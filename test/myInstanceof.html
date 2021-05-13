@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实现instanceof</title>
+</head>
+
+<body>
+  <script>
+    function myInstanceof(left, right) {
+      // 获得类型的原型
+      let prototype = right.prototype
+      // 获得对象的原型
+      left = left.__proto__
+      // 判断对象的类型是否等于类型的原型
+      while (true) {
+        if (left === null) {
+          return false
+        }
+        if (prototype === left) {
+          return true
+        }
+        left = left.__proto__
+      }
+    }
+
+    function Fun(name, age) {
+      this.name = name;
+      this.age = age;
+    }
+
+    Fun.prototype.say = function () {
+      console.log('我叫' + this.name + '，今年' + this.age + '岁！');
+    }
+
+    const fun = new Fun('dnhyxc', '18');
+    console.log(myInstanceof(fun, Fun)); // true
+    console.log(fun.name); // dnhyxc
+    console.log(fun.age); // 18
+    fun.say(); // 我叫dnhyxc，今年18岁！
+  </script>
+</body>
+
+</html>

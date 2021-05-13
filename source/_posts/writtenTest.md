@@ -1,0 +1,2029 @@
+---
+title: interview
+draft: true
+date: 2021-03-18 13:50:50
+tags: interview
+toc: true
+top: true
+categories:
+  - JavaScript
+---
+
+### JavaScript 相关
+
+#### 箭头函数和普通函数的区别是什么
+
+1，普通函数 this：this 总是指向它的直接调用者。
+
+- 在默认情况下，没找到直接调用者，this 指的是 window。
+
+- 在严格模式下，没有直接调用者的函数中的 this 是 undefined。
+
+- 使用 call,apply,bind 绑定，this 指的是绑定的对象。
+
+2，箭头函数 this：在使用`=>`定义函数的时候，this 的指向是`定义时所在的对象`，而不是使用时所在的对象。
+
+- 不能够用作构造函数，这就是说，不能够使用 new 命令，否则就会抛出一个错误。
+
+- 不能够使用 arguments 对象。
+
+- 不能使用 yield 命令。
+
+<!-- more -->
+
+#### let、var、const 的区别
+
+1，var：var 没有块级作用域，支持变量提升。
+
+2，let 有块级作用域，不支持变量提升。不允许重复声明，暂存性死区。不能通过 window.变量名进行访问。
+
+3，const 有块级作用域，不支持变量提升，不允许重复声明，暂存性死区。声明一个变量一旦声明就不能改变，改变报错。
+
+- 如果声明的变量是一个数组或者对象，则可以改变其中的属性或属性值。
+
+#### typeof
+
+1，typeof 检测对象，除了函数是 function 类型之外。像常见的数组，对象或者是正则，日期等等都是 object。
+
+2，typeof 检测对象的特殊场景如下：
+
+```js
+typeof Symbol(); // 'symbol'
+typeof null; // object
+typeof undefined; // undefined
+```
+
+> typeof null 检测输出 object 因为 js 最初版本，使用的是 32 位系统，类型的标签存储在每个单元的低位中 000 是 object 类型。null 全是 0，所以当我们使用 typeof 进行检测的时候 js 错误的判断位 object。
+
+#### 深度优先和广度优先
+
+1，广度优先：尝试访问尽可能靠近它的目标节点，然后逐层向下遍历，直至最远的节点层级。
+
+2，深度优先：从起始节点开始，一直向下找到最后一个节点，然后返回，又继续下一条路径。直到找遍所有的节点。
+
+#### setTimeout 与 setInterval 的区别
+
+1，setTimeout 表示间隔一段时间之后执行一次调用，而 setInterval 是每隔一段时间循环调用，直至清除。
+
+2，内存方面，setTimeout 只需要进入一次宏队列，setInterval 不计算代码执行时间，有可能多次执行多次代码。
+
+#### 如何实现一个 new 的伪代码
+
+1，创建一个新的对象。
+
+2，把 obj 的 `__proto__` 指向 fn 的 `prototype`，实现继承。
+
+3，改变 this 的指向，执行构造函数、传递参数,fn.apply() 或者 fn.call()。
+
+4，返回新的对象 obj。
+
+```js
+function Dog(name) {
+  this.name = name;
+  this.say = function () {
+    console.log("name = " + this.name);
+  };
+}
+
+function Cat(name) {
+  this.name = name;
+  this.say = function () {
+    console.log("name = " + this.name);
+  };
+}
+
+function _new(fn, ...arg) {
+  const obj = {}; //创建一个新的对象
+  obj.__proto__ = fn.prototype; //把obj的__proto__指向fn的prototype,实现继承
+  fn.apply(obj, arg); //改变this的指向
+  return Object.prototype.toString.call(obj) === "[object Object]" ? obj : {}; //返回新的对象obj
+}
+
+//测试1
+var dog = _new(Dog, "aaa");
+dog.say(); //'name = aaa'
+console.log(dog instanceof Dog); //true
+console.log(dog instanceof Cat); //false
+//测试2
+var cat = _new(Cat, "bbb");
+cat.say(); //'name = bbb'
+console.log(cat instanceof Cat); //true
+console.log(cat instanceof Dog); //false
+```
+
+#### 原型、原型链
+
+##### 什么是原型
+
+1，js 中每一个函数都自带的属性，它的值是一个对象，就好比(prototype:{……})，叫做原型对象。
+
+2，对于构造函数来讲，每通过构造函数实例化一个对象,都有一个隐藏的属性，指向该构造函数的原型对象。他们两个是全等的关系，实例化对象.\_\_proto\_\_ === 构造函数.prototype。
+
+3，原型对象就好像是一个公共区域，他可以被每一个实例化对象所访问(当然构造函数要相同，因为后面要往原型里添加方法，用别的构造函数实例化的对象的原型里是没有新增的方法的)。
+
+4，在创建函数的时候，我们如果将方法写在原型对象中，不但不会造成全局变量的污染，还可以被每一个用这个构造函数实例化的对象所共享。
+
+5，原型的作用：为实例化对象提供共享的属性和方法。
+
+##### 怎么使用原型添加共享的属性和方法
+
+1，我们一般用 Fn.prototype.FunName = function(){...}，的方法为这个构造函数添加方法，如下：
+
+```js
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+Person.prototype.sayHi = function () {
+  return "我是" + this.name + "今年" + this.age + "岁了";
+};
+var person01 = new Person("大威天龙", 12);
+// console.log(person01.constructor.prototype.__proto__.__proto__)
+console.log(person01.sayHi());
+```
+
+##### 原型里常用的几个属性：
+
+1，prototype 属性：
+
+- js 中的每个函数都默认有一个 prototype 属性，随着函数的声明自动生成。
+
+- 构造函数调用 prototype 可以得到构造函数的原型对象。
+
+- 通过这个原型对象可以自定义共享属性供构造函数的实例化对象使用。
+
+2，constructor 属性：
+
+- constructor 属性的作用：
+
+  - constructor 的作用是获取一个(实例化对象/构造函数)的构造函数。
+
+  - 构造函数的最上级是 Function，Function 的构造函数依旧是它本身。
+
+3，instanceof 运算符：
+
+- 用于测试构造函数的 prototype(原型对象) 属性是否出现在原型链中的任何位置。
+
+- 这个方法可以用来判断一个数据是否是对象也可以判断一个数据是否是数组。
+
+- 语法：实例化对象 instanceof Object/Array 返回布尔值。
+
+4，hasOwnProperty()方法：
+
+- 每一个实例化对象都有一个 hasOwnProperty() 方法，用来判断某个属性到底是本地属性还是来自原型的属性。
+
+- 通过构造函数添加的属性或方法叫做本地属性或方法。
+
+- 语法: 实例化对象.hasOwnProperty()，参数是字符串类型，返回布尔值。
+
+> in 运算符用来判断某个实例是否含有某个属性，不管是不是本地属性。语法：`'属性' in 实例化对象`返回布尔值。
+
+##### 什么是原型链
+
+1，每一个对象都有原型对象。一个原型对象也是对象，所以它也有原型对象。
+
+2，当一个对象去调用某个属性或者方法的时候，先从自身开始查找，如果有则使用；如果没有则到对象的原型中去查找。如果有则使用；如果原型中也没有，则会到原型的原型中去查找，这样就形成了一条链，叫做原型链。原型链的终点是 Object 的原型，如果该对象中依然没有找到，则返回 undefined。
+
+![原型链结构图](prototype.png)
+
+#### 继承
+
+##### 继承的原理
+
+1，复制父类的属性和方法来重写子类的原型对象。
+
+##### 继承的分类
+
+1，原型链继承：
+
+```js
+function Person() {
+  this.name = "hello";
+  this.hobby = ["唱歌", "coding"];
+}
+
+function Child() {}
+//关键代码
+Child.prototype = new Person();
+Child.prototype.constructor = Child;
+var child = new Child();
+child.hobby.push("睡觉");
+var child2 = new Child();
+console.log(child2.hobby); //['唱歌','coding','睡觉']
+```
+
+2，原型继承的缺点：
+
+- 不能传递参数。
+
+- 如果父类的属性是引用类型，子类实列修改了该属性，其他的子类实列会共享该属性。
+
+##### 构造函数继承
+
+1，借用构造函数实现继承，也就是通过 call 或者 apply 方法调用父类构造函数，以实现继承。
+
+```js
+// 父类
+function Person(name) {
+  this.name = name;
+  this.hobby = ["唱歌", "踢球", "跑步"];
+}
+Person.prototype.eat = function () {
+  console.log("好吃");
+};
+
+//子类
+function Child(age, name) {
+  this.age = age;
+  Person.call(this, name);
+}
+
+//实列
+var child1 = new Child("11", "dnhyxc");
+child1.hobby.push("学习");
+console.log(child1.hobby); // ['唱歌','踢球','跑步','学习']
+var child2 = new Child("11", "dnhyxc");
+console.log(child2.hobby); // ['唱歌','踢球','跑步']
+console.log(child2.name); // dnhyxc
+console.log(child1.eat); // undefined
+console.log(child2.eat); // undefined
+var person = new Person();
+console.log(person.eat); // function
+```
+
+2，借用构造函数有缺点：
+
+- 子类无法继承父类在原型链上的属性和方法。
+
+- 每个实例都拷贝一份，占用内存大，尤其是方法过多的时候（函数复用又无从谈起了，本来我们用 prototype 就是解决复用问题的）。
+
+3，优点：
+
+- 解决了通过原型链继承子类对于父类引用类型属性的修改，导致其他子类实列共享了修改的问题。
+
+##### 组合继承
+
+1，组合继承（原型链继承+借用构造函数继承）由于这两种继承方式都存在各自的优缺点，从而将他们优点结合起来，通过原型继承父类原型上的属性和方法，通过构造函数的方法继承父类的属性。
+
+```js
+// 父类
+function Person(name) {
+  this.name = name;
+  this.hobby = ["唱歌", "踢球", "跑步"];
+}
+Person.prototype.eat = function (value) {
+  console.log(value, "好吃");
+};
+//子类
+function Child(age, name) {
+  this.age = age;
+  Person.call(this, name); //借用构造函数
+}
+Child.prototype = new Person(); // 原型链
+Child.prototype.constructor = Child;
+var child = new Child(18, "dnhyxc");
+console.log(child.name); // dnhyxc
+console.log(child.hobby); // ["唱歌", "踢球", "跑步"]
+console.log(child.age); // 18
+child.eat("雪糕"); // 雪糕 好吃
+```
+
+2，组合继承缺点：
+
+- 组合继承是 js 最常用的继承模式，组合继承最大的问题就是无论在什么情况下，都会调用两次构造函数：一次是在创建子类型原型时，另一次是在子类构造函数内部。
+
+##### 寄生组合继承
+
+1，寄生组合继承就是避免两次调用父类构造函数，通过赋值直接继承父类的原型。
+
+```js
+function Person(name) {
+  this.name = name;
+  this.hobby = ["唱歌", "踢球", "跑步"];
+}
+Person.prototype.eat = function () {
+  console.log("好吃");
+};
+//子类
+function Child(age, name) {
+  this.age = age;
+  Person.call(this, name); //借用构造函数
+}
+var proObj = Object.create(Person.prototype);
+proObj.constructor = Child;
+Child.prototype = proObj;
+var child = new Child(18, "dnhyxc");
+console.log(child.name); // dnhyxc
+console.log(child.hobby); // ["唱歌", "踢球", "跑步"]
+console.log(child.age); // 18
+child.eat("雪糕"); // 雪糕 好吃
+```
+
+2，Object.create() 做了什么？
+
+```js
+Object._create = function (obj) {
+  function F() {} // 创建了一个新的构造函数F
+  F.prototype = obj; // 然后将构造函数F的原型指向了参数对象obj
+  return new F(); // 返回构造函数F的实例对象，从而实现了该实例继承obj的属性。
+};
+```
+
+#### 闭包
+
+1，什么是闭包？
+
+- 闭包就是有权访问一个函数内部变量的函数，也就是常说的函数内部嵌套函数，内部函数访问外部函数变量，从而导致垃圾回收机制没有将当前变量回收掉。这样的操作，有可能会带来内存泄漏。好处就是可以设计私有的方法和变量。
+
+2，闭包形成的条件：
+
+- 函数嵌套。
+
+- 内部函数引用外部函数的局部变量。
+
+#### 垃圾回收机制（闭包的延伸）
+
+1，js 拥有特殊的垃圾回收机制，当一个变量在内存中失去引用，js 会通过特殊的算法将其回收，并释放内存。分为以下两个阶段：
+
+- 标记阶段：垃圾回收器，从根对象开始遍历，访问到的每一个对象都会被标示为可到达对象。
+
+- 清除阶段：垃圾回收器在对内存当中进行线性遍历，如果发现该对象没有被标记为可到达对象，那么就会被垃圾回收机制回收。这里面牵扯到了引用计数法，每次引用都被会`+1` 如果标记清零，那么就会被回收掉。
+
+#### 深浅拷贝
+
+##### 浅拷贝
+
+1，通常需要拷贝的对象内部只有一层的这种对象。
+
+2，常用方法：
+
+- Object.assign() 方法来实现。
+
+- 扩展运算符 ...obj。
+
+##### 深拷贝
+
+1，通常是嵌套二层或以上的复杂对象。
+
+2，常用方法：
+
+- JSON.parse(JSON.stringfy(object)); 该方法忽略掉 undefined、忽略 Symbol、忽略 function。只适合简单深拷贝。
+
+- 递归实现深拷贝
+
+```js
+// 定义一个深拷贝函数  接收目标target参数
+function deepClone(target) {
+  // 定义一个变量
+  let result;
+  // 如果当前需要深拷贝的是一个对象的话
+  if (typeof target === "object") {
+    // 如果是一个数组的话
+    if (Array.isArray(target)) {
+      result = []; // 将result赋值为一个数组，并且执行遍历
+      for (let i in target) {
+        // 递归克隆数组中的每一项
+        result.push(deepClone(target[i]));
+      }
+      // 判断如果当前的值是null的话；直接赋值为null
+    } else if (target === null) {
+      result = null;
+      // 判断如果当前的值是一个RegExp对象的话，直接赋值
+    } else if (target.constructor === RegExp) {
+      result = target;
+    } else {
+      // 否则是普通对象，直接for in循环，递归赋值对象的所有值
+      result = {};
+      for (let i in target) {
+        result[i] = deepClone(target[i]);
+      }
+    }
+    // 如果不是对象的话，就是基本数据类型，那么直接赋值
+  } else {
+    result = target;
+  }
+  // 返回最终结果
+  return result;
+}
+
+// 测试
+let obj1 = {
+  a: {
+    c: /a/,
+    d: undefined,
+    b: null,
+  },
+  b: function () {
+    console.log(this.a);
+  },
+  c: [
+    {
+      a: "c",
+      b: /b/,
+      c: undefined,
+    },
+    "a",
+    3,
+  ],
+};
+
+let obj2 = deepClone(obj1);
+
+obj2.a.d = {
+  aa: "我改了",
+};
+
+obj2.c = [
+  {
+    a: "c",
+    b: "我改了",
+    c: undefined,
+  },
+  "a",
+  3,
+];
+
+console.log(obj1);
+console.log(obj2);
+console.log(obj1.a); // {c: /a/, d: undefined, b: null}
+console.log(obj2.a); // {c: /a/, d: {…}, b: null}
+```
+
+#### 函数的节流和防抖
+
+##### 防抖函数
+
+1，防抖函数：将多次触发变成最后一次触发。
+
+```js
+function debounce(fn, wait) {
+  let timer = null;
+  return function () {
+    let arg = arguments;
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, arg);
+    }, wait);
+  };
+}
+function clg() {
+  console.log("clg");
+}
+window.addEventListener("resize", debounce(clg, 1000));
+```
+
+> 为什么要在 fn.apply(this, arg) 中传入 arg？
+>
+> - fun.apply(this, arg)的用意，就是想让 fn 中的 this 指向 debounce 中 return 的这个函数中的 this，return 回来的这个函数中的 this 也就是指向直接调用 return 函数那个对象。这里都是 window 来直接调用 return 回来的那个函数。所以这里的 this 其实没啥用，之所以这么写是因为 arguments 就是传入的参数数组，而且个数可以不确定的传回给 fn。
+
+##### 节流函数
+
+1，将多次执行变成每隔一个时间节点去执行的函数。
+
+```js
+function throttle(fn, time) {
+  let lastTime = null;
+  return function () {
+    let nowTime = Date.now();
+    if (nowTime - lastTime > time || !lastTime) {
+      fn();
+      lastTime = nowTime;
+    }
+  };
+}
+function sayHi() {
+  console.log("hi");
+}
+setInterval(throttle(sayHi, 1000), 500);
+```
+
+#### call、apply、bind
+
+##### call、apply、bind 的区别
+
+1，三者的相同点：都是重定向 this 指针的方法。
+
+2，三者的不同点：call 和 apply 的第二个参数不相同，call 和 bind 是若干个参数的列表，apply 则是一个数组。
+
+##### 手写 call
+
+1，call 方法的执行操作回顾：
+
+```js
+let mock = { value: 1 };
+function mockNum() {
+  console.log("value", this.value);
+}
+mockNum.call(mock); // 改变了函数中this的指向，当前this指向了mock对象
+```
+
+2，具体分析：
+
+- 将上述调用方式进行转换：
+
+```js
+let mock = {
+  value:1;
+  mockNum:function(){
+     console.log('value',this.value)
+  }
+}
+mock.mockNum();
+```
+
+- 经过上面这个操作的演化即可得出如下结论：
+
+  - 将函数设为一个对象的属性。
+
+  - 并将这个函数属性进行调用。
+
+  - 最后删除该函数。
+
+3，具体实现代码如下：
+
+```js
+Function.prototype.Mycall = function (context) {
+  if (typeof this !== "function") {
+    // 判断当前调用者是否为函数
+    return;
+  }
+  // 保存传入的this指向，这里会出现没有传入this指向的问题，那么就默认指向window
+  let obj = context || window;
+  // 为obj添加fn函数，并将其this指向当前函数，即为mockNum函数，此时fn函数就相当于是mockNum函数
+  obj.fn = this;
+  // 通过slice来截取传入的参数，即除去传入的第一个参数mock
+  let args = [...arguments].slice(1);
+  // 调用fn函数
+  let result = obj.fn(...args);
+  delete obj.fn;
+  // 如果mockNum函数有返回，result就是mockNum函数的返回值，否则就是undefined
+  return result;
+};
+
+// 测试
+let mock = {
+  value: 1,
+};
+
+function mockNum(a, b) {
+  console.log("value", this.value); // value 1
+  console.log("a", a); // a 111
+  console.log("b", b); // b 222
+}
+mockNum.Mycall(mock, 111, 222);
+```
+
+##### 手写 apply
+
+```js
+Function.prototype.myApply = function (context) {
+  if (typeof this !== "function") {
+    // 判断当前调用者是否为函数
+    return;
+  }
+  let obj = context || window;
+  obj.fn = this;
+  let result = arguments[1] ? obj.fn(arguments[1]) : obj.fn([]);
+  delete obj.fn;
+  return result;
+};
+
+let mock3 = {
+  arr: [1, 2, 3, 4, 5],
+};
+
+function arrx2(arr) {
+  return this.arr.concat(arr).map((x) => x * 2);
+}
+
+console.log("arrx2", arrx2.myApply(mock3, [6, 7, 8]));
+```
+
+##### 手写 bind
+
+1，bind 方法具体说明：该方法会直接返回一个新的函数，需要手动去调用才能执行。其特点是：
+
+- 返回一个函数。
+
+- 可以传入参数。
+
+- 例如：
+
+```js
+let foo = { value: 1 };
+function bar() {
+  console.log("bindFoo", this.value);
+  // return this.value // 考虑到函数可能有返回值
+}
+let bindFoo = bar.bind(foo);
+// 如果有返回值的情况下 bindFoo() === 1;
+bindFoo(); // 1
+```
+
+3，bind 方法具体代码实现如下：
+
+```js
+Function.prototype.Mybind = function (obj) {
+  if (typeof this !== "function") throw new Error("not a function");
+  // 当前this指向bar函数
+  let self = this;
+  let args = [...arguments].slice(1);
+  return function F() {
+    if (this instanceof F) {
+      return new self(...args, ...arguments);
+    }
+    // ...arguments为传入F函数的参数
+    return self.apply(obj, args.concat([...arguments]));
+  };
+};
+
+let foo = {
+  value: 1,
+};
+
+function bar(arg) {
+  console.log("bindFoo", this.value); // bindFoo 1
+  return this.value;
+}
+let bindFoo = bar.Mybind(foo);
+console.log(bindFoo()); // 1
+```
+
+4，终极完整版实现如下：
+
+```js
+Function.prototype._bind = function (thisObj) {
+  // 判断是否为函数调用
+  if (
+    typeof target !== "function" ||
+    Object.prototype.toString.call(target) !== "[object Function]"
+  ) {
+    throw new TypeError(this + " must be a function");
+  }
+
+  const self = this;
+  const args = [...arguments].slice(1);
+
+  var bound = function () {
+    var finalArgs = [...args, ...arguments];
+    // 考虑new调用的情况，new.target用来检测是否是被new调用
+    if (new.target !== undefined) {
+      // 说明是用new来调用的
+      var result = self.apply(this, finalArgs);
+      if (result instanceof Object) {
+        return result;
+      }
+      return this;
+    } else {
+      return self.apply(thisArg, finalArgs);
+    }
+  };
+
+  // 保留函数原型，为了防止构造函数有prototype属性的时候出现问题
+  if (self.prototype) {
+    // 为什么使用了Object.create?因为我们要防止，bound.prototype的修改而导致self.prototype被修改。
+    // 不要写成bound.prototype = self.prototype，这样可能会导致原函数的原型被修改。
+    bound.prototype = Object.create(self.prototype);
+    bound.prototype.constructor = self;
+  }
+  return bound;
+};
+```
+
+#### instanceof 原理
+
+1，instanceOf 用来判断右边的 prototype 是否在左边的原型链上，告诉我们左边是否是右边的实例。
+
+```js
+function myInstanceof(left, right) {
+  // 获得类型的原型
+  let prototype = right.prototype;
+  // 获得对象的原型
+  left = left.__proto__;
+  // 判断对象的类型是否等于类型的原型
+  while (true) {
+    if (left === null) {
+      return false;
+    }
+    if (prototype === left) {
+      return true;
+    }
+    left = left.__proto__;
+  }
+}
+
+function Fun(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+Fun.prototype.say = function () {
+  console.log("我叫" + this.name + "，今年" + this.age + "岁！");
+};
+
+const fun = new Fun("dnhyxc", "18");
+console.log(myInstanceof(fun, Fun)); // true
+console.log(fun.name); // dnhyxc
+console.log(fun.age); // 18
+fun.say(); // 我叫dnhyxc，今年18岁！
+```
+
+#### 实现 Event(event bus)
+
+1，event bus 既是 node 中各个模块的基石，又是前端组件通信的依赖手段之一，同时涉及了订阅-发布设计模式，是非常重要的基础。
+
+2，简单版实现：
+
+```js
+// 简单版
+class EventEmeitter {
+  constructor() {
+    this._events = this._events || new Map(); // 储存事件/回调键值对
+    this._maxListeners = this._maxListeners || 10; // 设立监听上限
+  }
+}
+
+// 监听名为type的事件
+EventEmeitter.prototype.on = function (type, fn) {
+  // 将type事件以及对应的fn函数放入this._events中储存
+  if (!this._events.get(type)) {
+    this._events.set(type, fn);
+  }
+};
+
+// 触发名为type的事件
+EventEmeitter.prototype.emit = function (type, ...args) {
+  let handler;
+  // 从储存事件键值对的this._events中获取对应事件回调函数
+  handler = this._events.get(type);
+  if (args.length > 0) {
+    handler.apply(this, args);
+  } else {
+    handler.call(this);
+  }
+  return true;
+};
+
+//测试用例
+let eventBus = new EventEmeitter();
+// 注意：必须先调用addListener，再调用emit触发addListener，否则会报错
+eventBus.on("event1", function (params) {
+  console.log(params);
+});
+eventBus.emit("event1", {
+  name: "dnhyxc",
+});
+console.log(">>手动分割线>>>----------------");
+```
+
+3，深度版实现：
+
+```js
+class MyEventBus {
+  constructor() {
+    this._events = this._events || new Map(); // 储存事件/回调键值对
+    this._maxListeners = this._maxListeners || 10; // 设立监听上限
+  }
+}
+
+// 监听名为type的事件
+MyEventBus.prototype.on = function (type, fn) {
+  // 获取对应事件名称的函数清单
+  const handler = this._events.get(type);
+  if (!handler) {
+    // 第一次监听type事件时，handler为undefined，说明_events中还没有监听者，需要设置type事件的监听者
+    this._events.set(type, fn);
+  } else if (handler && typeof handler === "function") {
+    // 如果handler是函数说明已经有一个监听者了，此时我们需要用数组储存这两个监听者
+    this._events.set(type, [handler, fn]);
+  } else {
+    // 进入到这，说明已经有多个监听者了，那么直接往数组里push函数即可
+    handler.push(fn);
+  }
+};
+
+// 触发名为type的事件
+MyEventBus.prototype.emit = function (type, ...args) {
+  let handler;
+  handler = this._events.get(type);
+  if (Array.isArray(handler)) {
+    // 如果是一个数组说明有多个监听者，需要依次此触发里面的函数
+    for (let i = 0; i < handler.length; i++) {
+      if (args.length > 0) {
+        handler[i].apply(this, args);
+      } else {
+        handler[i].call(this);
+      }
+    }
+  } else {
+    // 单个函数的情况我们直接触发即可
+    if (args.length > 0) {
+      handler.apply(this, args);
+    } else {
+      handler.call(this);
+    }
+  }
+
+  return true;
+};
+
+MyEventBus.prototype.removeListener = function (type, fn) {
+  // 获取对应事件名称的函数清单
+  const handler = this._events.get(type);
+  // 如果是函数,说明只被监听了一次
+  if (handler && typeof handler === "function") {
+    this._events.delete(type, fn);
+  } else {
+    let postion;
+    // 如果handler是数组，说明被监听多次要找到对应的函数
+    for (let i = 0; i < handler.length; i++) {
+      if (handler[i] === fn) {
+        postion = i;
+      } else {
+        postion = -1;
+      }
+    }
+    // 如果找到匹配的函数，从数组中清除
+    if (postion !== -1) {
+      // 找到数组对应的位置，直接清除此回调
+      handler.splice(postion, 1);
+      // 如果清除后只有一个函数，那么取消数组，以函数形式保存
+      if (handler.length === 1) {
+        this._events.set(type, handler[0]);
+      }
+    } else {
+      return this;
+    }
+  }
+};
+
+//测试用例
+let deepEventBus = new MyEventBus();
+// 注意：必须先调用addListener，再调用emit触发addListener，否则会报错
+deepEventBus.on("event1", function (params) {
+  console.log(params, "dnhyxc1");
+});
+deepEventBus.on("event1", function (params) {
+  console.log(params, "dnhyxc2");
+});
+deepEventBus.on("event1", function (params) {
+  console.log(params, "dnhyxc3");
+});
+deepEventBus.emit("event1", {
+  name: "dnhyxc",
+  age: "18",
+});
+```
+
+#### 模拟 Object.create()
+
+1，Object.create()方法说明：Object.create()方法创建一个新对象，使用现有的对象来提供新创建的对象的\_\_proto\_\_。
+
+```js
+// 模拟 Object.create()
+function create(proto) {
+  function F() {}
+  F.prototype = proto;
+  return new F();
+}
+```
+
+#### 实现 JOSN.parse
+
+1，深度实现方式：
+
+```js
+var i = 0;
+function parseValue() {
+  if (str[i] === "{") {
+    return parseObject();
+  } else if (str[i] === "[") {
+    return parseArray();
+  } else if (str[i] === "n") {
+    return parseNull();
+  } else if (str[i] === "t") {
+    return parseTrue();
+  } else if (str[i] === "f") {
+    return parseFalse();
+  } else if (str[i] === '"') {
+    return parseString();
+  } else {
+    //如果不考虑出错的话，不是以上所有的情况即
+    return parseNumber();
+  }
+}
+
+// 所有的函数都是从i位置开始解析出一个对应类型的值，同时把i移动到解析完成后的下一个位置
+function parseString() {
+  var result = "";
+  i++; // 开始解析之前，i是指向字符开始的双引号的，但字符的内容是不包含这个双引号的
+  while (str[i] != '"') {
+    result += str[i++];
+  }
+  i++; // 移动i到解析完成后的下一个位置
+  return result;
+}
+
+function parseNull() {
+  // 简单粗暴，直接往后读出一个长度为4的个字符串出来，如果不是null，则直接报错
+  var content = str.substr(i, 4);
+
+  if (content === "null") {
+    i += 4;
+    return null;
+  } else {
+    throw new Error("Unexpected char at pos: " + i);
+  }
+}
+
+function parseFalse() {
+  // 基本同上
+  var content = str.substr(i, 5);
+
+  if (content === "false") {
+    i += 5;
+    return false;
+  } else {
+    throw new Error("Unexpected char at pos: " + i);
+  }
+}
+
+function parseTrue() {
+  // 基本同上
+  var content = str.substr(i, 4);
+
+  if (content === "true") {
+    i += 4;
+    return true;
+  } else {
+    throw new Error("Unexpected char at pos: " + i);
+  }
+}
+
+function parseNumber() {
+  // 本函数的实现并没有考虑内容格式的问题，实际上JSON中的数值需要满足一个格式
+  // 并且由于最后调用了parseFloat，所以如果格式不对，还是会报错的
+  var numStr = ""; //-2e+8
+  // 此处只要判断i位置还是数字字符，就继续读
+  // 为了方便，写了另一个helper函数
+  while (isNumberChar(str[i])) {
+    numStr += str[i++];
+  }
+  return parseFloat(numStr);
+}
+
+// 判断字符c是否为组成JSON中数值的符号
+function isNumberChar(c) {
+  var chars = {
+    "-": true,
+    "+": true,
+    e: true,
+    E: true,
+    ".": true,
+  };
+  if (chars[c]) {
+    return true;
+  }
+  if (c >= "0" && c <= "9") {
+    return true;
+  }
+  return false;
+}
+
+// 解析数组
+// 掐头去尾，然后一个值一个逗号，如果解析完一个值后没遇到逗号，说明解析完了
+function parseArray() {
+  i++;
+  var result = []; // [1234,"lsdf",true,false]
+  while (str[i] !== "]") {
+    result.push(parseValue());
+    if (str[i] === ",") {
+      i++;
+    }
+  }
+  i++;
+  return result;
+}
+
+/*
+ * 解析对象：
+ * 掐头去尾，然后一个key，是字符串，一个冒号，一个值，可能是任意类型，所以调用parseValue
+ * 最后，如果解析完一组键值对对，遇到了逗号，则解析下一组，没遇到逗号，则解析完毕
+ */
+function parseObject() {
+  i++;
+  var result = {}; //{"a":1,"b":2}
+  while (str[i] !== "}") {
+    var key = parseString();
+    i++; //由于只考虑合法且无多余空白的JSON，所以这里就不判断是不是逗号了，正常应该是发现不是逗号就报错的
+    var value = parseValue();
+    result[key] = value;
+    if (str[i] === ",") {
+      i++;
+    }
+  }
+  i++;
+  return result;
+}
+
+function parse(json) {
+  i = 0;
+  str = json;
+  return parseValue();
+}
+
+var str = '{"a":1,"b":true,"c":false,"foo":null,"bar":[1,2,3]}';
+console.log(parse(str)); // {a: 1, b: true, c: false, foo: null, bar: Array(3)}
+```
+
+2，骚操作实现方式：
+
+```js
+var str = '{"a":1,"b":true,"c":false,"foo":null,"bar":[1,2,3]}';
+var obj = eval("(" + str + ")"); // {a: 1, b: true, c: false, foo: null, bar: Array(3)}
+```
+
+> 此方法属于骚操作，极易容易被 xss 攻击，慎用。
+
+#### 实现 Promise
+
+```js
+var PromisePolyfill = (function () {
+  // 和reject不同的是resolve需要尝试展开thenable对象
+  function tryToResolve(value) {
+    if (this === value) {
+      // 主要是防止下面这种情况
+      // let y = new Promise(res => setTimeout(res(y)))
+      throw TypeError("Chaining cycle detected for promise!");
+    }
+
+    // 根据规范2.32以及2.33 对对象或者函数尝试展开
+    // 保证S6之前的 polyfill 也能和ES6的原生promise混用
+    if (
+      value !== null &&
+      (typeof value === "object" || typeof value === "function")
+    ) {
+      try {
+        // 这里记录这次then的值同时要被try包裹
+        // 主要原因是 then 可能是一个getter, 也就是说:
+        // 1. value.then可能报错
+        // 2. value.then可能产生副作用(例如多次执行可能结果不同)
+        var then = value.then;
+
+        // 另一方面, 由于无法保证 then 确实会像预期的那样只调用一个onFullfilled / onRejected
+        // 所以增加了一个flag来防止resolveOrReject被多次调用
+        var thenAlreadyCalledOrThrow = false;
+        if (typeof then === "function") {
+          // 是thenable 那么尝试展开
+          // 并且在该thenable状态改变之前this对象的状态不变
+          then.bind(value)(
+            // onFullfilled
+            function (value2) {
+              if (thenAlreadyCalledOrThrow) return;
+              thenAlreadyCalledOrThrow = true;
+              tryToResolve.bind(this, value2)();
+            }.bind(this),
+
+            // onRejected
+            function (reason2) {
+              if (thenAlreadyCalledOrThrow) return;
+              thenAlreadyCalledOrThrow = true;
+              resolveOrReject.bind(this, "rejected", reason2)();
+            }.bind(this)
+          );
+        } else {
+          // 拥有then 但是then不是一个函数 所以也不是thenable
+          resolveOrReject.bind(this, "resolved", value)();
+        }
+      } catch (e) {
+        if (thenAlreadyCalledOrThrow) return;
+        thenAlreadyCalledOrThrow = true;
+        resolveOrReject.bind(this, "rejected", e)();
+      }
+    } else {
+      // 基本类型 直接返回
+      resolveOrReject.bind(this, "resolved", value)();
+    }
+  }
+
+  function resolveOrReject(status, data) {
+    if (this.status !== "pending") return;
+    this.status = status;
+    this.data = data;
+    if (status === "resolved") {
+      for (var i = 0; i < this.resolveList.length; ++i) {
+        this.resolveList[i]();
+      }
+    } else {
+      for (i = 0; i < this.rejectList.length; ++i) {
+        this.rejectList[i]();
+      }
+    }
+  }
+
+  function Promise(executor) {
+    if (!(this instanceof Promise)) {
+      throw Error("Promise can not be called without new !");
+    }
+
+    if (typeof executor !== "function") {
+      // 非标准 但与Chrome谷歌保持一致
+      throw TypeError("Promise resolver " + executor + " is not a function");
+    }
+
+    this.status = "pending";
+    this.resolveList = [];
+    this.rejectList = [];
+
+    try {
+      executor(tryToResolve.bind(this), resolveOrReject.bind(this, "rejected"));
+    } catch (e) {
+      resolveOrReject.bind(this, "rejected", e)();
+    }
+  }
+
+  Promise.prototype.then = function (onFullfilled, onRejected) {
+    // 返回值穿透以及错误穿透, 注意错误穿透用的是throw而不是return，否则的话
+    // 这个then返回的promise状态将变成resolved即接下来的then中的onFullfilled
+    // 会被调用, 然而我们想要调用的是onRejected
+    if (typeof onFullfilled !== "function") {
+      onFullfilled = function (data) {
+        return data;
+      };
+    }
+    if (typeof onRejected !== "function") {
+      onRejected = function (reason) {
+        throw reason;
+      };
+    }
+
+    var executor = function (resolve, reject) {
+      setTimeout(
+        function () {
+          try {
+            // 拿到对应的handle函数处理this.data
+            // 并以此为依据解析这个新的Promise
+            var value =
+              this.status === "resolved"
+                ? onFullfilled(this.data)
+                : onRejected(this.data);
+            resolve(value);
+          } catch (e) {
+            reject(e);
+          }
+        }.bind(this)
+      );
+    };
+
+    // then 接受两个函数返回一个新的Promise
+    // then 自身的执行永远异步与onFullfilled/onRejected的执行
+    if (this.status !== "pending") {
+      return new Promise(executor.bind(this));
+    } else {
+      // pending
+      return new Promise(
+        function (resolve, reject) {
+          this.resolveList.push(executor.bind(this, resolve, reject));
+          this.rejectList.push(executor.bind(this, resolve, reject));
+        }.bind(this)
+      );
+    }
+  };
+
+  // for prmise A+ test
+  Promise.deferred = Promise.defer = function () {
+    var dfd = {};
+    dfd.promise = new Promise(function (resolve, reject) {
+      dfd.resolve = resolve;
+      dfd.reject = reject;
+    });
+    return dfd;
+  };
+
+  // for prmise A+ test
+  if (typeof module !== "undefined") {
+    module.exports = Promise;
+  }
+
+  return Promise;
+})();
+
+PromisePolyfill.all = function (promises) {
+  return new Promise((resolve, reject) => {
+    const result = [];
+    let cnt = 0;
+    for (let i = 0; i < promises.length; ++i) {
+      promises[i].then((value) => {
+        cnt++;
+        result[i] = value;
+        if (cnt === promises.length) resolve(result);
+      }, reject);
+    }
+  });
+};
+
+PromisePolyfill.race = function (promises) {
+  return new Promise((resolve, reject) => {
+    for (let i = 0; i < promises.length; ++i) {
+      promises[i].then(resolve, reject);
+    }
+  });
+};
+```
+
+#### 解析 URL Params 为对象
+
+```js
+function parseParam(url) {
+  // 将 ? 后面的字符串取出来
+  const paramsStr = /.+\?(.+)$/.exec(url)[1];
+  // 将字符串以 & 分割后存到数组中
+  const paramsArr = paramsStr.split("&");
+  let paramsObj = {};
+  // 将 params 存到对象中
+  paramsArr.forEach((param) => {
+    if (/=/.test(param)) {
+      // 处理有 value 的参数
+      let [key, val] = param.split("="); // 分割 key 和 value
+      val = decodeURIComponent(val); // 解码
+      val = /^\d+$/.test(val) ? parseFloat(val) : val; // 判断是否转为数字
+
+      if (paramsObj.hasOwnProperty(key)) {
+        // 如果对象有 key，则添加一个值
+        paramsObj[key] = [].concat(paramsObj[key], val);
+      } else {
+        // 如果对象没有这个 key，创建 key 并设置值
+        paramsObj[key] = val;
+      }
+    } else {
+      // 处理没有 value 的参数
+      paramsObj[param] = true;
+    }
+  });
+
+  return paramsObj;
+}
+
+// 测试
+let url =
+  "http://dnhyxc.github.io/?user=dnhyxc&id=123&id=456&city=%E5%8C%97%E4%BA%AC&enabled";
+console.log(parseParam(url)); // {user: "dnhyxc", id: [123, 456], city: "北京", enabled: true}
+```
+
+#### 转化为驼峰命名
+
+```js
+const f = function (s) {
+  // /\-\w|_\w|\.\w/g：正则匹配'-'、'_'、'.'
+  return s.replace(/\-\w|_\w|\.\w/g, function (x) {
+    return x.slice(1).toUpperCase();
+  });
+};
+
+const str = "get.element_by-id";
+console.log(f(str)); // getElementById
+```
+
+#### 查找字符串中出现最多的字符和个数
+
+```js
+let str = "abcabcabcbbccccc";
+let num = 0;
+let char = "";
+
+// 使其按照一定的次序排列
+str = str.split("").sort().join(""); // "aaabbbbbcccccccc"
+
+// 定义正则表达式
+let re = /(\w)\1+/g;
+
+str.replace(re, ($1, $2, $3, $4, $5) => {
+  if (num < $1.length) {
+    num = $1.length;
+    char = $2;
+  }
+});
+console.log(`字符最多的是${char}，出现了${num}次`);
+
+// 上述$1，$2参数说明：
+str.replace(re, ($1, $2, $3, $4, $5) => {
+  console.log($1, $2, $3, $4, $5);
+  /*
+    aaa a 0 aaabbbbbcccccccc undefined
+    bbbbb b 3 aaabbbbbcccccccc undefined
+    cccccccc c 8 aaabbbbbcccccccc undefined
+  */
+});
+```
+
+#### 字符串查找
+
+1，具体应用场景：用最基本的遍历来实现判断字符串 a 是否被包含在字符串 b 中，并返回第一次出现的位置（找不到返回 -1）。
+
+```js
+function isContain(a, b) {
+  for (let i in b) {
+    if (a[0] === b[i]) {
+      let tmp = true;
+      for (let j in a) {
+        if (a[j] !== b[~~i + ~~j]) {
+          tmp = false;
+        }
+      }
+      if (tmp) {
+        return i;
+      }
+    }
+  }
+  return -1;
+}
+
+a = "34";
+b = "1234567";
+console.log(isContain(a, b)); // 返回 2
+a = "35";
+b = "1234567";
+console.log(isContain(a, b)); // 返回 -1
+a = "355";
+b = "123554355";
+console.log(isContain(a, b)); // 返回 2
+```
+
+#### 实现千位分隔符
+
+##### 实现方式一
+
+1，首先将数字转为字符串数组，在循环整个数组，每三位添加一个分隔逗号，最后再合并成字符串。
+
+2，由于分隔符在顺序上是从后往前添加的：比如 1234567 添加后是 1,234,567 而不是 123,456,7，所以方便起见可以先把数组倒序排列，添加完之后再将顺序倒回来，就是正常顺序了。
+
+3，**注意**：如果数字带小数的话，要把小数部分分开处理。
+
+```js
+function numFormat(num) {
+  // 保留三位小数并将其转为字符串以"."进行小数点分割
+  num = parseFloat(num.toFixed(3)).toString().split(".");
+  // 转换成字符数组并且倒序排列
+  var arr = num[0].split("").reverse();
+  var res = [];
+  for (var i = 0; i < arr.length; i++) {
+    // 如果能被3整除，就往数组中添加","分隔符
+    if (i % 3 === 0 && i !== 0) {
+      res.push(",");
+    }
+    // 注意：添加分割符必须写在添加数字之前，因为后面需要将其进行反转回来
+    res.push(arr[i]);
+  }
+  // 再次倒序成为正确的顺序
+  res.reverse();
+  // 如果有小数的话添加小数部分
+  if (num[1]) {
+    res = res.join("").concat("." + num[1]);
+  } else {
+    res = res.join("");
+  }
+  return res;
+}
+
+var a = 1234567894532;
+var b = 673439.4542;
+var c = 673439.8629;
+console.log(numFormat(a)); // "1,234,567,894,532"
+console.log(numFormat(b)); // "673,439.4542"
+console.log(numFormat(c)); // "673,439.863"
+```
+
+##### 实现方式二
+
+1，使用 JS 自带的 API `toLocaleString()`。
+
+```js
+numObj.toLocaleString(locales, options);
+```
+
+> locales：缩写语言代码（BCP 47 language tag，例如：cmn-Hans-CN）的字符串或者这些字符串组成的数组。
+> options：包含一些或所有的下面属性的类。`decimal => 用于纯数字格式`，`currency => 用于货币格式`，`percent => 用于百分比格式`，`unit => 用于单位格式`。
+> 说明：该方法返回这个数字在特定语言环境下的表示字符串。
+
+2，**注意**：该方法在没有指定区域时，返回时用默认的语言环境和默认选项格式化的字符串，所以不同地区数字格式可能会有一定的差异，因此最好确保使用 locales 参数指定了使用的语言。
+
+3，实现数字插入千位符代码如下：
+
+```js
+const a = 1234567894532;
+const b = 673439.4542;
+
+console.log(a.toLocaleString()); // "1,234,567,894,532"
+console.log(b.toLocaleString()); // "673,439.454"  （小数部分四舍五入了）
+```
+
+##### 实现方式三
+
+1，使用 `RegExp 和 replace()` 方法。
+
+```js
+function numFormat(num) {
+  // 先提取整数部分
+  var res = num.toString().replace(/\d+/, function (n) {
+    return n.replace(/(\d)(?=(\d{3})+$)/g, function ($1) {
+      return $1 + ",";
+    });
+  });
+  return res;
+}
+var a = 1234567894532;
+var b = 673439.4542;
+console.log(numFormat(a)); // "1,234,567,894,532"
+console.log(numFormat(b)); // "673,439.4542"
+```
+
+#### 数组去重
+
+##### 使用双重循环实现
+
+```js
+Array.prototype.unique = function () {
+  const newArray = [];
+  let isRepeat;
+  for (let i = 0; i < this.length; i++) {
+    isRepeat = false;
+    for (let j = 0; j < newArray.length; j++) {
+      if (this[i] === newArray[j]) {
+        isRepeat = true;
+        break;
+      }
+    }
+    if (!isRepeat) {
+      newArray.push(this[i]);
+    }
+  }
+  return newArray;
+};
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+arr.unique();
+console.timeEnd("test"); // test: 1645.865966796875 ms
+console.log(testArr.unique()); // [1, 2, 3, 4, 5, 6, 7, 8, 9, "11", "22"]
+```
+
+##### 使用 Array.prototype.indexOf() 实现
+
+1，基本思路：如果索引不是第一个索引，说明是重复值。
+
+- Array.prototype.indexOf()返回的是第一个索引值。
+
+```js
+// 写法一
+Array.prototype.unique = function () {
+  return this.filter((item, index) => {
+    return this.indexOf(item) === index;
+  });
+};
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+arr.unique();
+console.timeEnd("test"); // test: 4436.455810546875 ms
+console.log(testArr.unique()); // [1, 2, 3, 4, 5, 6, 7, 8, 9, "11", "22"]
+
+// 写法二
+Array.prototype.unique = function () {
+  const newArray = [];
+  this.forEach((item) => {
+    if (newArray.indexOf(item) === -1) {
+      newArray.push(item);
+    }
+  });
+  return newArray;
+};
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+arr.unique();
+console.timeEnd("test"); // test: 3468.3388671875 ms
+console.log(testArr.unique()); // [1, 2, 3, 4, 5, 6, 7, 8, 9, "11", "22"]
+```
+
+##### 使用 Array.prototype.sort() 实现
+
+1，基本思路：先对原数组进行排序，然后再进行元素比较。
+
+```js
+// 写法一
+Array.prototype.unique3 = function () {
+  const newArray = [];
+  this.sort();
+  for (let i = 0; i < this.length; i++) {
+    if (this[i] !== this[i + 1]) {
+      newArray.push(this[i]);
+    }
+  }
+  return newArray;
+};
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+arr.unique();
+console.timeEnd("test"); // test: 37.299072265625 ms
+console.log(testArr.unique()); // [1, "11", 2, "22", 3, 4, 5, 6, 7, 8, 9]
+
+// 写法二
+Array.prototype.unique = function () {
+  const newArray = [];
+  this.sort();
+  for (let i = 0; i < this.length; i++) {
+    if (this[i] !== newArray[newArray.length - 1]) {
+      newArray.push(this[i]);
+    }
+  }
+  return newArray;
+};
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+arr.unique();
+console.timeEnd("test"); // test: 37.14990234375 ms
+console.log(testArr.unique()); // [1, "11", 2, "22", 3, 4, 5, 6, 7, 8, 9]
+```
+
+##### 使用 Array.prototype.includes() 实现
+
+```js
+Array.prototype.unique = function () {
+  const newArray = [];
+  this.forEach((item) => {
+    if (!newArray.includes(item)) {
+      newArray.push(item);
+    }
+  });
+  return newArray;
+};
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+arr.unique();
+console.timeEnd("test"); // test: 3066.06201171875 ms
+console.log(testArr.unique()); // [1, 2, 3, 4, 5, 6, 7, 8, 9, "11", "22"]
+```
+
+##### 使用 {} 和 [] 结合 forEach() 实现
+
+```js
+function unique(arr) {
+  if (!arr instanceof Array) {
+    throw Error("当前传入的不是数组");
+  }
+  let list = [];
+  let obj = {};
+  arr.forEach((item) => {
+    if (!obj[item]) {
+      list.push(item);
+      obj[item] = true;
+    }
+  });
+  return list;
+}
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+unique(arr);
+console.timeEnd("test"); // test: 8.662109375 ms
+console.log(unique(testArr)); // [1, 2, 3, 4, 5, 6, 7, 8, 9, "11", "22"]
+```
+
+##### 使用 Array.prototype.reduce() 实现
+
+```js
+Array.prototype.unique = function () {
+  return this.sort().reduce((init, current) => {
+    if (init.length === 0 || init[init.length - 1] !== current) {
+      init.push(current);
+    }
+    return init;
+  }, []);
+};
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+arr.unique();
+console.timeEnd("test"); // test: 38.675048828125 ms
+console.log(testArr.unique()); // [1, "11", 2, "22", 3, 4, 5, 6, 7, 8, 9]
+```
+
+##### 使用 Map 实现
+
+```js
+// 写法一
+Array.prototype.unique = function () {
+  const newArray = [];
+  const tmp = new Map();
+  for (let i = 0; i < this.length; i++) {
+    if (!tmp.get(this[i])) {
+      tmp.set(this[i], 1);
+      newArray.push(this[i]);
+    }
+  }
+  return newArray;
+};
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+arr.unique();
+console.timeEnd("test"); // test: 11.30712890625 ms
+console.log(testArr.unique()); // [1, 2, 3, 4, 5, 6, 7, 8, 9, "11", "22"]
+
+// 写法二
+Array.prototype.unique = function () {
+  const tmp = new Map();
+  return this.filter((item) => {
+    return !tmp.has(item) && tmp.set(item, 1);
+  });
+};
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+arr.unique();
+console.timeEnd("test"); // test: 8.900146484375 ms
+console.log(testArr.unique()); // [1, 2, 3, 4, 5, 6, 7, 8, 9, "11", "22"]
+```
+
+##### 使用 Set 实现
+
+```js
+// 写法一
+Array.prototype.unique = function () {
+  const set = new Set(this);
+  return Array.from(set);
+};
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+arr.unique();
+console.timeEnd("test"); // test: 5.614013671875 ms
+console.log(testArr.unique()); // [1, 2, 3, 4, 5, 6, 7, 8, 9, "11", "22"]
+
+// 写法二
+Array.prototype.unique = function () {
+  return [...new Set(this)];
+};
+
+const testArr = [1, 2, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9, "11", "11", "22"];
+const arr = [];
+// 生成[0, 100000]之间的随机数
+for (let i = 0; i < 100000; i++) {
+  arr.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+console.time("test");
+arr.unique();
+console.timeEnd("test"); // test: 5.591796875 ms
+console.log(testArr.unique()); // [1, 2, 3, 4, 5, 6, 7, 8, 9, "11", "22"]
+```
+
+#### 字符串反转
+
+1，基本思路：先将字符串转成一个数组，然后用数组的 reverse()+join() 方法实现。
+
+```js
+let str = "hello word";
+let b = [...str].reverse().join(""); //drow olleh
+```
+
+#### 实现链式调用
+
+1，基本思路：在调用完的方法之后将自身实例返回。
+
+2，实现示例：
+
+- 示例一：
+
+```js
+function Class1() {
+  console.log("初始化");
+}
+Class1.prototype.method = function (param) {
+  console.log(param);
+  return this;
+};
+let cl = new Class1();
+//由于new 在实例化的时候this会指向创建的对象，所以this.method这个方法会在原型链中找到。
+cl.method("第一次调用").method("第二次链式调用").method("第三次链式调用");
+```
+
+- 示例二：
+
+```js
+const obj = {
+  a: function () {
+    console.log("a");
+    return this;
+  },
+  b: function () {
+    console.log("b");
+    return this;
+  },
+};
+obj.a().b(); // a b
+```
+
+- 示例三：
+
+```js
+class Person {
+  fn1() {
+    const args = [...arguments];
+    const res = args.reduce((prev, current) => prev + current, "");
+    console.log(res); // 疯狂coding88
+    return this;
+  }
+  fn2() {
+    const args = [...arguments];
+    const res = args.reduce((prev, current) => prev + current * 2, 0);
+    console.log(res); // 24
+    return this;
+  }
+  fn3(value) {
+    console.log(value * 3); // 18
+    return this;
+  }
+  fn4(value) {
+    console.log(value * 4); // 36
+    return this;
+  }
+}
+const person = new Person();
+person.fn1("疯狂coding", 88).fn2(3, 9).fn3(6).fn4(9);
+```
+
+### DOM 相关
+
+#### css 的重绘与回流
+
+1，重绘：当节点需要更改外观而不会影响布局。
+
+- 如更改背景颜色，字体颜色等。
+
+2，DOM 结构的修改引发 DOM 几何尺寸变化的时候，发生回流。
+
+- 常见的几何属性有 width、height、padding、margin、left、top、border 或者是 DOM 节点发生增减移动。
+
+3，减少重绘和回流的办法：
+
+- 使用 css3 新增属性：translate 替代 top 等方向值。
+
+- 避免频繁使用 style，而是采用 class。
+
+#### 判断一个变量是对象还是数组
+
+1，判断数组和对象分别都有好几种方法，其中用 prototype.toString.call() 兼容性最好。
+
+```js
+function isObjArr(value) {
+  if (Object.prototype.toString.call(value) === "[object Array]") {
+    console.log("value是数组");
+  } else if (Object.prototype.toString.call(value) === "[object Object]") {
+    //这个方法兼容性好一点
+    console.log("value是对象");
+  } else {
+    console.log("value不是数组也不是对象");
+  }
+}
+```
+
+### 浏览器相关
+
+#### cookie、localstorage、seesionstorage
+
+1，cookie：存储大小为 4kb 左右，每次都会携带在 HTTP 头中，如果使用 cookie 保存过多数据会带来性能问题，默认是关闭浏览器后失效，但是也可以设置过期时间。
+
+2，localstorage：存储大小为 5M，仅在浏览器中保存，不参与和服务器的通信，除非手动被清除，否则永久保存。
+
+3，seesionstorage：存储大小 5M，仅在浏览器中保存，不参与和服务器的通信，仅在当前会话(窗口)下有效，关闭窗口或浏览器后被清除，不能设置过期时间。
+
+#### 浏览器禁用 cookie 该如何处理
+
+1，一般会用到 url 重写的技术来进行会话跟踪，每一次的交互，都会在 url 后面加上 sid=xxx 类似的参数。服务端根据这种方式来识别用户。
+
+#### 如何解决 js 跨域问题
+
+1，使用 jsonp 实现跨域，原理为：
+
+- 借用 script 标签没有跨域限制的漏洞实现的一种跨域方法，只支持 get 请求。安全问题会受到威胁。
+
+2，使用 CORS 实现跨域，原理为：
+
+- 通过后端服务器实现，Access-Control-Allow-Origin。
+
+3，使用 postMessage 实现跨域，postMessage 是 window 的一个属性方法。
+
+4，使用 websocket 实现跨域。
+
+5，使用 nginx 反向代理实现跨域。
+
+6，使用 iframe 实现跨域。
+
+7，使用 webpack proxy 实现跨域，原理为：
+
+- webpack proxy 配置在 webpack 的 devServer 属性中。在 webpack 中的 devServer 配置后，打包阶段在本地临时生成了一个 node 服务器，浏览器请求服务器相当于请求本地服务。
+
+> 注意：webpack proxy 跨域只能用作与开发阶段，临时解决本地请求服务器产生的跨域问题，并不适合线上环境。
+
+#### 进程与线程
+
+##### 进程
+
+1，进程：进程是 CPU 资源分配的最小单位，进程包括运行中的程序和程序所使用到的内存和系统资源。
+
+2，CPU 可以有很多进程，我们的电脑每打开一个软件就会产生一个或多个进程，为什么电脑运行的软件多就会卡，是因为 CPU 给每个进程分配资源空间，但是一个 CPU 一共就那么多资源，分出去越多，越卡，每个进程之间是相互独立的，CPU 在运行一个进程时，其他的进程处于非运行状态，CPU 使用**时间片轮转调度算法**（想深入了解可自行百度，这里不做赘述）来实现同时运行多个进程。
+
+##### 线程
+
+1，线程是 CPU 调度的最小单位。
+
+2，线程是建立在进程的基础上的一次程序运行单位，通俗点解释线程就是程序中的一个执行流，一个进程可以有多个线程。
+
+3，一个进程中只有一个执行流称作单线程，即程序执行时，所走的程序路径按照连续顺序排下来，前面的必须处理好，后面的才会执行。
+
+4，一个进程中有多个执行流称作多线程，即在一个程序中可以同时运行多个不同的线程来执行不同的任务，也就是说允许单个程序创建多个并行执行的线程来完成各自的任务。
+
+##### 进程和线程的区别
+
+1，进程是操作系统分配资源的最小单位，线程是程序执行的最小单位。
+
+2，一个进程由一个或多个线程组成，线程可以理解为是一个进程中代码的不同执行路线。
+
+3，进程之间相互独立，但同一进程下的各个线程间共享程序的内存空间(包括代码段、数据集、堆等)及一些进程级的资源(如打开文件和信号)。
+
+4，调度和切换：线程上下文切换比进程上下文切换要快得多。
+
+##### 多进程和多线程
+
+1，多进程指的是在同一个时间里，同一个计算机系统中允许存在两个或两个以上的进程处于运行状态。多进程带来的好处是明显的，比如大家可以在网易云听歌的同时打开编辑器敲代码，编辑器和网易云的进程之间不会相互干扰。
+
+2，多线程是指程序中包含多个执行流，即在一个程序中可以同时运行多个不同的线程来执行不同的任务，也就是说允许单个程序创建多个并行执行的线程来完成各自的任务。
+
+##### 浏览器包含的进程
+
+1，Browser 进程：
+
+- 浏览器的主进程（负责协调、主控），该进程只有一个。
+
+- 负责浏览器界面显示，与用户交互。如前进，后退等。
+
+- 负责各个页面的管理，创建和销毁其他进程。
+
+- 将渲染（Renderer）进程得到的内存中的 Bitmap（位图），绘制到用户界面上。
+
+- 网络资源的管理，下载等。
+
+2，第三方插件进程：
+
+- 每种类型的插件对应一个进程，当使用该插件时才创建。
+
+3，GPU 进程：
+
+- 该进程也只有一个，用于 3D 绘制等等。
+
+4，渲染进程：
+
+- 即通常所说的浏览器内核（Renderer 进程，内部是多线程）。
+
+- 每个 Tab 页面都有一个渲染进程，互不影响。
+
+- 主要作用为页面渲染，脚本执行，事件处理等。
+
+- 页面的渲染，JS 的执行，事件的循环，都在渲染进程内执行。
+
+##### 为什么浏览器要多进程
+
+1，假设浏览器是单进程，那么某个 Tab 页崩溃了，就影响了整个浏览器，体验极差。同理如果插件崩溃了也会影响整个浏览器。
+
+##### 渲染进程 Renderer 的主要线程
+
+1，GUI 渲染线程：
+
+- 负责渲染浏览器界面，解析 HTML，CSS，构建 DOM 树和 RenderObject 树，布局和绘制等。
+
+  - 解析 html 代码(HTML 代码本质是字符串)转化为浏览器认识的节点，生成 DOM 树，也就是 DOM Tree。
+
+  - 解析 css，生成 CSSOM(CSS 规则树)。
+
+  - 把 DOM Tree 和 CSSOM 结合，生成 Rendering Tree(渲染树)。
+
+- 当我们修改了一些元素的颜色或者背景色，页面就会重绘(Repaint)。
+
+- 当我们修改元素的尺寸，页面就会回流(Reflow)。
+
+- 当页面需要 Repaing 和 Reflow 时 GUI 线程执行，绘制页面。
+
+- 回流(Reflow)比重绘(Repaint)的成本要高，我们要尽量避免 Reflow 和 Repaint。
+
+- GUI 渲染线程与 JS 引擎线程是互斥的：
+
+  - 当 JS 引擎执行时 GUI 线程会被挂起(相当于被冻结了)。
+
+  - GUI 更新会被保存在一个队列中等到 JS 引擎空闲时立即被执行。
+
+2，JS 引擎线程：
+
+- JS 引擎线程就是 JS 内核，负责处理 Javascript 脚本程序(例如 V8 引擎)。
+
+- JS 引擎线程负责解析 Javascript 脚本，运行代码。
+
+- JS 引擎一直等待着任务队列中任务的到来，然后加以处理：
+
+  - 浏览器同时只能有一个 JS 引擎线程在运行 JS 程序，所以 JS 是单线程运行的。
+
+  - 一个 Tab 页(renderer 进程)中无论什么时候都只有一个 JS 线程在运行 JS 程序。
+
+- GUI 渲染线程与 JS 引擎线程是互斥的，JS 引擎线程会阻塞 GUI 渲染线程：
+
+  - 就是我们常遇到的 JS 执行时间过长，造成页面的渲染不连贯，导致页面渲染加载阻塞(就是加载慢)。
+
+  - 例如浏览器渲染的时候遇到 script 标签，就会停止 GUI 的渲染，然后 JS 引擎线程开始工作，执行里面的 JS 代码，等 JS 执行完毕，JS 引擎线程停止工作，GUI 继续渲染下面的内容。所以如果 JS 执行时间太长就会造成页面卡顿的情况。
+
+3，事件触发线程：
+
+- 属于浏览器而不是 JS 引擎，用来控制事件循环，并且管理着一个事件队列(task queue)。
+
+- 当 JS 执行碰到事件绑定和一些异步操作(如 setTimeout，也可来自浏览器内核的其他线程，如鼠标点击、AJAX 异步请求等)，会走事件触发线程将对应的事件添加到对应的线程中(比如定时器操作，便把定时器事件添加到定时器线程)，等异步事件有了结果，便把他们的回调操作添加到事件队列，等待 JS 引擎线程空闲时来处理。
+
+- 当对应的事件符合触发条件被触发时，该线程会把事件添加到待处理队列的队尾，等待 JS 引擎的处理。
+
+- 因为 JS 是单线程，所以这些待处理队列中的事件都得排队等待 JS 引擎处理。
+
+4，定时触发器线程：
+
+- setInterval 与 setTimeout 所在线程。
+
+- 浏览器定时计数器并不是由 JavaScript 引擎计数的(因为 JavaScript 引擎是单线程的，如果处于阻塞线程状态就会影响记计时的准确)。
+
+- 通过单独线程来计时并触发定时(计时完毕后，添加到事件触发线程的事件队列中，等待 JS 引擎空闲后执行)，这个线程就是定时触发器线程，也叫定时器线程。
+
+- W3C 在 HTML 标准中规定，规定要求 setTimeout 中低于 4ms 的时间间隔算为 4ms。
+
+5，异步 http 请求线程：
+
+- 在 XMLHttpRequest 在连接后是通过浏览器新开一个线程请求。
+
+- 将检测到状态变更时，如果设置有回调函数，异步线程就产生状态变更事件，将这个回调再放入事件队列中再由 JavaScript 引擎执行。
+
+- 简单说就是当执行到一个 http 异步请求时，就把异步请求事件添加到异步请求线程，等收到响应(准确来说应该是 http 状态变化)，再把回调函数添加到事件队列，等待 JS 引擎线程来执行。

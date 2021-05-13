@@ -1,0 +1,122 @@
+.music {
+  position: absolute;
+
+  .aplayer.aplayer-fixed {
+    max-width: 261px;
+    left: 20px;
+    bottom: 20px;
+
+    .aplayer-lrc {
+      max-width: 280px;
+      top: 44px;
+      left: 19px;
+      height: 30px;
+      z-index: 0;
+      opacity: 0;
+      transition: all 0.5s ease;
+      text-shadow: none;
+
+      p {
+        font-size: 14px;
+        background-image: linear-gradient(
+          -225deg,
+          #2cd8d5 0%,
+          #c5c1ff 56%,
+          #ffbac3 100%
+        );
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+    }
+
+    .hideLrc {
+      opacity: 1;
+      transition: all 0.5s ease;
+    }
+
+    .aplayer-list {
+      position: relative;
+      border: none;
+      max-height: 261px;
+      margin-bottom: 68px;
+      background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
+      z-index: 88;
+      text-align: left;
+      .aplayer-list-author {
+        color: #c9c9c9;
+      }
+      .aplayer-list-cur {
+        background-color: gold !important;
+      }
+      ol {
+        li {
+          box-shadow: 0 0 6px #ccc inset;
+          color: #c9c9c9;
+          background: transparent;
+        }
+        li.aplayer-list-light {
+          background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
+          color: gold;
+        }
+        li:hover {
+          background-image: linear-gradient(-225deg, #cbbacc 0%, #2580b3 100%);
+        }
+      }
+    }
+
+    .aplayer-body {
+      max-width: 261px;
+      left: 20px;
+      bottom: 22px;
+      // border-top-right-radius: 10px;
+      // border-bottom-left-radius: 10px;
+      left: -66px;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      background-image: linear-gradient(to right, #2b5876 0%, #4e4376 100%);
+
+      .aplayer-controller {
+        display: none;
+      }
+
+      .aplayer-info {
+        background-image: linear-gradient(to right, #2b5876 0%, #4e4376 100%);
+        border: none;
+        width: calc(100% - 47px);
+        box-shadow: 0 0 10px #ccc inset;
+      }
+
+      .aplayer-miniswitcher {
+        display: none;
+      }
+
+      .aplayer-pic {
+        visibility: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px #fff inset;
+      }
+    }
+
+    .showBody {
+      visibility: visible;
+      left: 20px;
+      transition: all 0.3s ease;
+      .aplayer-pic {
+        visibility: visible;
+        transition: all 0.3s ease;
+      }
+
+      .aplayer-controller {
+        display: flex;
+      }
+    }
+  }
+
+  .aplayer {
+    background: transparent;
+
+    .aplayer-miniswitcher {
+      border-radius: 0;
+    }
+  }
+}

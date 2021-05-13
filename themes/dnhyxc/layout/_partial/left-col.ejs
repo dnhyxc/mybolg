@@ -1,0 +1,80 @@
+<!-- <% var defaultBg = '#4d4d4d'; %>
+<div class="overlay" style="background: <%= theme.style && theme.style.header ? theme.style.header : defaultBg %>">
+</div> -->
+<div class="intrude-less">
+  <header id="header" class="inner">
+    <a class="profilepic">
+      <!-- <a href="<%=theme.root%>" class="profilepic"> -->
+      <img src="<%=theme.avatar%>" class="js-avatar">
+    </a>
+    <hgroup>
+      <h1 class="header-author"><a href="<%=theme.root%>"><%=theme.author%></a></h1>
+    </hgroup>
+    <% if (theme.subtitle){ %>
+    <p class="header-subtitle"><%=theme.subtitle%></p>
+    <%}%>
+
+    <%if(theme.tagcloud){%>
+    <div class="switch-btn">
+      <div class="home">
+        <!-- <img src="/img/home.png" alt="" style="width: 30px; height: 30px;"> -->
+        <div class="homeIcon" id="home-icon"></div>
+      </div>
+      <div class="tips-box">
+        <% for (var i in theme.smart_menu){ %>
+        <% if(theme.smart_menu[i]){ %>
+        <div class="tips-text">
+          <a class="tips-a" q-on="click: openSlider(e, '<%-i%>')"
+            href="javascript:void(0)"><%= theme.smart_menu[i] %></a>
+        </div>
+        <% } %>
+        <%}%>
+      </div>
+    <%}%>
+
+        <ul class="header-menu">
+          <% for (var i in theme.menu){ %>
+          <li class="menu-text">
+            <a href="<%- url_for(theme.menu[i]) %>"><%= i %></a>
+          </li>
+          <%}%>
+        </ul>
+		<!-- <nav class="header-smart-menu">
+    	<% for (var i in theme.smart_menu){ %>
+          <% if(theme.smart_menu[i]){ %>
+          <a q-on="click: openSlider(e, '<%-i%>')" href="javascript:void(0)"><%= theme.smart_menu[i] %></a>
+          <% } %>
+          <%}%>
+		</nav> -->
+		<nav class="header-nav">
+			<div class="social">
+				<% for (var i in theme.subnav){ %>
+          <div class="icon-wrap">
+            <a class="<%= i %>" target="_blank" href="<%- url_for(theme.subnav[i]) %>" title="<%= i %>"></a>
+          </div>
+          <!-- <a class="<%= i %> iconImg" target="_blank" href="<%- url_for(theme.subnav[i]) %>" title="<%= i %>">
+            <i class="icon-<%= i %>"></i>
+          </a> -->
+          <%}%>
+			</div>
+    </nav>
+    <div class="toggleLight">
+        <span class="dark">黑夜</span>
+        <span class="toggleMusic">音乐</span>
+    </div>
+    <div class="motto">
+      <div>行 到 水 穷 处</div>
+      <div>坐 看 云 起 时</div>
+    </div>
+    <div class="music">
+      <!-- 《左侧边栏添加--APlayer音乐播放器 -->
+      <% if(theme.aplayer.enable) { %>
+          <link rel="stylesheet" href="/dist/APlayer.min.css">
+          <div id="aplayer"></div>
+          <script type="text/javascript" src="/dist/APlayer.min.js"></script>
+          <script type="text/javascript" src="/dist/music.js"></script>
+          <% } %>
+      </div>
+  </header>
+</div>
+<div class="topControl"></div>

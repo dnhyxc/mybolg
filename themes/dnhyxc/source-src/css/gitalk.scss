@@ -1,0 +1,105 @@
+#gitalk-container {
+  padding: 0 10px;
+
+  .gt-container {
+    padding: 0 8px 15px 8px;
+    box-shadow: 0 0 3px #ccc inset;
+
+    .gt-btn-preview {
+      box-shadow: 0 0 5px #ccc inset;
+      background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+    }
+
+    .gt-btn-public {
+      box-shadow: 0 0 5px #ccc inset;
+      background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+    }
+
+    .gt-btn-login {
+      box-shadow: 0 0 5px #ccc inset;
+      background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+    }
+
+    .gt-copyright {
+      border-top: none;
+    }
+
+    .gt-user {
+      font-size: 16px;
+
+      .gt-ico {
+        margin: 0 0;
+        display: none;
+      }
+    }
+
+    .gt-popup {
+      top: 3.375em;
+      background-image: linear-gradient(-225deg, #2b5876 0%, #4e4376 100%);
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 0 3px #ccc;
+    }
+
+    .gt-btn {
+      border: none;
+      color: #ccc;
+    }
+
+    .gt-btn:hover {
+      color: #6190e8;
+    }
+
+    .gt-meta {
+      margin: 0 0 1.25em;
+      border-bottom: 1px solid #666;
+      z-index: 5;
+    }
+
+    .gt-header-textarea {
+      border: none;
+      background-image: linear-gradient(-335deg, #475682, #2e5676);
+    }
+
+    .gt-header-preview {
+      border: none;
+      background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+
+      p {
+        color: #ccc;
+        font-size: 14px;
+      }
+    }
+
+    .gt-comment-content:hover {
+      box-shadow: 0 0 5px #ccc inset;
+    }
+
+    .gt-comment-admin .gt-comment-content {
+      background-image: linear-gradient(-335deg, #475682, #2e5676);
+    }
+
+    .gt-comment-body p {
+      color: #ccc !important;
+      font-size: 14px;
+    }
+
+    .markdown-body blockquote {
+      border-left: 2px solid #666;
+    }
+
+    .markdown-body h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: #ccc;
+    }
+
+    .markdown-body h1,
+    h2 {
+      border-bottom: 2px solid #666;
+    }
+  }
+}

@@ -1,0 +1,208 @@
+# Header
+# subtitle: dnhyxc
+author: dnhyxc
+
+menu:
+  主 页: /
+  分 类: /categories
+  归 档: /archives
+  随 笔: /informal
+  # 时间轴: /timeline
+  # -page: history
+  #   directory: timeline/
+  #   icon: fa-history
+
+tagcloud: true
+
+# SubNav
+subnav:
+  juejin: "https://juejin.cn/user/4265760848885368"
+  github: "https://github.com/dnhyxc"
+  # weibo: "#"
+  # rss: "#"
+  zhihu: "https://www.zhihu.com/people/xia-mo-65-57-25"
+  #qq: "#"
+  #weixin: "#"
+  #jianshu: "#"
+  #douban: "#"
+  #segmentfault: "#"
+  #bilibili: "#"
+  #acfun: "#"
+  # mail: "2640559435@qq.com"
+  #facebook: "#"
+  #google: "#"
+  #twitter: "#"
+  #linkedin: "#"
+
+rss: /atom.xml
+
+# 是否需要修改 root 路径
+# 如果您的网站存放在子目录中，例如 http://yoursite.com/blog，
+# 请将您的 url 设为 http://yoursite.com/blog 并把 root 设为 /blog/。
+root: /
+
+# Content
+
+# 文章太长，截断按钮文字
+excerpt_link: false
+# 文章卡片右下角常驻链接，不需要请设置为false
+show_all_link: "展开全文"
+# 数学公式
+mathjax: false
+# 是否在新窗口打开链接
+open_in_new: false
+
+# 打赏
+# 打赏type设定：0-关闭打赏； 1-文章对应的md文件里有reward:true属性，才有打赏； 2-所有文章均有打赏
+reward_type: 2
+# 打赏wording
+reward_wording: "Thank you"
+# 支付宝二维码图片地址，跟你设置头像的方式一样。比如：/assets/img/alipay.jpg
+alipay: "/assets/img/alipay.jpg"
+# 微信二维码图片地址
+weixin: /assets/img/wechat.jpg
+
+# 目录
+# 目录设定：0-不显示目录； 1-文章对应的md文件里有toc:true属性，才有目录； 2-所有文章均显示目录
+toc: 1
+# 根据自己的习惯来设置，如果你的目录标题习惯有标号，置为true即可隐藏hexo重复的序号；否则置为false
+toc_hide_index: false
+# 目录为空时的提示
+toc_empty_wording: "抱歉·私密文章不支持目录"
+
+# 是否有快速回到顶部的按钮
+top: false
+
+# Miscellaneous
+baidu_analytics: ""
+google_analytics: ""
+
+favicon:
+  small: /img/favicon.ico
+  #medium: /images/favicon-32x32-next.png
+  medium: /img/favicon.ico
+  apple_touch_icon: /img/apple-touch-icon-next.png
+  safari_pinned_tab: /img/logo.svg
+  #android_manifest: /manifest.json
+
+#你的头像url
+avatar: /img/dnhyxc.jpg
+# avatar: https://avatars.githubusercontent.com/u/57223903?s=460&u=6af037d861ac65ffc7916d60edbe0c541d1cc9d3&v=4
+
+#是否开启分享
+share_jia: false
+
+#评论：1、多说；2、网易云跟帖；3、畅言；4、Disqus；5、Gitment
+#不需要使用某项，直接设置值为false，或注释掉
+#具体请参考wiki：https://github.com/litten/hexo-theme-yilia/wiki/
+
+#1、多说
+duoshuo: false
+
+#2、网易云跟帖
+wangyiyun: false
+
+#3、畅言
+changyan_appid: false
+changyan_conf: false
+
+#4、Disqus 在hexo根目录的config里也有disqus_shortname字段，优先使用yilia的
+disqus: false
+
+#5、Gitment
+gitment_owner: false #你的 GitHub ID
+gitment_repo: "" #存储评论的 repo
+gitment_oauth:
+  client_id: "" #client ID
+  client_secret: "" #client secret
+
+# 样式定制 - 一般不需要修改，除非有很强的定制欲望…
+style:
+  # 头像上面的背景颜色
+  # header: "background-color: rgba(225,225,225,0)"
+  # 右滑板块背景
+  slider: "background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%)"
+  btnctn: "background-image: linear-gradient(-225deg, #2b5876 0%, #4e4376 100%)"
+  tocContent: "background-image: linear-gradient(to top, #09203f 0%, #537895 100%)"
+
+# slider的设置
+slider:
+  # 是否默认展开tags板块
+  showTags: true
+
+# 智能菜单
+# 如不需要，将该对应项置为false
+# 比如
+#smart_menu:
+#  friends: false
+smart_menu:
+  innerArchive: "所有文章"
+  friends: "友链"
+  aboutme: "关于我"
+
+friends:
+  友情链接1: http://localhost:4000/
+  友情链接2: http://localhost:4000/
+  友情链接3: http://localhost:4000/
+  友情链接4: http://localhost:4000/
+  友情链接5: http://localhost:4000/
+  友情链接6: http://localhost:4000/
+
+# aboutme: 性名:ninghai<br><br>github:https://github.com/dnhyxc<br>微信:dnh20091206<br>擅长:JavaScript、React、Dva、webpack<br>
+aboutme:
+  name: dengninghai
+  github: https://github.com/dnhyxc
+  wechat: dnh20091206
+
+canvas_nest: true
+
+busuanzi:
+  enable: true
+
+# Valine 评论系统 https://valine.js.org
+# valine:
+#   appid: k8iXy6BCJ5fbB1TB8DbrUPr9-gzGzoHsz
+#   appkey: VszAhjmXdkoNUDRyO0URdndV
+#   verify: false #验证码，verify和notify这两个最好就别动了
+#   notify: false #评论回复提醒
+#   avatar: "" #评论列表头像样式：''/mm/identicon/monsterid/wavatar/retro/hide
+#   placeholder: 精彩的评论从您输入开始 #评论框占位符
+#   avatar_cdn: https://avatars.githubusercontent.com/u/57223903?s=460&u=6af037d861ac65ffc7916d60edbe0c541d1cc9d3&v=4
+
+# gitalk 评论
+gitalk:
+  enable: true
+  owner: dnhyxc
+  admin: dnhyxc
+  repo: dnhyxc.github.io
+  ClientID: 5821385ca1ed52b2134e
+  ClientSecret: 60de8d60e1a711ebd05ca957ffd3d2816ddd121e
+  labels: gitalk
+  distractionFreeMode: true
+
+# 文章加密
+encrypt:
+  enable: true
+  abstract: 这是一篇加密文章，内容可能是个人情感宣泄或者收费技术。如果你非常好奇，请与我联系。
+  message: 输入密码，查看文章。
+  # default_abstract: 这是一篇加密文章，内容可能是个人情感宣泄或者收费技术。如果你确实想看，请与我联系。
+  # default_message: 输入密码，查看文章。
+
+# 文章字数统计
+word_count: True
+
+# 版权声明
+#在需要进行版权声明的文章的md文件头部，设置属性declare: true。
+#版权基础设定：0-关闭声明； 1-文章对应的md文件里有declare: true属性，才有版权声明； 2-所有文章均有版权声明
+declare:
+  declare_type: 1
+  licensee_url: https://creativecommons.org/licenses/by-nc-sa/4.0/ #当前应用的版权协议地址。
+  licensee_name: "CC BY-NC-SA 4.0" #版权协议的名称
+  licensee_alias: "知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议" # alias别名
+  # licensee_img: /img/declare.png #版权协议的Logo
+
+# 添加APlayer音乐播放器，官网：https://aplayer.js.org
+# github: https://github.com/MoePlayer/APlayer
+aplayer:
+  enable: true
+  asset_inject: false

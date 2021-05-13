@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>查找字符串出现最多的字符及次数</title>
+</head>
+
+<body>
+  <script>
+    let str = "abcabcabcbbccccc";
+    let num = 0;
+    let char = '';
+
+    // 使其按照一定的次序排列
+    str = str.split('').sort().join(''); // "aaabbbbbcccccccc"
+
+    // 定义正则表达式
+    let re = /(\w)\1+/g;
+
+    str.replace(re, ($1, $2, $3, $4, $5) => {
+      if (num < $1.length) {
+        num = $1.length;
+        char = $2;
+      }
+    });
+    console.log(`字符最多的是${char}，出现了${num}次`);
+
+    // $1, $2说明：
+    str.replace(re, ($1, $2, $3, $4, $5) => {
+      console.log($1, $2, $3, $4, $5);
+      /*
+        aaa a 0 aaabbbbbcccccccc undefined
+        bbbbb b 3 aaabbbbbcccccccc undefined
+        cccccccc c 8 aaabbbbbcccccccc undefined
+      */
+    });
+  </script>
+</body>
+
+</html>

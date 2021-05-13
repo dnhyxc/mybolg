@@ -1,0 +1,1390 @@
+---
+title: informal
+date: 2021-02-14 01:55:54
+toc: true
+---
+
+### Event Loop 相关
+
+1，为什么 js 是单线程？
+
+- js 作为主要运行在浏览器的脚本语言，js 主要用途之一是操作 DOM。
+
+- 在 js 高程中举过一个栗子，如果 js 同时有两个线程，同时对同一个 dom 进行操作，这时浏览器应该听哪个线程的，如何判断优先级？为了避免这种问题，js 必须是一门单线程语言，并且在未来这个特点也不会改变。
+
+#### 执行栈
+
+1，执行栈是一个类似于函数调用栈的运行容器，是一个具有 LIFO（后进先出）结构的堆栈，用于存储在代码执行期间创建的所有执行上下文。当执行栈为空时，JS 引擎便检查事件队列，如果事件队列不为空的话，事件队列便将第一个任务压入执行栈中运行。
+
+#### 事件队列
+
+1，事件队列是一个存储着待执行任务的队列，其中的任务严格按照时间先后顺序执行（先进先出），排在队头的任务将会率先执行，而排在队尾的任务会最后执行。
+
+2，事件队列每次仅执行一个任务，在该任务执行完毕之后，再执行下一个任务。
+
+#### 主线程
+
+1，主线程跟执行栈是不同概念，主线程规定现在执行执行栈中的哪个事件。
+
+2，主线程循环：即主线程会不停的从执行栈中读取事件，会执行完所有栈中的同步代码。
+
+3，当遇到一个异步事件后，并不会一直等待异步事件返回结果，而是会将这个事件挂在与执行栈不同的队列中，我们称之为任务队列(Task Queue)。
+
+4，当主线程将执行栈中所有的代码执行完之后，主线程将会去查看任务队列是否有任务。如果有，那么主线程会依次执行那些任务队列中的回调函数。
+
+#### js 异步执行的运行机制
+
+1，所有任务都在主线程上执行，形成一个执行栈。
+
+2，主线程之外，还存在一个"任务队列"（task queue）。只要异步任务有了运行结果，就在"任务队列"之中放置一个事件。
+
+3，一旦"执行栈"中的所有同步任务执行完毕，系统就会读取"任务队列"。那些对应的异步任务，结束等待状态，进入执行栈并开始执行。
+
+4，主线程不断重复上面的第三步。
+
+#### 宏任务与微任务
+
+1，异步任务分为 宏任务（macrotask）与微任务 (microtask)，不同的 API 注册的任务会依次进入自身对应的队列中，然后等待 Event Loop 将它们依次压入执行栈中执行。
+
+2，宏任务（macrotask）包括：script（整体代码）、setTimeout、setInterval、UI 渲染、 I/O、postMessage、 MessageChannel、setImmediate（Node.js 环境）。
+
+3，微任务（microtask）包括：Promise、 MutaionObserver、process.nextTick（Node.js 环境）。
+
+#### Event Loop(事件循环)
+
+1，Event Loop（事件循环）中，每一次循环称为 tick, 每一次 tick 的任务如下：
+
+- 执行栈选择最先进入队列的宏任务(通常是 script 整体代码)，如果有则执行。
+
+- 检查是否存在宏任务，如果存在则不停的执行，直至清空微任务队列。
+
+- 更新 render（每一次事件循环，浏览器都可能会去更新渲染）。
+
+- 重复以上步骤。
+
+2，事件循环执行机制为：宏任务 => 所有微任务 => 宏任务，如下图所示：
+
+![事件循环执行机制](event.jpeg)
+
+> 从上图我们可以看出：
+>
+> - 将所有任务看成两个队列：执行队列与事件队列。
+> - 执行队列是同步的，事件队列是异步的，宏任务放入事件列表，微任务放入执行队列之后，事件队列之前。
+> - 当执行完同步代码之后，就会执行位于执行列表之后的微任务，然后再执行事件列表中的宏任务。
+
+3，完整的 Event Loop 如下图：
+
+![完整的 Event Loop](eventLoop.png)
+
+4，简单实践题：
+
+```js
+setTimeout(function () {
+  console.log(1);
+});
+new Promise(function (resolve, reject) {
+  console.log(2);
+  resolve(3);
+}).then(function (val) {
+  console.log(val);
+});
+console.log(4);
+
+// 答案为：2 4 3 1
+```
+
+> 解题思路为：
+>
+> - 先执行 script 同步代码：先执行 new Promise 中的 console.log(2)，then 后面的不执行属于微任务，然后执行 console.log(4)。
+> - 执行完 script 宏任务后，执行微任务，console.log(3)，没有其他微任务了。
+> - 执行另一个宏任务，定时器，console.log(1)。
+
+### JS API
+
+#### outerHTML
+
+1，使用 outerHTML 获取指定元素中的所有子元素及文本元素。
+
+```js
+<div id="content">
+  <p>outerHTML</p>
+  <ul>
+    <li>Item 1</li>
+  </ul>
+</div>;
+const content = document.getElementById("content");
+console.log(content.outerHTML);
+/*
+  执行console.log(content.outerHTML)返回如下：
+  <div id="content">
+    <p>This is a <strong>paragraph</strong> with a list following it.</p>
+    <ul>
+      <li>Item 1</li>
+      <li>Item 2</li>
+      <li>Item 3</li>
+    </ul>
+  </div>
+*/
+```
+
+2，使用 outerHTML 整体替换指定元素。
+
+```js
+<div id="content">
+  <p>outerHTML</p>
+  <ul>
+    <li>Item 1</li>
+  </ul>
+</div>;
+content.outerHTML = "<span>替换原来的div</span>";
+
+// 上述代码等价于如下代码
+const p = document.createElement("p");
+p.appendChild(document.createTextNode("dsadsadsadasda"));
+div.parentNode.replaceChild(p, div);
+```
+
+> 上述代码中，将会使用 span 标签整体替换原来的 div 标签。
+
+#### encodeURIComponent()
+
+1，该方法可以把字符串作为 URI 组件进行编码。
+
+2，该方法不会对 ASCII 字母和数字进行编码，也不会对这些 ASCII 标点符号进行编码： `- _ . ! ~ * ' ( ) `。其他字符（比如：`; / ? : @ & = + $ , #`这些用于分隔 URI 组件的标点符号），都会被一个或多个十六进制的转义序列替换的。
+
+3，具体使用：
+
+```js
+const url = "http://www.baidu.com";
+const res = encodeURIComponent(url);
+console.log(res); // http%3A%2F%2Fwww.baidu.com
+```
+
+### 构造函数相关
+
+#### 构造函数 this
+
+1，构造函数中，this 总是指向新创建出来的实例对象。
+
+2，如果在严格模式下，this 则指向 undefined。
+
+#### new 关键字
+
+1，构造函数于普通函数的区别就是，构造函数需要使用 new 关键字进行调用。
+
+2，new 关键字调用构造函数时，会经历四个过程，分别为：
+
+- 创建一个 Object 实例对象。相当于：
+
+```js
+const obj = new Object();
+```
+
+- 将构造函数中的 this 指向新创建的这个实例对象。
+
+```js
+this.name = "dnhyxc";
+// 相当于（obj是new Object()创建的对象）
+obj.name = "dnhyxc";
+```
+
+- 自上而下执行构造函数中的代码。
+
+- 返回 new 构建出的实例对象。
+
+**注意**：如果被调用的这个构造函数没有显示的 `return` 表达式（仅限于返回对象类型数据的情况）时，则会隐式的返 `this` 对象，也就是 new 创建出来的实例对象。
+
+**说明**：如果使用 return 表达式返回 undefined、null、boolean、number、string 等基本数据类型的时候，则不会替换 new 关键字调用的默认行为，也就是说此时会隐式的返回 new 创建出来的实例对象。而如果用 return 显示的返回 {}、[]、RegExp、Data、Function 时，return 返回的值则会替换 new 调用的默认返回值 this，也就是说会替换 new 新创建出来的实例对象。
+
+#### 相关测试代码
+
+```js
+function Test(name) {
+  console.log(this);
+  this.user = name;
+  return {};
+}
+
+const newObj = new Test("dnhyxc");
+console.log(newObj.user, "return {}"); // undefined
+console.log(">>>))手动分割线)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+function Test1(name) {
+  console.log(this);
+  this.user = name;
+  return [];
+}
+
+const newObj1 = new Test1("dnhyxc");
+console.log(newObj1.user, "return []"); // undefined
+console.log(">>>))手动分割线)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+function Test2(name) {
+  console.log(this);
+  this.user = name;
+  return null;
+}
+
+const newObj2 = new Test2("dnhyxc");
+console.log(newObj2.user, "return null"); // dnhyxc
+console.log(">>>))手动分割线)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+function Test3(name) {
+  console.log(this);
+  this.user = name;
+  return undefined;
+}
+
+const newObj3 = new Test3("dnhyxc");
+console.log(newObj3.user, "return null"); // dnhyxc
+console.log(">>>))手动分割线)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+```
+
+### JS 实现千位分隔符
+
+#### 实现方式一
+
+1，首先将数字转为字符串数组，在循环整个数组，每三位添加一个分隔逗号，最后再合并成字符串。
+
+2，由于分隔符在顺序上是从后往前添加的：比如 1234567 添加后是 1,234,567 而不是 123,456,7，所以方便起见可以先把数组倒序排列，添加完之后再将顺序倒回来，就是正常顺序了。
+
+3，**注意**：如果数字带小数的话，要把小数部分分开处理。
+
+```js
+function numFormat(num) {
+  // 分隔小数点
+  num = num.toString().split(".");
+  // 转换成字符数组并且倒序排列
+  var arr = num[0].split("").reverse();
+  var res = [];
+  for (var i = 0; i < arr.length; i++) {
+    if (i % 3 === 0 && i !== 0) {
+      // 添加分隔符
+      res.push(",");
+    }
+    res.push(arr[i]);
+  }
+  // 再次倒序成为正确的顺序
+  res.reverse();
+  // 如果有小数的话添加小数部分
+  if (num[1]) {
+    res = res.join("").concat("." + num[1]);
+  } else {
+    res = res.join("");
+  }
+  return res;
+}
+
+var a = 1234567894532;
+var b = 673439.4542;
+console.log(numFormat(a)); // "1,234,567,894,532"
+console.log(numFormat(b)); // "673,439.4542"
+```
+
+#### 实现方式二
+
+1，使用 JS 自带的 API `toLocaleString()`。
+
+```js
+numObj.toLocaleString(locales, options);
+```
+
+> locales：缩写语言代码（BCP 47 language tag，例如：cmn-Hans-CN）的字符串或者这些字符串组成的数组。
+
+> options：包含一些或所有的下面属性的类。`decimal => 用于纯数字格式`，`currency => 用于货币格式`，`percent => 用于百分比格式`，`unit => 用于单位格式`。
+
+> 该方法返回这个数字在特定语言环境下的表示字符串。
+
+2，**注意**：该方法在没有指定区域时，返回时用默认的语言环境和默认选项格式化的字符串，所以不同地区数字格式可能会有一定的差异，因此最好确保使用 locales 参数指定了使用的语言。
+
+3，实现数字插入千位符代码如下：
+
+```js
+const a = 1234567894532;
+const b = 673439.4542;
+
+console.log(a.toLocaleString()); // "1,234,567,894,532"
+console.log(b.toLocaleString()); // "673,439.454"  （小数部分四舍五入了）
+```
+
+#### 实现方式三
+
+1，使用 `RegExp 和 replace()` 方法。
+
+```js
+function numFormat(num) {
+  // 先提取整数部分
+  var res = num.toString().replace(/\d+/, function (n) {
+    return n.replace(/(\d)(?=(\d{3})+$)/g, function ($1) {
+      return $1 + ",";
+    });
+  });
+  return res;
+}
+var a = 1234567894532;
+var b = 673439.4542;
+console.log(numFormat(a)); // "1,234,567,894,532"
+console.log(numFormat(b)); // "673,439.4542"
+```
+
+> 上述代码中，对象或者字面量所匹配的内容会被第二个参数的返回值替换。
+
+### JS 计算行数
+
+#### 计算元素是否达到三行
+
+1，使用`元素的高度` **/** `元素的行高`即为文本行数：
+
+```js
+const box = document.getElementById("box");
+const height = box.offsetHeight;
+const lineHeight = box.style.lineHeight.slice(
+  0,
+  box.style.lineHeight.length - 2
+);
+const rowMun = Math.round(height / parseFloat(lineHeight));
+console.log(rowMun); // 3
+```
+
+### Array.map() 实现页面展示数组数据
+
+#### 上传文件与列表已有文件同时展示
+
+1，处理文件上传文件与原有文件需要同时展示时，需要使用两个互不相干的数组进行展示，即上传文件分为一个数组，已有文件分为一个数组，将这两个数组同时展示在页面上，避免在操作增删改操作时相互影响。
+
+2，伪代码如下：
+
+```js
+<div className={classNames(styles.contentWrap, styles.faceWrap)}>
+  <div className={styles.uploadWrap} style={isShowFaceCreate ? { display: 'blocdisplay: 'none' }}>
+    <FaceUpload onChange={uploadSuccess} getAddRes={getAddRes} />
+  </div>
+  {
+    !loading ? faceDetialData.registeredFaceList && faceDetialData.registeredFaceList.map((i, index) => {
+      return (
+        <MFace
+          key={index as number}
+          width={145}
+          height={173}
+          url={i.url}
+          faceId={i.faceId}
+          data={{
+            i, index,
+          }}
+          delEntityFace={delEntityFace}
+          type="edit"
+        />
+      );
+    }) : ''
+  }
+  {
+    !loading ? uploadList.length > 0 && uploadList.map((i, index) => {
+      return (
+        <MFace
+          key={index as number}
+          width={145}
+          height={173}
+          url={i.url}
+          res={i.res}
+          data={{
+            i, index,
+          }}
+          type="edit"
+          delUploadData={delUploadData}
+        />
+      );
+    }) : ''
+  }
+</div>
+```
+
+### 数组转对象的方式
+
+#### 方式一
+
+1，`对象结构`：
+
+```js
+const arr = ["arr1", "arr2", "arr3"];
+
+const obj = { ...arr };
+```
+
+#### 方式二
+
+1，`for...in 循环`：
+
+```js
+const arr = ["arr1", "arr2", "arr3"];
+const obj = {};
+
+for (let k in arr) {
+  obj[k] = arr[k];
+}
+```
+
+#### 方式三
+
+1，`Object.assign()`：
+
+```js
+const arr = ["arr1", "arr2", "arr3"];
+
+Object.assign({}, arr);
+```
+
+#### 方式四
+
+1，`Array.reduce()`：
+
+```js
+arr.reduce((obj, arr, index) => {
+  obj[index] = arr;
+  return obj;
+}, {});
+```
+
+### 改变对象属性名的方式
+
+#### JSON.parse() && JSON.stringify()
+
+1，缺点：如果属性值匹配到也会被更改，而且属性名中有部分匹配到也会被更改。
+
+```js
+var aaa = [
+  {
+    Name: "test1Name",
+    type: "test",
+  },
+  {
+    Name: "test2",
+    model: "model2",
+  },
+];
+var bbb = JSON.parse(JSON.stringify(aaa).replace(/Name/g, "title"));
+console.log(bbb);
+```
+
+#### 使用递归遍历
+
+1，使用递归遍历对数组中每一个对象的属性名进行更改。
+
+2，函数第一个参数是要修改的对象，第二个参数传数组 key 为要被改的属性名，value 为改成的属性名。
+
+3，函数本身是一个深拷贝，通过对其每层中对象的“键”做匹配替换即实现了多层的“键”替换，另外这里如果传空数组此函数就是一个深拷贝。
+
+```js
+function copyTrans(obj, typeArr) {
+  let result;
+  const { toString } = Object.prototype;
+  if (toString.call(obj) === "[object Array]") {
+    result = [];
+    for (let i = 0; i < obj.length; i++) {
+      result[i] = copyTrans(obj[i], typeArr);
+    }
+  } else if (toString.call(obj) === "[object Object]") {
+    result = {};
+    for (const _key in obj) {
+      if (obj.hasOwnProperty(_key)) {
+        let flag = 0;
+        let _value = null;
+        for (let j = 0; j < typeArr.length; j++) {
+          if (typeArr[j].key === _key) {
+            flag = 1;
+            _value = typeArr[j].value;
+          }
+        }
+        if (flag) {
+          result[_value] = copyTrans(obj[_key], typeArr);
+        } else {
+          result[_key] = copyTrans(obj[_key], typeArr);
+        }
+      }
+    }
+  } else {
+    return obj;
+  }
+  return result;
+}
+
+const arr = [
+  { name: "key", age: "18" },
+  { key: "name", address: "poyang" },
+];
+
+const res = copyTrans(arr, [
+  { key: "name", value: "myname" },
+  { key: "key", value: "myvalue" },
+]);
+console.log(res);
+```
+
+### 时间转换
+
+#### 将时长转成 时:分:秒
+
+```js
+const timeToMinute = (time) => {
+  let t;
+  if (time > -1) {
+    const hour = Math.floor(time / 3600);
+    const min = Math.floor(time / 60) % 60;
+    const sec = time % 60;
+    if (hour < 10) {
+      t = "0" + hour + ":";
+    } else {
+      t = hour + ":";
+    }
+    if (min < 10) {
+      t += "0";
+    }
+    t += min + ":";
+    if (sec < 10) {
+      t += "0";
+    }
+    t += sec.toFixed(2);
+  }
+  t = t.substring(0, t.length - 3);
+  return t;
+};
+
+const res = timeToMinute(320);
+console.log(res);
+```
+
+#### 将时间转成 天/时/分/秒
+
+```js
+function secondsFormat(s) {
+  var day = Math.floor(s / (24 * 3600)); // Math.floor()向下取整
+  var hour = Math.floor((s - day * 24 * 3600) / 3600);
+  var minute = Math.floor((s - day * 24 * 3600 - hour * 3600) / 60);
+  var second = s - day * 24 * 3600 - hour * 3600 - minute * 60;
+  return day + "天" + hour + "时" + minute + "分" + second + "秒";
+}
+console.log(secondsFormat(5555555)); // 64天7时12分35秒
+console.log(secondsFormat(1234)); // 0天0时20分34秒
+```
+
+#### 将时间转成 年/月/日 时:分:秒
+
+```js
+function getHMS(timestamp) {
+  var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  var Y = date.getFullYear() + "/";
+  var M =
+    (date.getMonth() + 1 < 10
+      ? "0" + (date.getMonth() + 1)
+      : date.getMonth() + 1) + "/";
+  var D = (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
+
+  var h =
+    (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":";
+  var m =
+    (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
+    ":";
+  var s = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+  return Y + M + D + h + m + s;
+}
+
+const HMS = getHMS(Date.now());
+console.log(HMS); // 2021/01/12 14:06:25
+```
+
+#### 时间戳转成 YYYY-MM-DD hh:mm:ss 新思路
+
+1，Date 的 'toJSON' 方法返回格林威治时间的 JSON 格式字符串，实际是使用 'toISOString' 方法的结果。字符串形如'2018-08-09T10:20:54.396Z'，转化为北京时间需要额外增加八个时区，我们需要取字符串前 19 位，然后把 'T' 替换为空格，即是我们需要的时间格式。
+
+```js
+function time(time = +new Date()) {
+  let date = new Date(time + 8 * 3600 * 1000); // 增加8小时
+  console.log(date.toJSON()); // 2021-01-12T14:20:21.511Z
+  return date.toJSON().substr(0, 19).replace("T", " ");
+}
+const myTime = time();
+console.log(myTime); // 2021-01-12 14:13:13
+
+function getTime(time = +new Date()) {
+  let date = new Date(time + 8 * 3600 * 1000); // 增加8小时
+  return date.toJSON().substr(0, 19).replace("T", " ").replace(/-/g, ".");
+}
+
+const time1 = getTime();
+console.log(time1); // 2021.01.12 14:18:55
+```
+
+### 坐标定位
+
+#### 使用坐标计算目标在元素中的实际位置
+
+1，说明：利用坐标在指定宽高的元素中按照实际比例框中指定的位置。
+
+```js
+const getVirtualRect = (options: any, meta: any) => {
+  if (!options || !meta) {
+    return null;
+  }
+  const { width, height } = meta;
+
+  if (!width || !height) {
+    return null;
+  }
+
+  const { regionHeight, regionLeft, regionTop, regionWidth, timePoint } =
+    options;
+
+  if (
+    regionHeight === undefined ||
+    regionLeft === undefined ||
+    regionTop === undefined ||
+    regionWidth === undefined
+  ) {
+    return null;
+  }
+
+  /* 
+    width: 135px; 规定当前元素显示的宽度。
+    height: 76px; 规定当前元素显示的高度。
+    即：实际就是要在宽为135px，高为76px的元素中利用坐标框出指定的位置
+  */
+
+  // 将位置信息映射处理
+  let virtualHeight = 0;
+  let virtualWidth = 0;
+  let deltaHeight = 0;
+  let deltaWidth = 0;
+  let radio = 1;
+  if (width / height >= 135 / 76) {
+    virtualWidth = 135;
+    virtualHeight = (height * 135) / width;
+    deltaHeight = Math.floor((76 - virtualHeight) / 2);
+    radio = width / 135;
+  } else {
+    virtualWidth = (width * 76) / height;
+    virtualHeight = 76;
+    deltaWidth = Math.floor((135 - virtualWidth) / 2);
+    radio = height / 76;
+  }
+  // 计算实际的位置信息
+  const delta = 20; // 成比例放大
+  const w = (regionWidth + delta) / radio;
+  const h = (regionHeight + delta) / radio;
+  const l = (regionLeft - delta) / radio + deltaWidth;
+  const t = (regionTop - delta) / radio + deltaHeight;
+
+  return {
+    w,
+    h,
+    l,
+    t,
+    timePoint,
+  };
+};
+```
+
+### 浏览器下载操作
+
+#### 处理批量下载
+
+```js
+export const download = (url: string) => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.click();
+};
+
+export const delay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+// 批量下载
+export const downloadFiles = async (urls: string[]) => {
+  for (const url of urls) {
+    download(url);
+    await delay(1000);
+  }
+};
+```
+
+### window.Image()
+
+#### 使用 new window.Image() 设置图片 loading 效果
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>image loading</title>
+    <style>
+      .wrap {
+        width: 400px;
+        height: 225px;
+        border: 1px solid red;
+        text-align: center;
+        line-height: 225px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <span>loading...</span>
+    </div>
+    <script>
+      const wrap = document.querySelector(".wrap");
+      const myImage = document.createElement("img");
+      const p = document.createElement("p");
+
+      const img = new window.Image();
+
+      img.onload = function () {
+        loading = false;
+      };
+
+      img.onerror = function () {
+        alert("error!");
+      };
+
+      img.src =
+        "https://s.newscdn.cn/file/2020/07/1413858a-b2fb-4351-a715-6496b980771b.gif";
+
+      window.onload = function () {
+        myImage.src = img.src;
+        wrap.innerHTML = "";
+        wrap.appendChild(myImage);
+      };
+    </script>
+  </body>
+</html>
+```
+
+### DOM
+
+#### dom 滚动条相关
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>scrollbar</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      body :first-child {
+        margin-right: 50px;
+      }
+
+      .parent {
+        box-sizing: border-box;
+        height: 100%;
+        width: 500px;
+        background-color: #ccc;
+        padding: 10px 10px;
+        overflow: auto;
+      }
+
+      .child {
+        width: 100%;
+        height: 1200px;
+        background-color: rgb(184, 247, 164);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="parent" id="scroll">
+      <div class="child">监听滚动条向上滚动还是向下滚动</div>
+    </div>
+    <div class="parent" id="scroll1">
+      <div class="child">监听滚动是否停止</div>
+    </div>
+    <script>
+      const scroll = document.getElementById("scroll");
+      let currentVal = 0;
+      let scrollVal = 0;
+      // 监听滚动条向上滚动还是向下滚动
+      scroll.onscroll = function () {
+        // 每滚动一次，就会重新赋值
+        currentVal = scrollVal;
+        scrollVal = scroll.scrollTop;
+        if (currentVal < scrollVal) {
+          //滚动条下滑，实现下滑效果
+          console.log("向下滚动");
+        } else {
+          //滚动条上滑，实现上滑效果
+          console.log("向上滚动");
+        }
+      };
+
+      // 监听滚动条滚动是否停止
+      let scrollTop1 = 0;
+      let scrollTop2 = 0;
+      let timer = null;
+      const scroll1 = document.getElementById("scroll1");
+      scroll1.onscroll = function () {
+        clearTimeout(timer);
+        scrollTop1 = scroll1.scrollTop;
+        timer = setTimeout(() => {
+          scrollTop2 = scroll1.scrollTop;
+          if (scrollTop1 === scrollTop2) {
+            console.log("滚动停止了");
+          }
+        }, 500);
+      };
+    </script>
+  </body>
+</html>
+```
+
+### CSS
+
+#### flex 换行后双双对齐
+
+1，给开启 flex 的父元素添加 `::after` 伪元素，并设置宽度与需要对齐的元素一致。`不要设置高度`。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>flex换行后双双对齐</title>
+    <style>
+      .wrap {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-wrap: wrap;
+        overflow-y: auto;
+        margin: 100px auto 0;
+        padding-bottom: 10px;
+        width: 375px;
+        max-height: 700px;
+        border: 1px solid red;
+      }
+      .wrap::after {
+        content: "";
+        width: 170px;
+      }
+      .box {
+        margin-top: 10px;
+        width: 170px;
+        height: 212px;
+        background-color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="box">box1</div>
+      <div class="box">box2</div>
+      <div class="box">box3</div>
+      <div class="box">box4</div>
+      <div class="box">box5</div>
+    </div>
+  </body>
+</html>
+```
+
+#### 使网页整体变灰色
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HtmlToGray</title>
+    <style>
+      body,
+      html {
+        /* 使网页整体变色 */
+        filter: grayscale(100%);
+        -webkit-filter: grayscale(100%);
+        -moz-filter: grayscale(100%);
+        -ms-filter: grayscale(100%);
+        -o-filter: grayscale(100%);
+        filter: url("data:image/svg+xml;utf8,#grayscale");
+        filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+        -webkit-filter: grayscale(1);
+        width: 100%;
+        height: 100%;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .box {
+        width: 100%;
+        height: 100%;
+        background-color: rgb(218, 237, 245);
+      }
+
+      .header {
+        width: 100%;
+        height: 70px;
+        background-color: wheat;
+        line-height: 70px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        width: 80px;
+        height: 32px;
+        background-color: rgb(224, 236, 241);
+        -webkit-border-radius: 6px;
+        /*适配以webkit为核心的浏览器(chrome、safari等)*/
+        -moz-border-radius: 6px;
+        /*适配firefox浏览器*/
+        -ms-border-radius: 6px;
+        /*适配IE浏览器*/
+        -o-border-radius: 6px;
+        /*适配opera浏览器*/
+        border-radius: 6px;
+        /*适配所有浏览器*/
+        border: 1px solid #c6c4c4;
+        outline: none;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background-color: rgb(175, 197, 206);
+      }
+
+      .btn:active {
+        background-color: rgb(156, 220, 245);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="box">
+      <div class="header">header</div>
+      <button class="btn">click</button>
+    </div>
+  </body>
+</html>
+```
+
+#### 双击不选中文字
+
+```css
+.clickNoSelectText {
+  -moz-user-select: none;
+  /*火狐*/
+  -webkit-user-select: none;
+  /*webkit浏览器*/
+  -ms-user-select: none;
+  /*IE10*/
+  -khtml-user-select: none;
+  /*早期浏览器*/
+  user-select: none;
+}
+```
+
+#### 多行文字垂直对齐
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>text-space-between</title>
+    <style>
+      .info {
+        border: 1px solid red;
+        width: 500px;
+        height: 300px;
+      }
+
+      .username,
+      .password {
+        width: 60px;
+        height: 40px;
+        line-height: 40px;
+        font-family: PingFangSC-Medium;
+        font-size: 16px;
+        /* display: inline-block; */
+        text-align: justify;
+        padding-right: 10px;
+        vertical-align: bottom;
+      }
+
+      .username::after,
+      .password::after {
+        display: inline-block;
+        width: 100%;
+        content: "";
+        height: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="info">
+      <div class="username">用户名</div>
+      <div class="password">密码</div>
+    </div>
+  </body>
+</html>
+```
+
+#### 图片层叠显示效果实现
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CascadeImg</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .wrap {
+        width: 98px;
+        height: 110px;
+        margin: 100px auto;
+        position: relative;
+      }
+
+      .stackone {
+        height: 110px;
+        width: 98px;
+        border: 2px solid #fff;
+        background-color: #99cecb;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .stacktwo {
+        content: "";
+        height: 110px;
+        width: 98px;
+        background: #a8b386;
+        border: 2px solid #fff;
+        position: absolute;
+        z-index: -1;
+        top: 0px;
+        left: -5px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        transform: rotate(-9deg);
+      }
+
+      .stackthree {
+        content: "";
+        height: 110px;
+        width: 98px;
+        background: #6f95b1;
+        border: 2px solid #fff;
+        position: absolute;
+        z-index: -1;
+        top: 0px;
+        left: 0px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        transform: rotate(12deg);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="stackone"></div>
+      <div class="stacktwo"></div>
+      <div class="stackthree"></div>
+    </div>
+  </body>
+</html>
+```
+
+- 效果如下：
+
+![图片层叠显示效果](cascadeImg.jpg)
+
+### less
+
+#### 定义不带参数的属性集合
+
+1，可用于隐藏这些属性集合，不让它暴露到 CSS 中。
+
+```less
+// 是网页整体变成灰色
+.htmlToGray() {
+  filter: grayscale(100%);
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+  filter: url("data:image/svg+xml;utf8,#grayscale");
+  filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+  -webkit-filter: grayscale(1);
+}
+
+// 双击不选中文字
+.clickNoSelectText {
+  -moz-user-select: none;
+  /*火狐*/
+  -webkit-user-select: none;
+  /*webkit浏览器*/
+  -ms-user-select: none;
+  /*IE10*/
+  -khtml-user-select: none;
+  /*早期浏览器*/
+  user-select: none;
+}
+```
+
+#### 定义带参数的属性集合
+
+1，不给参数设置默认值。
+
+```less
+.border-radius (@radius) {
+  border-radius: @radius;
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+}
+
+#header {
+  .border-radius(4px);
+}
+
+.button {
+  .border-radius(6px);
+}
+```
+
+2，给参数设置默认值。
+
+```less
+.border-radius (@radius : 5px) {
+  border-radius: @radius;
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+}
+
+#header {
+  .border-radius(4px);
+}
+```
+
+3，arguments 包含了所有的传递进来的参数，不用单独处理每一个参数。
+
+```less
+.box-shadow (@x: 0, @y: 0, @blur: 1px, @color: #000) {
+  box-shadow: @arguments;
+  -moz-box-shadow: @arguments;
+  -webkit-box-shadow: @arguments;
+}
+.box-shadow(2px, 5px);
+```
+
+> 以上样式编译结果如下：
+
+```css
+.box-shadow {
+  box-shadow: 2px 5px 1px #000;
+  -moz-box-shadow: 2px 5px 1px #000;
+  -webkit-box-shadow: 2px 5px 1px #000;
+}
+```
+
+#### 匹配模式
+
+1，可以通过参数与实参的名称进行匹配，也可以通过参数的个数进行匹配。
+
+```less
+//让.mixin根据不同的@switch值而表现各异
+.mixin (dark, @color) {
+  color: darken(@color, 10%);
+}
+.mixin (light, @color) {
+  color: lighten(@color, 10%);
+}
+.mixin (@_, @color) {
+  display: block;
+}
+
+//运行
+@switch: light;
+
+.class {
+  .mixin(@switch, #888);
+}
+```
+
+> 编译结果如下：
+
+```css
+.class {
+  color: #a2a2a2;
+  display: block;
+}
+/*
+  mixin就会得到传入颜色的浅色。如果@switch设为dark，就会得到深色。
+
+  具体实现如下：
+  第一个混合定义并未被匹配，因为它只接受dark做为首参。
+  第二个混合定义被成功匹配，因为它只接受light。
+  第三个混合定义被成功匹配，因为它接受任意值。
+
+  只有被匹配的混合才会被使用。变量可以匹配任意的传入值，而变量以外的固定值就仅仅匹配与其相等的。
+*/
+```
+
+### 移动端滑动事件
+
+#### 判断手指滑动方向
+
+```js
+let startx, starty;
+//获得角度
+function getAngle(angx, angy) {
+  return (Math.atan2(angy, angx) * 180) / Math.PI;
+}
+
+//根据起点终点返回方向 1向上 2向下 3向左 4向右 0未滑动
+function getDirection(startx, starty, endx, endy) {
+  let angx = endx - startx;
+  let angy = endy - starty;
+  let result = 0;
+
+  //如果滑动距离太短
+  if (Math.abs(angx) < 2 && Math.abs(angy) < 2) {
+    return result;
+  }
+
+  let angle = getAngle(angx, angy);
+  if (angle >= -135 && angle <= -45) {
+    result = 1;
+  } else if (angle > 45 && angle < 135) {
+    result = 2;
+  } else if (
+    (angle >= 135 && angle <= 180) ||
+    (angle >= -180 && angle < -135)
+  ) {
+    result = 3;
+  } else if (angle >= -45 && angle <= 45) {
+    result = 4;
+  }
+  return result;
+}
+//手指接触屏幕
+document.addEventListener(
+  "touchstart",
+  function (e) {
+    startx = e.touches[0].pageX;
+    starty = e.touches[0].pageY;
+  },
+  false
+);
+//手指离开屏幕
+document.addEventListener(
+  "touchend",
+  function (e) {
+    let endx, endy;
+    endx = e.changedTouches[0].pageX;
+    endy = e.changedTouches[0].pageY;
+    let direction = getDirection(startx, starty, endx, endy);
+    switch (direction) {
+      case 1:
+        console.log("向上滑动");
+        break;
+      case 2:
+        console.log("向下滑动");
+        break;
+      case 3:
+        console.log("向左滑动");
+        break;
+      case 4:
+        console.log("向右滑动");
+        break;
+      default:
+        console.log("暂未滑动");
+        break;
+    }
+  },
+  false
+);
+```
+
+### Fetch API
+
+#### text()
+
+1，该方法用于读取 Response 对象并且将它设置为已读（因为 Responses 对象被设置为了 stream 的方式，所以它们只能被读取一次），并返回一个被解析为 USVString 格式的 Promise 对象。
+
+```js
+async function getData() {
+  const res = await fetch("http://xxxxxx");
+  res.text().then((res) => {
+    console.log(res);
+  });
+}
+```
+
+> 上述代码描述的是通过 url 从 oss 上获取富文本内容（返回的是一个 html 字符串），此时获取到的结果在 body 中，如果不使用 `text()` 方法，那么获取到的数据就是不可读的。因此 text() 可以读取 response 对象，同时将其设置为已读。最后返回一被解析的 html 字符串。
+
+### Dva
+
+#### Dva 中实现请求轮循
+
+1，利用 yield 关键字可以阻塞代码运行的特性，将异步变为同步的特性来实现轮询，通过设置一个延时函数，延时时间为 300ms，当此次的数据请求完成之后通过延时函数延时 300ms 之后再进行下一次请求执行。
+
+2，具体代码如下：
+
+```js
+* getLatestList(action, { call, put, select }) {
+	const delay = ms => new Promise(resolve => setTimeout(resolve, ms);
+	while(true) {
+	  const data = yield call(getData);
+	  yield call(delay, 300); // 延时300ms之后进行下一次的while循环执行
+    yield put({ type: 'save', data });
+  }
+}
+```
+
+### npm 相关
+
+#### npm 发布私有包
+
+1，创建 npm 账号。
+
+2，账号创建成功，即可在需要发布的项目终端中使用 npm login 命令进行登录。
+
+3，在需要发布的项目终端中输入 npm publish 进行发布。
+
+4，使用 npm unpublish 要删除的包名 --force 强制删除发布的私有包。
+
+5，使用 npm unpublish 要删除的包名@版本号 删除指定的版本。
+
+#### npm 私有包版本迭代
+
+1，npm 采用语义化版本，共三位，以'.'隔开，从左至右依次代表：主版本（major）、次要版本（minor）、补丁版本（patch）。
+
+2，变更版本号的命令：npm version [major | minor | patch]。
+
+3，版本号更改完毕即可使用 npm publish 进行发布更新了。

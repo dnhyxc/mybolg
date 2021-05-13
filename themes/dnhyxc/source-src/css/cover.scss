@@ -1,0 +1,239 @@
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  .cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    z-index: 99999;
+    transition: all 1s;
+    background: linear-gradient(
+      135deg,
+      #e9defa,
+      #fbfcdb,
+      #a8edea,
+      #e0c3fc,
+      #d1e8f3
+    );
+    background-size: 200% 200%;
+    animation: bgmove 5s infinite;
+
+    .loading {
+      position: relative;
+      color: #dedede;
+      font-size: 8rem;
+      padding: 0 45px;
+      &::after {
+        content: "LOADING";
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: transparent;
+        padding: 0 45px;
+        background-image: linear-gradient(
+          to right,
+          #c23616,
+          #192a56,
+          #00d2d3,
+          yellow,
+          #6d214f,
+          #2e86de,
+          #4cd137,
+          #e84118
+        );
+        /*背景绘制区域，当值为text的时候代表设置了文字的镂空效果，
+        但是前提时文字的颜色为透明色*/
+        background-clip: text;
+        -webkit-background-clip: text;
+        /*利用裁切来创建元素的可显示区域，circle表示创建了圆形，
+        100px表示圆形的直径，0%和50%表示圆形的圆心，
+        圆形的直径和圆形的圆心利用at关键字隔开*/
+        clip-path: circle(100px at 0% 50%);
+        animation: move 5s infinite;
+      }
+      .btnBorder {
+        position: absolute;
+        &:nth-child(1) {
+          width: 100%;
+          height: 10px;
+          top: 0;
+          left: 0;
+          background: linear-gradient(to right, transparent, #ffeb3b);
+          animation: animate1 2s linear infinite;
+          animation-delay: 0s;
+        }
+        @keyframes animate1 {
+          0% {
+            left: -100%;
+          }
+          50%,
+          100% {
+            left: 100%;
+          }
+        }
+        &:nth-child(2) {
+          width: 10px;
+          height: 100%;
+          top: -100%;
+          right: 0;
+          background: linear-gradient(to bottom, transparent, #9bfbc1);
+          animation: animate2 2s linear infinite;
+          // animation-delay: 0.5s;
+          animation-delay: 0s;
+        }
+
+        @keyframes animate2 {
+          0% {
+            top: -100%;
+          }
+          50%,
+          100% {
+            top: 100%;
+          }
+        }
+        &:nth-child(3) {
+          width: 100%;
+          height: 10px;
+          bottom: 0;
+          right: -100%;
+          background: linear-gradient(to left, transparent, #add5ff);
+          animation: animate3 2s linear infinite;
+          // animation-delay: 1s;
+          animation-delay: 0s;
+        }
+
+        @keyframes animate3 {
+          0% {
+            right: -100%;
+          }
+          50%,
+          100% {
+            right: 100%;
+          }
+        }
+        &:nth-child(4) {
+          width: 10px;
+          height: 100%;
+          bottom: -100%;
+          left: 0;
+          background-image: linear-gradient(to top, transparent, #fed6e3);
+          animation: animate4 2s linear infinite;
+          // animation-delay: 1.5s;
+          animation-delay: 0s;
+        }
+
+        @keyframes animate4 {
+          0% {
+            bottom: -100%;
+          }
+          50%,
+          100% {
+            bottom: 100%;
+          }
+        }
+      }
+    }
+
+    .hideCoverBtn {
+      display: inline-block;
+      padding: 5px 15px;
+      color: #03e9f4;
+      text-decoration: none;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: 0.5s;
+      border-radius: 10px;
+      z-index: 1;
+      cursor: pointer;
+      // -webkit-box-reflect: below 1px linear-gradient(transparent, #999);
+      &:hover::before {
+        animation: sun 2s infinite;
+      }
+      &:hover {
+        &::before {
+          content: "";
+          position: absolute;
+          top: -5px;
+          right: -5px;
+          bottom: -5px;
+          left: -5px;
+          background: linear-gradient(
+            90deg,
+            #03a9f4,
+            #f441a5,
+            #ffeb3b,
+            #03a9f4
+          );
+          filter: blur(10px);
+          background-size: 200%;
+          border-radius: 10px;
+          z-index: -1;
+        }
+        background-image: linear-gradient(
+          90deg,
+          #03a9f4,
+          #f441a5,
+          #ffeb3b,
+          #03a9f4
+        );
+        background-size: 400%;
+        color: #fff;
+        animation: sun 2s infinite;
+      }
+    }
+  }
+
+  .hideCover {
+    opacity: 0;
+    z-index: 0;
+    transition: all 1s;
+  }
+
+  @keyframes sun {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: -400% 0%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  }
+
+  @keyframes bgmove {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  }
+
+  @keyframes move {
+    0% {
+      clip-path: circle(100px at 0% 50%);
+    }
+    50% {
+      clip-path: circle(100px at 100% 50%);
+    }
+    100% {
+      clip-path: circle(100px at 0% 50%);
+    }
+  }
+}

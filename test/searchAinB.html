@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>查找A是否存在B中</title>
+</head>
+
+<body>
+  <script>
+    function isContain(a, b) {
+      for (let i in b) {
+        if (a[0] === b[i]) {
+          let tmp = true;
+          for (let j in a) {
+            if (a[j] !== b[~~i + ~~j]) {
+              tmp = false;
+            }
+          }
+          if (tmp) {
+            return i;
+          }
+        }
+      }
+      return -1;
+    }
+
+    a = '34';
+    b = '1234567';
+    console.log(isContain(a, b)); // 返回 2
+    a = '35';
+    b = '1234567';
+    console.log(isContain(a, b)); // 返回 -1
+    a = '355';
+    b = '123554355';
+    console.log(isContain(a, b)); // 返回 2
+  </script>
+</body>
+
+</html>

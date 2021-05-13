@@ -1,0 +1,96 @@
+.container {
+  .lightBtnctn {
+    background-color: transparent;
+    background-image: linear-gradient(
+      to top,
+      #ddeaf0 0%,
+      #ace0f9 100%
+    ) !important;
+    box-shadow: 0 1px 6px #fff;
+  }
+  .lightIntrudeLess {
+    .inner {
+      .atthorName {
+        h1 {
+          color: #000 !important;
+        }
+      }
+      .header-menu {
+        ul {
+          background-color: #eefefe !important;
+          li {
+            a {
+              background-color: #cfcfcf;
+              // background-image: linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);
+              background-image: linear-gradient(
+                -225deg,
+                #fffeff 0%,
+                #d7fffe 100%
+              );
+              box-shadow: none !important;
+              color: #333 !important;
+              &.active {
+                color: #f2ac4e !important;
+                background-image: linear-gradient(
+                  to top,
+                  #fffeff 0%,
+                  #d7fffe 100%
+                );
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .toc-container {
+    background-color: transparent;
+    box-shadow: none !important;
+  }
+
+  .wrap-side-operation
+    .toc-container.tooltip-left
+    .tooltip-east
+    .tooltip-content
+    a {
+    color: #333;
+    font-weight: 700;
+  }
+
+  .wrap-side-operation
+    .toc-container.tooltip-left
+    .tooltip-east
+    .tooltip-content
+    .toc-article
+    li
+    a:hover {
+    background-color: #d7fffe;
+  }
+
+  .article-header {
+    border-bottom: 1px dotted #666 !important;
+  }
+
+  .article {
+    .article-entry {
+      h3 {
+        border-bottom: 1px solid #ccc !important;
+      }
+    }
+    .article-info {
+      border-top: 1px solid #ccc !important;
+    }
+  }
+
+  .tooltip-content:after {
+    content: none;
+  }
+
+  #footer {
+    .outer {
+      box-shadow: initial;
+      background-color: transparent;
+      color: #fdfdfd;
+    }
+  }
+}

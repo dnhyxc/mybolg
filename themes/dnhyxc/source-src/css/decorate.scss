@@ -1,0 +1,111 @@
+@mixin bgi($direction) {
+  background-image: linear-gradient(to $direction, #2b5876 0%, #4e4376 100%);
+  box-shadow: 0 0 5px #ccc inset;
+}
+
+@media screen and (min-width: 801px) {
+  .ttl,
+  .ttr {
+    position: absolute;
+    top: 0;
+    width: 66px;
+    height: 8px;
+  }
+  .ttl {
+    left: 22px;
+    border-bottom-right-radius: 10px;
+    @include bgi(left);
+  }
+
+  .ttr {
+    right: 22px;
+    border-bottom-left-radius: 10px;
+    @include bgi(right);
+  }
+
+  .tl,
+  .tr {
+    position: absolute;
+    top: 22px;
+    width: 8px;
+    height: 66px;
+    @include bgi(top);
+  }
+
+  .tl {
+    left: 0;
+    border-bottom-right-radius: 10px;
+  }
+
+  .tr {
+    right: 0;
+    border-bottom-left-radius: 10px;
+  }
+
+  .br {
+    position: absolute;
+    bottom: 22px;
+    right: 0;
+    width: 8px;
+    height: 66px;
+    @include bgi(bottom);
+    border-top-left-radius: 10px;
+  }
+
+  .bbr {
+    position: absolute;
+    bottom: 0;
+    right: 22px;
+    width: 66px;
+    height: 8px;
+    @include bgi(right);
+    border-top-left-radius: 10px;
+  }
+
+  .bbl {
+    position: absolute;
+    bottom: 0;
+    left: 22px;
+    width: 66px;
+    height: 8px;
+    @include bgi(right);
+    border-top-right-radius: 10px;
+  }
+
+  .sqtl {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    @include bgi(right);
+    border-bottom-right-radius: 10px;
+  }
+
+  .sqbl {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    @include bgi(right);
+  }
+
+  .sqbr {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 22px;
+    height: 22px;
+    @include bgi(right);
+  }
+
+  .sqtr {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 22px;
+    height: 22px;
+    @include bgi(right);
+  }
+}

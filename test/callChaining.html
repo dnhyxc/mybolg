@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实现链式调用</title>
+</head>
+
+<body>
+  <script>
+    // 示例一
+    function Class1() {
+      console.log('初始化');
+    }
+    Class1.prototype.method = function (param) {
+      console.log(param);
+      return this;
+    }
+    let cl = new Class1();
+    //由于new 在实例化的时候this会指向创建的对象， 所以this.method这个方法会在原型链中找到。
+    cl.method('第一次调用').method('第二次链式调用').method('第三次链式调用');
+
+    // 示例二
+    var obj = {
+      a: function () {
+        console.log("a");
+        return this;
+      },
+      b: function () {
+        console.log("b");
+        return this;
+      },
+    };
+    obj.a().b(); // a b
+
+    // 示例三
+    class Person {
+      fn1() {
+        const args = [...arguments];
+        const res = args.reduce((prev, current) => prev + current, '');
+        console.log(res); // 疯狂coding88
+        return this;
+      }
+      fn2() {
+        const args = [...arguments];
+        const res = args.reduce((prev, current) => prev + current * 2, 0);
+        console.log(res); // 24
+        return this;
+      }
+      fn3(value) {
+        console.log(value * 3); // 18
+        return this;
+      }
+      fn4(value) {
+        console.log(value * 4); // 36
+        return this;
+      }
+    }
+    const person = new Person();
+    person.fn1('疯狂coding', 88).fn2(3, 9).fn3(6).fn4(9);
+  </script>
+</body>
+
+</html>

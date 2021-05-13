@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实现千位分隔符</title>
+</head>
+
+<body>
+  <script>
+    // 方式一
+    function parseToMoney(num) {
+      num = parseFloat(num.toFixed(3));
+      // 以"."进行分割，integer为整数部分，decimal为小数部分
+      let [integer, decimal] = String.prototype.split.call(num, '.');
+      integer = integer.replace(/\d(?=(\d{3})+$)/g, '$&,');
+      return integer + (decimal ? '.' + decimal : '');
+    }
+
+    // 保留三位小数
+    console.log(parseToMoney(1234.5616)); // return '1,234.56'
+    console.log(parseToMoney(123456789)); // return '123,456,789'
+    console.log(parseToMoney(1087654.3214)); // return '1,087,654.321'
+    console.log(">>手动分割线>>----------------------")
+
+    // 方式二
+    function numFormat(num) {
+      // 保留三位小数并将其转为字符串以"."进行小数点分割
+      num = parseFloat(num.toFixed(3)).toString().split(".");
+      // 转换成字符数组并且倒序排列
+      var arr = num[0].split("").reverse();
+      var res = [];
+      for (var i = 0; i < arr.length; i++) {
+        // 如果能被3整除，就往数组中添加","分隔符
+        if (i % 3 === 0 && i !== 0) {
+          res.push(",");
+        }
+        // 注意：添加分割符必须写在添加数字之前，因为后面需要将其进行反转回来
+        res.push(arr[i]);
+      }
+      // 再次倒序成为正确的顺序
+      res.reverse();
+      // 如果有小数的话添加小数部分
+      if (num[1]) {
+        res = res.join("").concat("." + num[1]);
+      } else {
+        res = res.join("");
+      }
+      return res;
+    }
+
+    var a = 1234567894532;
+    var b = 673439.4542;
+    var c = 673439.8629;
+    console.log(numFormat(a)); // "1,234,567,894,532"
+    console.log(numFormat(b)); // "673,439.4542"
+    console.log(numFormat(c)); // "673,439.863"
+  </script>
+</body>
+
+</html>
