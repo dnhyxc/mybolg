@@ -35,7 +35,11 @@
   cursor: pointer;
   width: 35px;
   height: 35px;
-  opacity: 0.8;
+}
+@media screen and (max-width: 800px) {
+  .toc-container {
+    opacity: 0.8;
+  }
 }
 .jump-plan-container {
   position: absolute;
@@ -72,8 +76,8 @@
 }
 
 .toc-container.tooltip-left {
-  // background-color: #292929;
-  box-shadow: 0 0 5px #111;
+  box-shadow: 0 0 5px #3e3758;
+  // box-shadow: 0 0 5px #3a3352;
   box-sizing: border-box;
   border-radius: 35px;
   transition: 0.3s;

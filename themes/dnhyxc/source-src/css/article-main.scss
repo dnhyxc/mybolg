@@ -150,14 +150,14 @@
 
   .article-count {
     padding-right: 7.6923%;
-    display: none;
+    // display: none;
     color: #999;
     margin-left: 10px;
     padding-bottom: 7px;
   }
   &:hover {
     .article-count {
-      display: block;
+      // display: block;
     }
   }
 }

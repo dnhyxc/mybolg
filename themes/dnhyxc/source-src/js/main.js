@@ -11,6 +11,8 @@ import Aside from './aside'
 
 import ChangeLight from './changelight'
 
+import atticleNarrow from './atticle-narrow'
+
 import Setmargin from './setmargin'
 
 import { addLoadEvent } from './util'
@@ -24,6 +26,7 @@ addLoadEvent(function () {
 	Aside.init();
 	Setmargin.init();
 	ChangeLight.init();
+	atticleNarrow.init();
 })
 
 function stopTouchmove(e) {

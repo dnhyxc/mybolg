@@ -18,6 +18,8 @@ let tipsBox = document.querySelector('.tips-box');
 let tipsAs = tipsBox.querySelectorAll('.tips-a');
 let wrapper = document.querySelector('#wrapper');
 let main = document.querySelector('.main');
+let changeSize = document.querySelector('.changeSize');
+let mainLoading = document.querySelector('.main-loading');
 let scrollTop = document.querySelector('#scrollTop');
 let bodyScroll = document.body;
 let coverInfo = document.querySelectorAll('.coverInfo');
@@ -112,21 +114,27 @@ scrollTop.onmouseleave = function () {
 }
 
 if (decodeURIComponent(path)) {
-	main.innerHTML = 'Informal Essay';
+	// main.innerHTML = 'Informal Essay';
 	if (path !== '/') {
+		const reg = /\d/;
+		const isArticle = reg.test(decodeURIComponent(path).substr('/'));
 		const res = decodeURIComponent(path).substr(decodeURIComponent(path).lastIndexOf('/', decodeURIComponent(path).lastIndexOf('/') - 1) + 1);
 		const subPath = res.slice(0, res.length - 1);
-		if (subPath === 'tags') {
-			main.innerHTML = 'Informal Essay';
+		if (subPath === 'informal') {
+			changeSize.style.display = 'block';
+			mainLoading.innerHTML = 'Informal Essay';
+		} else if (isArticle) {
+			changeSize.style.display = 'block';
+			mainLoading.innerHTML = 'Article-' + subPath[0].toUpperCase() + subPath.slice(1);
 		} else {
-			main.innerHTML = 'Article-' + subPath[0].toUpperCase() + subPath.slice(1);
+			mainLoading.innerHTML = subPath[0].toUpperCase() + subPath.slice(1);
 		}
 		if (coverInfo && coverInfo.length > 0) {
 			coverInfo[0].style.display = 'none';
 			coverInfo[1].style.display = 'none';
 		}
 	} else {
-		main.innerHTML = 'HOME'
+		mainLoading.innerHTML = 'HOME'
 	}
 }
 

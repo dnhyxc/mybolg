@@ -164,5 +164,54 @@ body,
     text-align: left;
     padding-left: 32px;
     color: #ffd900;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .changeSize {
+      display: none;
+      font-size: 14px;
+      font-weight: 700;
+      width: 35px;
+      height: 35px;
+      line-height: 35px;
+      text-align: center;
+      margin-right: 77px;
+      box-shadow: 0 0 5px #3e3758;
+      border-radius: 35px;
+      cursor: pointer;
+      -moz-user-select: none;
+      /*火狐*/
+      -webkit-user-select: none;
+      /*webkit浏览器*/
+      -ms-user-select: none;
+      /*IE10*/
+      -khtml-user-select: none;
+      /*早期浏览器*/
+      user-select: none;
+
+      &:hover {
+        box-shadow: 0 0 12px #ccc inset;
+        color: #d9ff00;
+        &::before {
+          content: "点击更改文章阅读尺寸";
+          width: auto;
+          height: 22px;
+          line-height: 22px;
+          position: absolute;
+          top: 25px;
+          right: 120px;
+          font-size: 14px;
+          text-align: center;
+          color: #ffd900;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .main {
+      display: none;
+    }
   }
 }
