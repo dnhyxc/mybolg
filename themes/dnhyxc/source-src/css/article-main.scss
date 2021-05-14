@@ -136,6 +136,14 @@
   transition: color 0.3s;
 }
 
+.article-inner {
+  .art-title {
+    a:hover {
+      color: #d9ff00;
+    }
+  }
+}
+
 .article-header {
   position: relative;
   box-sizing: border-box;

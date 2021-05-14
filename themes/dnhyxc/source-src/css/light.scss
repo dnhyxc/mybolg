@@ -158,7 +158,15 @@
       box-shadow: initial;
 
       .article-title {
-        color: #333 !important;
+        color: #333;
+      }
+
+      .article-inner {
+        .art-title {
+          a:hover {
+            color: gold;
+          }
+        }
       }
 
       .narrow {
@@ -226,11 +234,17 @@
       background-color: #eee;
       .archive-year {
         color: #333;
+        &:hover {
+          color: gold;
+        }
       }
     }
     .archives {
       .archive-article-title {
         color: #333;
+        &:hover {
+          color: gold;
+        }
       }
 
       .archive-article-inner {
