@@ -154,7 +154,6 @@ body,
     box-sizing: border-box;
     height: 69px;
     line-height: 69px;
-    // line-height: 50px;
     margin: 10px 10px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -194,7 +193,7 @@ body,
         box-shadow: 0 0 12px #ccc inset;
         color: #d9ff00;
         &::before {
-          content: "点击更改文章阅读尺寸";
+          content: "点击切换文章阅读模式";
           width: auto;
           height: 22px;
           line-height: 22px;

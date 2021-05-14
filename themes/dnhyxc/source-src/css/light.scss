@@ -1,16 +1,6 @@
 .container {
   position: relative;
-  // background-image: linear-gradient(
-  //   to top,
-  //   #c4c5c7 0%,
-  //   #dcdddf 52%,
-  //   #ebebeb 100%
-  // ) !important;
-  background-image: linear-gradient(
-    -225deg,
-    #e6e9f0 0%,
-    #eef1f5 100%
-  ) !important;
+  background-image: linear-gradient(-225deg, #fff 0%, #fff 100%) !important;
 
   &.show {
     .anm-canvas {
@@ -24,9 +14,8 @@
   }
 
   .left-col {
-    // background-color: #fff !important;
-    // background-image: linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);
-    background-image: linear-gradient(to bottom, #fffeff 0%, #d7fffe 100%);
+    // background-image: linear-gradient(to bottom, #fffeff 0%, #d7fffe 100%);
+    background-image: linear-gradient(to bottom, #fbf6fb 0%, #d7fffe 100%);
     box-shadow: initial;
 
     .intrude-less {
@@ -101,6 +90,14 @@
     }
   }
 
+  .toc-container.tooltip-left {
+    &:hover {
+      .icon-font {
+        color: #333;
+      }
+    }
+  }
+
   .tooltip-content::after {
     content: none;
     width: 2em;
@@ -127,10 +124,23 @@
 
   .mid-col {
     .main {
-      background-color: #fff !important;
+      background-color: #f4f5f5 !important;
       // border-radius: 10px;
       box-shadow: initial;
       color: #333;
+
+      .changeSize {
+        color: #ffd900;
+        background-color: transparent;
+        box-shadow: 0 0 10px #999;
+        &:hover {
+          box-shadow: 0 0 10px #999;
+          color: #333;
+          &::before {
+            color: #333;
+          }
+        }
+      }
     }
 
     #scrollTop {
@@ -144,12 +154,17 @@
     }
 
     .article {
-      background-color: #fff !important;
+      background-color: #f4f5f5 !important;
       box-shadow: initial;
 
       .article-title {
         color: #333 !important;
       }
+
+      .narrow {
+        background: #fff;
+      }
+
       .article-entry {
         blockquote {
           background: rgba(225, 225, 225, 0.6);
@@ -233,7 +248,7 @@
 
     .outer {
       box-shadow: initial;
-      background-color: #fff;
+      background-color: #f4f5f5;
       color: #999 !important;
     }
   }
