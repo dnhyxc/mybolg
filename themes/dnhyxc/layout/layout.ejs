@@ -3,13 +3,11 @@
 <body class="bodyCover">
   <%- partial('_partial/cover') %>
   <div id="container" q-class="show:isCtnShow" style="<%=theme.style && theme.style.slider%>">
-    <!-- <%- partial('_partial/boder.ejs') %> -->
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
       <%- partial('_partial/left-col', null, {cache: !config.relative_link}) %>
     </div>
     <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
-      <!-- <%- partial('_partial/boeder-mid.ejs') %> -->
       <div class="main">
         <div class="main-loading">loading... </div>
         <div class="changeSize">模式</div>
