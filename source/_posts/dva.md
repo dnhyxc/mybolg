@@ -1,6 +1,6 @@
 ---
 title: DvaStructure
-date: 2021-03-25 17:58:02
+date: 2021-05-15 17:58:02
 tags: dva webpack ts eslint
 toc: true
 top: true
@@ -8,6 +8,37 @@ categories:
   - 项目构建
     - dva
 ---
+
+<div class="coverInfo coverInfoTop">
+  前言：读完本篇文章您将充分的了解以下几个知识点，是不是找不到知识点在哪？哈哈，请看大图下方，是不是看不完全？那就将鼠标悬浮在大图下方的文本上吧，但是还是建议您点击详情查看吧。
+</div>
+
+<div class="browserCover">
+  <!-- <img src="c3.png" class="browserCover changeImg"> -->
+</div>
+
+<div 
+  class="coverInfo" 
+  title="本问主要讲的是如何初始化构建一个基于 dva + antd + ts + webpack 的项目，主要会讲到如何配置 TypeScript、如何配置 webpack 进行项目的打包、如何配置 antd 按需加载、以及如何配置 eslint 进行代码的规范性检查。"
+>
+  本问主要讲的是如何初始化构建一个基于 dva + antd + ts + webpack 的项目，主要会讲到如何配置 TypeScript、如何配置 webpack 进行项目的打包、如何配置 antd 按需加载、以及如何配置 eslint 进行代码的规范性检查。
+</div>
+
+<!-- more -->
+
+### 前言
+
+#### 读完本文您将了解以下几点
+
+1，如何配置一个基于 Dva + antd + ts + eslint 的项目。
+
+2，webpack 是如何打包 js、jsx、ts、tsx、css、less、img、svg 等资源。以及常用的一些 plugins 的配置等。
+
+3，TypeStript 的 tsconfig.json 是如何配置的。
+
+4，如何处理 antd 按需加载。
+
+5，eslint 是如何配置的。
 
 ### Dva 配置
 
@@ -24,8 +55,6 @@ npm install dva-cli -g
 - 安装方式一：dva new myapp。
 
 - 安装方式二：在创建好的项目文件夹中运行 dva init。
-
-<!-- more -->
 
 ### 安装 webpack
 
