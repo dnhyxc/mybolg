@@ -46,7 +46,7 @@ categories:
 
 1，全局安装 dva-cli：
 
-```js
+```json
 npm install dva-cli -g
 ```
 
