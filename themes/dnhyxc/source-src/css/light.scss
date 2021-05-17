@@ -91,9 +91,12 @@
   }
 
   .toc-container.tooltip-left {
+    .icon-font {
+      color: #333;
+    }
     &:hover {
       .icon-font {
-        color: #333;
+        color: #ffd900;
       }
     }
   }
@@ -125,17 +128,16 @@
   .mid-col {
     .main {
       background-color: #f4f5f5 !important;
-      // border-radius: 10px;
       box-shadow: initial;
       color: #333;
 
       .changeSize {
-        color: #ffd900;
+        color: #333;
         background-color: transparent;
         box-shadow: 0 0 10px #999;
         &:hover {
           box-shadow: 0 0 10px #999;
-          color: #333;
+          color: #ffd900;
           &::before {
             color: #333;
           }
