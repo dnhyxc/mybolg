@@ -1,10 +1,6 @@
-<!-- <% var defaultBg = '#4d4d4d'; %>
-<div class="overlay" style="background: <%= theme.style && theme.style.header ? theme.style.header : defaultBg %>">
-</div> -->
 <div class="intrude-less">
   <header id="header" class="inner">
     <a class="profilepic">
-      <!-- <a href="<%=theme.root%>" class="profilepic"> -->
       <img src="<%=theme.avatar%>" class="js-avatar">
     </a>
     <hgroup>
@@ -17,7 +13,6 @@
     <%if(theme.tagcloud){%>
     <div class="switch-btn">
       <div class="home">
-        <!-- <img src="/img/home.png" alt="" style="width: 30px; height: 30px;"> -->
         <div class="homeIcon" id="home-icon"></div>
       </div>
       <div class="tips-box">
@@ -39,22 +34,12 @@
           </li>
           <%}%>
         </ul>
-		<!-- <nav class="header-smart-menu">
-    	<% for (var i in theme.smart_menu){ %>
-          <% if(theme.smart_menu[i]){ %>
-          <a q-on="click: openSlider(e, '<%-i%>')" href="javascript:void(0)"><%= theme.smart_menu[i] %></a>
-          <% } %>
-          <%}%>
-		</nav> -->
 		<nav class="header-nav">
 			<div class="social">
 				<% for (var i in theme.subnav){ %>
           <div class="icon-wrap">
             <a class="<%= i %>" target="_blank" href="<%- url_for(theme.subnav[i]) %>" title="<%= i %>"></a>
           </div>
-          <!-- <a class="<%= i %> iconImg" target="_blank" href="<%- url_for(theme.subnav[i]) %>" title="<%= i %>">
-            <i class="icon-<%= i %>"></i>
-          </a> -->
           <%}%>
 			</div>
     </nav>
