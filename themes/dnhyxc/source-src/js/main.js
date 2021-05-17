@@ -13,6 +13,8 @@ import ChangeLight from './changelight'
 
 import atticleNarrow from './atticle-narrow'
 
+import action from './action'
+
 import Setmargin from './setmargin'
 
 import { addLoadEvent } from './util'
@@ -25,6 +27,7 @@ addLoadEvent(function () {
 	Viewer.init();
 	Aside.init();
 	Setmargin.init();
+	action.init();
 	ChangeLight.init();
 	atticleNarrow.init();
 })
