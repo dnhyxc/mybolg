@@ -3,11 +3,11 @@ import '../css/main.scss'
 // 上报
 // import './report'
 // 图片查看器
-import Viewer from './viewer'
+// import Viewer from './viewer'
 // 分享
-import Share from './share'
+// import Share from './share'
 // 边缘
-import Aside from './aside'
+// import Aside from './aside'
 
 import ChangeLight from './changelight'
 
@@ -24,8 +24,8 @@ const hideCoverBtn = document.querySelector('.hideCoverBtn');
 
 addLoadEvent(function () {
 	// Share.init()
-	Viewer.init();
-	Aside.init();
+	// Viewer.init();
+	// Aside.init();
 	Setmargin.init();
 	action.init();
 	ChangeLight.init();
