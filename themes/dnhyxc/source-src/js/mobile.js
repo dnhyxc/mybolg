@@ -33,14 +33,18 @@ tocArticle && tocArticle.addEventListener('touchmove', function (event) {
 
 let path = location.pathname;
 if (decodeURIComponent(path)) {
-	btnctnname.innerHTML = 'Informal Essay';
+	// btnctnname.innerHTML = 'Informal Essay';
+	const reg = /\d/;
+	const isArticle = reg.test(decodeURIComponent(path).substr('/'));
 	if (path !== '/') {
 		const res = decodeURIComponent(path).substr(decodeURIComponent(path).lastIndexOf('/', decodeURIComponent(path).lastIndexOf('/') - 1) + 1);
 		const subPath = res.slice(0, res.length - 1);
-		if (subPath === 'tags') {
+		if (subPath === 'informal') {
 			btnctnname.innerHTML = 'Informal Essay';
-		} else {
+		} else if (isArticle) {
 			btnctnname.innerHTML = 'Article-' + subPath[0].toUpperCase() + subPath.slice(1);
+		} else {
+			btnctnname.innerHTML = subPath[0].toUpperCase() + subPath.slice(1);
 		}
 		if (document.body.clientWidth >= 800 && coverInfo && coverInfo.length > 0) {
 			coverInfo[0].style.display = 'none';

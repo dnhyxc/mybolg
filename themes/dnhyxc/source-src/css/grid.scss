@@ -166,6 +166,15 @@ body,
     display: flex;
     justify-content: space-between;
     align-items: center;
+    -moz-user-select: none;
+    /*火狐*/
+    -webkit-user-select: none;
+    /*webkit浏览器*/
+    -ms-user-select: none;
+    /*IE10*/
+    -khtml-user-select: none;
+    /*早期浏览器*/
+    user-select: none;
 
     .changeSize {
       display: none;
@@ -179,15 +188,6 @@ body,
       box-shadow: 0 0 5px #3e3758;
       border-radius: 35px;
       cursor: pointer;
-      -moz-user-select: none;
-      /*火狐*/
-      -webkit-user-select: none;
-      /*webkit浏览器*/
-      -ms-user-select: none;
-      /*IE10*/
-      -khtml-user-select: none;
-      /*早期浏览器*/
-      user-select: none;
 
       &:hover {
         box-shadow: 0 0 12px #ccc inset;
