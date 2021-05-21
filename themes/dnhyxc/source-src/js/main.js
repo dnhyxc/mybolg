@@ -17,6 +17,8 @@ import action from './action'
 
 import Setmargin from './setmargin'
 
+import articleToc from './articleToc'
+
 import { addLoadEvent } from './util'
 
 const cover = document.querySelector('.cover');
@@ -30,6 +32,7 @@ addLoadEvent(function () {
 	action.init();
 	ChangeLight.init();
 	atticleNarrow.init();
+	articleToc.init();
 })
 
 function stopTouchmove(e) {
@@ -38,7 +41,6 @@ function stopTouchmove(e) {
 
 document.onreadystatechange = function () {
 	if (document.readyState === "complete") {
-		// ChangeLight.init()
 		cover.classList.add('hideCover');
 		if (document.body.clientWidth <= 800) {
 			document.body.style.position = 'relative';
@@ -48,8 +50,6 @@ document.onreadystatechange = function () {
 	} else if (document.readyState === "interactive") {
 		hideCoverBtn.addEventListener('click', function () {
 			cover.classList.add('hideCover');
-			// setTimeout(() => {
-			// }, 1000)
 		})
 	} else {
 		document.body.addEventListener('touchmove', stopTouchmove, { passive: false });

@@ -11,6 +11,7 @@ function init() {
   let bodyScroll = document.body;
   let coverInfo = document.querySelectorAll('.coverInfo');
   let aplayer = document.querySelector('.aplayer');
+  let articleToc = document.querySelector('.article-toc');
 
   homeIcon.onclick = function (e) {
     e.stopPropagation();
@@ -80,6 +81,11 @@ function init() {
           scrollTop.style.display = 'none';
         }, 2000);
       }
+    }
+    if (wrapper.scrollTop <= 0) {
+      articleToc.style.height = 'calc(100vh - 246px)';
+    } else {
+      articleToc.style.height = 'calc(100vh - 178px)';
     }
   };
 
