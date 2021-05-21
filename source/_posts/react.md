@@ -3,6 +3,7 @@ title: react
 date: 2019-02-20 21:08:18
 tags: react
 toc: true
+declare: true
 categories:
   - 前端框架
     - react

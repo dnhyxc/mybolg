@@ -1,10 +1,9 @@
 ---
 title: interview
-draft: true
 date: 2021-03-18 13:50:50
 tags: interview
 toc: true
-top: true
+declare: true
 categories:
   - JavaScript
 ---

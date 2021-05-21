@@ -3,7 +3,6 @@ title: browser
 date: 2021-04-30 16:16:01
 tags: browser
 toc: true
-top: true
 declare: true
 categories:
   - 浏览器

@@ -13,55 +13,63 @@
   <% } %>
   </header>
   <% } %>
-  <div class="article-entry" itemprop="articleBody">
-    <% if (post.excerpt && index){ %>
-    <%- post.excerpt %>
-    <% if (theme.excerpt_link) { %>
-    <a class="article-more-a" href="<%- url_for(post.path) %>#more"><%= theme.excerpt_link %> >></a>
-    <% } %>
-    <% } else { %>
-    <%- post.content %>
-    <% } %>
+  <div class="article-entry-wrap">
+    <div class="article-entry" itemprop="articleBody">
+      <% if (post.excerpt && index){ %>
+      <%- post.excerpt %>
+      <% if (theme.excerpt_link) { %>
+      <a class="article-more-a" href="<%- url_for(post.path) %>#more"><%= theme.excerpt_link %> >></a>
+      <% } %>
+      <% } else { %>
+      <%- post.content %>
+      <% } %>
 
-    <!-- 版权声明 -->
-    <% if(theme.declare){%>
-    <%- partial('post/declare') %>
-    <% } %>
-    <!-- 版权声明 -->
+      <!-- 版权声明 -->
+      <% if(theme.declare){%>
+      <%- partial('post/declare') %>
+      <% } %>
+      <!-- 版权声明 -->
 
-    <% if ((theme.reward_type === 2 || (theme.reward_type === 1 && post.reward)) && !index){ %>
-    <div class="page-reward">
-      <a href="javascript:;" class="page-reward-btn tooltip-top">
-        <div class="tooltip tooltip-east">
-          <span class="tooltip-item">
-            赏
-          </span>
-          <span class="tooltip-content">
-            <span class="tooltip-text">
-              <span class="tooltip-inner">
-                <div class="reward-p"><i class="icon icon-quo-left"></i><%= theme.reward_wording%><i
-                    class="icon icon-quo-right"></i></div>
-                <div class="reward-box">
-                  <% if(theme.alipay) {%>
-                  <div class="reward-box-item">
-                    <div class="alipay"></div>
-                    <span class="reward-type">支付宝</span>
+      <% if ((theme.reward_type === 2 || (theme.reward_type === 1 && post.reward)) && !index){ %>
+      <div class="page-reward">
+        <a href="javascript:;" class="page-reward-btn tooltip-top">
+          <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <div class="reward-p"><i class="icon icon-quo-left"></i><%= theme.reward_wording%><i
+                      class="icon icon-quo-right"></i></div>
+                  <div class="reward-box">
+                    <% if(theme.alipay) {%>
+                    <div class="reward-box-item">
+                      <div class="alipay"></div>
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    <% } %>
+                    <% if(theme.weixin) {%>
+                    <div class="reward-box-item">
+                      <div class="wechat"></div>
+                      <span class="reward-type">微信</span>
+                    </div>
+                    <% } %>
                   </div>
-                  <% } %>
-                  <% if(theme.weixin) {%>
-                  <div class="reward-box-item">
-                    <div class="wechat"></div>
-                    <span class="reward-type">微信</span>
-                  </div>
-                  <% } %>
-                </div>
+                </span>
               </span>
             </span>
-          </span>
-        </div>
-      </a>
+          </div>
+        </a>
+      </div>
+      <% } %>
     </div>
-    <% } %>
+    <div class="article-toc">
+      <div>目录</div>
+      <div>
+        <%- toc(post.content) || theme.toc_empty_wording %>
+      </div>
+    </div>
   </div>
   <div class="article-info article-info-index">
     <%if(post.top){%>

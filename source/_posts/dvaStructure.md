@@ -4,6 +4,7 @@ date: 2021-05-15 17:58:02
 tags: dva webpack ts eslint
 toc: true
 top: true
+declare: true
 categories:
   - 项目构建
     - dva
@@ -1174,5 +1175,4 @@ module.exports = (env, argv) => {
 }
 ```
 
-> 最后附上该项目 github 仓库地址
-> [猛戳这里查看吧](https://github.com/dnhyxc/project-config "仓库地址")
+> 最后附上该项目 github 仓库地址[猛戳这里查看吧](https://github.com/dnhyxc/project-config "仓库地址")
