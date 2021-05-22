@@ -1,6 +1,7 @@
 .wrap-side-operation {
   position: fixed;
-  right: 39px;
+  right: 87px;
+  // right: 39px;
   top: 27px;
   z-index: 999;
   font-size: 14px;
@@ -133,7 +134,7 @@
     }
     .toc-article li ol,
     .toc-article li ul {
-      margin-left: 30px;
+      margin-left: 20px;
     }
     .toc-article li {
       white-space: nowrap;

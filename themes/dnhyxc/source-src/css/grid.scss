@@ -176,6 +176,18 @@ body,
     /*早期浏览器*/
     user-select: none;
 
+    .change-info {
+      height: 22px;
+      line-height: 22px;
+      position: absolute;
+      top: 25px;
+      right: 120px;
+      font-size: 14px;
+      text-align: center;
+      color: #ffd900;
+      display: none;
+    }
+
     .changeSize {
       display: none;
       font-size: 14px;
@@ -184,7 +196,8 @@ body,
       height: 35px;
       line-height: 35px;
       text-align: center;
-      margin-right: 77px;
+      margin-right: 30px;
+      // margin-right: 77px;
       box-shadow: 0 0 5px #3e3758;
       border-radius: 35px;
       cursor: pointer;
@@ -192,17 +205,9 @@ body,
       &:hover {
         box-shadow: 0 0 12px #ccc inset;
         color: #d9ff00;
-        &::before {
-          content: "点击该 “模式” 按钮可切换文章阅读模式";
-          width: auto;
-          height: 22px;
-          line-height: 22px;
-          position: absolute;
-          top: 25px;
-          right: 120px;
-          font-size: 14px;
-          text-align: center;
-          color: #ffd900;
+
+        .change-info {
+          display: block;
         }
       }
     }

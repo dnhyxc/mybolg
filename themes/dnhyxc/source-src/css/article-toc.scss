@@ -12,9 +12,34 @@
     padding-left: 10px;
     overflow-y: auto;
     display: none;
+    -moz-user-select: none;
+    /*火狐*/
+    -webkit-user-select: none;
+    /*webkit浏览器*/
+    -ms-user-select: none;
+    /*IE10*/
+    -khtml-user-select: none;
+    /*早期浏览器*/
+    user-select: none;
+
+    .toc-header {
+      font-weight: 700;
+    }
+
+    li ol {
+      margin-left: 20px;
+    }
 
     a {
       color: #ccc;
+    }
+
+    a:hover {
+      color: #d9ff00;
+    }
+
+    a:active {
+      color: gold;
     }
   }
 }

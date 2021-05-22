@@ -135,6 +135,11 @@
         color: #333;
         background-color: transparent;
         box-shadow: 0 0 10px #999;
+
+        .change-info {
+          color: #333;
+        }
+
         &:hover {
           box-shadow: 0 0 10px #999;
           color: #ffd900;
@@ -158,6 +163,17 @@
     .article {
       background-color: #f4f5f5 !important;
       box-shadow: initial;
+
+      .article-entry-wrap {
+        .article-toc {
+          .toc-header {
+            color: #666;
+          }
+          a {
+            color: #333;
+          }
+        }
+      }
 
       .article-title {
         color: #333;

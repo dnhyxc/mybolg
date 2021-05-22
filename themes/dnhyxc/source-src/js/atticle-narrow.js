@@ -3,6 +3,7 @@ function init() {
   const changeSize = document.querySelector('.changeSize');
   const articleToc = document.querySelector('.article-toc');
   const headerToc = document.querySelector('.wrap-side-operation');
+  const changeInfo = document.querySelector('.change-info');
 
   changeSize.onclick = function () {
     if (document.body.clientWidth > 800 && changeSize) {
@@ -12,11 +13,11 @@ function init() {
     if (article.getAttribute('class').includes('narrow')) {
       articleToc.style.display = 'block';
       headerToc.style.display = 'none';
-      // changeSize.style.marginRight = '30px';
+      changeInfo.style.right = "75px";
     } else {
       articleToc.style.display = 'none';
       headerToc.style.display = 'block';
-      // changeSize.style.marginRight = '77px';
+      changeInfo.style.right = "120px";
     }
   }
 }
