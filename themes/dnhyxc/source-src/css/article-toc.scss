@@ -23,7 +23,12 @@
     user-select: none;
 
     .toc-header {
+      font-size: 16px;
+    }
+
+    .toc-level-3 > a {
       font-weight: 700;
+      color: #eee;
     }
 
     li ol {
@@ -50,7 +55,7 @@
       color: #d9ff00 !important;
     }
 
-    a:active {
+    .select-toc {
       color: gold;
     }
   }

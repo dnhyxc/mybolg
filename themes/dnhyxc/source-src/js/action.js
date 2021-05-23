@@ -119,7 +119,7 @@ function init() {
     }
 
     h345.forEach(i => {
-      if (wrapper.scrollTop >= i.offsetTop) {
+      if (wrapper.scrollTop + 20 >= i.offsetTop) {
         if (toTopId.length <= 0) {
           toTopId.push(i.id);
         } else {
@@ -130,11 +130,11 @@ function init() {
 
     const res = Array.from(articleTocA).filter(i => getText(i.href).includes(toTopId[0]));
     articleTocA.forEach(i => {
-      i.style.color = '#ccc';
+      i.classList.remove('select-toc');
     })
 
     if (res.length > 0) {
-      res[0].style.color = 'gold';
+      res[0].classList.add('select-toc');
       articleToc.scrollTop = res[0] && res[0].offsetTop - (wrapper.clientHeight / 2);
     }
   };
