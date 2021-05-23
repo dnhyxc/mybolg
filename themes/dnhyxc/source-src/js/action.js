@@ -10,10 +10,10 @@ function init() {
   let bodyScroll = document.body;
   let coverInfo = document.querySelectorAll('.coverInfo');
   let aplayer = document.querySelector('.aplayer');
-  let articleToc = document.querySelector('.article-toc');
   let articleEntry = document.querySelector('.article-entry');
-  let articleTocA = articleToc.querySelectorAll('a');
-  let h345 = articleEntry.querySelectorAll('h3,h4,h5');
+  let articleToc = document.querySelector('.article-toc');
+  let articleTocA = articleToc && articleToc.querySelectorAll('a');
+  let h345 = articleEntry && articleEntry.querySelectorAll('h3,h4,h5');
 
   let path = location.pathname;
   const reg = /\d/;
