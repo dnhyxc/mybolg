@@ -6,6 +6,10 @@
     left: 20px;
     bottom: 20px;
 
+    .aplayer-icon-menu {
+      right: -2px;
+    }
+
     .aplayer-lrc {
       max-width: 280px;
       top: 44px;
@@ -50,9 +54,14 @@
       }
       ol {
         li {
-          box-shadow: 0 0 6px #ccc inset;
+          box-shadow: 0 0 1px #ccc inset;
+          border-top: none;
           color: #c9c9c9;
           background: transparent;
+
+          .aplayer-list-index {
+            color: #999;
+          }
         }
         li.aplayer-list-light {
           background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
@@ -83,7 +92,29 @@
         background-image: linear-gradient(to right, #2b5876 0%, #4e4376 100%);
         border: none;
         width: calc(100% - 47px);
-        box-shadow: 0 0 10px #ccc inset;
+        // box-shadow: 0 0 10px #ccc inset;
+
+        .aplayer-controller {
+          .aplayer-volume-wrap {
+            .aplayer-volume-bar-wrap {
+              .aplayer-volume-bar {
+                background: #999;
+
+                .aplayer-volume {
+                  background: #ccc !important;
+                }
+              }
+            }
+          }
+
+          .aplayer-time {
+            .aplayer-icon {
+              path {
+                fill: #ccc;
+              }
+            }
+          }
+        }
       }
 
       .aplayer-miniswitcher {

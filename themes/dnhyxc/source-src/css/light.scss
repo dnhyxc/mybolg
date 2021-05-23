@@ -76,6 +76,83 @@
         }
       }
     }
+
+    .music {
+      .aplayer.aplayer-fixed {
+        .aplayer-lrc {
+          p {
+            background-image: linear-gradient(
+              -225deg,
+              #262929,
+              #278ab9 56%,
+              #6ac77c
+            );
+          }
+        }
+
+        .aplayer-list {
+          background-image: linear-gradient(225deg, #fbf6fd 0, #d7fffe);
+          .aplayer-list-author {
+            color: #333;
+          }
+          .aplayer-list-cur {
+            background-color: gold !important;
+          }
+          ol {
+            li {
+              box-shadow: 0 0 1px #ccc inset;
+              color: #333;
+            }
+            li.aplayer-list-light {
+              background-image: linear-gradient(225deg, #fbf6fd 0, #d7fffe);
+              color: #9acd32;
+            }
+            li:hover {
+              background-image: linear-gradient(225deg, #fbf6fd 0, #d7fffe);
+            }
+          }
+        }
+
+        .aplayer-body {
+          background-image: linear-gradient(225deg, #fbf6fd 0, #d7fffe);
+
+          .aplayer-info {
+            background-image: linear-gradient(225deg, #fbf6fd 0, #d7fffe);
+            box-shadow: 0 0 10px #fdfdfd inset;
+
+            .aplayer-music {
+              color: #333;
+            }
+
+            .aplayer-controller {
+              .aplayer-volume-wrap {
+                .aplayer-volume-bar-wrap {
+                  .aplayer-volume-bar {
+                    background: #ccc;
+
+                    .aplayer-volume {
+                      background: #333 !important;
+                    }
+                  }
+                }
+              }
+
+              .aplayer-time {
+                .aplayer-icon {
+                  path {
+                    fill: #333;
+                  }
+                }
+              }
+            }
+          }
+
+          .aplayer-pic {
+            box-shadow: 0 0 10px #fff inset;
+          }
+        }
+      }
+    }
   }
 
   .toc-container.tooltip-left .tooltip-east .tooltip-content {
@@ -164,6 +241,10 @@
       background-color: #f4f5f5 !important;
       box-shadow: initial;
 
+      .coverInfo {
+        color: #333;
+      }
+
       .article-entry-wrap {
         .article-toc {
           .toc-header {
@@ -236,6 +317,7 @@
           }
         }
       }
+
       .article-info {
         border-top: 1px solid #ccc;
         .article-more-link {
@@ -247,6 +329,11 @@
             }
           }
         }
+      }
+
+      .declare {
+        background-color: rgba(0, 0, 0, 0.1);
+        color: #333;
       }
     }
 

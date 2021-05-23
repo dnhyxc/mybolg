@@ -166,6 +166,7 @@ body,
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: color 0.2s ease-in, box-shadow 0.2s ease-in;
     -moz-user-select: none;
     /*火狐*/
     -webkit-user-select: none;
