@@ -15,6 +15,9 @@ function init() {
   let articleEntry = document.querySelector('.article-entry');
   let articleTocA = articleToc.querySelectorAll('a');
   let h345 = articleEntry.querySelectorAll('h3,h4,h5');
+  const article = document.querySelector('.article-entry');
+
+  const reg = /\d/;
 
   homeIcon.onclick = function (e) {
     e.stopPropagation();
@@ -90,8 +93,12 @@ function init() {
   }
 
   const toTopId = [];
+  const toTopHref = [];
+  let mainLoadingText;
 
   function scroll() {
+    const isArticle = reg.test(decodeURIComponent(path).substr('/'));
+
     count.innerHTML = `${parseInt((wrapper.scrollTop / (wrapper.scrollHeight - wrapper.offsetHeight) * 100))}%`;
     scrollTop.appendChild(count);
     if (bodyScroll.clientWidth <= 800) {
@@ -112,30 +119,45 @@ function init() {
       }
     }
 
-    if (wrapper.scrollTop <= 0) {
-      articleToc.style.height = 'calc(100vh - 246px)';
-    } else {
-      articleToc.style.height = 'calc(100vh - 178px)';
-    }
-
-    h345.forEach(i => {
-      if (wrapper.scrollTop + 20 >= i.offsetTop) {
-        if (toTopId.length <= 0) {
-          toTopId.push(i.id);
-        } else {
-          toTopId.splice(0, 1, i.id);
-        }
+    if (isArticle) {
+      if (wrapper.scrollTop <= 0) {
+        articleToc.style.height = 'calc(100vh - 246px)';
+      } else {
+        articleToc.style.height = 'calc(100vh - 178px)';
       }
-    });
 
-    const res = Array.from(articleTocA).filter(i => getText(i.href).includes(toTopId[0]));
-    articleTocA.forEach(i => {
-      i.classList.remove('select-toc');
-    })
+      h345.forEach(i => {
+        if (wrapper.scrollTop + 20 >= i.offsetTop) {
+          if (toTopHref.length <= 0) {
+            toTopId.push(i.id);
+            toTopHref.push(getText(i.children[0].href));
+          } else {
+            toTopId.splice(0, 1, i.id);
+            toTopHref.splice(0, 1, getText(i.children[0].href));
+          }
+        }
+      });
 
-    if (res.length > 0) {
-      res[0].classList.add('select-toc');
-      articleToc.scrollTop = res[0] && res[0].offsetTop - (wrapper.clientHeight / 2);
+      const isSelect = Array.from(articleTocA).filter(i => getText(i.href) === toTopHref[0]);
+      articleTocA.forEach(i => {
+        i.classList.remove('select-toc');
+      })
+
+      if (isSelect.length > 0) {
+        isSelect[0].classList.add('select-toc');
+        articleToc.scrollTop = isSelect[0] && isSelect[0].offsetTop - (wrapper.clientHeight / 2);
+      }
+
+      if (toTopId && toTopId[0]) {
+        mainLoading.innerHTML = toTopId[0].replace('-', "");
+        mainLoading.title = toTopId[0].replace('-', "");
+      }
+
+      if (wrapper.scrollTop === 0) {
+        isSelect[0].classList.remove('select-toc');
+        mainLoading.innerHTML = mainLoadingText;
+        mainLoading.title = mainLoadingText;
+      }
     }
   };
 
@@ -159,7 +181,6 @@ function init() {
 
   if (decodeURIComponent(path)) {
     if (path !== '/') {
-      const reg = /\d/;
       const isArticle = reg.test(decodeURIComponent(path).substr('/'));
       const res = decodeURIComponent(path).substr(decodeURIComponent(path).lastIndexOf('/', decodeURIComponent(path).lastIndexOf('/') - 1) + 1);
       const subPath = res.slice(0, res.length - 1);
@@ -169,6 +190,8 @@ function init() {
       } else if (isArticle) {
         changeSize.style.display = 'block';
         mainLoading.innerHTML = 'Article-' + subPath[0].toUpperCase() + subPath.slice(1);
+        mainLoading.title = 'Article-' + subPath[0].toUpperCase() + subPath.slice(1);
+        mainLoadingText = 'Article-' + subPath[0].toUpperCase() + subPath.slice(1);
       } else {
         mainLoading.innerHTML = subPath[0].toUpperCase() + subPath.slice(1);
       }

@@ -176,6 +176,13 @@ body,
     /*早期浏览器*/
     user-select: none;
 
+    .main-loading {
+      width: 55%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .change-info {
       height: 22px;
       line-height: 22px;
