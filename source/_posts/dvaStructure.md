@@ -73,7 +73,7 @@ npm i webpack@4.44.2 webpack-cli@4.4.0 webpack-dev-server@3.11.2 -D
 
 > 在项目根目录中创建 webpack.config.js 文件。
 
-#### 配置 入口及输出路径
+#### 配置入口及输出路径
 
 1，相关配置如下：
 
