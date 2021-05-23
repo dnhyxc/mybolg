@@ -1,5 +1,4 @@
 function init() {
-  let path = location.pathname;
   let leftCol = document.querySelector('.left-col');
   let homeIcon = document.querySelector('#home-icon');
   let tipsBox = document.querySelector('.tips-box');
@@ -15,9 +14,10 @@ function init() {
   let articleEntry = document.querySelector('.article-entry');
   let articleTocA = articleToc.querySelectorAll('a');
   let h345 = articleEntry.querySelectorAll('h3,h4,h5');
-  const article = document.querySelector('.article-entry');
 
+  let path = location.pathname;
   const reg = /\d/;
+  const isArticle = reg.test(decodeURIComponent(path).substr('/'));
 
   homeIcon.onclick = function (e) {
     e.stopPropagation();
@@ -97,8 +97,6 @@ function init() {
   let mainLoadingText;
 
   function scroll() {
-    const isArticle = reg.test(decodeURIComponent(path).substr('/'));
-
     count.innerHTML = `${parseInt((wrapper.scrollTop / (wrapper.scrollHeight - wrapper.offsetHeight) * 100))}%`;
     scrollTop.appendChild(count);
     if (bodyScroll.clientWidth <= 800) {
@@ -129,10 +127,10 @@ function init() {
       h345.forEach(i => {
         if (wrapper.scrollTop + 20 >= i.offsetTop) {
           if (toTopHref.length <= 0) {
-            toTopId.push(i.id);
+            toTopId.push(i.innerText);
             toTopHref.push(getText(i.children[0].href));
           } else {
-            toTopId.splice(0, 1, i.id);
+            toTopId.splice(0, 1, i.innerText);
             toTopHref.splice(0, 1, getText(i.children[0].href));
           }
         }
@@ -149,8 +147,8 @@ function init() {
       }
 
       if (toTopId && toTopId[0]) {
-        mainLoading.innerHTML = toTopId[0].replace('-', "");
-        mainLoading.title = toTopId[0].replace('-', "");
+        mainLoading.innerHTML = toTopId[0];
+        mainLoading.title = toTopId[0];
       }
 
       if (wrapper.scrollTop === 0) {
@@ -181,7 +179,6 @@ function init() {
 
   if (decodeURIComponent(path)) {
     if (path !== '/') {
-      const isArticle = reg.test(decodeURIComponent(path).substr('/'));
       const res = decodeURIComponent(path).substr(decodeURIComponent(path).lastIndexOf('/', decodeURIComponent(path).lastIndexOf('/') - 1) + 1);
       const subPath = res.slice(0, res.length - 1);
       if (subPath === 'informal') {
