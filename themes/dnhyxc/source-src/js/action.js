@@ -19,6 +19,11 @@ function init() {
   const reg = /\d/;
   const isArticle = reg.test(decodeURIComponent(path).substr('/'));
   const isInformal = decodeURIComponent(path).substr('/').includes('informal');
+  const isCategories = decodeURIComponent(path).substr('/').includes('categories');
+  const isArchives = decodeURIComponent(path).substr('/').includes('archives');
+
+  console.log(isArchives, 'isArchives');
+  console.log(isCategories, 'isCategories');
 
   homeIcon.onclick = function (e) {
     e.stopPropagation();
@@ -161,7 +166,7 @@ function init() {
     }
 
     // 处理滚动条
-    if (!articleEntry.getAttribute('class').includes('narrow')) {
+    if (articleEntry && !articleEntry.getAttribute('class').includes('narrow') || isArchives || isCategories) {
       clearTimeout(scrollTimer);
       wrapper.classList.add('onscroll');
       scrollTimer = setTimeout(() => {
@@ -176,7 +181,7 @@ function init() {
   wrapper.addEventListener('scroll', debounce(scroll, 0));
 
   function wrapperOnMouseMove(e) {
-    if (!articleEntry.getAttribute('class').includes('narrow')) {
+    if (articleEntry && !articleEntry.getAttribute('class').includes('narrow') || isArchives || isCategories) {
       if (e.pageX - leftCol.offsetWidth + 10 > wrapper.offsetWidth) {
         clearTimeout(scrollTimer);
         wrapper.classList.add('onscroll');
