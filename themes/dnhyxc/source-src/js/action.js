@@ -18,6 +18,7 @@ function init() {
   let path = location.pathname;
   const reg = /\d/;
   const isArticle = reg.test(decodeURIComponent(path).substr('/'));
+  const isInformal = decodeURIComponent(path).substr('/').includes('informal');
 
   homeIcon.onclick = function (e) {
     e.stopPropagation();
@@ -117,7 +118,7 @@ function init() {
       }
     }
 
-    if (isArticle) {
+    if (isArticle || isInformal) {
       if (wrapper.scrollTop <= 0) {
         articleToc.style.height = 'calc(100vh - 246px)';
       } else {
