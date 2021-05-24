@@ -96,6 +96,7 @@ function init() {
   const toTopId = [];
   const toTopHref = [];
   let mainLoadingText;
+  let scrollTimer = null;
 
   function scroll() {
     count.innerHTML = `${parseInt((wrapper.scrollTop / (wrapper.scrollHeight - wrapper.offsetHeight) * 100))}%`;
@@ -158,9 +159,39 @@ function init() {
         mainLoading.title = mainLoadingText;
       }
     }
+
+    // 处理滚动条
+    if (!articleEntry.getAttribute('class').includes('narrow')) {
+      clearTimeout(scrollTimer);
+      wrapper.classList.add('onscroll');
+      scrollTimer = setTimeout(() => {
+        wrapper.classList.remove('onscroll');
+      }, 500);
+    } else {
+      clearTimeout(scrollTimer);
+      wrapper.classList.remove('onscroll');
+    }
   };
 
   wrapper.addEventListener('scroll', debounce(scroll, 0));
+
+  function wrapperOnMouseMove(e) {
+    if (!articleEntry.getAttribute('class').includes('narrow')) {
+      if (e.pageX - leftCol.offsetWidth + 10 > wrapper.offsetWidth) {
+        clearTimeout(scrollTimer);
+        wrapper.classList.add('onscroll');
+      } else {
+        wrapper.classList.remove('onscroll');
+      }
+      if (e.pageX - leftCol.offsetWidth > wrapper.offsetWidth) {
+        document.documentElement.style.cursor = 'pointer';
+      } else {
+        document.documentElement.style.cursor = 'initial';
+      }
+    }
+  };
+
+  document.addEventListener('mousemove', debounce(wrapperOnMouseMove, 100))
 
   scrollTop.onmouseenter = function () {
     clearTimeout(timer);

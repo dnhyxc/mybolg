@@ -1,65 +1,52 @@
-/* 设置滚动条的样式 */
+.body-wrap::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  display: none;
+}
+
+.body-wrap {
+  padding: 0 10px;
+}
+
+.body-wrap.onscroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  display: block;
+}
+
+.body-wrap.onscroll {
+  padding: 0 2px 0 10px;
+}
+
 ::-webkit-scrollbar {
-    width: 10px;
-		height: 10px;
-		display: none;
+  width: 8px;
+  height: 8px;
+  display: none;
 }
 
 ::-webkit-scrollbar-button {
-	width: 0;
-	height: 0;
+  display: none;
 }
 
-::-webkit-scrollbar-button:start:increment,::-webkit-scrollbar-button:end:decrement {
-	display: none;
+::-webkit-scrollbar-track {
+  display: none;
+}
+
+::-webkit-scrollbar-button:start:increment,
+::-webkit-scrollbar-button:end:decrement {
+  display: none;
 }
 
 ::-webkit-scrollbar-corner {
-	display: block;
+  display: none;
 }
 
 ::-webkit-scrollbar-thumb {
-	border-radius: 8px;
-	background-color: rgba(0,0,0,.2);
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	border-radius: 8px;
-	background-color: rgba(0,0,0,.5);
-}
-
-::-webkit-scrollbar-track,::-webkit-scrollbar-thumb {
-	border-right: 1px solid transparent;
-	border-left: 1px solid transparent;
-}
-
-::-webkit-scrollbar-track:hover {
-	background-color: rgba(0,0,0,.15);
-}
-::-webkit-scrollbar-button:start {
-	width: 10px;
-	height: 10px;
-	background: url(./img/scrollbar_arrow.png) no-repeat 0 0;
-}
-
-::-webkit-scrollbar-button:start:hover {
-	background: url(./img/scrollbar_arrow.png) no-repeat -15px 0;
-}
-
-::-webkit-scrollbar-button:start:active {
-	background: url(./img/scrollbar_arrow.png) no-repeat -30px 0;
-}
-
-::-webkit-scrollbar-button:end {
-	width: 10px;
-	height: 10px;
-	background: url(./img/scrollbar_arrow.png) no-repeat 0 -18px;
-}
-
-::-webkit-scrollbar-button:end:hover {
-	background: url(./img/scrollbar_arrow.png) no-repeat -15px -18px;
-}
-
-::-webkit-scrollbar-button:end:active {
-	background: url(./img/scrollbar_arrow.png) no-repeat -30px -18px;
+  border-radius: 8px;
+  background-color: gold;
 }
