@@ -22,9 +22,6 @@ function init() {
   const isCategories = decodeURIComponent(path).substr('/').includes('categories');
   const isArchives = decodeURIComponent(path).substr('/').includes('archives');
 
-  console.log(isArchives, 'isArchives');
-  console.log(isCategories, 'isCategories');
-
   homeIcon.onclick = function (e) {
     e.stopPropagation();
     if (tipsBox.classList.value === 'tips-box') {
