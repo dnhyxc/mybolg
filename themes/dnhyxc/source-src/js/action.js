@@ -7,6 +7,8 @@ function init() {
   let changeSize = document.querySelector('.changeSize');
   let mainLoading = document.querySelector('.main-loading');
   let scrollTop = document.querySelector('#scrollTop');
+  let scrollLine = document.querySelector('#scrollLine');
+  let line = document.querySelector('#line');
   let bodyScroll = document.body;
   let coverInfo = document.querySelectorAll('.coverInfo');
   let aplayer = document.querySelector('.aplayer');
@@ -101,22 +103,29 @@ function init() {
   let scrollTimer = null;
 
   function scroll() {
-    count.innerHTML = `${parseInt((wrapper.scrollTop / (wrapper.scrollHeight - wrapper.offsetHeight) * 100))}%`;
+    const countInfo = `${parseInt((wrapper.scrollTop / (wrapper.scrollHeight - wrapper.offsetHeight) * 100))}%`;
+    count.innerHTML = countInfo;
+    line.style.width = countInfo;
     scrollTop.appendChild(count);
     if (bodyScroll.clientWidth <= 800) {
       scrollTop.style.display = 'none';
+      scrollLine.style.display = 'none';
     } else {
       if (wrapper.scrollTop === 0) {
         scrollTop.style.display = 'none';
+        scrollLine.style.display = 'none';
         clearTimeout(timer);
       } else if (wrapper.scrollHeight - wrapper.scrollTop === wrapper.clientHeight) {
         scrollTop.style.display = 'block';
+        scrollLine.style.display = 'block';
         clearTimeout(timer);
       } else {
         scrollTop.style.display = 'block';
+        scrollLine.style.display = 'block';
         clearTimeout(timer);
         timer = setTimeout(() => {
           scrollTop.style.display = 'none';
+          scrollLine.style.display = 'none';
         }, 2000);
       }
     }
@@ -198,15 +207,22 @@ function init() {
   scrollTop.onmouseenter = function () {
     clearTimeout(timer);
     scrollTop.style.display = 'block';
+    scrollLine.style.display = 'block';
+    scrollLine.style.borderColor = 'gold';
+    line.style.backgroundColor = 'gold';
   }
 
   scrollTop.onmouseleave = function () {
+    scrollLine.style.borderColor = '#969696';
+    line.style.backgroundColor = '#969696';
     if (wrapper.scrollHeight - wrapper.scrollTop === wrapper.clientHeight) {
       clearTimeout(timer);
       scrollTop.style.display = 'block';
+      scrollLine.style.display = 'block';
     } else {
       timer = setTimeout(() => {
         scrollTop.style.display = 'none';
+        scrollLine.style.display = 'none';
       }, 2000);
     }
   }

@@ -383,6 +383,26 @@
       box-shadow: initial;
       background-color: #f4f5f5;
       color: #999 !important;
+
+      .scrollWrap {
+        #scrollLine {
+          border: 1px solid #ccc !important;
+
+          #line {
+            background-color: #ccc !important;
+          }
+        }
+
+        #scrollTop {
+          border-color: transparent transparent #ccc;
+          &::before {
+            color: #ccc;
+          }
+          &:hover {
+            border-color: transparent transparent #ccc;
+          }
+        }
+      }
     }
   }
 
