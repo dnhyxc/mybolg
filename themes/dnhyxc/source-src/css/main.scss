@@ -26,6 +26,8 @@
 @import "./decorate";
 @import "./atticle-narrow";
 @import "./article-toc";
+@import "./header";
+@import "./scrollBar.scss";
 @media screen and (max-width: 800px) {
   @import "./mobile";
   @import "./mobile-slider";

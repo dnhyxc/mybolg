@@ -7,8 +7,16 @@ function init() {
   let changeSize = document.querySelector('.changeSize');
   let mainLoading = document.querySelector('.main-loading');
   let scrollTop = document.querySelector('#scrollTop');
-  let scrollLine = document.querySelector('#scrollLine');
-  let line = document.querySelector('#line');
+
+  let scroll_top = document.querySelector('.scroll_top');
+  let topBar = document.querySelector('.topBar');
+  let scrollbottom = document.querySelector('.scrollbottom');
+  let bottomBar = document.querySelector('.bottomBar');
+  let scroll_right = document.querySelector('.scrollright');
+  let rightBar = document.querySelector('.rightBar');
+  let scroll_left = document.querySelector('.scrollLeft');
+  let leftBar = document.querySelector('.leftBar');
+
   let bodyScroll = document.body;
   let coverInfo = document.querySelectorAll('.coverInfo');
   let aplayer = document.querySelector('.aplayer');
@@ -105,27 +113,45 @@ function init() {
   function scroll() {
     const countInfo = `${parseInt((wrapper.scrollTop / (wrapper.scrollHeight - wrapper.offsetHeight) * 100))}%`;
     count.innerHTML = countInfo;
-    line.style.width = countInfo;
+    topBar.style.width = countInfo;
+    bottomBar.style.width = countInfo;
+    rightBar.style.height = countInfo;
+    leftBar.style.height = countInfo;
     scrollTop.appendChild(count);
     if (bodyScroll.clientWidth <= 800) {
       scrollTop.style.display = 'none';
-      scrollLine.style.display = 'none';
+      scroll_top.style.display = 'none';
+      scrollbottom.style.display = 'none';
+      scroll_right.style.display = 'none';
+      scroll_left.style.display = 'none';
     } else {
       if (wrapper.scrollTop === 0) {
         scrollTop.style.display = 'none';
-        scrollLine.style.display = 'none';
+        scroll_top.style.display = 'none';
+        scrollbottom.style.display = 'none';
+        scroll_right.style.display = 'none';
+        scroll_left.style.display = 'none';
         clearTimeout(timer);
       } else if (wrapper.scrollHeight - wrapper.scrollTop === wrapper.clientHeight) {
         scrollTop.style.display = 'block';
-        scrollLine.style.display = 'block';
+        scroll_top.style.display = 'block';
+        scrollbottom.style.display = 'block';
+        scroll_right.style.display = 'block';
+        scroll_left.style.display = 'block';
         clearTimeout(timer);
       } else {
         scrollTop.style.display = 'block';
-        scrollLine.style.display = 'block';
+        scroll_top.style.display = 'block';
+        scrollbottom.style.display = 'block';
+        scroll_right.style.display = 'block';
+        scroll_left.style.display = 'block';
         clearTimeout(timer);
         timer = setTimeout(() => {
           scrollTop.style.display = 'none';
-          scrollLine.style.display = 'none';
+          scroll_top.style.display = 'none';
+          scrollbottom.style.display = 'none';
+          scroll_right.style.display = 'none';
+          scroll_left.style.display = 'none';
         }, 2000);
       }
     }
@@ -207,22 +233,27 @@ function init() {
   scrollTop.onmouseenter = function () {
     clearTimeout(timer);
     scrollTop.style.display = 'block';
-    scrollLine.style.display = 'block';
-    scrollLine.style.borderColor = 'gold';
-    line.style.backgroundColor = 'gold';
+    scroll_top.style.display = 'block';
+    scrollbottom.style.display = 'block';
+    scroll_right.style.display = 'block';
+    scroll_left.style.display = 'block';
   }
 
   scrollTop.onmouseleave = function () {
-    scrollLine.style.borderColor = '#969696';
-    line.style.backgroundColor = '#969696';
     if (wrapper.scrollHeight - wrapper.scrollTop === wrapper.clientHeight) {
       clearTimeout(timer);
       scrollTop.style.display = 'block';
-      scrollLine.style.display = 'block';
+      scroll_top.style.display = 'block';
+      scrollbottom.style.display = 'block';
+      scroll_right.style.display = 'block';
+      scroll_left.style.display = 'block';
     } else {
       timer = setTimeout(() => {
         scrollTop.style.display = 'none';
-        scrollLine.style.display = 'none';
+        scroll_top.style.display = 'none';
+        scrollbottom.style.display = 'none';
+        scroll_right.style.display = 'none';
+        scroll_left.style.display = 'none';
       }, 2000);
     }
   }

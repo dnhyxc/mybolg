@@ -2,6 +2,51 @@
   position: relative;
   background-image: linear-gradient(-225deg, #fff 0%, #fff 100%) !important;
 
+  .scroll_top {
+    .topBar {
+      background-image: linear-gradient(
+        -45deg,
+        #f4f5f5 0%,
+        #f4f5f5 100%
+      ) !important;
+      box-shadow: 0 0 3px #ccc inset;
+    }
+  }
+
+  .scrollbottom {
+    .bottomBar {
+      // border-radius: 5px;
+      background-image: linear-gradient(
+        -45deg,
+        #f4f5f5 0%,
+        #f4f5f5 100%
+      ) !important;
+      box-shadow: 0 0 3px #ccc inset;
+    }
+  }
+
+  .scrollright {
+    .rightBar {
+      background-image: linear-gradient(
+        -45deg,
+        #f4f5f5 0%,
+        #f4f5f5 100%
+      ) !important;
+      box-shadow: 0 0 3px #ccc inset;
+    }
+  }
+
+  .scrollLeft {
+    .leftBar {
+      background-image: linear-gradient(
+        -45deg,
+        #f4f5f5 0%,
+        #f4f5f5 100%
+      ) !important;
+      box-shadow: 0 0 3px #ccc inset;
+    }
+  }
+
   &.show {
     .anm-canvas {
       display: none !important;
