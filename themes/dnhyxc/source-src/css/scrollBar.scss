@@ -3,7 +3,7 @@
 
   .scroll_top {
     box-sizing: border-box;
-    padding: 0 10px;
+    padding-left: 10px;
     width: 100%;
     height: 10px;
     position: absolute;
@@ -16,13 +16,13 @@
       height: 100%;
       // border-radius: 5px;
       background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
-      box-shadow: 0 0 3px #ccc inset;
+      box-shadow: 0 0 5px #ccc inset;
     }
   }
 
   .scrollbottom {
     box-sizing: border-box;
-    padding: 0 10px;
+    padding-left: 10px;
     width: 100%;
     height: 10px;
     position: absolute;
@@ -36,12 +36,13 @@
       height: 100%;
       // border-radius: 5px;
       background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
-      box-shadow: 0 0 3px #ccc inset;
+      box-shadow: 0 0 5px #ccc inset;
     }
   }
 
   .scrollright {
     box-sizing: border-box;
+    padding-bottom: 10px;
     width: 10px;
     height: 100%;
     position: absolute;
@@ -55,12 +56,13 @@
       height: 0%;
       // border-radius: 5px;
       background-image: linear-gradient(-45deg, #4e4376 0%, #2b5876 100%);
-      box-shadow: 0 0 3px #ccc inset;
+      box-shadow: 0 0 5px #ccc inset;
     }
   }
 
   .scrollLeft {
     box-sizing: border-box;
+    padding-bottom: 10px;
     width: 10px;
     height: 100%;
     position: absolute;
@@ -73,7 +75,7 @@
       height: 0%;
       // border-radius: 5px;
       background-image: linear-gradient(-45deg, #4e4376 0%, #2b5876 100%);
-      box-shadow: 0 0 3px #ccc inset;
+      box-shadow: 0 0 5px #ccc inset;
     }
   }
 }
