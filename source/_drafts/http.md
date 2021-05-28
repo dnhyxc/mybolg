@@ -1,14 +1,11 @@
 ---
 title: http
-date: 2020-08-06 15:13:53
-tags: http
+date: 2021-05-18 11:50:30
+tags: http https
 toc: true
+declare: true
 categories:
-  - 计算机网络
+  - 传输协议
 ---
 
-### http 简介
 
-1，http 是什么：
-
-<!-- more -->
