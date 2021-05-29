@@ -15,7 +15,7 @@
       width: 0%;
       height: 100%;
       // border-radius: 5px;
-      background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+      background-image: linear-gradient(to top, #2b5876 0%, #4e4376 100%);
       box-shadow: 0 0 5px #ccc inset;
     }
   }
@@ -35,7 +35,7 @@
       width: 0%;
       height: 100%;
       // border-radius: 5px;
-      background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+      background-image: linear-gradient(to bottom, #2b5876 0%, #4e4376 100%);
       box-shadow: 0 0 5px #ccc inset;
     }
   }
@@ -55,7 +55,7 @@
       width: 100%;
       height: 0%;
       // border-radius: 5px;
-      background-image: linear-gradient(-45deg, #4e4376 0%, #2b5876 100%);
+      background-image: linear-gradient(to left, #4e4376 0%, #2b5876 100%);
       box-shadow: 0 0 5px #ccc inset;
     }
   }
@@ -74,7 +74,7 @@
       width: 100%;
       height: 0%;
       // border-radius: 5px;
-      background-image: linear-gradient(-45deg, #4e4376 0%, #2b5876 100%);
+      background-image: linear-gradient(to right, #4e4376 0%, #2b5876 100%);
       box-shadow: 0 0 5px #ccc inset;
     }
   }

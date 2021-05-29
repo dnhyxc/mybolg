@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body,
+    html {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="audioBox">
+    <script type="text/javascript">
+      window.onload = function () {
+
+        let arr = [
+          './auto/4.mp3',
+          './auto/1.mp3',
+          './auto/2.mp3',
+          './auto/3.mp3',
+        ];
+
+        setTimeout(() => {
+          arr = [
+            './auto/5.mp3',
+            './auto/6.mp3',
+            './auto/7.mp3',
+            './auto/8.mp3',
+            './auto/9.mp3',
+            './auto/10.mp3',
+            './auto/11.mp3',
+          ]
+          console.log(arr);
+        }, 500);
+
+        const myAudio = new Audio();
+
+        myAudio.preload = true;
+        myAudio.controls = true;
+        myAudio.src = arr.shift();
+        myAudio.addEventListener('ended', playEndedHandler, false);
+        myAudio.play();
+        document.getElementById("audioBox").appendChild(myAudio);
+        myAudio.loop = false;
+
+        function playEndedHandler() {
+          myAudio.src = arr.shift();
+          myAudio.play();
+          console.log(arr.length);
+          !arr.length && myAudio.removeEventListener('ended', playEndedHandler, false);
+        }
+      }
+    </script>
+  </div>
+</body>
+
+</html>
