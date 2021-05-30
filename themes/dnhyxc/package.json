@@ -1,6 +1,6 @@
 {
   "name": "dnhyxc",
-  "version": "4.0.0",
+  "version": "1.1.0",
   "description": "a theme for hexo",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -8,8 +8,7 @@
     "dist": "webpack -p"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/litten/hexo-theme-yilia.git"
+    "type": "git"
   },
   "keywords": [
     "hexo",
@@ -18,10 +17,6 @@
   ],
   "author": "dnhyxc",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/litten/hexo-theme-yilia/issues"
-  },
-  "homepage": "https://github.com/litten/hexo-theme-yilia#readme",
   "devDependencies": {
     "autoprefixer": "^6.5.1",
     "clean-webpack-plugin": "^0.1.15",
