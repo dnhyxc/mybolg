@@ -19,6 +19,8 @@ import Setmargin from './setmargin'
 
 import articleToc from './articleToc'
 
+import changeTheme from './changeTheme'
+
 import { addLoadEvent } from './util'
 
 const cover = document.querySelector('.cover');
@@ -33,6 +35,7 @@ addLoadEvent(function () {
 	ChangeLight.init();
 	atticleNarrow.init();
 	articleToc.init();
+	changeTheme.init();
 })
 
 function stopTouchmove(e) {

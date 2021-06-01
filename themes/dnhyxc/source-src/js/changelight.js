@@ -43,7 +43,7 @@ function init() {
       sessionStorage.removeItem('light');
     } else {
       dark.classList.add('light');
-      dark.innerHTML = '黑夜';
+      dark.innerHTML = '炫酷';
       sessionStorage.setItem('light', true);
     }
     if (toggleMusic.getAttribute('class').includes('light')) {
@@ -57,7 +57,7 @@ function init() {
       sessionStorage.removeItem('mobileLight');
     } else {
       mobileDark.classList.add('mobileLight');
-      mobileDark.innerHTML = '黑夜';
+      mobileDark.innerHTML = '炫酷';
       sessionStorage.setItem('mobileLight', true);
     }
     if (toTopDark.getAttribute('class').includes('mobileLight')) {
@@ -80,7 +80,7 @@ function init() {
   if (sessionStorage.getItem('light')) {
     dark.classList.add('light');
     toggleMusic.classList.add('light');
-    dark.innerHTML = '黑夜';
+    dark.innerHTML = '炫酷';
   } else {
     dark.classList.remove('light');
     toggleMusic.classList.remove('light');
@@ -89,7 +89,7 @@ function init() {
   if (sessionStorage.getItem('mobileLight')) {
     mobileDark.classList.add('mobileLight')
     toTopDark.classList.add('mobileLight')
-    mobileDark.innerHTML = '黑夜';
+    mobileDark.innerHTML = '炫酷';
   } else {
     mobileDark.classList.remove('mobileLight');
     toTopDark.classList.remove('mobileLight');

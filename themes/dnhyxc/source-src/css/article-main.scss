@@ -2,56 +2,6 @@
   position: relative;
 }
 
-@media screen and (max-width: 800px) {
-  .browserCover {
-    margin-bottom: 13px;
-  }
-  .coverInfo {
-    display: none;
-  }
-
-  .coverInfoTop {
-    display: none;
-  }
-}
-
-.article {
-  .browserCover {
-    width: 100%;
-    height: calc(100vh - 373px);
-    animation-name: imageAnimation;
-    animation-duration: 12s;
-    animation-iteration-count: infinite;
-  }
-
-  @keyframes imageAnimation {
-    0% {
-      background-image: url(./img/c1.png);
-      background-size: 100% 100%;
-    }
-
-    50% {
-      background-image: url(./img/c2.png);
-      background-size: 100% 100%;
-    }
-
-    100% {
-      background-image: url(./img/c1.png);
-      background-size: 100% 100%;
-    }
-  }
-
-  .coverInfo {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .coverInfoTop {
-    border-top: 1px solid #999;
-  }
-}
-
 @-webkit-keyframes cd-bounce-1 {
   0% {
     opacity: 0;
@@ -110,7 +60,7 @@
   position: relative;
   border-radius: 5px;
   // transition: all 0.2s ease-in;
-  transition: color 0.2s ease-in, box-shadow 0.2s ease-in;
+  transition: box-shadow 0.2s ease-in;
   box-shadow: 0px 0px 10px #ccc inset;
   img {
     max-width: 100%;
