@@ -273,17 +273,14 @@
   color: transparent;
   /*文字填充色为透明*/
   -webkit-text-fill-color: transparent;
+  background-clip: text;
   -webkit-background-clip: text;
-  /*背景剪裁为文字，只将文字显示为背景*/
   background-size: 200% 100%;
-  /*背景图片向水平方向扩大一倍，这样background-position才有移动与变化的空间*/
-  /* 动画 */
-  animation: masked-animation 4s infinite linear;
+  animation: masked-animation 3s infinite linear;
 }
 @keyframes masked-animation {
   0% {
     background-position: 0 0;
-    /*background-position 属性设置背景图像的起始位置。*/
   }
   100% {
     background-position: -100% 0;

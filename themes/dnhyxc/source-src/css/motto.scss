@@ -1,0 +1,54 @@
+.motto {
+  font-size: 24px;
+  font-weight: 700;
+  padding-bottom: 20px;
+
+  .motto-text {
+    display: inline-block;
+    cursor: pointer;
+
+    &:hover {
+      text-shadow: 0 0 10px #ecf8c5, 0 0 20px #ecf8c5, 0 0 30px #ecf8c5;
+    }
+  }
+
+  .xin {
+    color: #ffd400;
+  }
+
+  .dao {
+    color: #f47920;
+  }
+
+  .shui {
+    color: #41c7af;
+  }
+
+  .qiong {
+    color: #c4e759;
+  }
+
+  .chu {
+    color: #ffd400;
+  }
+
+  .zuo {
+    color: #f7acbc;
+  }
+
+  .kan {
+    color: #c4e759;
+  }
+
+  .yun {
+    color: #41c7af;
+  }
+
+  .qi {
+    color: #f47920;
+  }
+
+  .shi {
+    color: #f7acbc;
+  }
+}
