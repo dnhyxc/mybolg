@@ -23,8 +23,12 @@ import changeTheme from './changeTheme'
 
 import { addLoadEvent } from './util'
 
+import * as setThemes from './setThemes'
+
 const cover = document.querySelector('.cover');
 const hideCoverBtn = document.querySelector('.hideCoverBtn');
+
+console.log(setThemes);
 
 addLoadEvent(function () {
 	// Share.init()
@@ -54,6 +58,27 @@ document.onreadystatechange = function () {
 		hideCoverBtn.addEventListener('click', function () {
 			cover.classList.add('hideCover');
 		})
+		if (sessionStorage.getItem('xin')) {
+			setThemes.xin();
+		} else if (sessionStorage.getItem('dao')) {
+			setThemes.dao();
+		} else if (sessionStorage.getItem('shui')) {
+			setThemes.shui();
+		} else if (sessionStorage.getItem('qiong')) {
+			setThemes.qiong();
+		} else if (sessionStorage.getItem('chu')) {
+			setThemes.chu();
+		} else if (sessionStorage.getItem('zuo')) {
+			setThemes.zuo();
+		} else if (sessionStorage.getItem('kan')) {
+			setThemes.kan();
+		} else if (sessionStorage.getItem('yun')) {
+			setThemes.yun();
+		} else if (sessionStorage.getItem('qi')) {
+			setThemes.qi();
+		} else {
+			setThemes.shi();
+		}
 	} else {
 		document.body.addEventListener('touchmove', stopTouchmove, { passive: false });
 	}

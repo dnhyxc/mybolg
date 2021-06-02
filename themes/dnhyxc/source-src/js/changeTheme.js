@@ -67,7 +67,18 @@ function init() {
     return `linear-gradient(${direction}, ${color1} 0%, ${color2} 100%)`;
   }
 
+  async function changeSSItems(type) {
+    const actionType = ['xin', 'dao', 'shui', 'qiong', 'chu', 'zuo', 'kan', 'yun', 'qi', 'shi'];
+    await actionType.filter(i => i !== type).forEach(i => {
+      sessionStorage.removeItem(i);
+    })
+    actionType.filter(i => i === type).forEach(i => {
+      sessionStorage.setItem(i, true);
+    })
+  }
+
   xin.onclick = function (e) {
+    changeSSItems('xin');
     const color1 = '#23262e';
     e.stopPropagation();
     container.style.backgroundImage = themes[1];
@@ -80,6 +91,7 @@ function init() {
   }
 
   dao.onclick = function (e) {
+    changeSSItems('dao');
     const color1 = '#8c8c8c';
     const color2 = '#304352';
     e.stopPropagation();
@@ -93,6 +105,7 @@ function init() {
   }
 
   shui.onclick = function (e) {
+    changeSSItems('shui');
     const color1 = '#13547a';
     const color2 = '#67ada5';
     e.stopPropagation();
@@ -106,6 +119,7 @@ function init() {
   }
 
   qiong.onclick = function (e) {
+    changeSSItems('qiong');
     const color1 = '#a5a99e';
     const color2 = '#386b96';
     e.stopPropagation();
@@ -119,6 +133,7 @@ function init() {
   }
 
   chu.onclick = function (e) {
+    changeSSItems('chu');
     const color1 = '#09203f';
     const color2 = '#537895';
     e.stopPropagation();
@@ -132,6 +147,7 @@ function init() {
   }
 
   zuo.onclick = function (e) {
+    changeSSItems('zuo');
     const color1 = '#3c6382';
     const color2 = '#3c6382';
     e.stopPropagation();
@@ -145,6 +161,7 @@ function init() {
   }
 
   kan.onclick = function (e) {
+    changeSSItems('kan');
     const color1 = '#535c68';
     const color2 = '#535c68';
     e.stopPropagation();
@@ -158,6 +175,7 @@ function init() {
   }
 
   yun.onclick = function (e) {
+    changeSSItems('yun');
     const color1 = '#336750';
     const color2 = '#1b6950';
     e.stopPropagation();
@@ -171,6 +189,7 @@ function init() {
   }
 
   qi.onclick = function (e) {
+    changeSSItems('qi');
     const color1 = '#60a3bc';
     const color2 = '#60a3bc';
     e.stopPropagation();
@@ -184,6 +203,8 @@ function init() {
   }
 
   shi.onclick = function (e) {
+    changeSSItems('shi');
+    sessionStorage.removeItem('xin');
     const color1 = 'rgb(43, 88, 118)';
     const color2 = 'rgb(78, 67, 118)';
     e.stopPropagation();
