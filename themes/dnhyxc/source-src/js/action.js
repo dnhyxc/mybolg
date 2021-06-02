@@ -214,7 +214,7 @@ function init() {
 
   function wrapperOnMouseMove(e) {
     if (articleEntry && !articleEntry.getAttribute('class').includes('narrow') || isArchives || isCategories) {
-      if (e.pageX - leftCol.offsetWidth + 10 > wrapper.offsetWidth) {
+      if (e.pageX - leftCol.offsetWidth + 10 > wrapper.offsetWidth && wrapper.scrollHeight > wrapper.clientHeight) {
         clearTimeout(scrollTimer);
         wrapper.classList.add('onscroll');
       } else {

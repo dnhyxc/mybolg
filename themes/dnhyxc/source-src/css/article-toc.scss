@@ -5,21 +5,15 @@
 
   .article-toc {
     height: calc(100vh - 246px);
-    // width: 251px;
     position: sticky;
     top: 0;
-    // left: 60%;
     padding-left: 10px;
     overflow-y: auto;
     display: none;
     -moz-user-select: none;
-    /*火狐*/
     -webkit-user-select: none;
-    /*webkit浏览器*/
     -ms-user-select: none;
-    /*IE10*/
     -khtml-user-select: none;
-    /*早期浏览器*/
     user-select: none;
 
     .toc-header {
@@ -43,13 +37,13 @@
     }
 
     a:hover {
-      background: #44526b;
-      background-image: linear-gradient(
-        -45deg,
-        rgb(43, 88, 118) 0%,
-        rgb(78, 67, 118) 100%
-      );
-      box-shadow: 0 0 3px #ccc inset;
+      // background-image: linear-gradient(
+      //   -45deg,
+      //   rgb(43, 88, 118) 0%,
+      //   rgb(78, 67, 118) 100%
+      // );
+      // background: rgba(225, 225, 225, 0.1);
+      // box-shadow: 0 0 3px #ccc inset;
       padding: 0px 5px;
       font-weight: 700;
       color: #d9ff00 !important;

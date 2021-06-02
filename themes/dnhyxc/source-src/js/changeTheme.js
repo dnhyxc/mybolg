@@ -19,8 +19,8 @@ function init() {
   const shi = document.querySelector('.shi');
 
   const themes = [
-    'linear-gradient(-45deg, rgb(43, 88, 118) 0%, rgb(78, 67, 118) 100%)', // 时
-    'linear-gradient(to top, #23262e 0%, #23262e 100%)', // 行
+    'linear-gradient(to top, #23262e 0%, #23262e 100%)', // 时
+    'linear-gradient(-45deg, rgb(43, 88, 118) 0%, rgb(78, 67, 118) 100%)', // 行
     'linear-gradient(to top, #8c8c8c 0%, #304352 100%)', // 到
     'linear-gradient(15deg, #13547a 0%, #67ada5 100%)',  // 水
     'linear-gradient(to top, #a5a99e 0%, #386b96 100%)', // 穷
@@ -33,8 +33,8 @@ function init() {
 
   function getBarThemes(direction) {
     const topBarThemes = [
-      `linear-gradient(${direction}, rgb(43, 88, 118) 0%, rgb(78, 67, 118) 100%)`,
       `linear-gradient(${direction}, #23262e 0%, #23262e 100%)`,
+      `linear-gradient(${direction}, rgb(43, 88, 118) 0%, rgb(78, 67, 118) 100%)`,
       `linear-gradient(${direction}, #8c8c8c 0%, #304352 100%)`,
       `linear-gradient(${direction}, #13547a 0%, #67ada5 100%)`,
       `linear-gradient(${direction}, #a5a99e 0%, #386b96 100%)`,
@@ -79,15 +79,16 @@ function init() {
 
   xin.onclick = function (e) {
     changeSSItems('xin');
-    const color1 = '#23262e';
+    const color1 = 'rgb(43, 88, 118)';
+    const color2 = 'rgb(78, 67, 118)';
     e.stopPropagation();
     container.style.backgroundImage = themes[1];
-    topBar.style.backgroundImage = getColor('to top', color1, color1);
-    bottomBar.style.backgroundImage = getColor('to bottom', color1, color1);
-    rightBar.style.backgroundImage = getColor('to left', color1, color1);
-    leftBar.style.backgroundImage = getColor('to right', color1, color1);
-    dark.style.backgroundImage = getColor('to bottom', color1, color1);
-    toggleMusic.style.backgroundImage = getColor('to bottom', color1, color1);
+    topBar.style.backgroundImage = getColor('to top', color1, color2);
+    bottomBar.style.backgroundImage = getColor('to bottom', color1, color2);
+    rightBar.style.backgroundImage = getColor('to left', color1, color2);
+    leftBar.style.backgroundImage = getColor('to right', color1, color2);
+    dark.style.backgroundImage = getColor('to bottom', color1, color2);
+    toggleMusic.style.backgroundImage = getColor('to bottom', color1, color2);
   }
 
   dao.onclick = function (e) {
@@ -204,17 +205,15 @@ function init() {
 
   shi.onclick = function (e) {
     changeSSItems('shi');
-    sessionStorage.removeItem('xin');
-    const color1 = 'rgb(43, 88, 118)';
-    const color2 = 'rgb(78, 67, 118)';
+    const color1 = '#23262e';
     e.stopPropagation();
     container.style.backgroundImage = themes[0];
-    topBar.style.backgroundImage = getColor('to top', color1, color2);
-    bottomBar.style.backgroundImage = getColor('to bottom', color1, color2);
-    rightBar.style.backgroundImage = getColor('to left', color1, color2);
-    leftBar.style.backgroundImage = getColor('to right', color1, color2);
-    dark.style.backgroundImage = getColor('to bottom', color1, color2);
-    toggleMusic.style.backgroundImage = getColor('to bottom', color1, color2);
+    topBar.style.backgroundImage = getColor('to top', color1, color1);
+    bottomBar.style.backgroundImage = getColor('to bottom', color1, color1);
+    rightBar.style.backgroundImage = getColor('to left', color1, color1);
+    leftBar.style.backgroundImage = getColor('to right', color1, color1);
+    dark.style.backgroundImage = getColor('to bottom', color1, color1);
+    toggleMusic.style.backgroundImage = getColor('to bottom', color1, color1);
   }
 }
 

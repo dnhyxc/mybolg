@@ -4,10 +4,12 @@ function init() {
   const articleToc = document.querySelector('.article-toc');
   const headerToc = document.querySelector('.wrap-side-operation');
   const changeInfo = document.querySelector('.change-info');
+  const articleInfo = document.querySelector('.article-info');
 
   changeSize.onclick = function () {
     if (document.body.clientWidth > 800 && changeSize) {
       article.classList.toggle('narrow');
+      articleInfo.classList.toggle('artNobb');
     }
 
     if (article.getAttribute('class').includes('narrow')) {

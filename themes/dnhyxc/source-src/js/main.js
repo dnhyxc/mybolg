@@ -28,8 +28,6 @@ import * as setThemes from './setThemes'
 const cover = document.querySelector('.cover');
 const hideCoverBtn = document.querySelector('.hideCoverBtn');
 
-console.log(setThemes);
-
 addLoadEvent(function () {
 	// Share.init()
 	// Viewer.init();

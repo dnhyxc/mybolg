@@ -7,17 +7,20 @@
 
     .gt-btn-preview {
       box-shadow: 0 0 5px #ccc inset;
-      background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+      // background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+      background: transparent;
     }
 
     .gt-btn-public {
       box-shadow: 0 0 5px #ccc inset;
-      background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+      // background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+      background: transparent;
     }
 
     .gt-btn-login {
       box-shadow: 0 0 5px #ccc inset;
-      background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+      // background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+      background: transparent;
     }
 
     .gt-copyright {
@@ -35,7 +38,8 @@
 
     .gt-popup {
       top: 3.375em;
-      background-image: linear-gradient(-225deg, #2b5876 0%, #4e4376 100%);
+      // background-image: linear-gradient(-225deg, #2b5876 0%, #4e4376 100%);
+      background: rgba(225, 225, 225, 0.1);
       border: none;
       border-radius: 5px;
       box-shadow: 0 0 3px #ccc;
@@ -58,12 +62,14 @@
 
     .gt-header-textarea {
       border: none;
-      background-image: linear-gradient(-335deg, #475682, #2e5676);
+      // background-image: linear-gradient(-335deg, #475682, #2e5676);
+      background: rgba(225, 225, 225, 0.1);
     }
 
     .gt-header-preview {
       border: none;
-      background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+      // background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%);
+      background: rgba(225, 225, 225, 0.1);
 
       p {
         color: #ccc;
