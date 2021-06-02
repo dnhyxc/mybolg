@@ -12,6 +12,10 @@ function init() {
   const shui = document.querySelector('.shui');
   const qiong = document.querySelector('.qiong');
   const chu = document.querySelector('.chu');
+  const zuo = document.querySelector('.zuo');
+  const kan = document.querySelector('.kan');
+  const yun = document.querySelector('.yun');
+  const qi = document.querySelector('.qi');
   const shi = document.querySelector('.shi');
 
   const themes = [
@@ -21,6 +25,10 @@ function init() {
     'linear-gradient(15deg, #13547a 0%, #67ada5 100%)',  // 水
     'linear-gradient(to top, #a5a99e 0%, #386b96 100%)', // 穷
     'linear-gradient(to top, #09203f 0%, #537895 100%)', // 处
+    'linear-gradient(to top, #3c6382 0%, #3c6382 100%)', // 坐
+    'linear-gradient(to top, #535c68 0%, #535c68 100%)', // 看
+    'linear-gradient(to top, #336750 0%, #1b6950 100%)', // 云
+    'linear-gradient(to top, #60a3bc 0%, #60a3bc 100%)', // 起
   ]
 
   function getBarThemes(direction) {
@@ -31,6 +39,10 @@ function init() {
       `linear-gradient(${direction}, #13547a 0%, #67ada5 100%)`,
       `linear-gradient(${direction}, #a5a99e 0%, #386b96 100%)`,
       `linear-gradient(${direction}, #09203f 0%, #537895 100%)`,
+      `linear-gradient(${direction}, #3c6382 0%, #3c6382 100%)`,
+      `linear-gradient(${direction}, #535c68 0%, #535c68 100%)`,
+      `linear-gradient(${direction}, #336750 0%, #1b6950 100%)`,
+      `linear-gradient(${direction}, #60a3bc 0%, #60a3bc 100%)`,
     ];
     return topBarThemes;
   }
@@ -111,6 +123,58 @@ function init() {
     const color2 = '#537895';
     e.stopPropagation();
     container.style.backgroundImage = themes[5];
+    topBar.style.backgroundImage = getColor('to top', color1, color2);
+    bottomBar.style.backgroundImage = getColor('to bottom', color1, color2);
+    rightBar.style.backgroundImage = getColor('to left', color1, color2);
+    leftBar.style.backgroundImage = getColor('to right', color1, color2);
+    dark.style.backgroundImage = getColor('to bottom', color1, color2);
+    toggleMusic.style.backgroundImage = getColor('to bottom', color1, color2);
+  }
+
+  zuo.onclick = function (e) {
+    const color1 = '#3c6382';
+    const color2 = '#3c6382';
+    e.stopPropagation();
+    container.style.backgroundImage = themes[6];
+    topBar.style.backgroundImage = getColor('to top', color1, color2);
+    bottomBar.style.backgroundImage = getColor('to bottom', color1, color2);
+    rightBar.style.backgroundImage = getColor('to left', color1, color2);
+    leftBar.style.backgroundImage = getColor('to right', color1, color2);
+    dark.style.backgroundImage = getColor('to bottom', color1, color2);
+    toggleMusic.style.backgroundImage = getColor('to bottom', color1, color2);
+  }
+
+  kan.onclick = function (e) {
+    const color1 = '#535c68';
+    const color2 = '#535c68';
+    e.stopPropagation();
+    container.style.backgroundImage = themes[7];
+    topBar.style.backgroundImage = getColor('to top', color1, color2);
+    bottomBar.style.backgroundImage = getColor('to bottom', color1, color2);
+    rightBar.style.backgroundImage = getColor('to left', color1, color2);
+    leftBar.style.backgroundImage = getColor('to right', color1, color2);
+    dark.style.backgroundImage = getColor('to bottom', color1, color2);
+    toggleMusic.style.backgroundImage = getColor('to bottom', color1, color2);
+  }
+
+  yun.onclick = function (e) {
+    const color1 = '#336750';
+    const color2 = '#1b6950';
+    e.stopPropagation();
+    container.style.backgroundImage = themes[8];
+    topBar.style.backgroundImage = getColor('to top', color1, color2);
+    bottomBar.style.backgroundImage = getColor('to bottom', color1, color2);
+    rightBar.style.backgroundImage = getColor('to left', color1, color2);
+    leftBar.style.backgroundImage = getColor('to right', color1, color2);
+    dark.style.backgroundImage = getColor('to bottom', color1, color2);
+    toggleMusic.style.backgroundImage = getColor('to bottom', color1, color2);
+  }
+
+  qi.onclick = function (e) {
+    const color1 = '#60a3bc';
+    const color2 = '#60a3bc';
+    e.stopPropagation();
+    container.style.backgroundImage = themes[9];
     topBar.style.backgroundImage = getColor('to top', color1, color2);
     bottomBar.style.backgroundImage = getColor('to bottom', color1, color2);
     rightBar.style.backgroundImage = getColor('to left', color1, color2);
