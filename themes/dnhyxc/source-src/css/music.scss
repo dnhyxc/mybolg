@@ -2,7 +2,7 @@
   position: absolute;
 
   .aplayer.aplayer-fixed {
-    max-width: 261px;
+    max-width: 280px;
     left: 20px;
     bottom: 20px;
 
@@ -72,7 +72,7 @@
         }
         li:hover {
           color: #c4e759;
-          background-image: linear-gradient(-225deg, #cbbacc 0%, #2580b3 100%);
+          // background-image: linear-gradient(-225deg, #cbbacc 0%, #2580b3 100%);
         }
       }
     }
@@ -98,7 +98,7 @@
         background: transparent;
         border: none;
         width: calc(100% - 47px);
-        // box-shadow: 0 0 10px #ccc inset;
+        // box-shadow: 0 0 3px #999 inset;
 
         .aplayer-controller {
           .aplayer-volume-wrap {
