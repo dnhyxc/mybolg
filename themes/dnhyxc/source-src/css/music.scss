@@ -98,7 +98,12 @@
         background: transparent;
         border: none;
         width: calc(100% - 47px);
+        padding: 10px 8px 0 2px;
         // box-shadow: 0 0 3px #999 inset;
+
+        .aplayer-music {
+          padding-bottom: 0px;
+        }
 
         .aplayer-controller {
           .aplayer-volume-wrap {

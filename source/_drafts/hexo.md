@@ -48,3 +48,17 @@ if (!e.defaultPrevented) {
   });
 }
 ```
+
+### hexo 配置切换页面音乐不中断
+
+```html
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
+<script>
+  // 对所有链接跳转事件绑定pjax容器container
+  $(document).pjax("a[target!=_blank]", "#container", {
+    fragment: "#container",
+    timeout: 8000,
+  });
+</script>
+```
