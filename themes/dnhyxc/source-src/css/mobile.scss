@@ -27,7 +27,7 @@ body,
       text-align: center;
       line-height: 36px;
       border-radius: 50px;
-      background-image: linear-gradient(to bottom, #2b5876 0%, #4e4376 100%);
+      // background-image: linear-gradient(to bottom, #2b5876 0%, #4e4376 100%);
       box-shadow: 0 0 5px #ccc inset;
       font-size: 10px;
       color: #ccc;
@@ -36,7 +36,11 @@ body,
     .mobileLight {
       background-color: none;
       color: #333;
-      background-image: linear-gradient(to bottom, #fff1eb 0%, #ace0f9 100%);
+      background-image: linear-gradient(
+        to bottom,
+        #fff1eb 0%,
+        #ace0f9 100%
+      ) !important;
     }
   }
   .toTop {
@@ -55,7 +59,7 @@ body,
       text-align: center;
       line-height: 36px;
       border-radius: 50px;
-      background-image: linear-gradient(to bottom, #2b5876 0%, #4e4376 100%);
+      // background-image: linear-gradient(to bottom, #2b5876 0%, #4e4376 100%);
       box-shadow: 0 0 5px #ccc inset;
       font-size: 10px;
       color: #ccc;
@@ -64,10 +68,15 @@ body,
     .mobileLight {
       background-color: none;
       color: #333;
-      background-image: linear-gradient(to bottom, #fff1eb 0%, #ace0f9 100%);
+      background-image: linear-gradient(
+        to bottom,
+        #fff1eb 0%,
+        #ace0f9 100%
+      ) !important;
     }
   }
 }
+
 .mid-col.show .article {
   background: none;
 }

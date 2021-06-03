@@ -123,7 +123,8 @@ style:
   # 右滑板块背景
   slider: "background-image: linear-gradient(to top, #23262e 0%, #23262e 100%)"
   # slider: "background-image: linear-gradient(-45deg, #2b5876 0%, #4e4376 100%)"
-  btnctn: "background-image: linear-gradient(-225deg, #2b5876 0%, #4e4376 100%)"
+  btnctn: "background-image: linear-gradient(to top, #23262e 0%, #23262e 100%)"
+  # btnctn: "background-image: linear-gradient(-225deg, #2b5876 0%, #4e4376 100%)"
   tocContent: "background-image: linear-gradient(to top, #09203f 0%, #537895 100%)"
 
 # slider的设置
