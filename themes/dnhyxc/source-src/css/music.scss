@@ -28,6 +28,7 @@
           #c5c1ff 56%,
           #ffbac3 100%
         );
+        background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
       }
@@ -43,7 +44,8 @@
       border: none;
       max-height: 261px;
       margin-bottom: 68px;
-      background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
+      // background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
+      background: rgba(0, 0, 0, 0.5);
       z-index: 88;
       text-align: left;
       .aplayer-list-author {
@@ -64,10 +66,12 @@
           }
         }
         li.aplayer-list-light {
-          background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
+          // background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
+          background: rgba(0, 0, 0, 0.5);
           color: gold;
         }
         li:hover {
+          color: #c4e759;
           background-image: linear-gradient(-225deg, #cbbacc 0%, #2580b3 100%);
         }
       }
@@ -82,14 +86,16 @@
       left: -66px;
       visibility: hidden;
       transition: all 0.3s ease;
-      background-image: linear-gradient(to right, #2b5876 0%, #4e4376 100%);
+      // background-image: linear-gradient(to right, #2b5876 0%, #4e4376 100%);
+      background: rgba(0, 0, 0, 0.5);
 
       .aplayer-controller {
         display: none;
       }
 
       .aplayer-info {
-        background-image: linear-gradient(to right, #2b5876 0%, #4e4376 100%);
+        // background-image: linear-gradient(to right, #2b5876 0%, #4e4376 100%);
+        background: transparent;
         border: none;
         width: calc(100% - 47px);
         // box-shadow: 0 0 10px #ccc inset;
