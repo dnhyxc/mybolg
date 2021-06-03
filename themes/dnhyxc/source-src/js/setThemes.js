@@ -16,7 +16,7 @@ const themes = [
   'linear-gradient(to top, #3c6382 0%, #3c6382 100%)', // 坐
   'linear-gradient(to top, #535c68 0%, #535c68 100%)', // 看
   'linear-gradient(to top, #336750 0%, #1b6950 100%)', // 云
-  'linear-gradient(to top, #60a3bc 0%, #60a3bc 100%)', // 起
+  'linear-gradient(to top, #2c3e50 0%, #2c3e50 100%)', // 起
 ]
 
 function getColor(direction, color1, color2) {
@@ -120,8 +120,8 @@ function yun() {
 }
 
 function qi() {
-  const color1 = '#60a3bc';
-  const color2 = '#60a3bc';
+  const color1 = '#2c3e50';
+  const color2 = '#2c3e50';
   container.style.backgroundImage = themes[9];
   topBar.style.backgroundImage = getColor('to top', color1, color2);
   bottomBar.style.backgroundImage = getColor('to bottom', color1, color2);
@@ -153,4 +153,5 @@ module.exports = {
   yun: yun,
   qi: qi,
   shi: shi,
+  themes: themes,
 }
