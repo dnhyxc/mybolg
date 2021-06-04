@@ -46,15 +46,15 @@ function stopTouchmove(e) {
 
 document.onreadystatechange = function () {
 	if (document.readyState === "complete") {
-		cover.classList.add('hideCover');
+		cover && cover.classList.add('hideCover');
 		if (document.body.clientWidth <= 800) {
 			document.body.style.position = 'relative';
 			document.body.style.width = '100%';
 			document.body.removeEventListener('touchmove', stopTouchmove, { passive: false });
 		}
 	} else if (document.readyState === "interactive") {
-		hideCoverBtn.addEventListener('click', function () {
-			cover.classList.add('hideCover');
+		hideCoverBtn && hideCoverBtn.addEventListener('click', function () {
+			cover && cover.classList.add('hideCover');
 		})
 		if (sessionStorage.getItem('xin')) {
 			setThemes.xin();

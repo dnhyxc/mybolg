@@ -265,6 +265,8 @@ function init() {
       if (subPath === 'informal') {
         changeSize.style.display = 'block';
         mainLoading.innerHTML = 'Informal Essay';
+        mainLoading.innerHTML = 'Informal Essay';
+        mainLoadingText = 'Informal Essay';
       } else if (isArticle) {
         changeSize.style.display = 'block';
         mainLoading.innerHTML = 'Article-' + subPath[0].toUpperCase() + subPath.slice(1);

@@ -1,10 +1,12 @@
 <%- partial('_partial/head') %>
 
 <body class="bodyCover">
+  <% if(theme.cover){%>
   <%- partial('_partial/cover') %>
+  <% } %>
   <div id="container" q-class="show:isCtnShow" style="<%=theme.style && theme.style.slider%>">
     <% if(theme.scrollBar){%>
-    <%- partial('_partial/scrollBar.ejs') %>
+    <%- partial('_partial/scrollBar') %>
     <% } %>
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
