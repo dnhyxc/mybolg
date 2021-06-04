@@ -161,4 +161,10 @@
       border-radius: 0;
     }
   }
+
+  .aplayer.aplayer-arrow .aplayer-icon-loop,
+  .aplayer.aplayer-arrow .aplayer-icon-order,
+  .aplayer.aplayer-mobile .aplayer-icon-volume-down {
+    display: inline-block;
+  }
 }
