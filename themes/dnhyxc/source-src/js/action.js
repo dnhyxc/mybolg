@@ -198,7 +198,7 @@ function init() {
     }
 
     // 处理滚动条
-    if (articleEntry && !articleEntry.getAttribute('class').includes('narrow') || isArchives || isCategories) {
+    if (articleEntry && !articleEntry.getAttribute('class').includes('narrow')) {
       clearTimeout(scrollTimer);
       wrapper.classList.add('onscroll');
       scrollTimer = setTimeout(() => {
