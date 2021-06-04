@@ -3,18 +3,9 @@
 <body class="bodyCover">
   <%- partial('_partial/cover') %>
   <div id="container" q-class="show:isCtnShow" style="<%=theme.style && theme.style.slider%>">
-    <div class="scroll_top">
-      <div class="topBar"></div>
-    </div>
-    <div class="scrollbottom">
-      <div class="bottomBar"></div>
-    </div>
-    <div class="scrollLeft">
-      <div class="leftBar"></div>
-    </div>
-    <div class="scrollright">
-      <div class="rightBar"></div>
-    </div>
+    <% if(theme.scrollBar){%>
+    <%- partial('_partial/scrollBar.ejs') %>
+    <% } %>
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
       <%- partial('_partial/left-col', null, {cache: !config.relative_link}) %>

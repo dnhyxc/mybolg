@@ -208,3 +208,6 @@ declare:
 aplayer:
   enable: true
   asset_inject: false
+
+# 四周联动进度条，true开启，false关闭
+scrollBar: true
