@@ -139,8 +139,6 @@
         margin-bottom: 2px;
         padding: 10px;
         background: rgba(255, 255, 255, 0.2);
-        // max-height: 132px;
-        // overflow-y: auto;
         &.show {
           display: block;
         }
@@ -153,15 +151,10 @@
       color: rgba(77, 77, 77, 0.75);
       -webkit-overflow-scrolling: touch;
       overflow-scrolling: touch;
-      // overflow-y: auto;
-      // max-height: calc(100% - 259px);
       padding-bottom: 20px;
       .search-li {
         padding: 10px 10px;
         border-bottom: 1px dotted #dcdcdc;
-        // &:last-child {
-        //   border-bottom: none;
-        // }
         &:hover {
           background: rgba(255, 255, 255, 0.2);
         }
@@ -217,21 +210,19 @@
   }
 
   .tools-section-friends {
-    padding-top: 30px;
+    padding-top: 10px;
   }
 
   .tools-section {
-    margin: 10px 0;
+    margin-top: 10px;
     border-radius: 10px;
     box-shadow: 0 0 10px inset;
+    overflow-y: auto;
 
     .about-wrap {
       width: 100%;
       height: 100%;
       overflow-y: auto;
-    }
-
-    .friends-wrap {
     }
   }
 
@@ -243,12 +234,18 @@
     text-shadow: 1px 1px rgba(77, 77, 77, 0.45);
     padding: 10px 10px;
   }
+
   .about {
-    text-align: center;
-    margin-top: 30px;
+    margin-top: 20px;
     font-size: 20px;
     line-height: 30px;
     font-weight: 700;
     color: #eac804;
+    padding: 0 10px;
+  }
+
+  .aboutInfo {
+    font-weight: 700;
+    color: #d9ff00;
   }
 }

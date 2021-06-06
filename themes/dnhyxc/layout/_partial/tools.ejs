@@ -83,12 +83,28 @@
         <section class="tools-section tools-section-me" q-show="aboutme">
           <%if(theme.aboutme){%>
           <div class="about">关 于 我</div>
-          <div class="aboutme-wrap" id="js-aboutme">name:<%=theme.aboutme.name%></div>
-          <div class="aboutme-wrap" id="js-aboutme">github:<%=theme.aboutme.github%></div>
-          <div class="aboutme-wrap" id="js-aboutme">wechat:<%=theme.aboutme.wechat%></div>
+          <div class="aboutme-wrap" id="js-aboutme" style="display: none;">
+            <span class="aboutInfo"></span>
+          </div>
+          <div class="aboutme-wrap" id="js-aboutme">
+            <span class="aboutInfo">name：</span>
+            <%=theme.aboutme.name%>
+          </div>
+          <div class="aboutme-wrap" id="js-aboutme">
+            <span class="aboutInfo">github：</span>
+            <a href=<%=theme.aboutme.github%> target="_blank"><%=theme.aboutme.github%></a>
+          </div>
+          <div class="aboutme-wrap" id="js-aboutme">
+            <span class="aboutInfo">wechat：</span>
+            <%=theme.aboutme.wechat%>
+          </div>
+          <div class="aboutme-wrap" id="js-aboutme">
+            <span class="aboutInfo">skill：</span>
+            <%=theme.aboutme.skill%>
+          </div>
           <%}%>
-    	</section>
-    <%}%>
+      </section>
+      <%}%>
   </div>
 
 </div>

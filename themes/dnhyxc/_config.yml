@@ -152,9 +152,10 @@ friends:
 
 # aboutme: 性名:ninghai<br><br>github:https://github.com/dnhyxc<br>微信:dnh20091206<br>擅长:JavaScript、React、Dva、webpack<br>
 aboutme:
-  name: dengninghai
+  name: NingHai
   github: https://github.com/dnhyxc
   wechat: dnh20091206
+  skill: JS、TS、React、Dva、CSS3、H5、webpack、Http、Antd、Git...
 
 canvas_nest: true
 
