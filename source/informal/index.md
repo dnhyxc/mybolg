@@ -1361,8 +1361,8 @@ async function getData() {
 	const delay = ms => new Promise(resolve => setTimeout(resolve, ms);
 	while(true) {
 	  const data = yield call(getData);
-	  yield call(delay, 300); // 延时300ms之后进行下一次的while循环执行
     yield put({ type: 'save', data });
+	  yield call(delay, 300); // 延时300ms之后进行下一次的while循环执行
   }
 }
 ```
@@ -1383,7 +1383,7 @@ npm install --save react-copy-to-clipboard
 
 - 使用示例：
 
-```js
+```jsx
 import React from "react";
 import ReactDOM from "react-dom";
 import { CopyToClipboard } from "react-copy-to-clipboard";
