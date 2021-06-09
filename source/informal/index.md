@@ -613,6 +613,22 @@ const time1 = getTime();
 console.log(time1); // 2021.01.12 14:18:55
 ```
 
+### js 类型判断
+
+#### 类型判断函数封装
+
+```js
+const getType = function (obj) {
+  let type = typeof obj;
+  if (type !== "object") {
+    return type;
+  }
+  return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
+  // 或如下方式
+  // return Object.prototype.toString.call(obj).replace(/^\[object (\S+)\]$/, '$1').toLowerCase();
+};
+```
+
 ### 坐标定位
 
 #### 使用坐标计算目标在元素中的实际位置
