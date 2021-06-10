@@ -629,6 +629,108 @@ const getType = function (obj) {
 };
 ```
 
+### 检测当前页面是否被隐藏
+
+#### visibilitychange 事件
+
+1，visibilitychange 可监测当前页面是否被隐藏，当切换页面时显示 true, false 就是打开状态。一般在工作用主要用到用户在页面停留了多长时间。
+
+2，具体使用方式如下：
+
+```js
+document.addEventListener("visibilitychange", function () {
+  console.log(document.hidden);
+});
+```
+
+### 随机打乱数组顺序
+
+#### sort 与 Math.random
+
+1，具体方式如下：
+
+```js
+let list = [1, 2, "dnhyxc", 1, 34, 3, 12];
+let res = list.sort(() => Math.random() - 0.5);
+console.log(res);
+```
+
+### 判断数组中的值是否满足要求
+
+#### 数组里的值是否有一个或一个以上满足要求
+
+1，当前方法只要数组里面有一个值符合需求，就返回 true，否则 false。
+
+```js
+let list = [6, 8, 8, 9, 8, 88];
+let res = list.some((item) => item > 6);
+console.log(res); // true
+```
+
+#### 数组里的值是否都满足要求
+
+1，我们之前使用 for 遍历在判断当前数组里的值是否全符合要求，还要声明一个变量来进行累计，直接使用 every 当全部满足需求时返回 true，否则返回 false。
+
+```js
+let list = [6, 8, 8, 88, 8, 68];
+let res = list.every((item) => item > 6);
+console.log(res); // false
+```
+
+### 运算符相关
+
+#### ?? 运算符
+
+1，`??`运算符只有前面的值是 undefined or null 才会执行，工作中有的情况下使用，我们来看一下。
+
+```js
+let status = undefined;
+let text = status ?? "暂无";
+console.log(text); // 暂无
+```
+
+#### ?. 运算符
+
+1，`?.`运算符这在有时候处理对象时非常有用，看下面案例，person.name 返回 undefined 然后在调用 toString 这时肯定会报错，这时使用`?.`运算符就不会产生错误，`?.`运算符是只有在当值不是 undefined 时才会调用 toString 方法。
+
+```js
+let person = {};
+console.log(person.name.toString()); // 报错
+console.log(person.name?.toString()); // undefined
+```
+
+#### ~~ 双非运算符
+
+1，`~~`双非运算符可以用于向下取整。
+
+```js
+console.log(~~9.2); // 9
+```
+
+### 代替 if else 的方式
+
+#### 定义特定的对象替代 if else
+
+1，在处理判断时，都会使用 if else， 但当业务越来越庞大时有好几种状态时，这样代码太冗余了，我们做一下简化。
+
+```js
+if(xxx = 1) {
+    xxx = "启用"
+} else if(xxx = 2) {
+    xxx = "停用"
+} // ...省略
+
+// 废除以上写法，可使用如下方式替代
+let operation = {
+    1: "启用",
+    2: "停用"
+    3: "注销",
+    4: "修改"
+    5: "详情"
+}
+xxx = operation[status] // 代码简洁清晰
+```
+
 ### 坐标定位
 
 #### 使用坐标计算目标在元素中的实际位置
@@ -777,6 +879,16 @@ export const downloadFiles = async (urls: string[]) => {
 ```
 
 ### DOM
+
+#### 事件委托
+
+1，如果有 100 个 li 元素，都要绑定一个 onclick 事件，这样性能不怎么好，我们可以通过事件委托实现。
+
+```js
+ul.on("click", "li", (e) => {
+  console.log(e);
+});
+```
 
 #### dom 滚动条相关
 
