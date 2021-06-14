@@ -12,8 +12,8 @@ const themes = [
   'linear-gradient(to top, #8c8c8c 0%, #304352 100%)', // 到
   'linear-gradient(15deg, #13547a 0%, #67ada5 100%)',  // 水
   'linear-gradient(to top, #a5a99e 0%, #386b96 100%)', // 穷
-  'linear-gradient(to top, #09203f 0%, #537895 100%)', // 处
-  'linear-gradient(to top, #3c6382 0%, #3c6382 100%)', // 坐
+  'linear-gradient(to top, #879d89 0%, #537895 100%)', // 处
+  'linear-gradient(to top, #39707b 0%, #39707b 100%)', // 坐
   'linear-gradient(to top, #535c68 0%, #535c68 100%)', // 看
   'linear-gradient(to top, #336750 0%, #1b6950 100%)', // 云
   'linear-gradient(to top, #2c3e50 0%, #2c3e50 100%)', // 起
@@ -72,7 +72,7 @@ function qiong() {
 }
 
 function chu() {
-  const color1 = '#09203f';
+  const color1 = '#879d89';
   const color2 = '#537895';
   container.style.backgroundImage = themes[5];
   topBar.style.backgroundImage = getColor('to top', color1, color2);
@@ -84,8 +84,8 @@ function chu() {
 }
 
 function zuo() {
-  const color1 = '#3c6382';
-  const color2 = '#3c6382';
+  const color1 = '#39707b';
+  const color2 = '#39707b';
   container.style.backgroundImage = themes[6];
   topBar.style.backgroundImage = getColor('to top', color1, color2);
   bottomBar.style.backgroundImage = getColor('to bottom', color1, color2);
