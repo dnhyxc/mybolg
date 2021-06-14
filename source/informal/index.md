@@ -1495,6 +1495,84 @@ async function getData() {
 }
 ```
 
+#### Dva 配置二级路由无法显示问题
+
+1，Dva 配置二级路由`('/app/about')`时，路由无法显示的原因是因为在入口 index.html 中加载 js 资源时没有使用绝对路径，如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dva Demo</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="index.js"></script>
+  </body>
+</html>
+```
+
+> 以上配置，在设置二级路由时将不显示二级路由的内容。
+
+2，如果要使配置的二级路由，生效，需要将 script 标签中引入的 src 资源改为绝对路径，如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dva Demo</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="/index.js"></script>
+  </body>
+</html>
+```
+
+> 以上配置可正常显示二级路由的内容。
+
+3，如果使用的入口 html 为 index.ejs，则需要在加载样式及 js 资源前使用使用 base 标签将路径改为绝对路径，具体操作如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta lang="zh" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta name="description" content="" />
+    <meta name="keyword" content="" />
+    <title>FRONTEND-SYSTEM</title>
+
+    <!-- 将加载的资源路径改为绝对路径，便于显示二级路由 -->
+    <base href="/" />
+
+    <link
+      rel="stylesheet"
+      href="/vendor/dist/vendor-d9bf47f526ed6200df30.dev.css"
+    />
+    <script src="/vendor/dist/vendor-d9bf47f526ed6200df30.dev.js"></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+```
+
+> 以上配置可正常显示二级路由的内容。
+
 ### 实现复制功能
 
 #### react-copy-to-clipboard
