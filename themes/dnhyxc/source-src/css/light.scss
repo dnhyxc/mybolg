@@ -1,6 +1,50 @@
+@font-face {
+  font-family: "iconfont";
+  src: url("./fonts/iconfont.eot"); /* IE9*/
+  src: url("./fonts/iconfont.eot#iefix") format("embedded-opentype"),
+    /* IE6-IE8 */ url("./fonts/iconfont.woff") format("woff"),
+    /* chrome, firefox */ url("./fonts/iconfont.ttf") format("truetype"),
+    url("./fonts/iconfont.svg#iconfont") format("svg"); /* iOS 4.1- */
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  font-family: "iconfont" !important;
+  speak: none;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .container {
   position: relative;
   background-image: linear-gradient(-225deg, #fff 0%, #fff 100%) !important;
+
+  .icon-book:before {
+    content: "\e6fe";
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .icon-price-tags:before {
+    content: "\e6f9";
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .icon-tuding:before {
+    content: "\e651";
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .icon-search:before {
+    content: "\E65B";
+    color: rgba(0, 0, 0, 0.25);
+  }
 
   .scroll_top {
     .topBar {
@@ -65,6 +109,20 @@
     .intrude-less {
       #header {
         .switch-btn {
+          .home {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .homeIcon {
+              width: 45px;
+              height: 45px;
+              // background: url(../css/img/home.png) no-repeat;
+              background: url(../css/img/home_light.svg) no-repeat;
+              background-size: 45px 45px;
+              cursor: pointer;
+            }
+          }
           .tips-box {
             .tips-text {
               background-image: linear-gradient(
@@ -323,6 +381,10 @@
           a:hover {
             color: gold;
           }
+        }
+
+        .archive-article-date {
+          color: hsla(0, 0, 0, 0.65);
         }
       }
 
