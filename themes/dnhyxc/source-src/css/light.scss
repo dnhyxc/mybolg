@@ -123,6 +123,7 @@
               cursor: pointer;
             }
           }
+
           .tips-box {
             .tips-text {
               background-image: linear-gradient(
@@ -145,7 +146,7 @@
               }
             }
             &::before {
-              border-color: transparent transparent #ace0f9 !important;
+              border-color: transparent transparent rgba(225, 225, 225, 0.95) !important;
             }
           }
         }
