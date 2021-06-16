@@ -1,10 +1,9 @@
 const container = document.querySelector('#container');
-const topBar = document.querySelector('.topBar');
-const bottomBar = document.querySelector('.bottomBar');
-const rightBar = document.querySelector('.rightBar');
-const leftBar = document.querySelector('.leftBar');
 const dark = document.querySelector('.dark');
 const toggleMusic = document.querySelector('.toggleMusic');
+const mobileDark = document.querySelector('.mobileDark');
+const toTopDark = document.querySelector('.toTopDark');
+const btnctn = document.querySelector('.btnctn');
 
 const themeColors = {
   xin: 'rgb(43, 88, 118) 0%, rgb(78, 67, 118) 100%',
@@ -51,102 +50,92 @@ function getColor(direction, color1, color2) {
 
 function xin() {
   container.style.backgroundImage = themes[0];
-  // topBar.style.backgroundImage = getColor('to top', colors.xin.color1, colors.xin.color2);
-  // bottomBar.style.backgroundImage = getColor('to bottom', colors.xin.color1, colors.xin.color2);
-  // rightBar.style.backgroundImage = getColor('to left', colors.xin.color1, colors.xin.color2);
-  // leftBar.style.backgroundImage = getColor('to right', colors.xin.color1, colors.xin.color2);
   dark.style.backgroundImage = getColor('to bottom', colors.xin.color1, colors.xin.color2);
   toggleMusic.style.backgroundImage = getColor('to bottom', colors.xin.color1, colors.xin.color2);
+  mobileDark.style.backgroundImage = getColor('to bottom', colors.xin.color1, colors.xin.color2);
+  toTopDark.style.backgroundImage = getColor('to bottom', colors.xin.color1, colors.xin.color2);
+  btnctn.style.backgroundImage = getColor('to top', colors.xin.color1, colors.xin.color2);
 }
 
 function dao() {
   container.style.backgroundImage = themes[1];
-  // topBar.style.backgroundImage = getColor('to top', colors.dao.color1, colors.dao.color2);
-  // bottomBar.style.backgroundImage = getColor('to bottom', colors.dao.color1, colors.dao.color2);
-  // rightBar.style.backgroundImage = getColor('to left', colors.dao.color1, colors.dao.color2);
-  // leftBar.style.backgroundImage = getColor('to right', colors.dao.color1, colors.dao.color2);
   dark.style.backgroundImage = getColor('to bottom', colors.dao.color1, colors.dao.color2);
   toggleMusic.style.backgroundImage = getColor('to bottom', colors.dao.color1, colors.dao.color2);
+  mobileDark.style.backgroundImage = getColor('to bottom', colors.dao.color1, colors.dao.color2);
+  toTopDark.style.backgroundImage = getColor('to bottom', colors.dao.color1, colors.dao.color2);
+  btnctn.style.backgroundImage = getColor('to top', colors.dao.color1, colors.dao.color2);
 }
 
 function shui() {
   container.style.backgroundImage = themes[2];
-  // topBar.style.backgroundImage = getColor('to top', colors.shui.color1, colors.shui.color2);
-  // bottomBar.style.backgroundImage = getColor('to bottom', colors.shui.color1, colors.shui.color2);
-  // rightBar.style.backgroundImage = getColor('to left', colors.shui.color1, colors.shui.color2);
-  // leftBar.style.backgroundImage = getColor('to right', colors.shui.color1, colors.shui.color2);
   dark.style.backgroundImage = getColor('to bottom', colors.shui.color1, colors.shui.color2);
   toggleMusic.style.backgroundImage = getColor('to bottom', colors.shui.color1, colors.shui.color2);
+  mobileDark.style.backgroundImage = getColor('to bottom', colors.shui.color1, colors.shui.color2);
+  toTopDark.style.backgroundImage = getColor('to bottom', colors.shui.color1, colors.shui.color2);
+  btnctn.style.backgroundImage = getColor('to top', colors.shui.color1, colors.shui.color2);
 }
 
 function qiong() {
   container.style.backgroundImage = themes[3];
-  // topBar.style.backgroundImage = getColor('to top', colors.qiong.color1, colors.qiong.color2);
-  // bottomBar.style.backgroundImage = getColor('to bottom', colors.qiong.color1, colors.qiong.color2);
-  // rightBar.style.backgroundImage = getColor('to left', colors.qiong.color1, colors.qiong.color2);
-  // leftBar.style.backgroundImage = getColor('to right', colors.qiong.color1, colors.qiong.color2);
   dark.style.backgroundImage = getColor('to bottom', colors.qiong.color1, colors.qiong.color2);
   toggleMusic.style.backgroundImage = getColor('to bottom', colors.qiong.color1, colors.qiong.color2);
+  mobileDark.style.backgroundImage = getColor('to bottom', colors.qiong.color1, colors.qiong.color2);
+  toTopDark.style.backgroundImage = getColor('to bottom', colors.qiong.color1, colors.qiong.color2);
+  btnctn.style.backgroundImage = getColor('to top', colors.qiong.color1, colors.qiong.color2);
 }
 
 function chu() {
   container.style.backgroundImage = themes[4];
-  // topBar.style.backgroundImage = getColor('to top', colors.chu.color1, colors.chu.color2);
-  // bottomBar.style.backgroundImage = getColor('to bottom', colors.chu.color1, colors.chu.color2);
-  // rightBar.style.backgroundImage = getColor('to left', colors.chu.color1, colors.chu.color2);
-  // leftBar.style.backgroundImage = getColor('to right', colors.chu.color1, colors.chu.color2);
   dark.style.backgroundImage = getColor('to bottom', colors.chu.color1, colors.chu.color2);
   toggleMusic.style.backgroundImage = getColor('to bottom', colors.chu.color1, colors.chu.color2);
+  mobileDark.style.backgroundImage = getColor('to bottom', colors.chu.color1, colors.chu.color2);
+  toTopDark.style.backgroundImage = getColor('to bottom', colors.chu.color1, colors.chu.color2);
+  btnctn.style.backgroundImage = getColor('to top', colors.chu.color1, colors.chu.color2);
 }
 
 function zuo() {
   container.style.backgroundImage = themes[5];
-  // topBar.style.backgroundImage = getColor('to top', colors.zuo.color1, colors.zuo.color2);
-  // bottomBar.style.backgroundImage = getColor('to bottom', colors.zuo.color1, colors.zuo.color2);
-  // rightBar.style.backgroundImage = getColor('to left', colors.zuo.color1, colors.zuo.color2);
-  // leftBar.style.backgroundImage = getColor('to right', colors.zuo.color1, colors.zuo.color2);
   dark.style.backgroundImage = getColor('to bottom', colors.zuo.color1, colors.zuo.color2);
   toggleMusic.style.backgroundImage = getColor('to bottom', colors.zuo.color1, colors.zuo.color2);
+  mobileDark.style.backgroundImage = getColor('to bottom', colors.zuo.color1, colors.zuo.color2);
+  toTopDark.style.backgroundImage = getColor('to bottom', colors.qiong.color1, colors.zuo.color2);
+  btnctn.style.backgroundImage = getColor('to top', colors.zuo.color1, colors.zuo.color2);
 }
 
 function kan() {
   container.style.backgroundImage = themes[6];
-  // topBar.style.backgroundImage = getColor('to top', colors.kan.color1, colors.kan.color2);
-  // bottomBar.style.backgroundImage = getColor('to bottom', colors.kan.color1, colors.kan.color2);
-  // rightBar.style.backgroundImage = getColor('to left', colors.kan.color1, colors.kan.color2);
-  // leftBar.style.backgroundImage = getColor('to right', colors.kan.color1, colors.kan.color2);
   dark.style.backgroundImage = getColor('to bottom', colors.kan.color1, colors.kan.color2);
   toggleMusic.style.backgroundImage = getColor('to bottom', colors.kan.color1, colors.kan.color2);
+  mobileDark.style.backgroundImage = getColor('to bottom', colors.kan.color1, colors.kan.color2);
+  toTopDark.style.backgroundImage = getColor('to bottom', colors.kan.color1, colors.kan.color2);
+  btnctn.style.backgroundImage = getColor('to top', colors.kan.color1, colors.kan.color2);
 }
 
 function yun() {
   container.style.backgroundImage = themes[7];
-  // topBar.style.backgroundImage = getColor('to top', colors.yun.color1, colors.yun.color2);
-  // bottomBar.style.backgroundImage = getColor('to bottom', colors.yun.color1, colors.yun.color2);
-  // rightBar.style.backgroundImage = getColor('to left', colors.yun.color1, colors.yun.color2);
-  // leftBar.style.backgroundImage = getColor('to right', colors.yun.color1, colors.yun.color2);
   dark.style.backgroundImage = getColor('to bottom', colors.yun.color1, colors.yun.color2);
   toggleMusic.style.backgroundImage = getColor('to bottom', colors.yun.color1, colors.yun.color2);
+  mobileDark.style.backgroundImage = getColor('to bottom', colors.yun.color1, colors.yun.color2);
+  toTopDark.style.backgroundImage = getColor('to bottom', colors.yun.color1, colors.yun.color2);
+  btnctn.style.backgroundImage = getColor('to top', colors.yun.color1, colors.yun.color2);
 }
 
 function qi() {
   container.style.backgroundImage = themes[8];
-  // topBar.style.backgroundImage = getColor('to top', colors.qi.color1, colors.qi.color2);
-  // bottomBar.style.backgroundImage = getColor('to bottom', colors.qi.color1, colors.qi.color2);
-  // rightBar.style.backgroundImage = getColor('to left', colors.qi.color1, colors.qi.color2);
-  // leftBar.style.backgroundImage = getColor('to right', colors.qi.color1, colors.qi.color2);
   dark.style.backgroundImage = getColor('to bottom', colors.qi.color1, colors.qi.color2);
   toggleMusic.style.backgroundImage = getColor('to bottom', colors.qi.color1, colors.qi.color2);
+  mobileDark.style.backgroundImage = getColor('to bottom', colors.qi.color1, colors.qi.color2);
+  toTopDark.style.backgroundImage = getColor('to bottom', colors.qi.color1, colors.qi.color2);
+  btnctn.style.backgroundImage = getColor('to top', colors.qi.color1, colors.qi.color2);
 }
 
 function shi() {
   container.style.backgroundImage = themes[9];
-  // topBar.style.backgroundImage = getColor('to top', colors.shi.color1, colors.shi.color2);
-  // bottomBar.style.backgroundImage = getColor('to bottom', colors.shi.color1, colors.shi.color2);
-  // rightBar.style.backgroundImage = getColor('to left', colors.shi.color1, colors.shi.color2);
-  // leftBar.style.backgroundImage = getColor('to right', colors.shi.color1, colors.shi.color2);
   dark.style.backgroundImage = getColor('to bottom', colors.shi.color1, colors.shi.color2);
   toggleMusic.style.backgroundImage = getColor('to bottom', colors.shi.color1, colors.shi.color2);
+  mobileDark.style.backgroundImage = getColor('to bottom', colors.shi.color1, colors.shi.color2);
+  toTopDark.style.backgroundImage = getColor('to bottom', colors.shi.color1, colors.shi.color2);
+  btnctn.style.backgroundImage = getColor('to top', colors.shi.color1, colors.shi.color2);
 }
 
 module.exports = {
