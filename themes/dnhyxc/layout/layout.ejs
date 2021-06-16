@@ -11,11 +11,17 @@
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
       <%- partial('_partial/left-col', null, {cache: !config.relative_link}) %>
+      <div class="leftColBar">
+        <div class="leftCol_bar"></div>
+      </div>
     </div>
     <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
       <div class="main">
         <div class="main-loading">loading... </div>
         <div class="changeSize"><span class="change-info">点击该 “模式” 按钮可切换文章阅读模式</span>模式</div>
+        <div class="headerBar">
+          <div class="header_bar"></div>
+        </div>
       </div>
       <%- partial('_partial/mobile-nav', null, {cache: !config.relative_link}) %>
       <div id="wrapper" class="body-wrap">

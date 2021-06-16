@@ -51,4 +51,53 @@
   .shi {
     color: #f7acbc;
   }
+
+  .changeInfo {
+    position: relative;
+    font-size: 14px;
+    height: 45px;
+    line-height: 45px;
+    width: 136px;
+    margin: 5px auto 0;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    color: rgba(225, 225, 225, 0.65);
+    display: none;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  .lightChangeInfo {
+    position: relative;
+    font-size: 14px;
+    height: 45px;
+    line-height: 45px;
+    width: 165px;
+    margin: 3px auto 0;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    color: rgba(0, 0, 0, 0.65);
+    opacity: 0;
+    transition: all 0.3s ease;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid rgba(0, 0, 0, 0.15);
+    }
+  }
 }

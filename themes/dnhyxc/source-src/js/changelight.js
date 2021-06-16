@@ -7,6 +7,8 @@ function init() {
   const toggleMusic = document.querySelector('.toggleMusic');
   const mobileDark = document.querySelector('.mobileDark');
   const toTopDark = document.querySelector('.toTopDark');
+  const changeInfo = document.querySelector('.changeInfo');
+  const lightChangeInfo = document.querySelector('.lightChangeInfo');
 
   function toggleLight() {
     if (container.getAttribute('class') === 'container') {
@@ -71,6 +73,11 @@ function init() {
   // PC端头像
   dark.onclick = function () {
     toggleLight();
+    if (sessionStorage.getItem('container')) {
+      changeInfo.style.display = 'none';
+    } else {
+      lightChangeInfo.style.opacity = '0';
+    }
   }
   // 移动端头像
   mobileDark.onclick = function () {

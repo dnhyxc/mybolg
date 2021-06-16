@@ -1,6 +1,98 @@
 #container {
   position: relative;
 
+  .main {
+    position: relative;
+    .headerBar {
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      transform: rotateY(180deg);
+      display: none;
+
+      .header_bar {
+        width: 0;
+        height: 100%;
+        box-shadow: 0 0 1px #ccc inset;
+        background: rgba(225, 225, 225, 0.02);
+        border-right: 1px solid rgba(225, 225, 225, 0.45);
+      }
+    }
+  }
+
+  .left-col {
+    .leftColBar {
+      position: absolute;
+      right: -10px;
+      top: 0;
+      width: 10px;
+      height: 100%;
+      transform: rotateX(180deg);
+      display: none;
+
+      .leftCol_bar {
+        width: 100%;
+        height: 0%;
+        box-shadow: 0 0 1px #ccc inset;
+        background: rgba(225, 225, 225, 0.02);
+        border-bottom: 1px solid rgba(225, 225, 225, 0.45);
+      }
+    }
+  }
+
+  .article {
+    .artBar {
+      position: absolute;
+      bottom: -10px;
+      width: 100%;
+      height: 10px;
+      display: none;
+
+      .art_bar {
+        width: 0%;
+        height: 100%;
+        box-shadow: 0 0 1px #ccc inset;
+        background: rgba(225, 225, 225, 0.02);
+        border-right: 1px solid rgba(225, 225, 225, 0.45);
+      }
+    }
+  }
+
+  #js-content .article:nth-of-type(even) {
+    .artBar {
+      transform: rotateY(180deg);
+    }
+  }
+
+  #js-content .article:last-of-type {
+    .artBar {
+      display: none !important;
+      .art_bar {
+        display: none !important;
+      }
+    }
+  }
+
+  #footer {
+    .footerBar {
+      position: absolute;
+      top: -10px;
+      width: 100%;
+      height: 10px;
+      display: none;
+
+      .footer_bar {
+        width: 0;
+        height: 100%;
+        box-shadow: 0 0 1px #ccc inset;
+        background: rgba(225, 225, 225, 0.02);
+        border-right: 1px solid rgba(225, 225, 225, 0.45);
+      }
+    }
+  }
+
   .scroll_top {
     box-sizing: border-box;
     padding-right: 10px;
@@ -8,15 +100,14 @@
     height: 10px;
     position: absolute;
     top: 0px;
-    // border-radius: 5px;
     display: none;
 
     .topBar {
       width: 0%;
       height: 100%;
-      // border-radius: 5px;
-      background-image: linear-gradient(to top, #2b5876 0%, #4e4376 100%);
-      box-shadow: 0 0 2px #ccc inset;
+      box-shadow: 0 0 1px #ccc inset;
+      background: rgba(225, 225, 225, 0.02);
+      border-right: 1px solid rgba(225, 225, 225, 0.45);
     }
   }
 
@@ -27,16 +118,15 @@
     height: 10px;
     position: absolute;
     bottom: 0px;
-    // border-radius: 5px;
     transform: rotateY(180deg);
     display: none;
 
     .bottomBar {
       width: 0%;
       height: 100%;
-      // border-radius: 5px;
-      background-image: linear-gradient(to bottom, #2b5876 0%, #4e4376 100%);
-      box-shadow: 0 0 2px #ccc inset;
+      box-shadow: 0 0 1px #ccc inset;
+      background: rgba(225, 225, 225, 0.02);
+      border-right: 1px solid rgba(225, 225, 225, 0.45);
     }
   }
 
@@ -47,16 +137,15 @@
     height: 100%;
     position: absolute;
     right: 0px;
-    // border-radius: 5px;
     transform: rotateX(180deg);
-    display: block;
+    display: none;
 
     .rightBar {
       width: 100%;
       height: 0%;
-      // border-radius: 5px;
-      background-image: linear-gradient(to left, #4e4376 0%, #2b5876 100%);
-      box-shadow: 0 0 2px #ccc inset;
+      box-shadow: 0 0 1px #ccc inset;
+      background: rgba(225, 225, 225, 0.02);
+      border-bottom: 1px solid rgba(225, 225, 225, 0.45);
     }
   }
 
@@ -67,15 +156,14 @@
     height: 100%;
     position: absolute;
     left: 0px;
-    // border-radius: 5px;
-    display: block;
+    display: none;
 
     .leftBar {
       width: 100%;
       height: 0%;
-      // border-radius: 5px;
-      background-image: linear-gradient(to right, #4e4376 0%, #2b5876 100%);
-      box-shadow: 0 0 2px #ccc inset;
+      box-shadow: 0 0 1px #ccc inset;
+      background: rgba(225, 225, 225, 0.02);
+      border-bottom: 1px solid rgba(225, 225, 225, 0.45);
     }
   }
 }

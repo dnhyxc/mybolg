@@ -27,6 +27,7 @@ import * as setThemes from './setThemes'
 
 const cover = document.querySelector('.cover');
 const hideCoverBtn = document.querySelector('.hideCoverBtn');
+const changeInfo = document.querySelector('.changeInfo');
 
 addLoadEvent(function () {
 	// Share.init()
@@ -51,6 +52,16 @@ document.onreadystatechange = function () {
 			document.body.style.position = 'relative';
 			document.body.style.width = '100%';
 			document.body.removeEventListener('touchmove', stopTouchmove, { passive: false });
+		}
+
+		if (!sessionStorage.getItem('container') && !sessionStorage.getItem('changeInfo')) {
+			let timer = null;
+			changeInfo.style.display = 'block';
+			sessionStorage.setItem('changeInfo', true);
+			if (timer) clearTimeout(timer);
+			timer = setTimeout(() => {
+				changeInfo.style.display = 'none';
+			}, 3000);
 		}
 	} else if (document.readyState === "interactive") {
 		hideCoverBtn && hideCoverBtn.addEventListener('click', function () {

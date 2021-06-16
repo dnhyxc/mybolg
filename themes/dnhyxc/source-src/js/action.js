@@ -16,6 +16,14 @@ function init() {
   let rightBar = document.querySelector('.rightBar');
   let scroll_left = document.querySelector('.scrollLeft');
   let leftBar = document.querySelector('.leftBar');
+  let artBar = document.querySelectorAll('.artBar');
+  let art_bar = document.querySelectorAll('.art_bar');
+  let leftColBar = document.querySelector('.leftColBar');
+  let leftCol_bar = document.querySelector('.leftCol_bar');
+  let headerBar = document.querySelector('.headerBar');
+  let header_bar = document.querySelector('.header_bar');
+  let footerBar = document.querySelector('.footerBar');
+  let footer_bar = document.querySelector('.footer_bar');
 
   let bodyScroll = document.body;
   let coverInfo = document.querySelectorAll('.coverInfo');
@@ -117,6 +125,12 @@ function init() {
     bottomBar.style.width = countInfo;
     rightBar.style.height = countInfo;
     leftBar.style.height = countInfo;
+    art_bar.forEach(i => {
+      i.style.width = countInfo;
+    })
+    leftCol_bar.style.height = countInfo;
+    header_bar.style.width = countInfo;
+    footer_bar.style.width = countInfo;
     scrollTop.appendChild(count);
     if (bodyScroll.clientWidth <= 800) {
       scrollTop.style.display = 'none';
@@ -124,6 +138,12 @@ function init() {
       scrollbottom.style.display = 'none';
       scroll_right.style.display = 'none';
       scroll_left.style.display = 'none';
+      artBar.forEach(i => {
+        i.style.display = 'none';
+      })
+      leftColBar.style.display = 'none';
+      headerBar.style.display = 'none';
+      footerBar.style.display = 'none';
     } else {
       if (wrapper.scrollTop === 0) {
         scrollTop.style.display = 'none';
@@ -131,6 +151,12 @@ function init() {
         scrollbottom.style.display = 'none';
         scroll_right.style.display = 'none';
         scroll_left.style.display = 'none';
+        artBar.forEach(i => {
+          i.style.display = 'none';
+        })
+        leftColBar.style.display = 'none';
+        headerBar.style.display = 'none';
+        footerBar.style.display = 'none';
         clearTimeout(timer);
       } else if (wrapper.scrollHeight - wrapper.scrollTop === wrapper.clientHeight) {
         scrollTop.style.display = 'block';
@@ -138,6 +164,12 @@ function init() {
         scrollbottom.style.display = 'block';
         scroll_right.style.display = 'block';
         scroll_left.style.display = 'block';
+        artBar.forEach(i => {
+          i.style.display = 'block';
+        })
+        leftColBar.style.display = 'block';
+        headerBar.style.display = 'block';
+        footerBar.style.display = 'block';
         clearTimeout(timer);
       } else {
         scrollTop.style.display = 'block';
@@ -145,6 +177,12 @@ function init() {
         scrollbottom.style.display = 'block';
         scroll_right.style.display = 'block';
         scroll_left.style.display = 'block';
+        artBar.forEach(i => {
+          i.style.display = 'block';
+        })
+        leftColBar.style.display = 'block';
+        headerBar.style.display = 'block';
+        footerBar.style.display = 'block';
         clearTimeout(timer);
         timer = setTimeout(() => {
           scrollTop.style.display = 'none';
@@ -152,6 +190,12 @@ function init() {
           scrollbottom.style.display = 'none';
           scroll_right.style.display = 'none';
           scroll_left.style.display = 'none';
+          artBar.forEach(i => {
+            i.style.display = 'none';
+          })
+          leftColBar.style.display = 'none';
+          headerBar.style.display = 'none';
+          footerBar.style.display = 'none';
         }, 2000);
       }
     }
@@ -237,6 +281,12 @@ function init() {
     scrollbottom.style.display = 'block';
     scroll_right.style.display = 'block';
     scroll_left.style.display = 'block';
+    artBar.forEach(i => {
+      i.style.display = 'block';
+    })
+    leftColBar.style.display = 'block';
+    headerBar.style.display = 'block';
+    footerBar.style.display = 'block';
   }
 
   scrollTop.onmouseleave = function () {
@@ -247,6 +297,12 @@ function init() {
       scrollbottom.style.display = 'block';
       scroll_right.style.display = 'block';
       scroll_left.style.display = 'block';
+      artBar.forEach(i => {
+        i.style.display = 'block';
+      })
+      leftColBar.style.display = 'block';
+      headerBar.style.display = 'block';
+      footerBar.style.display = 'block';
     } else {
       timer = setTimeout(() => {
         scrollTop.style.display = 'none';
@@ -254,6 +310,12 @@ function init() {
         scrollbottom.style.display = 'none';
         scroll_right.style.display = 'none';
         scroll_left.style.display = 'none';
+        artBar.forEach(i => {
+          i.style.display = 'none';
+        })
+        leftColBar.style.display = 'none';
+        headerBar.style.display = 'none';
+        footerBar.style.display = 'none';
       }, 2000);
     }
   }
