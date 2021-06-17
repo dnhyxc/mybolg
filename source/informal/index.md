@@ -1680,7 +1680,7 @@ npm install --save react-copy-to-clipboard
 
 - 使用示例：
 
-```jsx
+```js
 import React from "react";
 import ReactDOM from "react-dom";
 import { CopyToClipboard } from "react-copy-to-clipboard";
