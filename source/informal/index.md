@@ -1578,14 +1578,14 @@ async function getData() {
 
 1，具体实现方式如下：
 
-```tsx
+```jsx
 import React, { useState } from "react";
 import { Checkbox } from "antd";
 import Header from "@/components/Header";
 import styles from "./index.less";
 
 const CheckList: React.FC = () => {
-  const [activeMultIds, setActiveMultIds] = useState<any>([]);
+  const [activeMultIds, setActiveMultIds] = useState < any > [];
 
   const data = [
     { id: "1", name: "aaa" },
@@ -1680,7 +1680,7 @@ npm install --save react-copy-to-clipboard
 
 - 使用示例：
 
-```js
+```jsx
 import React from "react";
 import ReactDOM from "react-dom";
 import { CopyToClipboard } from "react-copy-to-clipboard";
