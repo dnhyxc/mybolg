@@ -1574,6 +1574,96 @@ async function getData() {
 
 > 以上配置可正常显示二级路由的内容。
 
+#### Dva 实现列表多选
+
+1，具体实现方式如下：
+
+```tsx
+import React, { useState } from "react";
+import { Checkbox } from "antd";
+import Header from "@/components/Header";
+import styles from "./index.less";
+
+const CheckList: React.FC = () => {
+  const [activeMultIds, setActiveMultIds] = useState<any>([]);
+
+  const data = [
+    { id: "1", name: "aaa" },
+    { id: "2", name: "bbb" },
+    { id: "3", name: "ccc" },
+    { id: "4", name: "ddd" },
+    { id: "5", name: "eee" },
+    { id: "6", name: "fff" },
+  ];
+
+  // 处理对选逻辑
+  const onSelected = (e: any, _data: any) => {
+    const activeMult = activeMultIds.some((i: any) => {
+      if (i.id === _data.id) {
+        return true;
+      }
+      return false;
+    });
+    if (activeMult) {
+      const res = activeMultIds.filter((i: any) => i.id !== _data.id);
+      setActiveMultIds(res);
+    } else {
+      const res = activeMultIds.concat(_data);
+      setActiveMultIds(res);
+    }
+  };
+
+  const onSelectAll = () => {
+    if (activeMultIds.length < data.length) {
+      setActiveMultIds(data);
+    } else {
+      setActiveMultIds([]);
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.right}>
+        <Header title="DND">search</Header>
+        <div className={styles.content}>
+          <div className={styles.checkAll}>
+            <Checkbox
+              onClick={onSelectAll}
+              checked={activeMultIds.length === data.length}
+            />
+            全选
+          </div>
+          {data.map((i) => (
+            <div
+              className={
+                activeMultIds.filter((j: any) => j.id === i.id).length
+                  ? styles.selectWrap
+                  : styles.wrap
+              }
+              key={i.id}
+            >
+              <Checkbox
+                onClick={(e) => onSelected(e, i)}
+                checked={activeMultIds.filter((j: any) => j.id === i.id).length}
+              />
+              <div className={styles.item}>名称{i.name}</div>
+            </div>
+          ))}
+          <div>
+            已选名称列表
+            {activeMultIds.map((i: any) => (
+              <div key={i.id}>{i.name}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CheckList;
+```
+
 ### 实现复制功能
 
 #### react-copy-to-clipboard

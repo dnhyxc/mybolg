@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多选操作</title>
+</head>
+<style>
+  .container {
+    width: 900px;
+    height: 600px;
+    border: 1px solid #ccc;
+    margin: 100px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .checkAll {
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+
+  .wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .mdiv {
+    width: 170px;
+    height: 170px;
+    background-color: #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .check,
+  .check_all {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mp {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <div class="checkAll"><input type="checkbox" class="check_all"><span>全选</span></div>
+    <div class="wrap"></div>
+  </div>
+
+  <script>
+    const wrap = document.querySelector('.wrap');
+
+    const data = [{
+      id: '1',
+      name: 'aaa',
+    }, {
+      id: '2',
+      name: 'bbb',
+    }, {
+      id: '3',
+      name: 'ccc',
+    }, {
+      id: '4',
+      name: 'ddd',
+    }, {
+      id: '5',
+      name: 'eee',
+    }]
+
+    data.forEach(i => {
+      const mdiv = document.createElement('div');
+      mdiv.className = 'mdiv';
+      const checkInp = document.createElement('input');
+      checkInp.className = 'check';
+      const mp = document.createElement('div');
+      mp.className = 'mp';
+      mp.innerHTML = i.name;
+      checkInp.type = 'checkbox';
+      checkInp.checked = false;
+      mdiv.appendChild(checkInp);
+      mdiv.appendChild(mp);
+      wrap.appendChild(mdiv);
+    });
+
+    const checkbox = document.querySelectorAll('.check');
+    checkbox.forEach(i => {
+      i.onclick = function () {
+        console.log(i.checked);
+      }
+    })
+  </script>
+</body>
+
+</html>
