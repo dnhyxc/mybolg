@@ -630,6 +630,19 @@ const getType = function (obj) {
 };
 ```
 
+#### js类型比较特殊点
+
+1，当声明的函数，其参数都为`数字型`字符串时，JS 会比较两个字符串 ASCII 码的大小，而不是比较数值的大小，具体如下：
+
+```js
+function numCompare(first, second) {
+  return first >= second ? first : second;
+}
+
+numCompare(12, 2);      // => 12
+numCompare('12', '2');  // => '2'
+```
+
 ### 检测当前页面是否被隐藏
 
 #### visibilitychange 事件
