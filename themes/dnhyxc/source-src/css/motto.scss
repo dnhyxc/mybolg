@@ -1,7 +1,7 @@
 .motto {
   font-size: 22px;
   font-weight: 700;
-  padding-bottom: 20px;
+  // padding-bottom: 20px;
 
   .motto-text {
     display: inline-block;
@@ -53,7 +53,9 @@
   }
 
   .changeInfo {
-    position: relative;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 14px;
     height: 45px;
     line-height: 45px;
@@ -77,7 +79,9 @@
   }
 
   .lightChangeInfo {
-    position: relative;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 14px;
     height: 45px;
     line-height: 45px;
