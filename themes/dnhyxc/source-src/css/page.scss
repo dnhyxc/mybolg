@@ -4,7 +4,7 @@
   .page-number {
     width: 20px;
     height: 25px;
-    background: #999;
+    background: rgba(225, 225, 225, 0.45);
     display: inline-block;
     color: #fff;
     line-height: 25px;
@@ -12,28 +12,84 @@
     margin: 0 5px 23px;
     border-radius: 2px;
     &:hover {
-      background: #5e5e5e;
+      background: #d9ff00;
+      color: #000;
+      font-weight: 700;
     }
   }
   .current {
-    background: #88acdb;
+    background: #d9ff00;
     cursor: default;
-    &:hover {
-      background: #88acdb;
-    }
+    color: #000;
+    font-weight: 700;
   }
   .extend {
-    color: #999;
+    color: #ccc;
     margin: 0 27px;
     opacity: 1;
     font-size: 14px;
     &:hover {
-      color: #88acdb;
+      color: #d9ff00;
+    }
+  }
+
+  .extend.disabled {
+    &:hover {
+      color: #ccc;
     }
   }
   &:hover {
     .extend {
       opacity: 1;
+    }
+  }
+}
+
+.container {
+  #page-nav {
+    text-align: center;
+    margin-top: 30px;
+    .page-number {
+      width: 20px;
+      height: 25px;
+      background: rgba(225, 225, 225, 0.45);
+      display: inline-block;
+      color: #666;
+      line-height: 25px;
+      font-size: 12px;
+      margin: 0 5px 23px;
+      border-radius: 2px;
+      &:hover {
+        background: #d9ff00;
+        color: #000;
+        font-weight: 700;
+      }
+    }
+    .current {
+      background: #d9ff00;
+      cursor: default;
+      color: #000;
+      font-weight: 700;
+    }
+    .extend {
+      color: #666;
+      margin: 0 27px;
+      opacity: 1;
+      font-size: 14px;
+      &:hover {
+        color: #000;
+      }
+    }
+
+    .extend.disabled {
+      &:hover {
+        color: #666;
+      }
+    }
+    &:hover {
+      .extend {
+        opacity: 1;
+      }
     }
   }
 }

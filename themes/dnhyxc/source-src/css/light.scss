@@ -488,8 +488,19 @@
           &::before {
             color: #ccc;
           }
+
+          .scroll-count {
+            color: #999;
+          }
+
           &:hover {
             border-color: transparent transparent #ccc;
+            .scroll-count {
+              color: #333;
+            }
+            &::before {
+              color: #999;
+            }
           }
         }
       }
