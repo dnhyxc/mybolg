@@ -11,7 +11,7 @@ function init() {
   const lightChangeInfo = document.querySelector('.lightChangeInfo');
 
   function toggleLight() {
-    if (container.getAttribute('class') === 'container') {
+    if (container.getAttribute('class').includes('container')) {
       container.classList.remove('container');
       sessionStorage.removeItem('container');
     } else {
@@ -84,6 +84,12 @@ function init() {
     toggleLight();
   }
 
+  if (sessionStorage.getItem('container')) {
+    container.classList.add('container');
+  } else {
+    container.classList.remove('container');
+  }
+
   if (sessionStorage.getItem('light')) {
     dark.classList.add('light');
     toggleMusic.classList.add('light');
@@ -102,11 +108,7 @@ function init() {
     toTopDark.classList.remove('mobileLight');
     mobileDark.innerHTML = '白天';
   }
-  if (sessionStorage.getItem('container')) {
-    container.classList.add('container');
-  } else {
-    container.classList.remove('container');
-  }
+
   if (sessionStorage.getItem('lightBtnctn')) {
     btnctn.classList.add('lightBtnctn');
   } else {

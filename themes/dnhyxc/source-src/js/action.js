@@ -53,11 +53,11 @@ function init() {
     }
   }
 
-  homeIcon.onmouseover = function (e) {
-    tipsBox.classList.add("tip-show");
-    aplayer.style.opacity = 0;
-    aplayer.style.transition = 'all 0.3s ease';
-  }
+  // homeIcon.onmouseover = function (e) {
+  //   tipsBox.classList.add("tip-show");
+  //   aplayer.style.opacity = 0;
+  //   aplayer.style.transition = 'all 0.3s ease';
+  // }
 
   leftCol.onclick = function (e) {
     tipsBox.classList.remove("tip-show");

@@ -1,10 +1,14 @@
 @font-face {
   font-family: "iconfont";
-  src: url("./fonts/iconfont.eot"); /* IE9*/
+  src: url("./fonts/iconfont.eot");
+  /* IE9*/
   src: url("./fonts/iconfont.eot#iefix") format("embedded-opentype"),
-    /* IE6-IE8 */ url("./fonts/iconfont.woff") format("woff"),
-    /* chrome, firefox */ url("./fonts/iconfont.ttf") format("truetype"),
-    url("./fonts/iconfont.svg#iconfont") format("svg"); /* iOS 4.1- */
+    /* IE6-IE8 */
+    url("./fonts/iconfont.woff") format("woff"),
+    /* chrome, firefox */
+    url("./fonts/iconfont.ttf") format("truetype"),
+    url("./fonts/iconfont.svg#iconfont") format("svg");
+  /* iOS 4.1- */
 }
 
 [class^="icon-"],
@@ -109,54 +113,56 @@
 
           .tips-box {
             .tips-text {
-              background-image: linear-gradient(
-                -20deg,
-                #fff1eb 0%,
-                #ace0f9 100%
-              );
+              background-image: linear-gradient(-20deg,
+                  #fff1eb 0%,
+                  #ace0f9 100%);
               border-left: none !important;
               border-right: none !important;
+
               .tips-a {
                 color: #333;
               }
+
               &:hover {
                 background-color: #f7f6e2 !important;
-                background-image: linear-gradient(
-                  to right,
-                  #fff1eb 0%,
-                  #ace0f9 100%
-                );
+                background-image: linear-gradient(to right,
+                    #fff1eb 0%,
+                    #ace0f9 100%);
               }
             }
+
             &::before {
               border-color: transparent transparent rgba(225, 225, 225, 0.95) !important;
             }
           }
         }
       }
+
       .inner {
         .profilepic {
           border: 5px solid #d7fffe !important;
         }
+
         .header-author {
           a {
             color: #333 !important;
           }
         }
+
         .header-menu {
           .menu-text {
             background-image: linear-gradient(-20deg, #fff1eb 0%, #ace0f9 100%);
             opacity: 1;
             box-shadow: 0 0 6px #c9d9d9 !important;
+
             a {
               color: #333 !important;
             }
+
             &:hover {
-              background-image: linear-gradient(
-                to right,
-                #fff1eb 0%,
-                #ace0f9 100%
-              );
+              background-image: linear-gradient(to right,
+                  #fff1eb 0%,
+                  #ace0f9 100%);
             }
           }
         }
@@ -167,32 +173,35 @@
       .aplayer.aplayer-fixed {
         .aplayer-lrc {
           p {
-            background-image: linear-gradient(
-              -225deg,
-              #262929,
-              #278ab9 56%,
-              #6ac77c
-            );
+            background-image: linear-gradient(-225deg,
+                #262929,
+                #278ab9 56%,
+                #6ac77c);
           }
         }
 
         .aplayer-list {
           background-image: linear-gradient(225deg, #fbf6fd 0, #d7fffe);
+
           .aplayer-list-author {
             color: #333;
           }
+
           .aplayer-list-cur {
             background-color: gold !important;
           }
+
           ol {
             li {
               box-shadow: 0 0 1px #ccc inset;
               color: #333;
             }
+
             li.aplayer-list-light {
               background-image: linear-gradient(225deg, #fbf6fd 0, #d7fffe);
               color: #9acd32;
             }
+
             li:hover {
               background-image: linear-gradient(225deg, #fbf6fd 0, #d7fffe);
             }
@@ -239,14 +248,30 @@
         }
       }
     }
+
+    .motto {
+      font-size: 22px;
+      font-weight: 700;
+
+      .motto-text {
+        display: inline-block;
+        cursor: default;
+
+        &:hover {
+          text-shadow: none;
+        }
+      }
+    }
+  }
+
+  .tools-col .tools-section .search-ul .search-li:hover {
+    background: #ddd;
   }
 
   .toc-container.tooltip-left .tooltip-east .tooltip-content {
-    background-image: linear-gradient(
-      to bottom,
-      #fff1eb 0%,
-      #ace0f9 100%
-    ) !important;
+    background-image: linear-gradient(to bottom,
+        #fff1eb 0%,
+        #ace0f9 100%) !important;
 
     a {
       color: #333;
@@ -257,6 +282,7 @@
     .icon-font {
       color: #333;
     }
+
     &:hover {
       .icon-font {
         color: #ffd900;
@@ -274,12 +300,7 @@
     background-size: 100%;
   }
 
-  .toc-container.tooltip-left
-    .tooltip-east
-    .tooltip-content
-    .toc-article
-    li
-    a:hover {
+  .toc-container.tooltip-left .tooltip-east .tooltip-content .toc-article li a:hover {
     color: #9b23ea;
     background-color: #d7fffe;
 
@@ -306,6 +327,7 @@
         &:hover {
           box-shadow: 0 0 10px #999;
           color: #ffd900;
+
           &::before {
             color: #333;
           }
@@ -315,9 +337,11 @@
 
     #scrollTop {
       border-color: transparent transparent #ccc;
+
       &::before {
         color: #d2e2cd;
       }
+
       &:hover {
         border-color: transparent transparent #d2e2cd;
       }
@@ -337,7 +361,7 @@
             color: #333;
           }
 
-          .toc-level-3 > a {
+          .toc-level-3>a {
             font-weight: 700;
             color: #333;
           }
@@ -380,6 +404,7 @@
         blockquote {
           background: rgba(225, 225, 225, 0.6);
         }
+
         h1,
         h2,
         h3,
@@ -388,18 +413,23 @@
         h6 {
           color: #333 !important;
         }
+
         h3 {
           border-bottom: 1px solid #ccc;
         }
+
         p {
           color: #333 !important;
+
           code {
             background: yellowgreen;
           }
         }
+
         ul {
           li {
             color: #333;
+
             &::before {
               border: 1px solid #666;
               background: #666;
@@ -410,10 +440,12 @@
 
       .article-info {
         border-top: 1px solid #ccc;
+
         .article-more-link {
           .article-more-a {
             color: #333;
             box-shadow: 0 0 3px #c9d9d9;
+
             &:hover {
               background-color: #ccc;
             }
@@ -439,18 +471,23 @@
 
   .archives-wrap {
     background-color: #fff !important;
+
     .archive-year-wrap {
       background-color: #eee;
+
       .archive-year {
         color: #333;
+
         &:hover {
           color: gold;
         }
       }
     }
+
     .archives {
       .archive-article-title {
         color: #333;
+
         &:hover {
           color: gold;
         }
@@ -485,6 +522,7 @@
 
         #scrollTop {
           border-color: transparent transparent #ccc;
+
           &::before {
             color: #ccc;
           }
@@ -495,9 +533,11 @@
 
           &:hover {
             border-color: transparent transparent #ccc;
+
             .scroll-count {
               color: #333;
             }
+
             &::before {
               color: #999;
             }
@@ -508,6 +548,7 @@
   }
 
   #gitalk-container {
+
     // padding: 0 10px;
     .gt-container {
       padding: 0 8px 15px 8px;
@@ -575,38 +616,47 @@
     background-color: #f4f5f5;
     color: #333;
     box-shadow: none;
+
     .search-wrap {
       .icon {
         color: #ccc;
       }
+
       .search-ipt {
         color: #333;
         border-bottom: 2px solid #ccc;
         font-family: initial;
+
         &::-webkit-input-placeholder {
           color: #ccc;
         }
       }
     }
+
     .search-ul {
       .search-title {
         color: #333;
+
         .icon {
           margin-right: 10px;
           color: #333;
         }
       }
+
       .search-time {
         color: #333;
       }
+
       .search-tag {
         color: #333;
       }
     }
   }
+
   .header-menu.tools-nav ul {
     background-color: #c9c9c9;
   }
+
   .header-menu.tools-nav ul a.active {
     background: #dedede;
     color: #333;
