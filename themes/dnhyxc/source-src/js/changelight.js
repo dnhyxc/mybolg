@@ -11,7 +11,7 @@ function init() {
   const lightChangeInfo = document.querySelector('.lightChangeInfo');
 
   function toggleLight() {
-    if (container.getAttribute('class').includes('container')) {
+    if (container.getAttribute('class') && container.getAttribute('class').includes('container')) {
       container.classList.remove('container');
       sessionStorage.removeItem('container');
     } else {
