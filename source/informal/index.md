@@ -1490,7 +1490,7 @@ async function getData() {
 
 > 上述代码描述的是通过 url 从 oss 上获取富文本内容（返回的是一个 html 字符串），此时获取到的结果在 body 中，如果不使用 `text()` 方法，那么获取到的数据就是不可读的。因此 text() 可以读取 response 对象，同时将其设置为已读。最后返回一被解析的 html 字符串。
 
-### Dva
+### Dva & React
 
 #### Dva 中实现请求轮循
 
@@ -1587,7 +1587,7 @@ async function getData() {
 
 > 以上配置可正常显示二级路由的内容。
 
-#### Dva 实现列表多选
+#### React 实现列表多选
 
 1，具体实现方式如下：
 
@@ -1609,7 +1609,7 @@ const CheckList: React.FC = () => {
     { id: "6", name: "fff" },
   ];
 
-  // 处理对选逻辑
+  // 处理选中逻辑
   const onSelected = (e: any, _data: any) => {
     const activeMult = activeMultIds.some((i: any) => {
       if (i.id === _data.id) {
@@ -1637,7 +1637,6 @@ const CheckList: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.right}>
-        <Header title="DND">search</Header>
         <div className={styles.content}>
           <div className={styles.checkAll}>
             <Checkbox
@@ -1676,6 +1675,11 @@ const CheckList: React.FC = () => {
 
 export default CheckList;
 ```
+
+> 上述代码中选中逻辑解析如下：
+> 
+> 1，当 activeMult 为 true 时，说明当前点击的这一项已经存在于 activeMultIds 中，是处于选中状态的，需要将其从 activeMultIds（选中列表）中移除。
+> 2，当 activeMult 为 false 时，说明当前点击的这一项不在 activeMultIds 中，即还没有被选中，需要将其加入到 activeMultIds（选中列表）中。
 
 ### 实现复制功能
 
