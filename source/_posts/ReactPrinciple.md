@@ -2,6 +2,7 @@
 title: ReactPrinciple
 tags: react
 declare: true
+toc: true
 categories:
   - react fiber diff hooks
 date: 2021-02-09 21:09:02
