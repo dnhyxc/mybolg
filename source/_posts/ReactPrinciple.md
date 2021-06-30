@@ -8,7 +8,6 @@ categories:
 date: 2021-02-09 21:09:02
 ---
 
-
 ### react 设计理念
 
 #### 快速响应
@@ -109,3 +108,59 @@ export const Deletion = /*              */ 0b0000000001000;
 #### Renderer（渲染器）
 
 1，Renderer 根据 Reconciler 为虚拟 DOM 打的标记，同步执行对应的 DOM 操作。
+
+> Reconciler 工作的阶段被称为 **render** 阶段。因为在该阶段会调用组件的 render 方法。
+>
+> Renderer 工作的阶段被称为 **commit** 阶段。就像完成一个需求的编码后执行 git commit 提交代码。commit 阶段会把 render 阶段提交的信息渲染在页面上。
+>
+> render 与 commit 阶段统称为 **work**，即 React 在工作中。相对应的，如果任务正在 Scheduler 内调度，就不属于 work。
+
+### JSX 与虚拟 DOM
+
+#### JSX
+
+1，JSX 是一种描述当前组件内容的数据结构，他不包含组件 schedule、reconcile、render 所需的相关信息。比如如下信息就不包含在 JSX 中：
+
+- 组件在更新中的优先级。
+
+- 组件的 state。
+
+- 组件被打上的用于 Renderer 的标记。
+
+> 以上所述的内容都包含在虚拟 DOM 中。
+
+2，在组件 mount 时，Reconciler 根据 JSX 描述的组件内容生成组件对应的虚拟 DOM。在 update 时，Reconciler 将 JSX 与虚拟 DOM 保存的数据对比，生成组件对应的虚拟 DOM，并根据对比结果为虚拟 DOM 打上标记。
+
+#### 虚拟 DOM
+
+1，虚拟 DOM 就是使用 javascript 对象来表示真实 DOM，是一个树形结构。
+
+2，虚拟 DOM 只保留了真实 DOM 节点的一些基本属性，和节点之间的层次关系，它相当于建立在 javascript 和 DOM 之间的一层“缓存”。
+
+3，由于在真实 DOM 中，一个普通的元素内容就很复杂了，可以想象浏览器处理 DOM 结构有多慢。因此相对于操作 DOM 来说，操作 javascript 对象更方便快速，如一个 ul 元素中包含三个 li 元素可以用如下方式表示：
+
+```js
+const element = {
+  tagName: "ul", // 节点标签名
+  props: {
+    // DOM的属性，用一个对象存储键值对
+    id: "list",
+  },
+  children: [
+    // 该节点的子节点
+    { tagName: "li", props: { class: "item" }, children: ["1"] },
+    { tagName: "li", props: { class: "item" }, children: ["2"] },
+    { tagName: "li", props: { class: "item" }, children: ["3"] },
+  ],
+};
+```
+
+### Fiber 架构
+
+#### Fiber 的含义
+
+1，作为架构来说，之前 React15 的 Reconciler 采用递归的方式执行，数据保存在递归调用栈中，所以被称为 stack Reconciler。React16 的 Reconciler 基于 Fiber 节点实现，被称为 Fiber Reconciler。
+
+2，作为静态的数据结构来说，每个 Fiber 节点对应一个组件，保存了该组件的类型（函数组件/类组件/原生组件...）、对应的 DOM 节点等信息。
+
+3，作为动态的工作单元来说，每个 Fiber 节点保存了本次更新中该组件改变的状态、要执行的工作（需要被删除/被插入页面中/被更新...）。
