@@ -158,7 +158,7 @@ function init() {
         headerBar.style.display = 'none';
         footerBar.style.display = 'none';
         clearTimeout(timer);
-      } else if (wrapper.scrollHeight - wrapper.scrollTop === wrapper.clientHeight) {
+      } else if (Math.floor(wrapper.scrollHeight - wrapper.scrollTop) <= wrapper.clientHeight) {
         scrollTop.style.display = 'block';
         scroll_top.style.display = 'block';
         scrollbottom.style.display = 'block';
@@ -290,7 +290,7 @@ function init() {
   }
 
   scrollTop.onmouseleave = function () {
-    if (wrapper.scrollHeight - wrapper.scrollTop === wrapper.clientHeight) {
+    if (Math.floor(wrapper.scrollHeight - wrapper.scrollTop) <= wrapper.clientHeight) {
       clearTimeout(timer);
       scrollTop.style.display = 'block';
       scroll_top.style.display = 'block';
