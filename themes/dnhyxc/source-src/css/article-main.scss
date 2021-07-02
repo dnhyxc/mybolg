@@ -74,7 +74,7 @@
   font-weight: 300;
   line-height: 35px;
   margin-bottom: 20px;
-  font-size: 26px;
+  font-size: 22px;
   -webkit-transition: color 0.3s;
   -moz-transition: color 0.3s;
   -o-transition: color 0.3s;
@@ -107,6 +107,7 @@
     color: #999;
     margin-left: 10px;
     padding-bottom: 7px;
+    font-size: 14px;
   }
   &:hover {
     .article-count {
@@ -117,8 +118,9 @@
 
 .time-count {
   position: absolute;
-  top: 27px;
+  top: 29px;
   right: 7.6923%;
+  font-size: 14px;
 
   .count {
     font-size: 15.5px;

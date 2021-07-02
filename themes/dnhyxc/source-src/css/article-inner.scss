@@ -28,8 +28,8 @@
 }
 
 .article-inner h3 {
-  font-size: 19px;
   font-size: 1.1875rem;
+  font-size: 18px;
   line-height: 1.1052631579;
   margin-top: 2.9473684211em;
   margin-bottom: 1em;
@@ -46,7 +46,13 @@
 }
 
 .article-inner h4 {
-  font-size: 18px;
+  font-size: 16px;
+  letter-spacing: 0.140625em;
+  // text-transform: uppercase;
+}
+
+.article-inner h5 {
+  font-size: 15px;
   letter-spacing: 0.140625em;
   // text-transform: uppercase;
 }
@@ -88,10 +94,10 @@
   }
   p {
     margin-top: 10px;
-    font-size: 16px;
+    font-size: 14px;
   }
   ul li {
-    font-size: 16px;
+    font-size: 14px;
     text-align: justify;
   }
   p code,
@@ -102,7 +108,7 @@
     font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New",
       monospace;
     word-wrap: break-word;
-    font-size: 14px;
+    font-size: 12px;
   }
   blockquote {
     padding: 10px 10px;

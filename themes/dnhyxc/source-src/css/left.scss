@@ -2,7 +2,7 @@
   margin: 10px 10px;
   border-radius: 5px;
   box-shadow: 0px 0px 10px #cecece inset;
-  width: 300px;
+  width: 260px;
   position: fixed;
   opacity: 1;
   transition: all 0.2s ease-in;
@@ -244,7 +244,7 @@
         align-items: center;
         margin-top: 30px;
         font-weight: 700;
-        line-height: 35px;
+        line-height: 32px;
         text-transform: uppercase;
 
         .menu-text {
@@ -298,8 +298,8 @@
         border: 5px solid #fff8d6;
         box-shadow: 0px 0px 20px #ccc;
         border-radius: 300px;
-        width: 128px;
-        height: 128px;
+        width: 110px;
+        height: 110px;
         margin: 0 auto;
         position: relative;
         overflow: hidden;
@@ -333,7 +333,7 @@
       }
       .header-author {
         text-align: center;
-        margin: 0.67em 0;
+        margin: 10px 0;
         font-family: Roboto, "Roboto", serif;
         font-size: 35px;
         transition: 0.3s;

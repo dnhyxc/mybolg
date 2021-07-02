@@ -221,11 +221,11 @@ function init() {
 
       const isSelect = Array.from(articleTocA).filter(i => getText(i.href) === toTopHref[0]);
       articleTocA.forEach(i => {
-        i.classList.remove('select-toc');
+        i.classList && i.classList.remove('select-toc');
       })
 
       if (isSelect.length > 0) {
-        isSelect[0].classList.add('select-toc');
+        isSelect[0].classList && isSelect[0].classList.add('select-toc');
         articleToc.scrollTop = isSelect[0] && isSelect[0].offsetTop - (wrapper.clientHeight / 2);
       }
 
@@ -235,7 +235,7 @@ function init() {
       }
 
       if (wrapper.scrollTop === 0) {
-        isSelect[0].classList.remove('select-toc');
+        isSelect[0].classList && isSelect[0].classList.remove('select-toc');
         mainLoading.innerHTML = mainLoadingText;
         mainLoading.title = mainLoadingText;
       }
