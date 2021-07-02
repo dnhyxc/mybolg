@@ -447,3 +447,5 @@ rootFiber beginWork
 > **说明**：之所以没有 “dnhyxc” Fiber 的 beginWork/completeWork，是因为作为一种性能优化手段，针对只有单一文本子节点的 Fiber，React 会特殊处理。
 
 ### beginWork
+
+#### beginWork 方法概览
