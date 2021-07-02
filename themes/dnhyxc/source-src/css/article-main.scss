@@ -381,6 +381,10 @@
   word-break: keep-all;
   position: relative;
   color: gold;
+  display: inline-block;
+  height: 35px;
+  line-height: 35px;
+  margin-bottom: 10px;
 }
 .tag-cloud a:hover::before {
   width: 100%;
