@@ -42,7 +42,7 @@
         border-color: transparent transparent rgba(225, 225, 225, 0.55);
         margin: 2px auto;
         left: 50%;
-        bottom: 6px;
+        bottom: 10px;
         transform: translateX(-50%);
         display: none;
         cursor: pointer;
@@ -50,7 +50,7 @@
 
         .scroll-count {
           position: absolute;
-          top: -23px;
+          top: -21px;
           left: -50%;
           transform: translateX(-50%);
           font-size: 12px;
@@ -58,13 +58,13 @@
         }
 
         &:hover {
-          bottom: 0px;
-          border: 22px solid;
+          bottom: 10px;
+          border: 20px solid;
           border-color: transparent transparent #ffd900;
 
           .scroll-count {
             position: absolute;
-            top: 7px;
+            top: 5px;
             left: -50%;
             transform: translateX(-50%);
             font-size: 10px;
@@ -74,10 +74,10 @@
           &::before {
             content: "back to top";
             width: 100px;
-            height: 22px;
-            line-height: 22px;
+            height: 20px;
+            line-height: 20px;
             position: absolute;
-            top: -23px;
+            top: -18px;
             left: -50px;
             font-size: 12px;
             text-align: center;
