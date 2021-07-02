@@ -22,17 +22,17 @@
 
   @keyframes imageAnimation {
     0% {
-      background-image: url(./img/c1.png);
+      background-image: url(./img/sea.jpg);
       background-size: 100% 100%;
     }
 
     50% {
-      background-image: url(./img/c2.png);
+      background-image: url(./img/c1.png);
       background-size: 100% 100%;
     }
 
     100% {
-      background-image: url(./img/c1.png);
+      background-image: url(./img/sea.jpg);
       background-size: 100% 100%;
     }
   }
