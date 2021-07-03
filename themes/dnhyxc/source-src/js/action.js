@@ -202,9 +202,9 @@ function init() {
 
     if (isArticle || isInformal) {
       if (wrapper.scrollTop <= 0) {
-        articleToc.style.height = 'calc(100vh - 246px)';
+        articleToc.style.height = 'calc(100vh - 225px)';
       } else {
-        articleToc.style.height = 'calc(100vh - 178px)';
+        articleToc.style.height = 'calc(100vh - 158px)';
       }
 
       h345.forEach(i => {
