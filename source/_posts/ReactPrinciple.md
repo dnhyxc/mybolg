@@ -243,7 +243,7 @@ function App() {
 }
 ```
 
-<!-- ![Fiber树结构]() -->
+![Fiber树结构](fiber.png)
 
 > 说明：为什么父级指针叫做 return 而不是 parent 或者 father 呢？因为作为一个工作单元，return 指节点执行完 completeWork（后面会介绍到）后会返回的下一个节点。子 Fiber 节点及其兄弟节点完成工作后会返回其父级节点，所以用 return 指代父级节点。
 
@@ -342,7 +342,7 @@ fiberRootNode.current = rootFiber;
 
 3，在进入 render 阶段时，根据组件返回的 JSX 在内存中依次创建 Fiber 节点并连接在一起构建 Fiber 树，被称为 workInProgress Fiber 树。（下图中右侧为内存中构建的树，左侧为页面显示的树）。
 
-- 在构建 workInProgress Fiber 树时会尝试复用 current Fiber 树中已有的 Fiber 节点内的属性，在首屏渲染时只有 rootFiber 存在对应的 current fiber（即 rootFiber.alternate）。
+- 在构建 workInProgress Fiber 树时会尝试复用 current Fiber 树中已有的 Fiber 节点内的属性，**在首屏渲染时只有 rootFiber 存在对应的 current fiber（即 rootFiber.alternate）**。
 
 ![workInProgressFiber](workInProgressFiber.png)
 
@@ -427,7 +427,7 @@ ReactDOM.render(<App />, document.getElementById("root"));
 
 - 上述代码对应的 Fiber 树结构：
 
-![currentTreeUpdate](currentTreeUpdate.png)
+![Fiber树结构](fiber.png)
 
 - render 阶段会依次执行：
 
@@ -448,4 +448,24 @@ rootFiber beginWork
 
 ### beginWork
 
-#### beginWork 方法概览
+#### beginWork 方法解析
+
+1，beginWork 方法大致定义如下，[戳这里看源码](https://github.com/facebook/react/blob/970fa122d8188bafa600e9b5214833487fbf1092/packages/react-reconciler/src/ReactFiberBeginWork.new.js#L3058)：
+
+```js
+function beginWork(
+  current: Fiber | null,
+  workInProgress: Fiber,
+  renderLanes: Lanes
+): Fiber | null {
+  // ...省略函数体
+}
+```
+
+2，参数说明：
+
+- current：当前组件对应的 Fiber 节点在上一次更新时的 Fiber 节点，即 workInProgress.alternate。
+
+- workInProgress：当前组件对应的 Fiber 节点。
+
+- renderLanes：优先级相关，在讲解 Scheduler 时再讲解。
