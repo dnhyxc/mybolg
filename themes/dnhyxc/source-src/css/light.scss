@@ -3,10 +3,8 @@
   src: url("./fonts/iconfont.eot");
   /* IE9*/
   src: url("./fonts/iconfont.eot#iefix") format("embedded-opentype"),
-    /* IE6-IE8 */
-    url("./fonts/iconfont.woff") format("woff"),
-    /* chrome, firefox */
-    url("./fonts/iconfont.ttf") format("truetype"),
+    /* IE6-IE8 */ url("./fonts/iconfont.woff") format("woff"),
+    /* chrome, firefox */ url("./fonts/iconfont.ttf") format("truetype"),
     url("./fonts/iconfont.svg#iconfont") format("svg");
   /* iOS 4.1- */
 }
@@ -113,9 +111,11 @@
 
           .tips-box {
             .tips-text {
-              background-image: linear-gradient(-20deg,
-                  #fff1eb 0%,
-                  #ace0f9 100%);
+              background-image: linear-gradient(
+                -20deg,
+                #fff1eb 0%,
+                #ace0f9 100%
+              );
               border-left: none !important;
               border-right: none !important;
 
@@ -125,9 +125,11 @@
 
               &:hover {
                 background-color: #f7f6e2 !important;
-                background-image: linear-gradient(to right,
-                    #fff1eb 0%,
-                    #ace0f9 100%);
+                background-image: linear-gradient(
+                  to right,
+                  #fff1eb 0%,
+                  #ace0f9 100%
+                );
               }
             }
 
@@ -160,9 +162,11 @@
             }
 
             &:hover {
-              background-image: linear-gradient(to right,
-                  #fff1eb 0%,
-                  #ace0f9 100%);
+              background-image: linear-gradient(
+                to right,
+                #fff1eb 0%,
+                #ace0f9 100%
+              );
             }
           }
         }
@@ -173,10 +177,12 @@
       .aplayer.aplayer-fixed {
         .aplayer-lrc {
           p {
-            background-image: linear-gradient(-225deg,
-                #262929,
-                #278ab9 56%,
-                #6ac77c);
+            background-image: linear-gradient(
+              -225deg,
+              #262929,
+              #278ab9 56%,
+              #6ac77c
+            );
           }
         }
 
@@ -269,9 +275,11 @@
   }
 
   .toc-container.tooltip-left .tooltip-east .tooltip-content {
-    background-image: linear-gradient(to bottom,
-        #fff1eb 0%,
-        #ace0f9 100%) !important;
+    background-image: linear-gradient(
+      to bottom,
+      #fff1eb 0%,
+      #ace0f9 100%
+    ) !important;
 
     a {
       color: #333;
@@ -300,7 +308,12 @@
     background-size: 100%;
   }
 
-  .toc-container.tooltip-left .tooltip-east .tooltip-content .toc-article li a:hover {
+  .toc-container.tooltip-left
+    .tooltip-east
+    .tooltip-content
+    .toc-article
+    li
+    a:hover {
     color: #9b23ea;
     background-color: #d7fffe;
 
@@ -361,7 +374,7 @@
             color: #333;
           }
 
-          .toc-level-3>a {
+          .toc-level-3 > a {
             font-weight: 700;
             color: #333;
           }
@@ -422,7 +435,9 @@
           color: #333 !important;
 
           code {
-            background: yellowgreen;
+            // background: yellowgreen;
+            background: rgba(0, 0, 0, 0.2);
+            color: #ff0068;
           }
         }
 
@@ -548,7 +563,6 @@
   }
 
   #gitalk-container {
-
     // padding: 0 10px;
     .gt-container {
       padding: 0 8px 15px 8px;

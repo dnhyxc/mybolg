@@ -102,13 +102,15 @@
   }
   p code,
   li code {
-    padding: 3px 3px 1px;
+    // padding: 3px 3px 1px;
     margin: 0 3px;
-    background: green;
+    // background: green;
+    background: rgba(225, 225, 225, 0.5);
     font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New",
       monospace;
     word-wrap: break-word;
-    font-size: 12px;
+    font-size: 14px;
+    color: #9bff00;
   }
   blockquote {
     padding: 10px 10px;
