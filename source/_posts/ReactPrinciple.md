@@ -1736,3 +1736,79 @@ function reconcileSingleElement(
   // 创建新Fiber，并返回 ...省略
 }
 ```
+
+- 从代码可以看出，React 通过先判断 key 是否相同，如果 key 相同则判断 type 是否相同，只有都相同时，这个 DOM 节点才能被复用。
+
+4，值得注意的几点如下：
+
+- **当 child !== null 且 key 相同且 type 不同时执行 deleteRemainingChildren 将 child 及其兄弟 fiber 都标记删除**。
+
+- **当 child !== null 且 key 不同时仅将当前 child 标记删除**。
+
+5，具体例子如下：
+
+- 当前页面有 3 个 li，要全部删除，再插入一个 p：
+
+```html
+<!-- 当前页面显示的 -->
+<ul>
+  <li></li>
+  <li></li>
+  <li></li>
+</ul>
+
+<!-- 本次需要更新的 -->
+<ul>
+  <p></p>
+</ul>
+```
+
+- 由于本次更新时只有一个 p，属于单一节点的 Diff，会进入上面所展示的 reconcileSingleElement 方法逻辑，即在 reconcileSingleElement 中遍历之前的 3 个 fiber（对应的 DOM 为 3 个 li），寻找本次更新的 p 是否可以复用之前的 3 个 fiber 中某个的 DOM。
+
+  - 当 key 相同且 type 不同时，代表我们已经找到本次更新的 p 对应的上次的 fiber，但是 p 与 li type 不同，不能复用。既然唯一的可能性已经不能复用，则剩下的 fiber 都没有机会了，所以都需要标记删除。
+
+  - 当 key 不同时只代表遍历到的该 fiber 不能被 p 复用，后面还有兄弟 fiber 还没有遍历到。所以仅仅标记该 fiber 删除。
+
+#### 多节点 Diff
+
+##### 多节点 Diff 出现的情况
+
+1，当有一个 FunctionComponent，他的返回值 JSX 对象的 children 属性不是单一节点，而是包含四个对象的数组，如下：
+
+```js
+function List() {
+  return (
+    <ul>
+      <li key="0">0</li>
+      <li key="1">1</li>
+      <li key="2">2</li>
+      <li key="3">3</li>
+    </ul>
+  );
+}
+
+// 对应JSX对象
+{
+  $$typeof: Symbol(react.element),
+  key: null,
+  props: {
+    children: [
+      {$$typeof: Symbol(react.element), type: "li", key: "0", ref: null, props: {…}, …}
+      {$$typeof: Symbol(react.element), type: "li", key: "1", ref: null, props: {…}, …}
+      {$$typeof: Symbol(react.element), type: "li", key: "2", ref: null, props: {…}, …}
+      {$$typeof: Symbol(react.element), type: "li", key: "3", ref: null, props: {…}, …}
+    ]
+  },
+  ref: null,
+  type: "ul"
+}
+```
+
+- 对于以上这种情况，即 reconcileChildFibers 的 newChild 参数类型为 Array，在 [reconcileChildFibers](https://github.com/facebook/react/blob/970fa122d8188bafa600e9b5214833487fbf1092/packages/react-reconciler/src/ReactChildFiber.new.js#L1344) 函数内部对应如下情况：
+
+```js
+if (isArray(newChild)) {
+  // 调用 reconcileChildrenArray 处理
+  // ...省略
+}
+```

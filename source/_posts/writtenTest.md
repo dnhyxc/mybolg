@@ -360,6 +360,12 @@ Object._create = function (obj) {
 
 - 扩展运算符 ...obj。
 
+- loadsh 里面的 \_.clone。
+
+- Array.prototype.concat。
+
+- Array.prototype.slice。
+
 ##### 深拷贝
 
 1，通常是嵌套二层或以上的复杂对象。
@@ -368,7 +374,9 @@ Object._create = function (obj) {
 
 - JSON.parse(JSON.stringfy(object)); 该方法忽略掉 undefined、忽略 Symbol、忽略 function。只适合简单深拷贝。
 
-- 递归实现深拷贝
+- 递归实现深拷贝。
+
+3，递归实现深拷贝方式一：
 
 ```js
 // 定义一个深拷贝函数  接收目标target参数
@@ -447,6 +455,32 @@ console.log(obj2);
 console.log(obj1.a); // {c: /a/, d: undefined, b: null}
 console.log(obj2.a); // {c: /a/, d: {…}, b: null}
 ```
+
+4，递归实现深拷贝方式二：
+
+```js
+function deepClone(obj) {
+  let cloneObj = new obj.constructor();
+  if (obj === null) return obj;
+  if (obj === Date) return new Date(obj);
+  if (obj === RegExp) return new RegExp(obj);
+  if (typeof obj !== "object") return obj;
+  for (let i in obj) {
+    if (obj.hasOwnProperty(i)) {
+      cloneObj[i] = deepClone(obj[i]);
+    }
+  }
+  return cloneObj;
+}
+```
+
+##### 深浅拷贝的区别
+
+1，深浅拷贝赋值不一样，在浅拷贝中，把一个对象赋值给新的变量时，赋的其实是该对象在栈中的地址，而不是堆中的数据，也就是两个对象指向的是同一个存储空间，无论哪个对象发生改变，其实都是改变的存储空间的内容，因此，两个对象是联动的。
+
+2，在浅拷贝中，重新在堆中创建内容，拷贝前后对象的**基本数据类型互不影响**，但拷贝引用类型时，因为共享同一内存空间，因此会相互影响。
+
+3，在深拷贝中，从堆内存中开辟一个新的内存空间存放对象，对对象中的子对象进行递归拷贝，拷贝前后的两个对象互不影响。
 
 #### 函数的节流和防抖
 
