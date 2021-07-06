@@ -486,7 +486,7 @@ function deepClone(obj) {
 
 ##### 防抖函数
 
-1，防抖函数：将多次触发变成最后一次触发。
+1，防抖函数：将多次触发变成最后一次触发，即让触发的函数只执行最后一次。
 
 ```js
 function debounce(fn, wait) {
@@ -514,9 +514,10 @@ window.addEventListener("resize", debounce(clg, 1000));
 
 ##### 节流函数
 
-1，将多次执行变成每隔一个时间节点去执行的函数。
+1，将多次执行变成每隔一个时间节点去执行的函数，即限制函数每隔 delay 时间执行一次。
 
 ```js
+// 方式一
 function throttle(fn, time) {
   let lastTime = null;
   return function () {
@@ -531,6 +532,20 @@ function sayHi() {
   console.log("hi");
 }
 setInterval(throttle(sayHi, 1000), 500);
+
+// 方式二
+function throttle(callback, delay) {
+  let delayTimer;
+
+  return function () {
+    if (!delayTimer) {
+      delayTimer = setTimeout(() => {
+        callback();
+        delayTimer = null;
+      }, delay);
+    }
+  };
+}
 ```
 
 #### call、apply、bind

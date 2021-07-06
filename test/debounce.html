@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>防抖函数</title>
+  </head>
+  <body>
+    <input type="text" />
+    <script>
+      const inp = document.querySelector("input");
+
+      // 防抖函数
+      function debounce(callback, delay) {
+        let timer;
+        return function () {
+          const arg = [...arguments];
+          if (timer) {
+            clearTimeout(timer);
+          }
+          timer = setTimeout(() => {
+            callback.apply(this, arg);
+          }, delay);
+        };
+      }
+
+      function fn(e) {
+        console.log(e.target.value, "00000");
+      }
+
+      // inp.oninput = debounce(fn, 1000);
+
+      // 截流函数
+      function throttle(fn, delay) {
+        let delayTimer;
+        return function () {
+          if (!delayTimer) {
+            delayTimer = setTimeout(() => {
+              fn();
+              console.log("00000");
+              delayTimer = null;
+            }, delay);
+          }
+        };
+      }
+
+      function fn(e) {
+        console.log("e.target.value");
+      }
+
+      inp.oninput = throttle(fn, 2000);
+    </script>
+  </body>
+</html>
