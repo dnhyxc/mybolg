@@ -66,50 +66,6 @@ typeof undefined; // undefined
 
 2，内存方面，setTimeout 只需要进入一次宏队列，setInterval 不计算代码执行时间，有可能多次执行多次代码。
 
-#### 如何实现一个 new 的伪代码
-
-1，创建一个新的对象。
-
-2，把 obj 的 `__proto__` 指向 fn 的 `prototype`，实现继承。
-
-3，改变 this 的指向，执行构造函数、传递参数,fn.apply() 或者 fn.call()。
-
-4，返回新的对象 obj。
-
-```js
-function Dog(name) {
-  this.name = name;
-  this.say = function () {
-    console.log("name = " + this.name);
-  };
-}
-
-function Cat(name) {
-  this.name = name;
-  this.say = function () {
-    console.log("name = " + this.name);
-  };
-}
-
-function _new(fn, ...arg) {
-  const obj = {}; //创建一个新的对象
-  obj.__proto__ = fn.prototype; //把obj的__proto__指向fn的prototype,实现继承
-  fn.apply(obj, arg); //改变this的指向
-  return Object.prototype.toString.call(obj) === "[object Object]" ? obj : {}; //返回新的对象obj
-}
-
-//测试1
-var dog = _new(Dog, "aaa");
-dog.say(); //'name = aaa'
-console.log(dog instanceof Dog); //true
-console.log(dog instanceof Cat); //false
-//测试2
-var cat = _new(Cat, "bbb");
-cat.say(); //'name = bbb'
-console.log(cat instanceof Cat); //true
-console.log(cat instanceof Dog); //false
-```
-
 #### 原型、原型链
 
 ##### 什么是原型
@@ -184,6 +140,134 @@ console.log(person01.sayHi());
 2，当一个对象去调用某个属性或者方法的时候，先从自身开始查找，如果有则使用；如果没有则到对象的原型中去查找。如果有则使用；如果原型中也没有，则会到原型的原型中去查找，这样就形成了一条链，叫做原型链。原型链的终点是 Object 的原型，如果该对象中依然没有找到，则返回 undefined。
 
 ![原型链结构图](prototype.png)
+
+#### JS 作用域
+
+##### 全局作用域
+
+1，全局作用域在页面打开时被创建，页面关闭时被销毁。
+
+2，编写在 script 标签中的变量和函数，作用域为全局，在页面的任意位置都可以访问到。
+
+3，在全局作用域中有全局对象 window，代表一个浏览器窗口，游浏览器穿件，可以直接调用。
+
+4，全局作用域中声明的变量和函数会作为 window 对象的属性和方法。
+
+##### 函数作用域
+
+1，函数作用域在函数定义时就已创建。
+
+2，每调用一次函数就会创建一个新的函数作用域，他们之间是相互独立的。
+
+3，在函数作用域中可以访问到全局作用域的变量，在函数外无法访问到函数作用域内的变量。
+
+4，在函数作用域中访问变量，函数时，会先在自身作用域中寻找，若没有找到，则会到函数的上一级作用域中寻找，一直到全局作用域。
+
+#### 作用域深层理解
+
+##### 执行期的上下文
+
+1，当函数代码执行的前期，会创建一个执行期上下文的内部对象 AO（作用域）。
+
+2，这个内部的对象是预编译时候创建出来的，因为当函数被调用的时候，会先进行预编译。
+
+3，在全局代码执行的前期，会创建一个执行期的上下文对象 GO。
+
+##### 函数作用域预编译
+
+1，创建 AO 对象 AO{}。
+
+2，找形参和变量声明，将变量和形参名当作 AO 对象的属性名，且值为 undefined。
+
+3，形参和实参相统一，形参被赋值为实参。
+
+4，在函数体里面找函数声明，值赋予函数体（即同名的变量声明会被同名的函数声明覆盖）。
+
+##### 作用域与执行上下文区别
+
+1，它们最大的区别就是：执行上下文在运行时确定，随时可能改变，但作用域在定义时就确定，并且不会改变。
+
+- 面试题示例如下：
+
+```js
+function fn(a, c) {
+  console.log(a); // f a(){}
+  var a = 123;
+  console.log(a); // 123
+  console.log(c); // f c(){}
+  function a() {}
+  if (false) {
+    var d = 678;
+  }
+  console.log(d); // undefined
+  console.log(b); // undefined
+  var b = function () {};
+  console.log(b); // f(){}
+  function c() {} // f c(){}
+  console.log(c);
+}
+fn(1, 2);
+
+// 解题过程如下：
+// AO {
+//   a: undefined => 1 => function a(){}
+//   b: undefined => 2 => function c(){}
+//   d: undefined
+//   b: undefined
+// }
+```
+
+##### 全局作用域预编译
+
+1，创建 GO 对象。
+
+2，找变量声明，将变量名作为 GO 对象的属性名，值为 undefined。
+
+3，找函数声明，值赋予函数体（即同名的变量声明会被同名的函数声明覆盖）。
+
+#### 如何实现一个 new 的伪代码
+
+1，创建一个新的对象。
+
+2，把 obj 的 `__proto__` 指向 fn 的 `prototype`，实现继承。
+
+3，改变 this 的指向，执行构造函数、传递参数,fn.apply() 或者 fn.call()。
+
+4，返回新的对象 obj。
+
+```js
+function Dog(name) {
+  this.name = name;
+  this.say = function () {
+    console.log("name = " + this.name);
+  };
+}
+
+function Cat(name) {
+  this.name = name;
+  this.say = function () {
+    console.log("name = " + this.name);
+  };
+}
+
+function _new(fn, ...arg) {
+  const obj = {}; //创建一个新的对象
+  obj.__proto__ = fn.prototype; //把obj的__proto__指向fn的prototype,实现继承
+  fn.apply(obj, arg); //改变this的指向
+  return Object.prototype.toString.call(obj) === "[object Object]" ? obj : {}; //返回新的对象obj
+}
+
+//测试1
+var dog = _new(Dog, "aaa");
+dog.say(); //'name = aaa'
+console.log(dog instanceof Dog); //true
+console.log(dog instanceof Cat); //false
+//测试2
+var cat = _new(Cat, "bbb");
+cat.say(); //'name = bbb'
+console.log(cat instanceof Cat); //true
+console.log(cat instanceof Dog); //false
+```
 
 #### 继承
 
@@ -462,8 +546,8 @@ console.log(obj2.a); // {c: /a/, d: {…}, b: null}
 function deepClone(obj) {
   let cloneObj = new obj.constructor();
   if (obj === null) return obj;
-  if (obj === Date) return new Date(obj);
-  if (obj === RegExp) return new RegExp(obj);
+  if (obj instanceof Date) return new Date(obj);
+  if (obj instanceof RegExp) return new RegExp(obj);
   if (typeof obj !== "object") return obj;
   for (let i in obj) {
     if (obj.hasOwnProperty(i)) {
@@ -473,6 +557,8 @@ function deepClone(obj) {
   return cloneObj;
 }
 ```
+
+> 说明；之所以使用 new obj.constructor()创建对象，是因为这样能保证即可克隆一个对象本身，也能克隆这个对象的实例。因为不确定 obj 传入的是对象本身，还是它创建出来的实例，new obj.constructor()可以保证当你传入的是 obj 的实例时，克隆的就是 obj 的实例。即为了保证克隆的结果和克隆之前的对象保持相同的所属类。
 
 ##### 深浅拷贝的区别
 

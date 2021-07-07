@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>双向数据绑定原理</title>
+  </head>
+  <body>
+    <span>name:</span><span id="text"></span>
+    <div>
+      <input type="text" id="inp" />
+    </div>
+
+    <script>
+      let obj = {
+        name: "",
+      };
+
+      // 实现方式一：Object.defineProperty
+      // let newObj = JSON.parse(JSON.stringify(obj));
+      // Object.defineProperty(obj, "name", {
+      //   // 之所以要用newObj.name是为了防止出现死循环，因为每次获取obj.name都会出发get()方法
+      //   get() {
+      //     return newObj.name;
+      //   },
+      //   set(value) {
+      //     value !== newObj.name && (newObj.name = value);
+      //     observer();
+      //   },
+      // });
+
+      // function observer() {
+      //   text.innerHTML = obj.name;
+      //   inp.value = obj.name;
+      // }
+
+      // setTimeout(() => {
+      //   obj.name = "dnhyxc";
+      // }, 1000);
+
+      // inp.oninput = function () {
+      //   obj.name = this.value;
+      // };
+
+      // 实现方式二：Proxy
+      obj = new Proxy(obj, {
+        // target为监听的对象obj，prop为obj的属性
+        get(target, prop) {
+          return target[prop];
+        },
+        // target为监听的对象obj，prop为obj的属性，value为obj对应的属性值
+        set(target, prop, value) {
+          target[prop] = value;
+          observer();
+        },
+      });
+
+      function observer() {
+        text.innerHTML = obj.name;
+        inp.value = obj.name;
+      }
+
+      setTimeout(() => {
+        obj.name = "dnhyxc";
+      }, 1000);
+
+      inp.oninput = function () {
+        obj.name = this.value;
+      };
+    </script>
+  </body>
+</html>

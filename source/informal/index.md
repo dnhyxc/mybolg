@@ -630,7 +630,7 @@ const getType = function (obj) {
 };
 ```
 
-#### js类型比较特殊点
+#### js 类型比较特殊点
 
 1，当声明的函数，其参数都为`数字型`字符串时，JS 会比较两个字符串 ASCII 码的大小，而不是比较数值的大小，具体如下：
 
@@ -639,8 +639,8 @@ function numCompare(first, second) {
   return first >= second ? first : second;
 }
 
-numCompare(12, 2);      // => 12
-numCompare('12', '2');  // => '2'
+numCompare(12, 2); // => 12
+numCompare("12", "2"); // => '2'
 ```
 
 ### 检测当前页面是否被隐藏
@@ -1677,7 +1677,7 @@ export default CheckList;
 ```
 
 > 上述代码中选中逻辑解析如下：
-> 
+>
 > 1，当 activeMult 为 true 时，说明当前点击的这一项已经存在于 activeMultIds 中，是处于选中状态的，需要将其从 activeMultIds（选中列表）中移除。
 > 2，当 activeMult 为 false 时，说明当前点击的这一项不在 activeMultIds 中，即还没有被选中，需要将其加入到 activeMultIds（选中列表）中。
 
@@ -1744,6 +1744,128 @@ const appRoot = document.createElement("div");
 document.body.appendChild(appRoot);
 ReactDOM.render(<App />, appRoot);
 ```
+
+### 架构原理相关
+
+#### 双向数据绑定原理
+
+##### 使用 Object.defineProperty 实现
+
+1，具体实现代码如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>双向数据绑定原理</title>
+  </head>
+  <body>
+    <span>name:</span><span id="text"></span>
+    <div>
+      <input type="text" id="inp" />
+    </div>
+
+    <script>
+      let obj = {
+        name: "",
+      };
+
+      let newObj = JSON.parse(JSON.stringify(obj));
+      Object.defineProperty(obj, "name", {
+        // 之所以要用newObj.name是为了防止出现死循环，因为每次获取obj.name都会出发get()方法
+        get() {
+          return newObj.name;
+        },
+        set(value) {
+          value !== newObj.name && (newObj.name = value);
+          observer();
+        },
+      });
+
+      function observer() {
+        text.innerHTML = obj.name;
+        inp.value = obj.name;
+      }
+
+      setTimeout(() => {
+        obj.name = "dnhyxc";
+      }, 1000);
+
+      inp.oninput = function () {
+        obj.name = this.value;
+      };
+    </script>
+  </body>
+</html>
+```
+
+2，使用 Object.defineProperty 实现的缺点：
+
+- 需要对原始数据进行克隆。
+
+- 需要分别对对象中的每一个属性设置监听，这就会导致一上来有的属性监听不上。
+
+  - 如：当定义了一个对象，而这个对象是一个空对象，其中没有任何属性，此时后期设置的属性就会监听不上。
+
+##### 使用 ES6 的 Proxy 实现
+
+1，具体实现代码如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>双向数据绑定原理</title>
+  </head>
+  <body>
+    <span>name:</span><span id="text"></span>
+    <div>
+      <input type="text" id="inp" />
+    </div>
+
+    <script>
+      let obj = {};
+
+      obj = new Proxy(obj, {
+        // target为监听的对象obj，prop为obj的属性
+        get(target, prop) {
+          return target[prop];
+        },
+        // target为监听的对象obj，prop为obj的属性，value为obj对应的属性值
+        set(target, prop, value) {
+          target[prop] = value;
+          observer();
+        },
+      });
+
+      function observer() {
+        text.innerHTML = obj.name;
+        inp.value = obj.name;
+      }
+
+      setTimeout(() => {
+        obj.name = "dnhyxc";
+      }, 1000);
+
+      inp.oninput = function () {
+        obj.name = this.value;
+      };
+    </script>
+  </body>
+</html>
+```
+
+2，Proxy 实现的优点：
+
+- 不需要对原始数据进行克隆，代码简洁方便。
+
+- 不需要对每个属性进行监听，不会出现初使对象为空的时，监听不上属性的情况。
 
 ### npm 相关
 

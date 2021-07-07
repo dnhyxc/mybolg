@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>作用域</title>
+  </head>
+  <body>
+    <script>
+      function fn(a, c) {
+        console.log(a); // f a(){}
+        var a = 123;
+        console.log(a); // 123
+        console.log(c); // f c(){}
+        function a() {}
+        if (false) {
+          var d = 678;
+        }
+        console.log(d); // undefined
+        console.log(b); // undefined
+        var b = function () {};
+        console.log(b); // f(){}
+        function c() {} // f c(){}
+        console.log(c);
+      }
+      fn(1, 2);
+
+      // 解题过程如下：
+      // AO {
+      //   a: undefined => 1 => function a(){}
+      //   b: undefined => 2 => function c(){}
+      //   d: undefined
+      //   b: undefined
+      // }
+    </script>
+  </body>
+</html>

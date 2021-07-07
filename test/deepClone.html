@@ -13,8 +13,8 @@
     function deepClone(obj) {
       let cloneObj = new obj.constructor();
       if (obj === null) return null;
-      if (obj === Date) return new Date(obj);
-      if (obj === RegExp) return new RegExp(obj);
+      if (obj instanceof Date) return new Date(obj);
+      if (obj instanceof RegExp) return new RegExp(obj);
       if (typeof obj !== 'object') return obj;
       for (let key in obj) {
         if (obj.hasOwnProperty(key)) {
