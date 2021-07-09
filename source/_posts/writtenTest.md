@@ -10,6 +10,78 @@ categories:
 
 ### JS 概念相关
 
+#### js 数据类型
+
+1，基本数据类型：
+
+- string、number、boolean、null、undefined、symbol。
+
+2，引用数据类型：
+
+- object、array、function 等。
+
+#### js 类型转换
+
+1，转换为字符串：使用 **String()/toString()** 方法，也可以使用引号或加法运算符进行隐式转换。
+
+2，转换为数据类型：使用 **Number()** 方法，或 **parseInt()/parseFloat()** 方法。
+
+- 使用 Number() 方法对**引用数据**类型进行转换时，首先会将其**转换为字符串类型**，再将其转为数字类型，而在转换的过程中，只要字符串中出现了非数字字符，其转换结果就是 NaN。
+
+- 使用 parseInt()/parseFloat() 方法进行转换时，也会先将其转换为字符串，然后从左往右依次寻找数字字符，遇到非数字字符就停止寻找，然后将找到的数据字符传为数字类型，如果一个都没找到，就会返回 NaN。
+
+3，将基本数据类型转为数字时：布尔值 true 为 1，false 为 0，null 为 0，undefined 为 NaN，空数组为 0，空对象为 NaN，symbol 不允许转换。
+
+#### 数据类型判断
+
+##### typeof
+
+1，typeof 检测对象，除了函数是 function 类型之外。像常见的数组，对象或者是正则，日期等等都是 object。
+
+2，typeof 检测对象的特殊场景如下：
+
+```js
+typeof Symbol(); // 'symbol'
+typeof null; // object
+typeof undefined; // undefined
+```
+
+> typeof null 检测输出 object 因为 js 最初版本，使用的是 32 位系统，类型的标签存储在每个单元的低位中 000 是 object 类型。null 全是 0，所以当我们使用 typeof 进行检测的时候 js 错误的判断位 object。
+
+##### instanceof
+
+1，instanceof 主要用于对对象进行判断，可判断出左边是否是右边的实例。但它**不能检测 null 和 undefined**。
+
+```js
+[] instanceof Array; //true
+{} instanceof Object; //true
+new Date() instanceof Date; //true
+new RegExp() instanceof RegExp; //true
+null instanceof Null; //报错
+undefined instanceof undefined; //报错
+```
+
+##### Object.prototype.toString.call()
+
+1，该方法可精准判断所有类型。
+
+```js
+Object.prototype.toString.call(""); // [object String]
+Object.prototype.toString.call(1); // [object Number]
+Object.prototype.toString.call(true); // [object Boolean]
+Object.prototype.toString.call(undefined); // [object Undefined]
+Object.prototype.toString.call(null); // [object Null]
+Object.prototype.toString.call(new Function()); // [object Function]
+Object.prototype.toString.call(new Date()); // [object Date]
+Object.prototype.toString.call([]); // [object Array]
+Object.prototype.toString.call(new RegExp()); // [object RegExp]
+Object.prototype.toString.call(new Error()); // [object Error]
+```
+
+#### 发生类型转换的情况
+
+1，使用加法运算符、== 运算符、逻辑运算符、if 条件判断等都会发生类型转换。
+
 #### 箭头函数和普通函数的区别是什么
 
 1，普通函数 this：this 总是指向它的直接调用者。
@@ -39,20 +111,6 @@ categories:
 3，const 有块级作用域，不支持变量提升，不允许重复声明，暂存性死区。声明一个变量一旦声明就不能改变，改变报错。
 
 - 如果声明的变量是一个数组或者对象，则可以改变其中的属性或属性值。
-
-#### typeof
-
-1，typeof 检测对象，除了函数是 function 类型之外。像常见的数组，对象或者是正则，日期等等都是 object。
-
-2，typeof 检测对象的特殊场景如下：
-
-```js
-typeof Symbol(); // 'symbol'
-typeof null; // object
-typeof undefined; // undefined
-```
-
-> typeof null 检测输出 object 因为 js 最初版本，使用的是 32 位系统，类型的标签存储在每个单元的低位中 000 是 object 类型。null 全是 0，所以当我们使用 typeof 进行检测的时候 js 错误的判断位 object。
 
 #### 深度优先和广度优先
 
@@ -149,9 +207,11 @@ console.log(person01.sayHi());
 
 2，编写在 script 标签中的变量和函数，作用域为全局，在页面的任意位置都可以访问到。
 
-3，在全局作用域中有全局对象 window，代表一个浏览器窗口，游浏览器穿件，可以直接调用。
+3，在全局作用域中有全局对象 window，代表一个浏览器窗口，由浏览器创建，可以直接调用。
 
 4，全局作用域中声明的变量和函数会作为 window 对象的属性和方法。
+
+5，作用域的作用就是**隔离变量**，是不同作用域中的同名变量不会产生冲突。
 
 ##### 函数作用域
 
@@ -245,7 +305,135 @@ fn(1, 2);
 
 - 清除阶段：垃圾回收器在对内存当中进行线性遍历，如果发现该对象没有被标记为可到达对象，那么就会被垃圾回收机制回收。这里面牵扯到了引用计数法，每次引用都被会`+1` 如果标记清零，那么就会被回收掉。
 
+#### Set 和 Map 的区别
+
+1，Set 是类似数字的数据结构，其中值都是唯一的，可以用来对数组进行去重。使用 new Set() 进行创建。
+
+- Set 包含的方法：
+
+  - add()：用于添加值。
+
+  - delete()：用于删除值。
+
+  - has()：用于检查受否存在该值。
+
+  - clear()：用来清除所有成员。
+
+2，Map 是类似对象的数据结构，成员键是任意类型的值，使用 new Map() 进行声明。
+
+- Map 包含的方法：
+
+  - get()：用于返回键值对。
+
+  - set()：用于添加键值对。
+
+  - delete()：用于删除键值对，返回布尔值。
+
+  - has()：用于检查键值对，返回布尔值。
+
+  - clear()：用于清除所有成员。
+
+#### Promise
+
+1，Promise 是用于解决异步编程的一种法案。
+
+2，Promise 有三种状态：pending、resolved、rejected，而状态一旦变更就不能逆转。
+
+- 其中成功的时候会调用 resolved，失败则是调用 rejected，都会返回一个新的 Promise，可以通过 .then() 中获取到成功或者失败的结果，或者也可以使用 **.catch()** 捕获异常的结果。
+
+- 当要同时执行多个异步操作的时候，且需要这多个异步操作同时成功的情况下再进行下一步操作的时候就可以用 **Promise.all()** 方法将这些异步操作同时执行。如果都成功了，就会以数组的形式返回结果，但只要其中有一个失败了就会返回失败的结果。
+
+- 当有多个任务同时执行，需要获取最先执行完毕的任务时，就可以使用 **Promise.race()** 方法获取，该方法只获取最先执行完成的任务，不管是成功还是失败的任务，只关注最先返回结果的任务。
+
+3，Promise 的优点：支持链式调用，能够解决回调地狱的问题。
+
+4，Promise 的缺点：
+
+- 一旦创建就会立即执行，无法中途取消。
+
+- 如果不设置回调函数，Promise 内部抛出的错误，不会反应到外部。
+
+- 当处于 pending 状态时，无法得知目前进展到哪一阶段。
+
+### DOM 相关
+
+#### css 的重绘与回流
+
+1，重绘：当节点需要更改外观而不会影响布局。
+
+- 如更改背景颜色，字体颜色等。
+
+2，DOM 结构的修改引发 DOM 几何尺寸变化的时候，发生回流。
+
+- 常见的几何属性有 width、height、padding、margin、left、top、border 或者是 DOM 节点发生增减移动。
+
+3，减少重绘和回流的办法：
+
+- 使用 css3 新增属性：translate 替代 top 等方向值。
+
+- 避免频繁使用 style，而是采用 class。
+
+#### innerHTML 与 innerText 的区别
+
+1，innerHTML 会获取到 html 标签、空格和换行，而 innerText 只会获取文本内容，不包括空格和换行。
+
+#### DOM 事件流
+
+1，DOM 事件流包括：捕获阶段、目标阶段、冒泡阶段。
+
+- 事件冒泡是从最具体的元素逐级向上传播的过程。事件委托就是利用冒泡的原理，将事件绑定在父节点上，通过冒泡原理，使子节点也能触发该事件。
+
+  - 事件委托可以减少对 DOM 的操作，提高程序性能，无需对每个元素都单独绑定一次事件。
+
+- 事件捕获是从最顶层元素逐级向下传播的过程。
+
+#### mouseover 与 mouseenter 的区别
+
+1，mouseover 在鼠标移入元素或者其子元素中时都会触发，会重复触发冒泡的过程。对应的移出事件为 mouseout。
+
+2，mouseenter 只有当鼠标移到元素本身上时才会触发，移动到其子元素上并不会触发。不会有冒泡的过程。对应的移出事件为 mouseleave。
+
+### CSS 相关
+
+#### css 盒子模型
+
+1，盒子模型分为 **IE 盒模型**和**标准盒模型**。
+
+- 标准盒模型内容区大小不包括 border 和 panding，而 IE 盒模型则包括 border 和 padding。
+
+- 可以使用 box-sizzing 将标准和模型转换为 IE 盒模型。
+
+#### 响应式布局
+
+1，响应式布局可以使用 @media 媒体查询，rem 适配，vm/vh，或者 flex 布局。
+
+#### mate 标签解决移动端适配
+
+```httml
+<meta name=”viewport” content=”initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no”>
+```
+
+#### 元素垂直居中的方法
+
+1，知道宽高的情况下使用：absolute + margin、absolute + calc。
+
+2，不知道宽高的情况下使用：flex、absolute + transform(translate: -50%, -50%)、网格布局。
+
+#### opacity、display、visibility 的区别
+
+1，display: none 会让元素完全从渲染树中消失，不占据任何空间，不能触发绑定的事件。
+
+2，opacity: 0 不会让元素从渲染树中消失，会占据空间，只是内容不可见，能触发绑定的事件。
+
+3，visibility: hidden 不会从渲染树消失，也会占据空间，但是不会触发绑定的事件。
+
 ### 浏览器及 http 相关
+
+#### get 和 post 的区别
+
+1，get 和 post 最主要的区别就在于携带参数的位置不同，get 是将参数放在 url 中，而 post 则是将参数放在 body 中。
+
+2，get 发送请求时，只会发送一个包，而 post 是发送两个包，第一个包会先发送 herder，用于确认服务器是否有处理能力，当服务器返回 100 后，再发送 data 数据。
 
 #### cookie、localstorage、seesionstorage
 
@@ -401,7 +589,15 @@ fn(1, 2);
 
 - 简单说就是当执行到一个 http 异步请求时，就把异步请求事件添加到异步请求线程，等收到响应(准确来说应该是 http 状态变化)，再把回调函数添加到事件队列，等待 JS 引擎线程来执行。
 
-#### 如何解决 js 跨域问题
+#### 从输入 url 到页面展示的过程
+
+1，首先需要经过 DNS 解析，获取到 IP 地址，之后经过 TCP 三次握手建立连接之后发送请求，然后服务器响应请求返回请求的文件，得到文件后，浏览器就开始渲染页面，其中遇到 html 标签就调用 html 引擎解析成 DOM 树，遇到 css 就调用 css 引擎解析成样式树，遇到 js 代码就调用 js 引擎解析 js 代码。之后将 DOM 树和样式树进行合并形成一个渲染树，之后根据渲染树来计算出各元素在页面中的布局，然后给各个节点绘制颜色，最后断开 TCP 链接。
+
+#### 同源策略
+
+1，协议、域名、端口号相同的即为同源，如果这三个任何一个不一样就是非同源，访问非同源时就会出现跨域的情况。
+
+#### 如何解决跨域问题
 
 1，使用 jsonp 实现跨域，原理为：
 
@@ -424,6 +620,66 @@ fn(1, 2);
 - webpack proxy 配置在 webpack 的 devServer 属性中。在 webpack 中的 devServer 配置后，打包阶段在本地临时生成了一个 node 服务器，浏览器请求服务器相当于请求本地服务。
 
 > 注意：webpack proxy 跨域只能用作与开发阶段，临时解决本地请求服务器产生的跨域问题，并不适合线上环境。
+
+#### http 与 https
+
+1，http 为超文本传输协议，采用请求响应的模式，用于服务器与浏览器之间传输数据。
+
+2，http 是无状态的，而且信息是明文传输的。
+
+- 解决明文传输可以使用 https，https 协议是由 http 和 ssl 协议构建的可进行机密传输和身份认证的网络协议。https 需要有证书，且需要进行加解密。
+
+3，http 的缺陷：
+
+- 无法复用链接，完成即断开，重新启动慢，存在对头阻塞的情况，会导致请求之间相互影响。
+
+- 在 http 1.1 之后支持长连接，但需要使用 keep-alive 开启。
+
+3，http 2.0 的特点：
+
+- http 2.0 相比之前的版本，它提升了访问速度，允许多路复用，就是同时发送多个请求及响应信息、支持二进制分帧（将所有传输信息分割为更小的信息或者帧，然后对它们进行二进制编码）、首部压缩、还能支持服务端推送。
+
+#### http 状态码
+
+1，200 系列表示请求成功。 其中 202 表示请求已被接收但还未处理，206 表示请求接受了，但还没处理完成。
+
+2，300 系列表示重定向。其中 301 表示永久重定向，302 表示临时重定向。
+
+3，400 系列表示客户端错误，其中 400 表示语义错误或者参数错误，401 表示请求需要用户验证，403 表示拒绝访问，404 表示访问的网页不存在。
+
+5，500 系列则是表示服务端错误。
+
+#### XSS 攻击
+
+1，XSS 称为跨站脚本攻击，攻击者通过注入非法的 html 标签或者 js 代码实现。
+
+2，XSS 主要分为三类：反射型 XSS、存储型 XSS 和 DOMXSS。
+
+- 反射型又称为非持久型 XSS，其原理就是当用户将带有 XSS 攻击的非法代码发送到服务端后，经过服务端解析返回这段 XSS 代码，最后通过浏览器解析执行后就会造成 XSS 攻击。
+
+- 存储型 XSS 又称为持久型 XSS 攻击，它将非法代码直接存储到服务器，这种方式相比反射型危害更大，也更隐蔽。
+
+- DOMXSS 是直接通过 DOM 解析然后达到 XSS 攻击的目的。
+
+3，XSS 的危害是：会对用户的信息造成危害，还能发送恶意的请求。
+
+4，防御 XSS 的方式首先是对用户输入的**内容进行验证**，然后对一些特殊的**标签进行转换**。
+
+#### CSRF 攻击
+
+1，CSRF 攻击称为跨站请求伪造，就是冒充用户且在用户不知情的情况下发起请求，然后做一些违背用户医院的事情，比如：修改用户信息等。
+
+- 跨站脚本攻击通俗的来讲，就像有一个小偷去别人家偷东西，被这家的小孩看见了，这个小孩就问小偷，你是谁叫什么名字，小偷就说我叫逗你玩，然后小孩就对她妈妈说：有人在偷我们家东西，他妈妈就问谁啊，小孩就说是逗你玩，然后小偷就顺利的偷走了东西还没被抓住。
+
+2，CSRF 的危害主要有：利用以通过认证的用户权限更新设定信息，购买商品，或者进行恶意评论等等。
+
+3，防止 CSRF 攻击可以通过**验证码技术**、**请求来源限制**、而最稳妥的还是使用 **token** 进行验证。
+
+- token 的原理就是在后端随机生成一个 token，并且把这个 token 保存到 session 中，同时把这个 token 发送到前端页面，之后浏览器提交请求时，把 token 加入到请求头中传输到服务器，服务器验证前端传来的 token 是否与 session 中的一致，如果一致就说明时合法的，否则就是不合法。
+
+#### SQL 注入
+
+1，SQL 注入就是在 url 中输入带有逻辑判断的代码，使用户的密码失效，从而达到攻击的目的。
 
 ### JS 笔试相关
 
@@ -1671,6 +1927,23 @@ b = "123554355";
 console.log(isContain(a, b)); // 返回 2
 ```
 
+#### 判断一个变量是对象还是数组
+
+1，判断数组和对象分别都有好几种方法，其中用 prototype.toString.call() 兼容性最好。
+
+```js
+function isObjArr(value) {
+  if (Object.prototype.toString.call(value) === "[object Array]") {
+    console.log("value是数组");
+  } else if (Object.prototype.toString.call(value) === "[object Object]") {
+    //这个方法兼容性好一点
+    console.log("value是对象");
+  } else {
+    console.log("value不是数组也不是对象");
+  }
+}
+```
+
 #### 实现千位分隔符
 
 ##### 实现方式一
@@ -2130,41 +2403,6 @@ class Person {
 }
 const person = new Person();
 person.fn1("疯狂coding", 88).fn2(3, 9).fn3(6).fn4(9);
-```
-
-### DOM 相关
-
-#### css 的重绘与回流
-
-1，重绘：当节点需要更改外观而不会影响布局。
-
-- 如更改背景颜色，字体颜色等。
-
-2，DOM 结构的修改引发 DOM 几何尺寸变化的时候，发生回流。
-
-- 常见的几何属性有 width、height、padding、margin、left、top、border 或者是 DOM 节点发生增减移动。
-
-3，减少重绘和回流的办法：
-
-- 使用 css3 新增属性：translate 替代 top 等方向值。
-
-- 避免频繁使用 style，而是采用 class。
-
-#### 判断一个变量是对象还是数组
-
-1，判断数组和对象分别都有好几种方法，其中用 prototype.toString.call() 兼容性最好。
-
-```js
-function isObjArr(value) {
-  if (Object.prototype.toString.call(value) === "[object Array]") {
-    console.log("value是数组");
-  } else if (Object.prototype.toString.call(value) === "[object Object]") {
-    //这个方法兼容性好一点
-    console.log("value是对象");
-  } else {
-    console.log("value不是数组也不是对象");
-  }
-}
 ```
 
 ### react 相关
