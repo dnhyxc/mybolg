@@ -26,6 +26,8 @@ categories:
 
 2，转换为数据类型：使用 **Number()** 方法，或 **parseInt()/parseFloat()** 方法。
 
+<!-- more -->
+
 - 使用 Number() 方法对**引用数据**类型进行转换时，首先会将其**转换为字符串类型**，再将其转为数字类型，而在转换的过程中，只要字符串中出现了非数字字符，其转换结果就是 NaN。
 
 - 使用 parseInt()/parseFloat() 方法进行转换时，也会先将其转换为字符串，然后从左往右依次寻找数字字符，遇到非数字字符就停止寻找，然后将找到的数据字符传为数字类型，如果一个都没找到，就会返回 NaN。
@@ -99,8 +101,6 @@ Object.prototype.toString.call(new Error()); // [object Error]
 - 不能够使用 arguments 对象。
 
 - 不能使用 yield 命令。
-
-<!-- more -->
 
 #### let、var、const 的区别
 
