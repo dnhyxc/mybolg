@@ -2574,3 +2574,39 @@ function Counter() {
   - 函数组件：使用 React.memo ，将函数组件传递给 memo 之后，就会返回一个新的组件，新组件的功能：如果接受到的属性不变，则不重新渲染函数。
 
 #### useEffect
+
+#### react 生命周期
+
+1，react 生命周期分为：实例化阶段、更新阶段、卸载阶段。
+
+- 实例化阶段主要有：
+
+  - constructor：可以在这里对 state、props 进行初始化等操作。
+
+  - getDerivedStateFromProps：根据父组件传递过来的 props 来按需更新自身的 state。
+
+  - render：初始化时，生成 Fiber 节点，形成虚拟 DOM。
+
+  - commonentDidMount：此时组件已经挂载完成，可以在这个生命周期中进行数据请求。
+
+- 更新阶段主要有：
+
+  - getDerivedStateFromProps：根据父组件传递过来的 props 来按需更新自身的 state。
+
+  - shouldComopnentUpdate：可以通过这个生命周期判断状态是否改变，组件是否需要更新，可以用来优化性能。
+
+  - render：将更新 Fiber 节点，生成新的虚拟 DOM。
+
+  - getSnapshotBeforeUpdate：会在组件即将更新时调用，用来获取快照，返回值将作为 componentDidUpdate 这个生命周期的第三个参数。
+
+  - componentDidUpdate：到此生命周期时组件已经更新完毕。
+
+- 卸载阶段主要有：
+
+  - componentWillUnmount：这个钩子主要用来做一些收尾工作，比如清除定时器、取消订阅等。
+
+3，react 捕获异常的生命周期：
+
+- componentDidCatch(error, info)：该声明周期专门用来捕获异常。
+
+![reactlive](reactlive.png)
