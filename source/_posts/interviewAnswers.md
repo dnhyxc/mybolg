@@ -210,6 +210,24 @@ https 是基于 http 与 ssl 实现的可进行机密传输和身份认证的网
 
 #### 什么是 BFC
 
+BFC 是一个完全独立的空间（布局环境），让空间里的子元素不会影响到外面的布局。BFC 就是一个块级元素，块级元素会在垂直方向一个接一个的排列，它是页面中的一个隔离的独立容器，容器里的标签不会影响到外部标签，垂直方向的距离由 margin 决定， 属于同一个 BFC 的两个相邻的标签外边距会发生重叠，计算 BFC 的高度时，浮动元素也参与计算。
+
+触发 BFC 的条件：
+
+- overflow: hidden
+
+- display: inline-block
+
+- position: absolute
+
+- position: fixed
+
+- display: table-cell
+
+- display: flex
+
+使用 BFC 能解决使用 Float 脱离文档流，高度塌陷的问题、解决 Margin 边距重叠以及解决两栏布局。
+
 #### 重绘和回流
 
 重绘是在改变元素的颜色，不改变元素的结构的情况下回触发重绘。
@@ -300,6 +318,8 @@ react 生命周期分为：实例话阶段、更新阶段、卸载阶段。
 
 - getSnapshotBeforeUpdate 在更新之前获取一次快照，返回值会作为接下来的 componentDidUpdate 的第三个参数。
 
+- componentDidUpdate 这里更新已经完成了。
+
 卸载阶段：
 
 - componentWillUnmount：主要用来清除一些副作用的操作。取消订阅之类的。
@@ -324,22 +344,60 @@ keys 是 react 用于追踪哪些列表中元素被修改、被添加或者被�
 
 #### 为什么虚拟 DOM 能提高性能
 
+虚拟 DOM 相当于在 js 和真实 DOM 中间加了一个缓存，利用 DOM diff 算法避免了没有必要的 DOM 操作，从而提高性能。具体就是在缓存中用 js 对象结构表示 DOM 树的结构，然后用这个树构建一棵真正的 DOM 树插入到文档中。
+
 #### 调用 setState 之后发生了什么
+
+#### react 性能优化
+
+类组件的化使用 shouldComponentUpdate 实现不必要的渲染。或者使用 pureComponent 会对接收到的 props 进行浅比较，也能达到优化的目的。
+
+函数组件可以使用 React.memo 到达效果。还可以使用 useCallback 和 useMemo。
 
 #### react 中如何实现组件间的通信
 
+父传子组件中使用 props 进行通信，子传父就用用回调函数。如果传的层级比较深的话可以使用 Context 上下文的方式。还有就是 redux，或者借用第三方库 events 进行通信了。
+
 #### 对 redux 的理解
+
+redux 是一个集中式管理状态的第三方库。其的特点是：单向数据流、单一数据源，状态是只读的，如果需要更该状态，唯一的途径就是使用其中的 reducer 这个纯函数进行更改。
 
 #### react-redux 的理解
 
 #### 虚拟 DOM 是什么
 
+虚拟 DOM 就是一个用 js 表示 DOM 元素的对象。里面有 type 表示节点名称，props 表示节点属性，children 表示子节点。
+
 #### diff 算法的原理
+
+diff 算法是对前后虚拟 DOM 采用递归的方式进行比较，然后返回一个补丁对象，用来存储两个节点之间的差异，然后将差异更新到真实 DOM 上。主要就是通过 type 和 key 进行比较看节点是需要插入还是删除，还是只是位置替换。如果 type 或者 key 其中一个不一样就会删除该节点重新创建。
 
 #### connect 的原理
 
+就是通过发布订阅的方式在入口使用 Provider 将 store 传递下去，然后将 mapStateToProps 和 mapDispatchToProps 返回的 state 和 dispatch 传递给 UI 组件。
+
 #### react-router 的理解
+
+它里面的 Router 是路由最外层的容器组件，用于保持 UI 和 URL 的同步，他有两种形式，分别是 hashRouter 和 browserRouter，项目中用的比较多的还是 browserRouter，它是通过 history 中的 pushState 和 replaceState 实现的。主要存在的问题就是要服务端进行配合，否则切换路由的时候可能会有 404 找不到页面的情况。
 
 #### react hooks
 
+hooks 主要解决的问题就是让函数组件也能有自己的状态。
+
+常用的 hooks 主要有：
+
+- useState：用户更新状态，类似 class 中的 setState。
+
+- useEffect：这个主要适用于做一些副作用的操作，比如发送请求之类的，那能在这里面清除副作用的操作，取消定时器，取消订阅之类的。同时根据依赖项看是否需要更新。
+
+- useCallback：主要用来进行一些性能的优化，防止不必要的渲染。他返回的是一个记忆函数，也能传依赖项，初始化的时候会调用一次，之后会根据依赖项的变化进行调用。
+
+- useMemo：主要用来进行一些复杂的运算，返回的是计算后的结果，其他的基本跟 useCallback 类似。
+
+- useContext：用户组件间的通信。
+
+- useRef：主要用于操作 DOM。
+
 #### es6 的语法有哪些
+
+扩展运算符、promise、模版字符串、Set/Map 数据结构等等。
