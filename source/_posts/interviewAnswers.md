@@ -401,3 +401,17 @@ hooks 主要解决的问题就是让函数组件也能有自己的状态。
 #### es6 的语法有哪些
 
 扩展运算符、promise、模版字符串、Set/Map 数据结构等等。
+
+#### react 原理
+
+react 之后采用的是 fiber 架构，而之前的架构采用的是递归的方式，一旦开始了是不能终端的，如果超过了浏览器的刷新频率，就会造成页面卡顿的情况。而 fiber 架构是可中断的，当浏览器空余时间内还有剩余时间，就交给 react 控制，没有就还给浏览器渲染页面。这就提高了性能，不会产生卡顿的情况。
+
+它分为 Scuduler、reconciler、renderer 三个阶段。Scuduler 就用于任务的调度，高优先级的操作会优先进入 reconciler 阶段。reconciler 阶段主要就是找出 DOM 区别，这里面主要的就是调用 render 之后，会触发 performuniowork 方法，然后根据传入的 DOM 节点调用 benginWork 去递归形成 Fiber 树，其中会调用 diff 算法找出差异，然后会调用 completeWork 为每个有变化的节点打上副作用的标记。这个副作用是以链表的形式存在的，通过 nextEffect 来指向下一个副作用节点。这个时候就产生了一颗带有副作用的 DOM 树。
+
+之后就会进入到 mutation 阶段，mutation 阶段会遍历整个 effectList，然后对这个副作用链表分别进行响应的操作。然后将这些更新渲染到视图中。其中会有三个阶段：
+
+- 就是 before mutation 阶段，在这个阶段回调用 getSnapshotBeforeUpdate钩子，还会对 useEffect 进行调度。
+
+- 然后就是 mutation 阶段，会对变化的文本进行更新，然后更新 ref 之类的，在这里会调用 componentWillUnmount 钩子。
+
+- 之后进入到 layout 阶段，这个阶段主要做的事情就是回去调用 componentDidmount 和 componentDidUpdate，还有 useEffect。将这几个钩子里面的更新渲染到页面中。
