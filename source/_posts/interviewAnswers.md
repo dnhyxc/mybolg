@@ -98,6 +98,8 @@ function deepClone(obj) {
 }
 ```
 
+#### promise 具体实现方式
+
 #### 对 js 数据类型的理解
 
 js 基本数据类型主要有：string、number、boolean、null、undefined、symbol。
@@ -204,6 +206,54 @@ https 是基于 http 与 ssl 实现的可进行机密传输和身份认证的网
 
 500 系列表示服务端错误。
 
+#### 浏览器缓存
+
+浏览器有强缓存和协商缓存。
+
+如果命中了强缓存，浏览器则不会发送请求到服务端，直接使用缓存中的数据。
+
+- 强缓存是通过服务端在响应头里面返回 Expires（GMT 时间格式个字符串），如果在这个时间之前，就会命中强缓存。或者使用 Cache-Control 来实现的，该值是利用 max-age 判断缓存的生命周期，是以秒为单位，如过在生命周期时间内，则命中缓存。
+
+如果命中了协商缓存，浏览器会发送请求到服务端，服务器会判断浏览器缓存是否失效，如果失效就返回新的数据，如果没有失效，服务端就不会返回数据，浏览器直接从缓存中获取数据。
+
+- 协商缓存也是在第一次发送请求的时候，服务端会在响应头中返回 Etag 或者 Last-Modified 来实现，Etag 的方式服务器会通过请求头中的 If-None-Match 是否与 Etag 一致，如果一致，就不会给返回数据，还是用缓存中的，如果不一致就会返回新的 etag，以及数据。Last-Modified 的方式服务端通过 If-Modified-Since 来比较两个时间，进行判断。
+
+- ETag 解决了 Last-Modified 使用时可能出现的资源的时间戳变了但内容没变及如果再一秒钟以内资源变化但 Last-Modified 没变的问题（因为 Last-Modified 无法精确到毫秒），感觉 ETag 更加稳妥。
+
+#### fetch 与 ajax 的区别
+
+fetch 默认不带 cookie，可以发送带凭证的请求解决该问题。使用 credentials:'same-origin'来处理。
+
+fetch 返回错误的 http 状态码不会 reject，可以在第一层 then 方法里面抛出异常解决。
+
+fetch 没有设置超时时间，解决这个问题可以通过 promise 进行封装。通过 setTimeout 设置超时时间解决。
+
+fetch 可以终止请求，可以通过给 fetch 传递一个参数 signal: controller.signal，它是中止控制器 AbortController 的一个实例，方式如下：
+
+```js
+var controller = new AbortController();
+var signal = controller.signal;
+
+var downloadBtn = document.querySelector('.download');
+var abortBtn = document.querySelector('.abort');
+
+downloadBtn.addEventListener('click', fetchVideo);
+
+abortBtn.addEventListener('click', function() {
+  controller.abort();
+  console.log('Download aborted');
+});
+
+function fetchVideo() {
+  ...
+  fetch(url, {signal}).then(function(response) {
+    ...
+  }).catch(function(e) {
+    reports.textContent = 'Download error: ' + e.message;
+  })
+}
+```
+
 #### 元素垂直居中的方式
 
 知道宽高的情况采用定位加 margin 实现，不知道宽高的情况采用定位加 transform 实现，或者采用 flex 实现。
@@ -249,14 +299,6 @@ BFC 是一个完全独立的空间（布局环境），让空间里的子元素�
 #### map、filter、forEach 的区别
 
 map、filter 与 forEatch 的区别于，前面两个都有返回值，而 forEach 没有返回值。map 是返回一个全新的数组，而 filter 是返回符合条件的数组。
-
-#### 浏览器缓存
-
-浏览器有强缓存和协商缓存。
-
-如果命中了强缓存，浏览器则不会发送请求到服务端，直接使用缓存中的数据，浏览器根据 http 头信息来判断是否命中强缓存。
-
-如果命中了协商缓存，浏览器会发送请求到服务端，服务器会判断浏览器缓存是否失效，如果失效就返回新的数据，如果没有失效，服务端就不会返回数据，浏览器直接从缓存中获取数据。
 
 #### localStorage、sessionStorage、cookie、session、token 的区别
 
@@ -360,9 +402,9 @@ keys 是 react 用于追踪哪些列表中元素被修改、被添加或者被�
 
 #### 对 redux 的理解
 
-redux 是一个集中式管理状态的第三方库。其的特点是：单向数据流、单一数据源，状态是只读的，如果需要更该状态，唯一的途径就是使用其中的 reducer 这个纯函数进行更改。
+redux 是一个集中式管理状态的第三方库。其的特点是：单向数据流、单一数据源，状态是只读的，如果需要更该状态，唯一的途径就是使用其中的 reducer 这个纯函数进行更改。项目中用的主要是 react-redux。
 
-#### react-redux 的理解
+react-redux 具体操作就是通过 Provider 将 store 传递下去，然后在组件中通过 connect 这个方法中的 mapStateToProps 获取 state，以及通过 mapStateDispatchToProps 去将 action 作为 props 绑定到组件上。之后就通过 dispatch 去触发 reducer 中监听的 type 属性，然后根据 type 去触发对应的逻辑。
 
 #### 虚拟 DOM 是什么
 
@@ -410,8 +452,12 @@ react 之后采用的是 fiber 架构，而之前的架构采用的是递归的�
 
 之后就会进入到 mutation 阶段，mutation 阶段会遍历整个 effectList，然后对这个副作用链表分别进行响应的操作。然后将这些更新渲染到视图中。其中会有三个阶段：
 
-- 就是 before mutation 阶段，在这个阶段回调用 getSnapshotBeforeUpdate钩子，还会对 useEffect 进行调度。
+- 就是 before mutation 阶段，在这个阶段回调用 getSnapshotBeforeUpdate 钩子，还会对 useEffect 进行调度。
 
 - 然后就是 mutation 阶段，会对变化的文本进行更新，然后更新 ref 之类的，在这里会调用 componentWillUnmount 钩子。
 
 - 之后进入到 layout 阶段，这个阶段主要做的事情就是回去调用 componentDidmount 和 componentDidUpdate，还有 useEffect。将这几个钩子里面的更新渲染到页面中。
+
+#### TS内置的类型
+
+string、number、boolean、null、undefined、any、never、void、enum、
