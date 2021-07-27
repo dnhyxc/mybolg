@@ -1869,6 +1869,20 @@ ReactDOM.render(<App />, appRoot);
 
 ### npm 相关
 
+#### npm 版本更改
+
+1，升级版本：
+
+```js
+npm install -g npm
+```
+
+2，降级版本：
+
+```js
+npm i npm@版本号 -g
+```
+
 #### npm 发布私有包
 
 1，创建 npm 账号。
@@ -1888,3 +1902,47 @@ ReactDOM.render(<App />, appRoot);
 2，变更版本号的命令：npm version [major | minor | patch]。
 
 3，版本号更改完毕即可使用 npm publish 进行发布更新了。
+
+### git 相关
+
+#### git 生成 ssh
+
+1，查看是否设置用户名及邮箱：
+
+```js
+git config user.name  // 查看用户名
+
+git config user.email // 查看邮箱
+```
+
+2，设置用户名及邮箱：
+
+```js
+git config --global user.name "xxx" // 设置用户名
+
+git config --global user.email "xxx" // 设置邮箱
+```
+
+3，查看是否配置过 ssh 文件：
+
+```js
+cd ~/.ssh
+```
+
+> 如果存在就能进入，说明已经创建过 ssh key 了，就不需要进行下面的步骤生成 ssh key 了。否则就不存在就说明还没有生成 ssh，使用如下步骤生成。
+
+4，生成 ssh key：
+
+```js
+ssh-keygen -t rsa -C "你的邮箱"
+```
+
+> 此处会提示 Enter file in which to save the key (/Users/shutong/.ssh/id_rsa): 这样一段内容，让我们输入文件名，如果第 3 步的 ssh 文件存在的话最好在这里修改一下文件名以防覆盖之前的内容，如果第 3 步的 ssh 文件不存在的话则直接按 enter 键就好了。
+>
+> 之后会有提示你是否需要设置密码，如果设置了每次使用 Git 都会用到密码，一般都是直接不写为空，直接 enter 就好了。
+
+5，查看生成的 ssh 公钥：
+
+```js
+cat ~/.ssh/id_rsa.pub
+```
