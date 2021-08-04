@@ -1946,3 +1946,9 @@ ssh-keygen -t rsa -C "你的邮箱"
 ```js
 cat ~/.ssh/id_rsa.pub
 ```
+
+#### git 删除远程分支
+
+```js
+git push origin --delete [branch_name]
+```
