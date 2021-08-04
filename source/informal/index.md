@@ -1934,7 +1934,7 @@ cd ~/.ssh
 4，生成 ssh key：
 
 ```js
-ssh-keygen -t rsa -C "你的邮箱地址"
+ssh-keygen -t rsa -C "你的邮箱"
 ```
 
 > 此处会提示 Enter file in which to save the key (/Users/shutong/.ssh/id_rsa): 这样一段内容，让我们输入文件名，如果第 3 步的 ssh 文件存在的话最好在这里修改一下文件名以防覆盖之前的内容，如果第 3 步的 ssh 文件不存在的话则直接按 enter 键就好了。
