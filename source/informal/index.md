@@ -1949,6 +1949,14 @@ cat ~/.ssh/id_rsa.pub
 
 #### git 删除远程分支
 
+1，使用如下命令查看远程分支：
+
+```js
+git branch -r
+```
+
+2，使用如下命令删除查到的远程分支：
+
 ```js
 git push origin --delete [branch_name]
 ```
