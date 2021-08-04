@@ -1918,9 +1918,9 @@ git config user.email // 查看邮箱
 2，设置用户名及邮箱：
 
 ```js
-git config --global user.name "xxx" // 设置用户名
+git config --global user.name "xxxxx" // 设置用户名
 
-git config --global user.email "xxx" // 设置邮箱
+git config --global user.email "xxxxx" // 设置邮箱
 ```
 
 3，查看是否配置过 ssh 文件：
