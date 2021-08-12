@@ -1960,3 +1960,21 @@ git branch -r
 ```js
 git push origin --delete [branch_name]
 ```
+
+#### github 没有提交记录解决方式
+
+1，出现问题的原因：本地 ssh 生成的邮箱与 github 上的邮箱不一致导致。
+
+2，处理方式：
+
+- 在需要提交到 github 的项目中使用 **git config user.name '用户名'** 生成局部用户名。使用 **git config user.email '邮箱'** 生成局部邮箱。
+
+- 再使用 **ssh-keygen -t rsa -C "刚设置的邮箱地址"** 生成 ssh 公钥，生成的公钥最好改一下名称，否则会覆盖原来的。
+
+3，最后将生成的 ssh 公钥设置到 github 中，或者将全局的 ssh 公钥修改最后的邮箱地址为刚设置的邮箱地址也能达到目的。
+
+```
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCfmlAt2plCVbeObPxuWawsQovYcoanwwRZKVnA5O/oMnGsyzjUWl+4dLOnSHmOo6dtEa9TDTZO7eWXtkVjMSLHyGTm5QvzrX31r/kbkhC0E23ZUqB4uA8Re0fPnDWC8O1sFVvD1QGd1qjs+hQS/sM0b+prwE0vWueM0zhuKpffjqSsbac9+6TkaCvGcaVvFIMNUWhGkhNWA4OjjhXTJEuDCwH+hT0orxzO/mW9Si3aHJtXi0xptiX3zzTNFFO9gYmnH80KGgwwlMrbRC+SPlFBzGQybniN9quhzs7VYwOffY3jcCM81NRrdR+K9sJF+A6/F2xV3VP+WAIjh1TQtVck2FF3k/BdqMuVI4yo2JBHrhUG7apSwTN7vwasou3CGL4wygQatt+tAl7GpXr0HbSWZWNgnyuQvVkImqPgBvS54fWzGb36pq4vI9Ix/eLbVaunOwy+NnZGm1NU0oj1w203GS6OfO7yguxuoheeGoESn/tiTmgcjkHbxNnl6oeCok= xxx@xx.com
+```
+
+- 即将上述 ssh 公钥中的邮箱：**xxx@xx.com** 换成刚刚设置邮箱地址即可设置到 github 中生效。
