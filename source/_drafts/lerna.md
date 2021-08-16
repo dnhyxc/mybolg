@@ -1,12 +1,11 @@
 ---
 title: lerna
-date: 2021-08-12 18:21:32
 tags: lerna
 toc: true
-# top: true
 declare: true
 categories:
   - 多包管理工具
+date: 2021-08-12 18:21:32
 ---
 
 ### lerna 简介
