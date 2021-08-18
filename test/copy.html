@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>js 实现复制功能</title>
+  </head>
+  <body>
+    <button id="btn">点击复制</button>
+    <div id="content">行到水穷处，坐看云起时，成功了啊</div>
+    <script>
+      const btn = document.querySelector("#btn");
+      const content = document.querySelector("#content");
+
+      const copyToClipboard = (str) => {
+        const el = document.createElement("textarea");
+        el.value = str;
+        el.setAttribute("readonly", "");
+        el.style.position = "absolute";
+        el.style.left = "-9999px";
+        document.body.appendChild(el);
+
+        const selected =
+          document.getSelection().rangeCount > 0
+            ? document.getSelection().getRangeAt(0)
+            : false;
+
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+
+        if (selected) {
+          console.log(selected);
+          document.getSelection().removeAllRanges();
+          document.getSelection().addRange(selected);
+        }
+      };
+      btn.addEventListener("click", () => {
+        copyToClipboard(content.innerHTML);
+      });
+    </script>
+  </body>
+</html>
