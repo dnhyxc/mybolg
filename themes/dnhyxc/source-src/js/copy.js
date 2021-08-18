@@ -2,10 +2,23 @@ function init() {
   const article = document.querySelector(".article-entry");
   const code = article.querySelectorAll("figure");
 
+  function throttle(fn, time) {
+    let lastTime = null;
+    return function () {
+      let nowTime = Date.now();
+      if (nowTime - lastTime > time || !lastTime) {
+        fn();
+        lastTime = nowTime;
+      }
+    };
+  }
+
   const copyToClipboard = (str, dom) => {
     const el = document.createElement("textarea");
     el.value = str;
+    // 防止唤起虚拟键盘
     el.setAttribute("readonly", "");
+    // 让文本域不显示在页面可视区域内
     el.style.position = "absolute";
     el.style.left = "-9999px";
     document.body.appendChild(el);
@@ -43,7 +56,8 @@ function init() {
       i.previousElementSibling.style.position = "relative";
       i.previousElementSibling.appendChild(btn);
       i.previousElementSibling.appendChild(info);
-      btn.onclick = function () {
+
+      const onCopy = function () {
         let code = "";
         i.querySelector(".code")
           .querySelectorAll(".line")
@@ -52,6 +66,8 @@ function init() {
           });
         copyToClipboard(code, info);
       };
+
+      btn.addEventListener("click", throttle(onCopy, 1500));
     });
   }
 }
