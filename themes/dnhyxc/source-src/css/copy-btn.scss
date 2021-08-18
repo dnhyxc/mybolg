@@ -1,0 +1,33 @@
+.article-entry {
+  figure {
+    position: relative;
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+      display: block;
+    }
+  }
+  .copyBtn {
+    position: absolute;
+    right: 5px;
+    bottom: -37px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #ccc;
+    z-index: 999;
+  }
+  .copyInfo {
+    position: absolute;
+    right: 5px;
+    bottom: -32px;
+    font-size: 12px;
+    color: #ffae00;
+    z-index: 888;
+    visibility: hidden;
+  }
+  .showCopyInfo {
+    bottom: -10px;
+    visibility: visible;
+    transition: all 0.5s ease-in-out;
+  }
+}
