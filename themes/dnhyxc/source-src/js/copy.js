@@ -22,7 +22,6 @@ function init() {
     if (selected) {
       document.getSelection().removeAllRanges();
       document.getSelection().addRange(selected);
-      console.log("复制成功");
       dom.classList.add("showCopyInfo");
       if (dom.getAttribute("class").includes("showCopyInfo")) {
         clearTimeout(timer);
