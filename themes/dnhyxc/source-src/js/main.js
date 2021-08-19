@@ -27,6 +27,8 @@ import * as setThemes from "./setThemes";
 
 import copy from "./copy";
 
+import closeShadow from "./closeShadow";
+
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
@@ -42,6 +44,7 @@ addLoadEvent(function () {
   articleToc.init();
   changeTheme.init();
   copy.init();
+  closeShadow.init();
 });
 
 function stopTouchmove(e) {
@@ -97,6 +100,7 @@ document.onreadystatechange = function () {
     } else {
       setThemes.shi();
     }
+    closeShadow.init()();
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {
       passive: false,
