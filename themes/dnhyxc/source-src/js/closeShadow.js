@@ -1,10 +1,14 @@
 function init() {
+  const articles = document.querySelectorAll(".article");
+  const archivesWrap = document.querySelectorAll(".archives-wrap");
+  const menuTexts = document.querySelectorAll(".menu-text");
+  const tipsText = document.querySelectorAll(".tips-text");
   const profilepic = document.querySelector(".profilepic");
   const leftCol = document.querySelector(".left-col");
-  const articles = document.querySelectorAll(".article");
   const main = document.querySelector(".main");
   const outer = document.querySelector(".outer");
-  const archivesWrap = document.querySelectorAll(".archives-wrap");
+  const dark = document.querySelector(".dark");
+  const toggleMusic = document.querySelector(".toggleMusic");
 
   function setShadow() {
     if (sessionStorage.getItem("hideShadow")) {
@@ -14,9 +18,17 @@ function init() {
       archivesWrap.forEach((i) => {
         i.classList.add("isShowShadow");
       });
+      menuTexts.forEach((i) => {
+        i.classList.add("isShowShadow");
+      });
+      tipsText.forEach((i) => {
+        i.classList.add("toggleShadow");
+      });
       leftCol.classList.add("isShowShadow");
       main.classList.add("isShowShadow");
       outer.classList.add("isShowShadow");
+      dark.classList.add("isShow-shadow");
+      toggleMusic.classList.add("isShow-shadow");
     } else {
       articles.forEach((i) => {
         i.classList.remove("isShowShadow");
@@ -24,9 +36,17 @@ function init() {
       archivesWrap.forEach((i) => {
         i.classList.remove("isShowShadow");
       });
+      menuTexts.forEach((i) => {
+        i.classList.remove("isShowShadow");
+      });
+      tipsText.forEach((i) => {
+        i.classList.remove("toggleShadow");
+      });
       leftCol.classList.remove("isShowShadow");
       main.classList.remove("isShowShadow");
       outer.classList.remove("isShowShadow");
+      dark.classList.remove("isShow-shadow");
+      toggleMusic.classList.remove("isShow-shadow");
     }
   }
 
@@ -36,9 +56,14 @@ function init() {
     } else {
       sessionStorage.setItem("hideShadow", true);
     }
-    setShadow();
+    if (!sessionStorage.getItem("container")) {
+      setShadow();
+    }
   };
-  profilepic.onclick = toggleShadow;
+
+  if (!sessionStorage.getItem("container")) {
+    profilepic.onclick = toggleShadow;
+  }
   return setShadow;
 }
 

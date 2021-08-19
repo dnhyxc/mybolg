@@ -7,4 +7,48 @@
       height: calc(100vh - 358px);
     }
   }
+
+  .isShow-shadow {
+    box-shadow: none !important;
+    border: 1px solid rgba(225, 225, 225, 0.5) !important;
+    line-height: 34px !important;
+  }
+
+  .tips-box {
+    .toggleShadow {
+      &:first-child {
+        box-shadow: none !important;
+        border: none;
+      }
+
+      &:nth-child(2) {
+        box-shadow: none !important;
+        border: none;
+      }
+
+      &:last-child {
+        box-shadow: none !important;
+        border: none;
+      }
+    }
+  }
+
+  .tip-show {
+    .toggleShadow {
+      &:first-child {
+        box-shadow: none !important;
+        border: 1px solid rgba(225, 225, 225, 0.5);
+      }
+
+      &:nth-child(2) {
+        box-shadow: none !important;
+        border: 1px solid rgba(225, 225, 225, 0.5);
+      }
+
+      &:last-child {
+        box-shadow: none !important;
+        border: 1px solid rgba(225, 225, 225, 0.5);
+      }
+    }
+  }
 }
