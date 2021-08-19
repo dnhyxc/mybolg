@@ -6,7 +6,6 @@ toc: true
 declare: true
 categories:
   - 前端框架
-    - react
 ---
 
 ### React 的定义方式

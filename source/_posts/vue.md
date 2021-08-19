@@ -1,12 +1,12 @@
 ---
-title: vue
-tags: vue
+title: Vue
+date: 2021-08-16 11:25:22
+tags: Vue
 draft: true
 toc: true
 declare: true
 categories:
-  - js框架
-date: 2021-08-16 11:25:22
+  - 前端框架
 ---
 
 ### Vue3 新特性说明
