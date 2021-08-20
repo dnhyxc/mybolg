@@ -9,6 +9,7 @@ function init() {
   const outer = document.querySelector(".outer");
   const dark = document.querySelector(".dark");
   const toggleMusic = document.querySelector(".toggleMusic");
+  const toolsSection = document.querySelector(".tools-section");
 
   function setShadow() {
     if (sessionStorage.getItem("hideShadow")) {
@@ -27,6 +28,7 @@ function init() {
       leftCol.classList.add("isShowShadow");
       main.classList.add("isShowShadow");
       outer.classList.add("isShowShadow");
+      toolsSection.classList.add("isShowShadow");
       dark.classList.add("isShow-shadow");
       toggleMusic.classList.add("isShow-shadow");
     } else {
@@ -45,6 +47,7 @@ function init() {
       leftCol.classList.remove("isShowShadow");
       main.classList.remove("isShowShadow");
       outer.classList.remove("isShowShadow");
+      toolsSection.classList.remove("isShowShadow");
       dark.classList.remove("isShow-shadow");
       toggleMusic.classList.remove("isShow-shadow");
     }
