@@ -10,6 +10,7 @@ function init() {
   const dark = document.querySelector(".dark");
   const toggleMusic = document.querySelector(".toggleMusic");
   const toolsSection = document.querySelector(".tools-section");
+  const articleMoreLink = document.querySelectorAll(".article-more-link");
 
   function setShadow() {
     if (sessionStorage.getItem("hideShadow")) {
@@ -24,6 +25,9 @@ function init() {
       });
       tipsText.forEach((i) => {
         i.classList.add("toggleShadow");
+      });
+      articleMoreLink.forEach((i) => {
+        i.classList.add("isShowShadow-a");
       });
       leftCol.classList.add("isShowShadow");
       main.classList.add("isShowShadow");
@@ -43,6 +47,9 @@ function init() {
       });
       tipsText.forEach((i) => {
         i.classList.remove("toggleShadow");
+      });
+      articleMoreLink.forEach((i) => {
+        i.classList.remove("isShowShadow-a");
       });
       leftCol.classList.remove("isShowShadow");
       main.classList.remove("isShowShadow");
