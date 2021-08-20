@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>检测页面是否被隐藏</title>
+  </head>
+  <body>
+    <div class="show"></div>
+    <script>
+      const show = document.querySelector(".show");
+      document.addEventListener("visibilitychange", function () {
+        let hidden;
+        if (typeof document.hidden !== "undefined") {
+          hidden = "hidden";
+        } else if (typeof document.mozHidden !== "undefined") {
+          hidden = "mozHidden";
+        } else if (typeof document.msHidden !== "undefined") {
+          hidden = "msHidden";
+        } else if (typeof document.webkitHidden !== "undefined") {
+          hidden = "webkitHidden";
+        }
+        if (document.hidden) {
+          document.title = "关闭";
+        } else {
+          document.title = "显示";
+        }
+      });
+    </script>
+  </body>
+</html>
