@@ -22,6 +22,8 @@ document.addEventListener("visibilitychange", function () {
 });
 ```
 
+<!-- more -->
+
 3、兼容性写法如下：
 
 ```js
@@ -43,8 +45,6 @@ document.addEventListener("visibilitychange", function () {
   }
 });
 ```
-
-<!-- more -->
 
 #### 保留 N 位小数
 
