@@ -38,7 +38,6 @@
 
   /* Tooltip */
   .tooltip-content {
-    // height: 320px;
     position: absolute;
     background: #666;
     z-index: 9999;
@@ -69,6 +68,7 @@
     transform-origin: calc(100% + 2em) 50%;
     -webkit-transform: translate3d(0, 50%, 0) rotate3d(1, 1, 1, -30deg);
     transform: translate3d(0, 50%, 0) rotate3d(1, 1, 1, -30deg);
+    border: 2px solid rgba(225, 225, 225, 0.1);
   }
 
   .tooltip:hover .tooltip-content {
@@ -101,12 +101,12 @@
 
   .tooltip-west .tooltip-content::before,
   .tooltip-west .tooltip-content::after {
-    right: 99%; /* because of FF, otherwise we have a gap */
+    right: 99%;
   }
 
   .tooltip-east .tooltip-content::before,
   .tooltip-east .tooltip-content::after {
-    left: 100%; /* because of FF, otherwise we have a gap */
+    left: 100%;
   }
 
   .tooltip-east .tooltip-content::after {

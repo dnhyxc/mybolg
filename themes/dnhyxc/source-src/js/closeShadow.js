@@ -97,5 +97,4 @@ module.exports = {
   init: init,
   removeShadow: removeShadow,
   addShadow: addShadow,
-  setShadow: setShadow,
 };
