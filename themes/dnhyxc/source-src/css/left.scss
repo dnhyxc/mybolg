@@ -48,11 +48,6 @@
             border-radius: 35px;
             width: 35px;
             height: 100%;
-            background-image: linear-gradient(
-              to bottom,
-              #2b5876 0%,
-              #4e4376 100%
-            );
             box-shadow: 0 0 5px #ccc inset;
             font-size: 10px;
             color: #ccc;
@@ -60,7 +55,8 @@
             cursor: pointer;
 
             &:hover {
-              color: #c4e759;
+              color: #ffd900;
+              background-color: rgba(225, 225, 225, 0.6);
             }
             -moz-user-select: none;
             /*火狐*/
@@ -95,7 +91,6 @@
           .homeIcon {
             width: 45px;
             height: 45px;
-            // background: url(../css/img/home.png) no-repeat;
             background: url(../css/img/home.svg) no-repeat;
             background-size: 45px 45px;
             cursor: pointer;

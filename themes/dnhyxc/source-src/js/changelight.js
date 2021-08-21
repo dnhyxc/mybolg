@@ -1,3 +1,5 @@
+import closeShadow from "./closeShadow";
+
 function init() {
   const container = document.querySelector('#container');
   const toolsCol = document.querySelector('.tools-col');
@@ -75,8 +77,12 @@ function init() {
     toggleLight();
     if (sessionStorage.getItem('container')) {
       changeInfo.style.display = 'none';
+      closeShadow.removeShadow()
     } else {
       lightChangeInfo.style.opacity = '0';
+      if (sessionStorage.getItem("hideShadow")) {
+        closeShadow.addShadow()
+      }
     }
   }
   // 移动端头像

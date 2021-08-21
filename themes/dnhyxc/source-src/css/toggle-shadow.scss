@@ -1,7 +1,7 @@
 @media screen and (min-width: 800px) {
   .isShowShadow {
     box-shadow: none !important;
-    border: 1px solid rgba(225, 225, 225, 0.5) !important;
+    border: 2px solid rgba(225, 225, 225, 0.1) !important;
 
     .browserCover {
       height: calc(100vh - 358px);
@@ -10,7 +10,7 @@
 
   .isShow-shadow {
     box-shadow: none !important;
-    border: 1px solid rgba(225, 225, 225, 0.5) !important;
+    border: 2px solid rgba(225, 225, 225, 0.1) !important;
     line-height: 34px !important;
   }
 
@@ -37,17 +37,17 @@
     .toggleShadow {
       &:first-child {
         box-shadow: none !important;
-        border: 1px solid rgba(225, 225, 225, 0.5);
+        border: 2px solid rgba(225, 225, 225, 0.1);
       }
 
       &:nth-child(2) {
         box-shadow: none !important;
-        border: 1px solid rgba(225, 225, 225, 0.5);
+        border: 2px solid rgba(225, 225, 225, 0.1);
       }
 
       &:last-child {
         box-shadow: none !important;
-        border: 1px solid rgba(225, 225, 225, 0.5);
+        border: 2px solid rgba(225, 225, 225, 0.1);
       }
     }
   }
@@ -55,7 +55,7 @@
   .isShowShadow-a {
     a {
       box-shadow: none !important;
-      border: 1px solid rgba(225, 225, 225, 0.5) !important;
+      border: 2px solid rgba(225, 225, 225, 0.1) !important;
       padding: 1px 5px;
     }
   }

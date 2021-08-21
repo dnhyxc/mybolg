@@ -21,7 +21,7 @@ import articleToc from "./articleToc";
 
 import changeTheme from "./changeTheme";
 
-import { addLoadEvent } from "./util";
+import e, { addLoadEvent } from "./util";
 
 import * as setThemes from "./setThemes";
 
@@ -100,7 +100,11 @@ document.onreadystatechange = function () {
     } else {
       setThemes.shi();
     }
-    closeShadow.init()();
+    if (!sessionStorage.getItem('container') && sessionStorage.getItem("hideShadow")) {
+      closeShadow.addShadow()
+    } else {
+      closeShadow.removeShadow()
+    }
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {
       passive: false,
