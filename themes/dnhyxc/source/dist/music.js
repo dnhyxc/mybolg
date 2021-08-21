@@ -13,6 +13,13 @@ const ap = new APlayer({
   fixed: true, //吸底模式（fixed:true），迷你模式（mini:true），普通模式（注释此行或者设置fixed:false）
   audio: [
     {
+      name: "True love",
+      artist: '蔡健雅',
+      lrc: '/downloads/musicLrc/TrueLove.lrc',
+      url: '/downloads/musicUrl/TrueLove.mp3',
+      cover: '/downloads/musicCover/TrueLove.jpg',
+    },
+    {
       name: "这世界那么多人",
       artist: '莫文蔚',
       lrc: '/downloads/musicLrc/zsjnmdr.lrc',
