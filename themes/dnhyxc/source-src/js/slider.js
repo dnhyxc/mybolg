@@ -62,12 +62,9 @@ function init() {
 				if (!type) {
 					type = 'innerArchive'
 				}
-				// innerArchive: '所有文章'
-				// friends: '友情链接'
-				// aboutme: '关于我'
-				app.$set('innerArchive', false)
-				app.$set('friends', false)
-				app.$set('aboutme', false)
+				app.$set('innerArchive', false)	// innerArchive: '所有文章'
+				app.$set('friends', false)	// friends: '友情链接'
+				app.$set('aboutme', false)	// aboutme: '关于我'
 				app.$set(type, true)
 				app.$set('isShow', true)
 				app.$set('isCtnShow', true)
