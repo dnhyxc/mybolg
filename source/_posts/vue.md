@@ -1,5 +1,5 @@
 ---
-title: Vue
+title: Vue 3
 date: 2021-08-16 11:25:22
 tags: Vue
 draft: true
@@ -8,8 +8,6 @@ declare: true
 categories:
   - 前端框架
 ---
-
-### Vue3 新特性说明
 
 ### setup
 
