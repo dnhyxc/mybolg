@@ -1,11 +1,11 @@
 ---
 title: jsTools
 date: 2021-08-20 11:02:09
-tags: javaScript
+tags: js
 toc: true
 declare: true
 categories:
-  - js
+  - javaScript
 ---
 
 #### 检测当前页面是否被隐藏
