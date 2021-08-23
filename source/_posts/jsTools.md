@@ -354,3 +354,65 @@ function getTime(time = +new Date()) {
 const time1 = getTime();
 console.log(time1); // 2021.01.12 14:18:55
 ```
+
+#### 获取文件后缀名
+
+1、使用场景：上传文件判断后缀名。
+
+```js
+export function getExt(filename) {
+  if (typeof filename == "string") {
+    return filename.split(".").pop().toLowerCase();
+  } else {
+    throw new Error("filename must be a string type");
+  }
+}
+```
+
+#### 设置休眠事件
+
+```js
+export function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+//使用方式
+const fetchData = async () => {
+  await sleep(1000);
+};
+```
+
+#### 生成随机字符串
+
+1、可以用此方式生成唯一的 id。
+
+```js
+export function uuid(length, chars) {
+  chars =
+    chars || "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  length = length || 8;
+  var result = "";
+  for (var i = length; i > 0; --i)
+    result += chars[Math.floor(Math.random() * chars.length)];
+  return result;
+}
+```
+
+#### 对象转化为 FormData 对象
+
+1、使用场景：上传文件时我们要新建一个 FormData 对象，然后有多少个参数就 append 多少次，使用该函数可以简化逻辑。
+
+```js
+export function getFormData(object) {
+  const formData = new FormData();
+  Object.keys(object).forEach((key) => {
+    const value = object[key];
+    if (Array.isArray(value)) {
+      value.forEach((subValue, i) => formData.append(key + `[${i}]`, subValue));
+    } else {
+      formData.append(key, object[key]);
+    }
+  });
+  return formData;
+}
+```
