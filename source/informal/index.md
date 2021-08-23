@@ -240,6 +240,7 @@ const newObj3 = new Test3("dnhyxc");
 console.log(newObj3.user, "return null"); // dnhyxc
 console.log(">>>))手动分割线)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 ```
+
 ### JS 计算行数
 
 #### 计算元素是否达到三行
@@ -1313,6 +1314,18 @@ async function getData() {
 ```
 
 > 以上配置可正常显示二级路由的内容。
+
+#### React 路由切换报错
+
+1，报错详情为：Warning: Hash history cannot PUSH the same path; a new entry will not be added to the history stack。
+
+2，解决方式为：在 Link/NavLink 标签中添加 **replace** 属性即可。
+
+```js
+<Link to="/seal/register/info" replace>
+  处理切换报错
+</Link>
+```
 
 #### React 实现列表多选
 
