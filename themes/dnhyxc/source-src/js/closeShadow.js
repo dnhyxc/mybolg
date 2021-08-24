@@ -10,6 +10,9 @@ function removeShadow() {
   const toggleMusic = document.querySelector(".toggleMusic");
   const toolsSection = document.querySelector(".tools-section");
   const articleMoreLink = document.querySelectorAll(".article-more-link");
+  const headerBar = document.querySelector(".headerBar");
+  const leftColBar = document.querySelector(".leftColBar");
+  const artBar = document.querySelectorAll(".artBar");
 
   articles.forEach((i) => {
     i.classList.remove("isShowShadow");
@@ -26,7 +29,12 @@ function removeShadow() {
   articleMoreLink.forEach((i) => {
     i.classList.remove("isShowShadow-a");
   });
+  artBar.forEach((i) => {
+    i.classList.remove("isShowShadow-art");
+  });
   leftCol.classList.remove("isShowShadow");
+  headerBar.classList.remove("isShowShadow-header");
+  leftColBar.classList.remove("isShowShadow-left");
   main.classList.remove("isShowShadow");
   outer.classList.remove("isShowShadow");
   toolsSection.classList.remove("isShowShadow");
@@ -46,6 +54,9 @@ function addShadow() {
   const toggleMusic = document.querySelector(".toggleMusic");
   const toolsSection = document.querySelector(".tools-section");
   const articleMoreLink = document.querySelectorAll(".article-more-link");
+  const headerBar = document.querySelector(".headerBar");
+  const leftColBar = document.querySelector(".leftColBar");
+  const artBar = document.querySelectorAll(".artBar");
 
   articles.forEach((i) => {
     i.classList.add("isShowShadow");
@@ -62,10 +73,15 @@ function addShadow() {
   articleMoreLink.forEach((i) => {
     i.classList.add("isShowShadow-a");
   });
+  artBar.forEach((i) => {
+    i.classList.add("isShowShadow-art");
+  });
   leftCol.classList.add("isShowShadow");
   main.classList.add("isShowShadow");
   outer.classList.add("isShowShadow");
   toolsSection.classList.add("isShowShadow");
+  headerBar.classList.add("isShowShadow-header");
+  leftColBar.classList.add("isShowShadow-left");
   dark.classList.add("isShow-shadow");
   toggleMusic.classList.add("isShow-shadow");
 }
