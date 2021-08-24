@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>将时间传时间戳</title>
+  </head>
+  <body>
+    <script>
+      function getTimestamp(time) {
+        return new Date(time).getTime();
+      }
+      console.log(getTimestamp("2020/12/25 11:02:09")); // 1608865329000
+      console.log(getTimestamp("2020-12-24 11:09:02")); // 1608779342000
+
+      function getTime(time = +new Date()) {
+        let date = new Date(time + 8 * 3600 * 1000); // 增加8小时
+        return date.toJSON().substr(0, 19).replace("T", " ").replace(/-/g, "/");
+      }
+      const time1 = getTime(1608865329000);
+      console.log(time1); // 2020/12/25 11:59:59
+      
+      const time2 = getTime(1608779342000);
+      console.log(time2); // 2020/12/25 11:59:59
+    </script>
+  </body>
+</html>

@@ -355,6 +355,16 @@ const time1 = getTime();
 console.log(time1); // 2021.01.12 14:18:55
 ```
 
+##### 将时间转为时间戳
+
+```js
+function getTimestamp(time) {
+  return new Date(time).getTime();
+}
+console.log(getTimestamp("2020/12/25 11:02:09")); // 1608865329000
+console.log(getTimestamp("2020-12-24 11:09:02")); // 1608779342000
+```
+
 #### 获取文件后缀名
 
 1、使用场景：上传文件判断后缀名。
