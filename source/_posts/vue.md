@@ -169,7 +169,7 @@ export default defineComponent({
 
 #### vue3.x 生命周期图谱
 
-<!-- ![生命周期]() -->
+![生命周期](vue-live.webp)
 
 > vue3.x 生命周期写在 setup 方法中，同时声明周期钩子都是以 onXxx 开头的，如：onMounted、onUpdated 等等。
 
