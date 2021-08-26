@@ -426,3 +426,52 @@ export function getFormData(object) {
   return formData;
 }
 ```
+
+#### js 生成随机颜色
+
+```js
+// 随机生成rgb颜色
+function rgb() {
+  let r = Math.floor(Math.random() * 256);
+  let g = Math.floor(Math.random() * 256);
+  let b = Math.floor(Math.random() * 256);
+  let rgb = "rgb(" + r + "," + g + "," + b + ")";
+  return rgb;
+}
+
+// 随机生成16进制颜色
+function color_16() {
+  let r = Math.floor(Math.random() * 256);
+  let g = Math.floor(Math.random() * 256);
+  let b = Math.floor(Math.random() * 256);
+  let color = "#" + r.toString(16) + g.toString(16) + b.toString(16);
+  return color;
+}
+
+// 获取指定的随机颜色
+const randomColor = () => {
+  const colors = [
+    "#a18cd1",
+    "#fad0c4",
+    "#ff8177",
+    "#fecfef",
+    "#fda085",
+    "#f5576c",
+    "#330867",
+    "#30cfd0",
+    "#38f9d7",
+  ];
+  var colorIndex = Math.floor(colors.length * Math.random());
+  return colors[colorIndex];
+};
+```
+
+#### js 随机设置字体大小
+
+```js
+// 获得一个包含最小值和最大值之间的随机数
+const randomNumber = (lowerInteger = 15, upperInteger = 35) => {
+  const choices = upperInteger - lowerInteger + 1;
+  return Math.floor(Math.random() * choices + lowerInteger) + "px";
+};
+```

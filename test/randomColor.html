@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>随机生成颜色</title>
+  </head>
+  <body>
+    <div class="rgbColor">随机生成rgb颜色</div>
+    <div class="color16">随机生成16进制颜色</div>
+    <div class="myColor">在指定的颜色中随机生成颜色</div>
+    <script>
+      const rgbColor = document.querySelector(".rgbColor");
+      const color16 = document.querySelector(".color16");
+      const myColor = document.querySelector(".myColor");
+
+      // 随机生成rgb颜色
+      function rgb() {
+        let r = Math.floor(Math.random() * 256);
+        let g = Math.floor(Math.random() * 256);
+        let b = Math.floor(Math.random() * 256);
+        let rgb = "rgb(" + r + "," + g + "," + b + ")";
+        return rgb;
+      }
+      rgbColor.style.color = rgb();
+
+      // 随机生成16进制颜色
+      function color_16() {
+        let r = Math.floor(Math.random() * 256);
+        let g = Math.floor(Math.random() * 256);
+        let b = Math.floor(Math.random() * 256);
+        let color = "#" + r.toString(16) + g.toString(16) + b.toString(16);
+        return color;
+      }
+      color16.style.color = color_16();
+
+      const colors = [
+        "#a18cd1",
+        "#fad0c4",
+        "#ff8177",
+        "#fecfef",
+        "#fda085",
+        "#f5576c",
+        "#330867",
+        "#30cfd0",
+        "#38f9d7",
+      ];
+
+      // 获取指定的随机颜色
+      const randomColor = () => {
+        var colorIndex = Math.floor(colors.length * Math.random());
+        return colors[colorIndex];
+      };
+
+      // 获得一个包含最小值和最大值之间的随机数。
+      const randomNumber = (lowerInteger = 15, upperInteger = 35) => {
+        const choices = upperInteger - lowerInteger + 1;
+        return Math.floor(Math.random() * choices + lowerInteger) + "px";
+      };
+
+      myColor.style.color = randomColor();
+      myColor.style.fontSize = randomNumber();
+    </script>
+  </body>
+</html>
