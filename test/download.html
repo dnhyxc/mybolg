@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>下载</title>
+  </head>
+  <body>
+    <button class="btn">下载txt</button>
+    <button class="btn1">下载json</button>
+    <button class="btn2">下载excel</button>
+    <script>
+      /**
+       * 浏览器下载静态文件
+       * @param {String} name 文件名
+       * @param {String} content 文件内容
+       */
+      function downloadFile(name, content) {
+        if (typeof name == "undefined") {
+          throw new Error("The first parameter name is a must");
+        }
+        if (typeof content == "undefined") {
+          throw new Error("The second parameter content is a must");
+        }
+        if (!(content instanceof Blob)) {
+          content = new Blob([content]);
+        }
+        const link = URL.createObjectURL(content);
+        console.log(link);
+        download(link, name);
+      }
+
+      //下载一个链接
+      function download(link, name) {
+        if (!name) {
+          //如果没有提供名字，从给的Link中截取最后一坨
+          name = link.slice(link.lastIndexOf("/") + 1);
+        }
+        let eleLink = document.createElement("a");
+        eleLink.download = name;
+        eleLink.style.display = "none";
+        eleLink.href = link;
+        document.body.appendChild(eleLink);
+        eleLink.click();
+        document.body.removeChild(eleLink);
+      }
+
+      const btn = document.querySelector(".btn");
+      const btn1 = document.querySelector(".btn1");
+      const btn2 = document.querySelector(".btn2");
+
+      btn.onclick = () => {
+        downloadFile("1.txt", "lalalallalalla");
+      };
+      btn1.onclick = () => {
+        downloadFile("1.json", JSON.stringify({ name: "hahahha" }));
+      };
+
+      btn2.onclick = () => {
+        //下载excel
+        download("http://111.229.14.189/file/1.xlsx");
+      };
+    </script>
+  </body>
+</html>

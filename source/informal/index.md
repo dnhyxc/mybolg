@@ -591,7 +591,7 @@ const getVirtualRect = (options: any, meta: any) => {
 
 #### 下载图片
 
-1、当后端返回的 url 是预览的形式（点击下载图片会直接在浏览器新标签页打开）时，可在 url 后面拼接上 **filename=xxx.png** 的形式完成下载。
+1，当后端返回的 url 是预览的形式（点击下载图片会直接在浏览器新标签页打开）时，可在 url 后面拼接上 **filename=xxx.png** 的形式完成下载。
 
 ```js
 const download = (url, index) => {
@@ -603,7 +603,7 @@ const download = (url, index) => {
 
 #### 处理批量下载
 
-1、如果后端返回的就是下载的 url，即可直接用当前 url 进行下载，无需拼接 filename。
+1，如果后端返回的就是下载的 url，即可直接用当前 url 进行下载，无需拼接 filename。
 
 ```js
 export const download = (url: string) => {
@@ -622,6 +622,92 @@ export const downloadFiles = async (urls: string[]) => {
     await delay(1000);
   }
 };
+```
+
+#### 下载 office 文档
+
+1，适用于下载 word，ppt 等浏览器不会默认执行预览的文档，也可以用于下载后端接口返回的流数据。
+
+```js
+function download(link, name) {
+  if (!name) {
+    name = link.slice(link.lastIndexOf("/") + 1);
+  }
+  let eleLink = document.createElement("a");
+  eleLink.download = name;
+  eleLink.style.display = "none";
+  eleLink.href = link;
+  document.body.appendChild(eleLink);
+  eleLink.click();
+  document.body.removeChild(eleLink);
+}
+
+//下载excel
+download("http://111.229.14.189/file/1.xlsx");
+```
+
+#### 在浏览器中自定义下载一些内容
+
+1，下载一些 DOM 内容，或者下载一个 JSON 文件。
+
+```js
+/**
+ * 浏览器下载静态文件
+ * @param {String} name 文件名
+ * @param {String} content 文件内容
+ */
+function downloadFile(name, content) {
+  if (typeof name == "undefined") {
+    throw new Error("The first parameter name is a must");
+  }
+  if (typeof content == "undefined") {
+    throw new Error("The second parameter content is a must");
+  }
+  if (!(content instanceof Blob)) {
+    content = new Blob([content]);
+  }
+  const link = URL.createObjectURL(content);
+  download(link, name);
+}
+
+function download(link, name) {
+  if (!name) {
+    //如果没有提供名字，从给的Link中截取最后一坨
+    name = link.slice(link.lastIndexOf("/") + 1);
+  }
+  let eleLink = document.createElement("a");
+  eleLink.download = name;
+  eleLink.style.display = "none";
+  eleLink.href = link;
+  document.body.appendChild(eleLink);
+  eleLink.click();
+  document.body.removeChild(eleLink);
+}
+
+// 使用方式
+downloadFile("1.txt", "lalalallalalla");
+downloadFile("1.json", JSON.stringify({ name: "hahahha" }));
+```
+
+#### 提供一个图片链接，点击下载
+
+1，图片、pdf 等文件，浏览器会默认执行预览，不能调用 download 方法进行下载，需要先把图片、pdf 等文件转成 blob，再调用 download 方法进行下载，转换的方式是使用 axios 请求对应的链接。
+
+```js
+//可以用来下载浏览器会默认预览的文件类型，例如mp4,jpg等
+import axios from "axios";
+//提供一个link，完成文件下载，link可以是  http://xxx.com/xxx.xls
+function downloadByLink(link, fileName) {
+  axios
+    .request({
+      url: link,
+      responseType: "blob", //关键代码，让axios把响应改成blob
+    })
+    .then((res) => {
+      const link = URL.createObjectURL(res.data);
+      download(link, fileName);
+    });
+}
 ```
 
 ### window.Image()
