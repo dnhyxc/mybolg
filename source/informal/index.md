@@ -419,6 +419,51 @@ let res = list.every((item) => item > 6);
 console.log(res); // false
 ```
 
+#### 找出数组 a 中不存在于数组 b 中的每一项
+
+```js
+const arr1 = [
+  {
+    value: 22,
+    name: "其它",
+  },
+  {
+    value: 11,
+    name: "法定代表人章",
+  },
+  {
+    value: 33,
+    name: "合同专用章",
+  },
+  {
+    value: 12,
+    name: "财务专用章",
+  },
+  {
+    value: 90,
+    name: "公章",
+  },
+];
+
+const arr2 = [
+  "公章",
+  "财务专用章",
+  "合同专用章",
+  "法定代表人章",
+  "其它",
+  "xxx",
+  "sss",
+  "vvv",
+  "nnn",
+];
+
+const arr1Name = arr1.map((i) => i.name);
+const last = arr2.filter((item) => !arr1Name.includes(item));
+const newLast = last.map((i) => ({ value: 0, name: i }));
+let data = [...arr1].concat(newLast);
+console.log(data, "data");
+```
+
 ### 运算符相关
 
 #### ?? 运算符
