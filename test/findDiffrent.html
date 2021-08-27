@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>查找两个数组中不同的值</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+  </head>
+  <body>
+    <script>
+      const arr1 = [
+        {
+          value: 22,
+          name: "其它",
+        },
+        {
+          value: 22,
+          name: "法定代表人章",
+        },
+        {
+          value: 22,
+          name: "合同专用章",
+        },
+        {
+          value: 22,
+          name: "财务专用章",
+        },
+        {
+          value: 22,
+          name: "公章",
+        },
+      ];
+
+      const arr2 = [
+        "公章",
+        "财务专用章",
+        "合同专用章",
+        "法定代表人章",
+        "其它",
+        "xxx",
+        "sss",
+        "vvv",
+        "nnn",
+      ];
+
+      const arr1Name = arr1.map((i) => i.name);
+      // const last = _.difference(arr3, arr2Name);
+      const last = arr2.filter((item) => !arr1Name.includes(item));
+      const newLast = last.map((i) => ({ value: 0, name: i }));
+      let data = [...arr1].concat(newLast);
+
+      console.log(data, "data");
+    </script>
+  </body>
+</html>
