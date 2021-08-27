@@ -544,7 +544,21 @@ const getVirtualRect = (options: any, meta: any) => {
 
 ### 浏览器下载操作
 
+#### 下载图片
+
+1、当后端返回的 url 是预览的形式（点击下载图片会直接在浏览器新标签页打开）时，可在 url 后面拼接上 **filename=xxx.png** 的形式完成下载。
+
+```js
+const download = (url, index) => {
+  const a = document.createElement("a");
+  a.href = `${url}&filename=xxx.png`;
+  a.click();
+};
+```
+
 #### 处理批量下载
+
+1、如果后端返回的就是下载的 url，即可直接用当前 url 进行下载，无需拼接 filename。
 
 ```js
 export const download = (url: string) => {
