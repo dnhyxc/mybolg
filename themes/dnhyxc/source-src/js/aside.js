@@ -3,9 +3,10 @@ function init() {
     const links = document.querySelectorAll('.toc-link')
     links.forEach(i => {
         i.addEventListener('click', () => {
-            links.forEach(i => i.style.color = '#ddd')
-            i.style.color = '#ffd900'
-            i.style.fontWeight = '700'
+            links.forEach(i => {
+                i.classList.remove('select-toc')
+            })
+            i.classList.add('select-toc')
         })
     })
 

@@ -308,17 +308,14 @@
     background-size: 100%;
   }
 
-  .toc-container.tooltip-left
-    .tooltip-east
-    .tooltip-content
-    .toc-article
-    li
+  .toc-container.tooltip-left .tooltip-east .tooltip-content .toc-article li {
     a:hover {
-    color: #9b23ea;
-    background-color: #d7fffe;
-
-    .toc-text {
+      color: #9b23ea;
       background-color: #d7fffe;
+
+      .toc-text {
+        background-color: #d7fffe;
+      }
     }
   }
 
