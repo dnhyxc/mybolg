@@ -298,16 +298,6 @@
     }
   }
 
-  .tooltip-content::after {
-    content: none;
-    width: 2em;
-    height: 2em;
-    top: 50%;
-    margin: -1em 0 0;
-    background: url(./img/tooltipLight.svg) no-repeat center center;
-    background-size: 100%;
-  }
-
   .toc-container.tooltip-left .tooltip-east .tooltip-content .toc-article li {
     a:hover {
       color: #9b23ea;
