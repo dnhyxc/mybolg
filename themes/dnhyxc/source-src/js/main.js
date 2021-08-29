@@ -7,7 +7,7 @@ import "../css/main.scss";
 // 分享
 // import Share from './share'
 // 边缘
-// import Aside from './aside'
+import Aside from './aside'
 
 import ChangeLight from "./changelight";
 
@@ -36,7 +36,7 @@ const changeInfo = document.querySelector(".changeInfo");
 addLoadEvent(function () {
   // Share.init()
   // Viewer.init();
-  // Aside.init();
+  Aside.init();
   Setmargin.init();
   action.init();
   ChangeLight.init();

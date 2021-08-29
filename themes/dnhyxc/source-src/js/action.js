@@ -237,7 +237,7 @@ function init() {
       }
 
       if (wrapper.scrollTop === 0) {
-        isSelect[0].classList && isSelect[0].classList.remove("select-toc");
+        isSelect.length && isSelect[0].classList && isSelect[0].classList.remove("select-toc");
         mainLoading.innerHTML = mainLoadingText;
         mainLoading.title = mainLoadingText;
       }

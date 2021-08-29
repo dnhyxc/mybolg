@@ -12,6 +12,7 @@ function init() {
   const qi = document.querySelector('.qi');
   const shi = document.querySelector('.shi');
   const lightChangeInfo = document.querySelector('.lightChangeInfo');
+  const tooltipToc = document.querySelector('.tooltip-toc')
 
   async function changeSSItems(type) {
     const actionType = ['xin', 'dao', 'shui', 'qiong', 'chu', 'zuo', 'kan', 'yun', 'qi', 'shi'];
@@ -40,6 +41,16 @@ function init() {
     }, 2000);
   }
 
+  function setColor(color) {
+    sessionStorage.setItem('color', color)
+  }
+
+  function setTocBgc() {
+    if (tooltipToc) {
+      tooltipToc.style.backgroundImage = `linear-gradient(to bottom, ${sessionStorage.getItem('color')})`
+    }
+  }
+
   xin.onclick = function (e) {
     if (isLight()) {
       showChangeInfo();
@@ -48,6 +59,8 @@ function init() {
     changeSSItems('xin');
     e.stopPropagation();
     setThemes.xin();
+    setColor(setThemes.themeColors.xin)
+    setTocBgc()
   }
 
   dao.onclick = function (e) {
@@ -58,6 +71,8 @@ function init() {
     changeSSItems('dao');
     e.stopPropagation();
     setThemes.dao();
+    setColor(setThemes.themeColors.dao)
+    setTocBgc()
   }
 
   shui.onclick = function (e) {
@@ -68,6 +83,8 @@ function init() {
     changeSSItems('shui');
     e.stopPropagation();
     setThemes.shui();
+    setColor(setThemes.themeColors.shui)
+    setTocBgc()
   }
 
   qiong.onclick = function (e) {
@@ -78,6 +95,8 @@ function init() {
     changeSSItems('qiong');
     e.stopPropagation();
     setThemes.qiong();
+    setColor(setThemes.themeColors.qiong)
+    setTocBgc()
   }
 
   chu.onclick = function (e) {
@@ -88,6 +107,8 @@ function init() {
     changeSSItems('chu');
     e.stopPropagation();
     setThemes.chu();
+    setColor(setThemes.themeColors.chu)
+    setTocBgc()
   }
 
   zuo.onclick = function (e) {
@@ -98,6 +119,8 @@ function init() {
     changeSSItems('zuo');
     e.stopPropagation();
     setThemes.zuo();
+    setColor(setThemes.themeColors.zuo)
+    setTocBgc()
   }
 
   kan.onclick = function (e) {
@@ -108,6 +131,8 @@ function init() {
     changeSSItems('kan');
     e.stopPropagation();
     setThemes.kan();
+    setColor(setThemes.themeColors.kan)
+    setTocBgc()
   }
 
   yun.onclick = function (e) {
@@ -118,6 +143,8 @@ function init() {
     changeSSItems('yun');
     e.stopPropagation();
     setThemes.yun();
+    setColor(setThemes.themeColors.yun)
+    setTocBgc()
   }
 
   qi.onclick = function (e) {
@@ -128,6 +155,8 @@ function init() {
     changeSSItems('qi');
     e.stopPropagation();
     setThemes.qi();
+    setColor(setThemes.themeColors.qi)
+    setTocBgc()
   }
 
   shi.onclick = function (e) {
@@ -138,6 +167,8 @@ function init() {
     changeSSItems('shi');
     e.stopPropagation();
     setThemes.shi();
+    setColor(setThemes.themeColors.shi)
+    setTocBgc()
   }
 }
 

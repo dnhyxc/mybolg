@@ -128,6 +128,8 @@ style:
   # tocContent: "background-image: linear-gradient(to top, #09203f 0%, #537895 100%)"
   tocContent: "background-image: linear-gradient(to top, #23262e 0%, #23262e 100%);"
 
+# <div class="tooltip-content tooltip-toc" style="<%=theme.style && theme.style.tocContent%>"> 设置toc背景
+
 # slider的设置
 slider:
   # 是否默认展开tags板块
