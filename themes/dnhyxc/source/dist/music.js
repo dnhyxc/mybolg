@@ -13,6 +13,13 @@ const ap = new APlayer({
   fixed: true, //吸底模式（fixed:true），迷你模式（mini:true），普通模式（注释此行或者设置fixed:false）
   audio: [
     {
+      name: "春三月",
+      artist: '司南',
+      lrc: '/downloads/musicLrc/chunsanyue.lrc',
+      url: '/downloads/musicUrl/chunsanyue.mp3',
+      cover: '/downloads/musicCover/chunsanyue.jpg',
+    },
+    {
       name: "True love",
       artist: '蔡健雅',
       lrc: '/downloads/musicLrc/TrueLove.lrc',
