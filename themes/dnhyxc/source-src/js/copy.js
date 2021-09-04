@@ -56,9 +56,11 @@ function init() {
         info.className = "copyInfo";
         btn.innerHTML = "复制代码";
         info.innerHTML = "复制成功";
-        i.previousElementSibling.style.position = "relative";
-        i.previousElementSibling.appendChild(btn);
-        i.previousElementSibling.appendChild(info);
+        if (i.previousElementSibling) {
+          i.previousElementSibling.style.position = "relative";
+          i.previousElementSibling.appendChild(btn);
+          i.previousElementSibling.appendChild(info);
+        }
 
         const onCopy = function () {
           let code = "";

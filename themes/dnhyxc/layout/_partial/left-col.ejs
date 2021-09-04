@@ -1,10 +1,14 @@
 <div class="intrude-less">
+  <div class="menuList">
+    <span class="changeFooter">收底</span>
+  </div>
   <header id="header" class="inner">
     <a class="profilepic">
       <img src="<%=theme.avatar%>" class="js-avatar">
     </a>
     <hgroup>
-      <h1 class="header-author"><a href="<%=theme.root%>"><%=theme.author%></a></h1>
+      <h1 class="header-author"><span class="authorName"><%=theme.author%></span></h1>
+      <!-- <h1 class="header-author"><a href="<%=theme.root%>"><%=theme.author%></a></h1> -->
     </hgroup>
     <% if (theme.subtitle){ %>
     <p class="header-subtitle"><%=theme.subtitle%></p>

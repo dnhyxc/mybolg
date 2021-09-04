@@ -333,9 +333,16 @@
         font-size: 35px;
         transition: 0.3s;
         font-weight: 700;
-        a {
+        a,
+        .authorName {
           color: #ffec8b;
           text-shadow: -1px -1px 0 #ffec8b, 1px 1px 0 #ccc, 1px 1px 0 #ccc;
+          cursor: pointer;
+          -moz-user-select: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
+          -khtml-user-select: none;
+          user-select: none;
 
           &:hover {
             color: rgb(255, 208, 0);

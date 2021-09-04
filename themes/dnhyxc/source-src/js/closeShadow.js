@@ -5,7 +5,7 @@ function removeShadow() {
   const tipsText = document.querySelectorAll(".tips-text");
   const leftCol = document.querySelector(".left-col");
   const main = document.querySelector(".main");
-  const outer = document.querySelector(".outer");
+  const outer = document.querySelectorAll(".outer");
   const dark = document.querySelector(".dark");
   const toggleMusic = document.querySelector(".toggleMusic");
   const toolsSection = document.querySelector(".tools-section");
@@ -32,11 +32,14 @@ function removeShadow() {
   artBar.forEach((i) => {
     i.classList.remove("isShowShadow-art");
   });
+  outer.forEach((i) => {
+    i.classList.remove("isShowShadow");
+  });
   leftCol.classList.remove("isShowShadow");
   headerBar.classList.remove("isShowShadow-header");
   leftColBar.classList.remove("isShowShadow-left");
   main.classList.remove("isShowShadow");
-  outer.classList.remove("isShowShadow");
+  // outer.classList.remove("isShowShadow");
   toolsSection.classList.remove("isShowShadow");
   dark.classList.remove("isShow-shadow");
   toggleMusic.classList.remove("isShow-shadow");
@@ -49,7 +52,7 @@ function addShadow() {
   const tipsText = document.querySelectorAll(".tips-text");
   const leftCol = document.querySelector(".left-col");
   const main = document.querySelector(".main");
-  const outer = document.querySelector(".outer");
+  const outer = document.querySelectorAll(".outer");
   const dark = document.querySelector(".dark");
   const toggleMusic = document.querySelector(".toggleMusic");
   const toolsSection = document.querySelector(".tools-section");
@@ -76,9 +79,12 @@ function addShadow() {
   artBar.forEach((i) => {
     i.classList.add("isShowShadow-art");
   });
+  outer.forEach((i) => {
+    i.classList.add("isShowShadow");
+  });
   leftCol.classList.add("isShowShadow");
   main.classList.add("isShowShadow");
-  outer.classList.add("isShowShadow");
+  // outer.classList.add("isShowShadow");
   toolsSection.classList.add("isShowShadow");
   headerBar.classList.add("isShowShadow-header");
   leftColBar.classList.add("isShowShadow-left");

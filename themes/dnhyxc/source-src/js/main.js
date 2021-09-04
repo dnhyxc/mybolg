@@ -29,6 +29,8 @@ import copy from "./copy";
 
 import closeShadow from "./closeShadow";
 
+import menuList from "./menuList";
+
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
@@ -45,6 +47,7 @@ addLoadEvent(function () {
   changeTheme.init();
   copy.init();
   closeShadow.init();
+  menuList.init();
 });
 
 function stopTouchmove(e) {
