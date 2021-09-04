@@ -8,7 +8,8 @@ function init() {
   let wrapper = document.querySelector("#wrapper");
   let changeSize = document.querySelector(".changeSize");
   let mainLoading = document.querySelector(".main-loading");
-  let scrollTop = document.querySelector("#scrollTop");
+  let scrollTop = document.querySelectorAll("#scrollTop");
+  let scrollCount = document.querySelectorAll(".scroll-count");
 
   let scroll_top = document.querySelector(".scroll_top");
   let topBar = document.querySelector(".topBar");
@@ -64,25 +65,27 @@ function init() {
     };
   });
 
-  scrollTop.onclick = function () {
-    const clock = setInterval(function () {
-      if (wrapper.scrollTop !== 0) {
-        wrapper.scrollTop -= Math.fround(wrapper.scrollTop / 10);
-      } else {
-        clearInterval(clock);
-      }
-    }, 10);
-  };
+  scrollTop.forEach(i => {
+    i.onclick = function () {
+      const clock = setInterval(function () {
+        if (wrapper.scrollTop !== 0) {
+          wrapper.scrollTop -= Math.fround(wrapper.scrollTop / 10);
+        } else {
+          clearInterval(clock);
+        }
+      }, 10);
+    };
+  })
 
   window.onresize = function () {
     if (bodyScroll.clientWidth <= 800) {
-      scrollTop.style.display = "none";
+      scrollTop.forEach(i => {
+        i.style.display = "none";
+      })
     }
   };
 
   let timer = null;
-  let count = document.createElement("span");
-  count.className = "scroll-count";
 
   function getText(path) {
     const pathIndex = decodeURIComponent(path).lastIndexOf("/");
@@ -116,7 +119,9 @@ function init() {
     const countInfo = `${parseInt(
       (wrapper.scrollTop / (wrapper.scrollHeight - wrapper.offsetHeight)) * 100
     )}%`;
-    count.innerHTML = countInfo;
+    scrollCount.forEach(i => {
+      i.innerHTML = countInfo;
+    })
     topBar.style.width = countInfo;
     bottomBar.style.width = countInfo;
     rightBar.style.height = countInfo;
@@ -127,9 +132,10 @@ function init() {
     leftCol_bar.style.height = countInfo;
     header_bar.style.width = countInfo;
     footer_bar.style.width = countInfo;
-    scrollTop.appendChild(count);
     if (bodyScroll.clientWidth <= 800) {
-      scrollTop.style.display = "none";
+      scrollTop.forEach(i => {
+        i.style.display = "none";
+      })
       scroll_top.style.display = "none";
       scrollbottom.style.display = "none";
       scroll_right.style.display = "none";
@@ -142,7 +148,9 @@ function init() {
       footerBar.style.display = "none";
     } else {
       if (wrapper.scrollTop === 0) {
-        scrollTop.style.display = "none";
+        scrollTop.forEach(i => {
+          i.style.display = "none";
+        })
         scroll_top.style.display = "none";
         scrollbottom.style.display = "none";
         scroll_right.style.display = "none";
@@ -158,7 +166,9 @@ function init() {
         Math.floor(wrapper.scrollHeight - wrapper.scrollTop) <=
         wrapper.clientHeight
       ) {
-        scrollTop.style.display = "block";
+        scrollTop.forEach(i => {
+          i.style.display = "block";
+        })
         scroll_top.style.display = "block";
         scrollbottom.style.display = "block";
         scroll_right.style.display = "block";
@@ -171,7 +181,9 @@ function init() {
         footerBar.style.display = "block";
         clearTimeout(timer);
       } else {
-        scrollTop.style.display = "block";
+        scrollTop.forEach(i => {
+          i.style.display = "block";
+        })
         scroll_top.style.display = "block";
         scrollbottom.style.display = "block";
         scroll_right.style.display = "block";
@@ -184,7 +196,9 @@ function init() {
         footerBar.style.display = "block";
         clearTimeout(timer);
         timer = setTimeout(() => {
-          scrollTop.style.display = "none";
+          scrollTop.forEach(i => {
+            i.style.display = "none";
+          })
           scroll_top.style.display = "none";
           scrollbottom.style.display = "none";
           scroll_right.style.display = "none";
@@ -289,54 +303,58 @@ function init() {
 
   document.addEventListener("mousemove", debounce(wrapperOnMouseMove, 100));
 
-  scrollTop.onmouseenter = function () {
-    clearTimeout(timer);
-    scrollTop.style.display = "block";
-    scroll_top.style.display = "block";
-    scrollbottom.style.display = "block";
-    scroll_right.style.display = "block";
-    scroll_left.style.display = "block";
-    artBar.forEach((i) => {
-      i.style.display = "block";
-    });
-    leftColBar.style.display = "block";
-    headerBar.style.display = "block";
-    footerBar.style.display = "block";
-  };
-
-  scrollTop.onmouseleave = function () {
-    if (
-      Math.floor(wrapper.scrollHeight - wrapper.scrollTop) <=
-      wrapper.clientHeight
-    ) {
+  scrollTop.forEach(i => {
+    i.onmouseenter = function () {
       clearTimeout(timer);
-      scrollTop.style.display = "block";
+      i.style.display = "block";
       scroll_top.style.display = "block";
       scrollbottom.style.display = "block";
       scroll_right.style.display = "block";
       scroll_left.style.display = "block";
-      artBar.forEach((i) => {
-        i.style.display = "block";
+      artBar.forEach((j) => {
+        j.style.display = "block";
       });
       leftColBar.style.display = "block";
       headerBar.style.display = "block";
       footerBar.style.display = "block";
-    } else {
-      timer = setTimeout(() => {
-        scrollTop.style.display = "none";
-        scroll_top.style.display = "none";
-        scrollbottom.style.display = "none";
-        scroll_right.style.display = "none";
-        scroll_left.style.display = "none";
+    };
+  })
+
+  scrollTop.forEach(i => {
+    i.onmouseleave = function () {
+      if (
+        Math.floor(wrapper.scrollHeight - wrapper.scrollTop) <=
+        wrapper.clientHeight
+      ) {
+        clearTimeout(timer);
+        i.style.display = "block";
+        scroll_top.style.display = "block";
+        scrollbottom.style.display = "block";
+        scroll_right.style.display = "block";
+        scroll_left.style.display = "block";
         artBar.forEach((i) => {
-          i.style.display = "none";
+          i.style.display = "block";
         });
-        leftColBar.style.display = "none";
-        headerBar.style.display = "none";
-        footerBar.style.display = "none";
-      }, 2000);
-    }
-  };
+        leftColBar.style.display = "block";
+        headerBar.style.display = "block";
+        footerBar.style.display = "block";
+      } else {
+        timer = setTimeout(() => {
+          i.style.display = "none";
+          scroll_top.style.display = "none";
+          scrollbottom.style.display = "none";
+          scroll_right.style.display = "none";
+          scroll_left.style.display = "none";
+          artBar.forEach((i) => {
+            i.style.display = "none";
+          });
+          leftColBar.style.display = "none";
+          headerBar.style.display = "none";
+          footerBar.style.display = "none";
+        }, 2000);
+      }
+    };
+  })
 
   if (decodeURIComponent(path)) {
     if (path !== "/") {
