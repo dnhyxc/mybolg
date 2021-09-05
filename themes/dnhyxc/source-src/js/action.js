@@ -213,7 +213,7 @@ function init() {
       }
     }
 
-    if (Utils.isInformal || Utils.isArticle && !Utils.isArchives) {
+    if (Utils.isInformal || Utils.isArticle && !Utils.isArchives && !Utils.isCategories) {
       if (wrapper.scrollTop <= 0) {
         articleToc.style.height = "calc(100vh - 225px)";
       } else {
@@ -380,7 +380,7 @@ function init() {
           mainLoading.innerHTML = "Informal Essay";
           mainLoading.innerHTML = "Informal Essay";
           mainLoadingText = "Informal Essay";
-        } else if (Utils.isArticle) {
+        } else if (Utils.isArticle && !Utils.isCategories && !Utils.isArchives) {
           changeSize.style.display = "block";
           mainLoading.innerHTML =
             "Article-" + subPath[0].toUpperCase() + subPath.slice(1);
