@@ -99,6 +99,8 @@
 
 .end-footer {
   display: block;
+  // opacity: 1;
+  transition: all 1s ease;
 
   #footer {
     font-size: 12px;
@@ -194,4 +196,6 @@
 
 .toggleEndFooter {
   display: none;
+  // opacity: 0;
+  transition: all 1s ease;
 }

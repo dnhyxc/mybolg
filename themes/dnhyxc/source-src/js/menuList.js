@@ -6,6 +6,7 @@ function init() {
   const afterFooter = document.querySelector('.after-footer')
   const bodyWrap = document.querySelector('.body-wrap')
   const articleToc = document.querySelector('.article-toc')
+  const browserCover = document.querySelector('.browserCover')
   authorName.addEventListener('click', () => {
     menuList.classList.toggle('showMenu')
   })
@@ -14,6 +15,7 @@ function init() {
     afterFooter.classList.toggle('toggleAfterFooter')
     bodyWrap.classList.toggle('toggleWrap')
     articleToc.classList.toggle('toggleArticleToc')
+    browserCover.classList.toggle('toggleBrowserCover')
   })
 }
 

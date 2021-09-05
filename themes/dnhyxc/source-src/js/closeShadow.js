@@ -84,7 +84,6 @@ function addShadow() {
   });
   leftCol.classList.add("isShowShadow");
   main.classList.add("isShowShadow");
-  // outer.classList.add("isShowShadow");
   toolsSection.classList.add("isShowShadow");
   headerBar.classList.add("isShowShadow-header");
   leftColBar.classList.add("isShowShadow-left");
