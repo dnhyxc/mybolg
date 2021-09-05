@@ -213,7 +213,7 @@ function init() {
       }
     }
 
-    if (Utils.isArticle || Utils.isInformal) {
+    if (Utils.isInformal || Utils.isArticle && !Utils.isArchives) {
       if (wrapper.scrollTop <= 0) {
         articleToc.style.height = "calc(100vh - 225px)";
       } else {
@@ -364,23 +364,35 @@ function init() {
           decodeURIComponent(path).lastIndexOf("/") - 1
         ) + 1
       );
-      const subPath = res.slice(0, res.length - 1);
-      if (subPath === "informal") {
-        changeSize.style.display = "block";
-        mainLoading.innerHTML = "Informal Essay";
-        mainLoading.innerHTML = "Informal Essay";
-        mainLoadingText = "Informal Essay";
-      } else if (Utils.isArticle) {
-        changeSize.style.display = "block";
-        mainLoading.innerHTML =
-          "Article-" + subPath[0].toUpperCase() + subPath.slice(1);
-        mainLoading.title =
-          "Article-" + subPath[0].toUpperCase() + subPath.slice(1);
-        mainLoadingText =
-          "Article-" + subPath[0].toUpperCase() + subPath.slice(1);
+
+      if (res === '/') {
+        const newPath = decodeURIComponent(path).slice(0, decodeURIComponent(path).length - 2)
+        const res = decodeURIComponent(newPath).substr(
+          decodeURIComponent(newPath).lastIndexOf(
+            "/",
+            decodeURIComponent(newPath).lastIndexOf("/") - 1
+          ) + 1)
+        mainLoading.innerHTML = `${res.split('/')[0][0].toUpperCase() + res.split('/')[0].slice(1)}-${res.split('/')[1]}`;
       } else {
-        mainLoading.innerHTML = subPath[0].toUpperCase() + subPath.slice(1);
+        const subPath = res.slice(0, res.length - 1);
+        if (subPath === "informal") {
+          changeSize.style.display = "block";
+          mainLoading.innerHTML = "Informal Essay";
+          mainLoading.innerHTML = "Informal Essay";
+          mainLoadingText = "Informal Essay";
+        } else if (Utils.isArticle) {
+          changeSize.style.display = "block";
+          mainLoading.innerHTML =
+            "Article-" + subPath[0].toUpperCase() + subPath.slice(1);
+          mainLoading.title =
+            "Article-" + subPath[0].toUpperCase() + subPath.slice(1);
+          mainLoadingText =
+            "Article-" + subPath[0].toUpperCase() + subPath.slice(1);
+        } else {
+          mainLoading.innerHTML = subPath[0].toUpperCase() + subPath.slice(1);
+        }
       }
+
       if (coverInfo && coverInfo.length > 0) {
         coverInfo[0].style.display = "none";
         coverInfo[1].style.display = "none";

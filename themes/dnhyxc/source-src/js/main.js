@@ -33,6 +33,8 @@ import closeShadow from "./closeShadow";
 
 import menuList from "./menuList";
 
+import section from "./section-height";
+
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
@@ -50,6 +52,7 @@ addLoadEvent(function () {
   copy.init();
   closeShadow.init();
   menuList.init();
+  section.init();
 });
 
 function stopTouchmove(e) {
