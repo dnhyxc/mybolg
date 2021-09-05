@@ -22,9 +22,21 @@
     border: 2px solid #ffd900;
     color: #ffd900;
     cursor: pointer;
+
     &:hover {
       box-shadow: 0 0 10px #fff inset;
       color: #d9ff00;
+    }
+  }
+
+  .perception-info {
+    @extend .changeFooter;
+
+    a {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      color: #ffd900;
     }
   }
 }

@@ -115,6 +115,7 @@ function init() {
   let mainLoadingText;
   let scrollTimer = null;
 
+  // 滚动事件
   function scroll() {
     const countInfo = `${parseInt(
       (wrapper.scrollTop / (wrapper.scrollHeight - wrapper.offsetHeight)) * 100
@@ -236,6 +237,7 @@ function init() {
         articleToc.style.height = "calc(100vh - 158px)";
       }
 
+      // 处理目录逻辑
       h345.forEach((i) => {
         if (wrapper.scrollTop + 20 >= i.offsetTop) {
           if (toTopHref.length <= 0) {
@@ -280,7 +282,8 @@ function init() {
       (articleEntry &&
         !articleEntry.getAttribute("class").includes("narrow")) ||
       Utils.isArchives ||
-      Utils.isCategories
+      Utils.isCategories ||
+      Utils.isPerception
     ) {
       clearTimeout(scrollTimer);
       wrapper.classList.add("onscroll");
@@ -300,7 +303,8 @@ function init() {
       (articleEntry &&
         !articleEntry.getAttribute("class").includes("narrow")) ||
       Utils.isArchives ||
-      Utils.isCategories
+      Utils.isCategories ||
+      Utils.isPerception
     ) {
       if (
         e.pageX - leftCol.offsetWidth + 10 > wrapper.offsetWidth &&
@@ -321,6 +325,7 @@ function init() {
 
   document.addEventListener("mousemove", debounce(wrapperOnMouseMove, 100));
 
+  // 置顶逻辑
   scrollTop.forEach((i) => {
     i.onmouseenter = function () {
       clearTimeout(timer);
@@ -380,6 +385,7 @@ function init() {
     };
   });
 
+  // 处理header中的title逻辑
   if (decodeURIComponent(path)) {
     if (path !== "/") {
       const res = decodeURIComponent(path).substr(
