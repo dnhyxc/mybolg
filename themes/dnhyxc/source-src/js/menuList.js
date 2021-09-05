@@ -33,22 +33,24 @@ function init() {
   const menuList = document.querySelector('.menuList')
   const changeFooter = document.querySelector('.changeFooter')
 
-  authorName.addEventListener('click', () => {
-    menuList.classList.toggle('showMenu')
-  })
+  if (document.body.clientWidth > 800) {
+    authorName.addEventListener('click', () => {
+      menuList.classList.toggle('showMenu')
+    })
 
-  changeFooter.addEventListener('click', () => {
-    if (Utils.getSSG('hideFooter')) {
-      Utils.removeSSG('hideFooter')
-    } else {
-      Utils.setSSG('hideFooter', true)
-    }
-    if (Utils.getSSG('hideFooter')) {
-      hideFooter()
-    } else {
-      showFooter()
-    }
-  })
+    changeFooter.addEventListener('click', () => {
+      if (Utils.getSSG('hideFooter')) {
+        Utils.removeSSG('hideFooter')
+      } else {
+        Utils.setSSG('hideFooter', true)
+      }
+      if (Utils.getSSG('hideFooter')) {
+        hideFooter()
+      } else {
+        showFooter()
+      }
+    })
+  }
 }
 
 module.exports = {
