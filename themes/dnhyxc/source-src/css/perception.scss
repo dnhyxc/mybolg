@@ -1,0 +1,13 @@
+.perception {
+  padding-bottom: 60px;
+  .perception-wrap {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 50px;
+
+    .title {
+      color: gold;
+    }
+  }
+}
