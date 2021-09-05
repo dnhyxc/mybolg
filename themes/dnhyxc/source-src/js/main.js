@@ -23,6 +23,8 @@ import changeTheme from "./changeTheme";
 
 import e, { addLoadEvent } from "./util";
 
+import * as Utils from './public-utils'
+
 import * as setThemes from "./setThemes";
 
 import copy from "./copy";
@@ -66,12 +68,12 @@ document.onreadystatechange = function () {
     }
 
     if (
-      !sessionStorage.getItem("container") &&
-      !sessionStorage.getItem("changeInfo")
+      !Utils.getSSG("container") &&
+      !Utils.getSSG("changeInfo")
     ) {
       let timer = null;
       changeInfo.style.display = "block";
-      sessionStorage.setItem("changeInfo", true);
+      Utils.setSSG("changeInfo", true);
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         changeInfo.style.display = "none";
@@ -82,31 +84,36 @@ document.onreadystatechange = function () {
       hideCoverBtn.addEventListener("click", function () {
         cover && cover.classList.add("hideCover");
       });
-    if (sessionStorage.getItem("xin")) {
+    if (Utils.getSSG("xin")) {
       setThemes.xin();
-    } else if (sessionStorage.getItem("dao")) {
+    } else if (Utils.getSSG("dao")) {
       setThemes.dao();
-    } else if (sessionStorage.getItem("shui")) {
+    } else if (Utils.getSSG("shui")) {
       setThemes.shui();
-    } else if (sessionStorage.getItem("qiong")) {
+    } else if (Utils.getSSG("qiong")) {
       setThemes.qiong();
-    } else if (sessionStorage.getItem("chu")) {
+    } else if (Utils.getSSG("chu")) {
       setThemes.chu();
-    } else if (sessionStorage.getItem("zuo")) {
+    } else if (Utils.getSSG("zuo")) {
       setThemes.zuo();
-    } else if (sessionStorage.getItem("kan")) {
+    } else if (Utils.getSSG("kan")) {
       setThemes.kan();
-    } else if (sessionStorage.getItem("yun")) {
+    } else if (Utils.getSSG("yun")) {
       setThemes.yun();
-    } else if (sessionStorage.getItem("qi")) {
+    } else if (Utils.getSSG("qi")) {
       setThemes.qi();
     } else {
       setThemes.shi();
     }
-    if (!sessionStorage.getItem('container') && sessionStorage.getItem("hideShadow")) {
+    if (!Utils.getSSG('container') && Utils.getSSG("hideShadow")) {
       closeShadow.addShadow()
     } else {
       closeShadow.removeShadow()
+    }
+    if (Utils.getSSG('hideFooter')) {
+      menuList.hideFooter()
+    } else {
+      menuList.showFooter()
     }
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {

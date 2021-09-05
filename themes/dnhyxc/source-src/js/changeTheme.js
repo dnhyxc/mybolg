@@ -1,4 +1,5 @@
 import * as setThemes from './setThemes';
+import * as Utils from './public-utils'
 
 function init() {
   const xin = document.querySelector('.xin');
@@ -17,15 +18,15 @@ function init() {
   async function changeSSItems(type) {
     const actionType = ['xin', 'dao', 'shui', 'qiong', 'chu', 'zuo', 'kan', 'yun', 'qi', 'shi'];
     await actionType.filter(i => i !== type).forEach(i => {
-      sessionStorage.removeItem(i);
+      Utils.removeSSG(i);
     })
     actionType.filter(i => i === type).forEach(i => {
-      sessionStorage.setItem(i, true);
+      Utils.setSSG(i, true);
     })
   }
 
   function isLight() {
-    if (sessionStorage.getItem('container')) {
+    if (Utils.getSSG('container')) {
       return true;
     } else {
       return false;
@@ -42,12 +43,12 @@ function init() {
   }
 
   function setColor(color) {
-    sessionStorage.setItem('color', color)
+    Utils.setSSG('color', color)
   }
 
   function setTocBgc() {
     if (tooltipToc) {
-      tooltipToc.style.backgroundImage = `linear-gradient(to bottom, ${sessionStorage.getItem('color')})`
+      tooltipToc.style.backgroundImage = `linear-gradient(to bottom, ${Utils.getSSG('color')})`
     }
   }
 

@@ -1,4 +1,5 @@
 import closeShadow from "./closeShadow";
+import * as Utils from './public-utils'
 
 function init() {
   const container = document.querySelector('#container');
@@ -15,40 +16,40 @@ function init() {
   function toggleLight() {
     if (container.getAttribute('class') && container.getAttribute('class').includes('container')) {
       container.classList.remove('container');
-      sessionStorage.removeItem('container');
+      Utils.removeSSG('container');
     } else {
       container.classList.add('container');
-      sessionStorage.setItem('container', true);
+      Utils.setSSG('container', true);
     }
     if (toolsCol.getAttribute('class').includes('lightToolsCol')) {
       toolsCol.classList.remove('lightToolsCol');
-      sessionStorage.removeItem('lightToolsCol');
+      Utils.removeSSG('lightToolsCol');
     } else {
       toolsCol.classList.add('lightToolsCol');
-      sessionStorage.setItem('lightToolsCol', true);
+      Utils.setSSG('lightToolsCol', true);
     }
     if (btnctn.getAttribute('class').includes('lightBtnctn')) {
       btnctn.classList.remove('lightBtnctn');
-      sessionStorage.removeItem('lightBtnctn');
+      Utils.removeSSG('lightBtnctn');
     } else {
       btnctn.classList.add('lightBtnctn');
-      sessionStorage.setItem('lightBtnctn', true);
+      Utils.setSSG('lightBtnctn', true);
     }
     if (intrudeLess.getAttribute('class').includes('lightIntrudeLess')) {
       intrudeLess.classList.remove('lightIntrudeLess');
-      sessionStorage.removeItem('lightIntrudeLess');
+      Utils.removeSSG('lightIntrudeLess');
     } else {
       intrudeLess.classList.add('lightIntrudeLess');
-      sessionStorage.setItem('lightIntrudeLess', true);
+      Utils.setSSG('lightIntrudeLess', true);
     }
     if (dark.getAttribute('class').includes('light')) {
       dark.classList.remove('light');
       dark.innerHTML = '白天';
-      sessionStorage.removeItem('light');
+      Utils.removeSSG('light');
     } else {
       dark.classList.add('light');
       dark.innerHTML = '炫酷';
-      sessionStorage.setItem('light', true);
+      Utils.setSSG('light', true);
     }
     if (toggleMusic.getAttribute('class').includes('light')) {
       toggleMusic.classList.remove('light');
@@ -58,29 +59,29 @@ function init() {
     if (mobileDark.getAttribute('class').includes('mobileLight')) {
       mobileDark.classList.remove('mobileLight');
       mobileDark.innerHTML = '白天';
-      sessionStorage.removeItem('mobileLight');
+      Utils.removeSSG('mobileLight');
     } else {
       mobileDark.classList.add('mobileLight');
       mobileDark.innerHTML = '炫酷';
-      sessionStorage.setItem('mobileLight', true);
+      Utils.setSSG('mobileLight', true);
     }
     if (toTopDark.getAttribute('class').includes('mobileLight')) {
       toTopDark.classList.remove('mobileLight');
-      sessionStorage.removeItem('mobileLight');
+      Utils.removeSSG('mobileLight');
     } else {
       toTopDark.classList.add('mobileLight');
-      sessionStorage.setItem('mobileLight', true);
+      Utils.setSSG('mobileLight', true);
     }
   }
   // PC端头像
   dark.onclick = function () {
     toggleLight();
-    if (sessionStorage.getItem('container')) {
+    if (Utils.getSSG('container')) {
       changeInfo.style.display = 'none';
       closeShadow.removeShadow()
     } else {
       lightChangeInfo.style.opacity = '0';
-      if (sessionStorage.getItem("hideShadow")) {
+      if (Utils.getSSG("hideShadow")) {
         closeShadow.addShadow()
       }
     }
@@ -90,13 +91,13 @@ function init() {
     toggleLight();
   }
 
-  if (sessionStorage.getItem('container')) {
+  if (Utils.getSSG('container')) {
     container.classList.add('container');
   } else {
     container.classList.remove('container');
   }
 
-  if (sessionStorage.getItem('light')) {
+  if (Utils.getSSG('light')) {
     dark.classList.add('light');
     toggleMusic.classList.add('light');
     dark.innerHTML = '炫酷';
@@ -105,7 +106,7 @@ function init() {
     toggleMusic.classList.remove('light');
     dark.innerHTML = '白天';
   }
-  if (sessionStorage.getItem('mobileLight')) {
+  if (Utils.getSSG('mobileLight')) {
     mobileDark.classList.add('mobileLight')
     toTopDark.classList.add('mobileLight')
     mobileDark.innerHTML = '炫酷';
@@ -115,17 +116,17 @@ function init() {
     mobileDark.innerHTML = '白天';
   }
 
-  if (sessionStorage.getItem('lightBtnctn')) {
+  if (Utils.getSSG('lightBtnctn')) {
     btnctn.classList.add('lightBtnctn');
   } else {
     btnctn.classList.remove('lightBtnctn');
   }
-  if (sessionStorage.getItem('lightToolsCol')) {
+  if (Utils.getSSG('lightToolsCol')) {
     toolsCol.classList.add('lightToolsCol');
   } else {
     toolsCol.classList.remove('lightToolsCol');
   }
-  if (sessionStorage.getItem('lightIntrudeLess')) {
+  if (Utils.getSSG('lightIntrudeLess')) {
     intrudeLess.classList.add('lightIntrudeLess');
   } else {
     intrudeLess.classList.remove('lightIntrudeLess');

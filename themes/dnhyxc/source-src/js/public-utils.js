@@ -8,10 +8,25 @@ const isCategories = decodeURIComponent(path)
 const isArchives = decodeURIComponent(path).substr("/").includes("archives");
 const isHome = path === '/'
 
+const getSSG = function (name) {
+  return sessionStorage.getItem(name)
+}
+
+const setSSG = function (name, value) {
+  sessionStorage.setItem(name, value)
+}
+
+const removeSSG = function (name) {
+  sessionStorage.removeItem(name)
+}
+
 module.exports = {
   isArticle: isArticle,
   isInformal: isInformal,
   isCategories: isCategories,
   isArchives: isArchives,
   isHome: isHome,
+  getSSG: getSSG,
+  setSSG: setSSG,
+  removeSSG: removeSSG
 };

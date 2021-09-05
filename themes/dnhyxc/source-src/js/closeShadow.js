@@ -1,3 +1,5 @@
+import * as Utils from './public-utils'
+
 function removeShadow() {
   const articles = document.querySelectorAll(".article");
   const archivesWrap = document.querySelectorAll(".archives-wrap");
@@ -92,7 +94,7 @@ function addShadow() {
 }
 
 function setShadow() {
-  if (sessionStorage.getItem("hideShadow")) {
+  if (Utils.getSSG("hideShadow")) {
     addShadow()
   } else {
     removeShadow()
@@ -102,11 +104,11 @@ function setShadow() {
 function init() {
   const profilepic = document.querySelector(".profilepic");
   const toggleShadow = function () {
-    if (!sessionStorage.getItem("container")) {
-      if (sessionStorage.getItem("hideShadow")) {
-        sessionStorage.removeItem("hideShadow");
+    if (!Utils.getSSG("container")) {
+      if (Utils.getSSG("hideShadow")) {
+        Utils.removeSSG("hideShadow");
       } else {
-        sessionStorage.setItem("hideShadow", true);
+        Utils.setSSG("hideShadow", true);
       }
       setShadow();
     }
