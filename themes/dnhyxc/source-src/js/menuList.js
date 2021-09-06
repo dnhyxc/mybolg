@@ -6,12 +6,14 @@ function hideFooter() {
   const bodyWrap = document.querySelector('.body-wrap')
   const articleToc = document.querySelector('.article-toc')
   const browserCover = document.querySelector('.browserCover')
+  const perceptionLife  = document.querySelector('.perception-life')
 
   endFooter && endFooter.classList.add('toggleEndFooter')
   afterFooter && afterFooter.classList.add('toggleAfterFooter')
   bodyWrap && bodyWrap.classList.add('toggleWrap')
   articleToc && articleToc.classList.add('toggleArticleToc')
   browserCover && browserCover.classList.add('toggleBrowserCover')
+  perceptionLife && perceptionLife.classList.add('togglePerceptionLife')
 }
 
 function showFooter() {
@@ -20,12 +22,14 @@ function showFooter() {
   const bodyWrap = document.querySelector('.body-wrap')
   const articleToc = document.querySelector('.article-toc')
   const browserCover = document.querySelector('.browserCover')
+  const perceptionLife  = document.querySelector('.perception-life')
 
   endFooter && endFooter.classList.remove('toggleEndFooter')
   afterFooter && afterFooter.classList.remove('toggleAfterFooter')
   bodyWrap && bodyWrap.classList.remove('toggleWrap')
   articleToc && articleToc.classList.remove('toggleArticleToc')
   browserCover && browserCover.classList.remove('toggleBrowserCover')
+  perceptionLife && perceptionLife.classList.remove('togglePerceptionLife')
 }
 
 function init() {
