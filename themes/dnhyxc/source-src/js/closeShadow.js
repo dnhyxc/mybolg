@@ -102,7 +102,8 @@ function setShadow() {
 }
 
 function init() {
-  const profilepic = document.querySelector(".profilepic");
+  const closeShadow = document.querySelector(".closeShadow");
+  // const profilepic = document.querySelector(".profilepic");
   const toggleShadow = function () {
     if (!Utils.getSSG("container")) {
       if (Utils.getSSG("hideShadow")) {
@@ -113,7 +114,8 @@ function init() {
       setShadow();
     }
   };
-  profilepic.onclick = toggleShadow;
+  closeShadow.onclick = toggleShadow;
+  // profilepic.onclick = toggleShadow;
 }
 
 module.exports = {
