@@ -1363,6 +1363,36 @@ async function getData() {
 
 > 上述代码描述的是通过 url 从 oss 上获取富文本内容（返回的是一个 html 字符串），此时获取到的结果在 body 中，如果不使用 `text()` 方法，那么获取到的数据就是不可读的。因此 text() 可以读取 response 对象，同时将其设置为已读。最后返回一被解析的 html 字符串。
 
+### momment
+
+#### momment 获取当天时间戳
+
+```js
+// 返回今天的起止时间戳
+const beginTime = moment().startOf("day").valueOf();
+const endTime = moment().valueOf(); // 当前时间戳
+// const endTd = moment().endOf('day').valueOf() // 今天24点时间戳
+
+// 返回今天0点YYYY-MM-DD HH:mm:ss格式的时间
+const date = moment().startOf("day").format("YYYY-MM-DD HH:mm:ss");
+```
+
+#### momment 获取昨天时间戳
+
+```js
+// 返回昨天的起止时间戳
+const beginTime = moment().subtract(1, "days").startOf("day").valueOf();
+const endTime = moment().subtract(1, "days").endOf("day").valueOf();
+```
+
+#### momment 获取近七天时间戳
+
+```js
+// 返回近七天的起止时间戳
+const beginTime = moment().subtract(6, "days").startOf("day").valueOf();
+const endTime = moment().endOf("day").valueOf();
+```
+
 ### Dva & React
 
 #### Dva 中实现请求轮循
