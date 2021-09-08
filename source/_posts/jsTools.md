@@ -475,3 +475,45 @@ const randomNumber = (lowerInteger = 15, upperInteger = 35) => {
   return Math.floor(Math.random() * choices + lowerInteger) + "px";
 };
 ```
+
+#### 平滑滚动到底部
+
+```js
+function toBottom() {
+  function scrollToBottom() {
+    // 外层容器 出现滚动条的dom
+    const domWrapper = document.querySelector(".wrapper");
+    (function smoothscroll() {
+      // 已经被卷掉的高度
+      const currentScroll = domWrapper.scrollTop;
+      // 容器高度
+      const clientHeight = domWrapper.offsetHeight;
+      // 内容总高度
+      const scrollHeight = domWrapper.scrollHeight;
+      if (scrollHeight - 10 > currentScroll + clientHeight) {
+        requestAnimationFrame(smoothscroll);
+        domWrapper.scrollTo(
+          0,
+          currentScroll + (scrollHeight - currentScroll - clientHeight) / 2
+        );
+      }
+    })();
+  }
+  setTimeout(scrollToBottom, 100);
+}
+```
+
+#### 平滑滚动到顶部
+
+```js
+const onBackToTop = () => {
+  const domWrapper = document.querySelector(".wrapper");
+  const toTop = () => {
+    if (domWrapper.scrollTop === 0) return;
+    const speed = 100;
+    domWrapper.scrollTop -= speed;
+    requestAnimationFrame(toTop);
+  };
+  requestAnimationFrame(toTop);
+};
+```
