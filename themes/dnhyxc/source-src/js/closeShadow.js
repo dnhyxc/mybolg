@@ -1,4 +1,4 @@
-import * as Utils from './public-utils'
+import * as Utils from "./public-utils";
 
 function removeShadow() {
   const articles = document.querySelectorAll(".article");
@@ -15,6 +15,7 @@ function removeShadow() {
   const headerBar = document.querySelector(".headerBar");
   const leftColBar = document.querySelector(".leftColBar");
   const artBar = document.querySelectorAll(".artBar");
+  const closeShadow = document.querySelector(".closeShadow");
 
   articles.forEach((i) => {
     i.classList.remove("isShowShadow");
@@ -45,6 +46,7 @@ function removeShadow() {
   toolsSection.classList.remove("isShowShadow");
   dark.classList.remove("isShow-shadow");
   toggleMusic.classList.remove("isShow-shadow");
+  closeShadow.innerHTML = "隐影";
 }
 
 function addShadow() {
@@ -62,6 +64,7 @@ function addShadow() {
   const headerBar = document.querySelector(".headerBar");
   const leftColBar = document.querySelector(".leftColBar");
   const artBar = document.querySelectorAll(".artBar");
+  const closeShadow = document.querySelector(".closeShadow");
 
   articles.forEach((i) => {
     i.classList.add("isShowShadow");
@@ -91,13 +94,14 @@ function addShadow() {
   leftColBar.classList.add("isShowShadow-left");
   dark.classList.add("isShow-shadow");
   toggleMusic.classList.add("isShow-shadow");
+  closeShadow.innerHTML = "显影";
 }
 
 function setShadow() {
   if (Utils.getSSG("hideShadow")) {
-    addShadow()
+    addShadow();
   } else {
-    removeShadow()
+    removeShadow();
   }
 }
 

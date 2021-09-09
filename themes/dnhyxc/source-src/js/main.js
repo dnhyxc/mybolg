@@ -7,7 +7,7 @@ import "../css/main.scss";
 // 分享
 // import Share from './share'
 // 边缘
-import Aside from './aside'
+import Aside from "./aside";
 
 import ChangeLight from "./changelight";
 
@@ -23,7 +23,7 @@ import changeTheme from "./changeTheme";
 
 import e, { addLoadEvent } from "./util";
 
-import * as Utils from './public-utils'
+import * as Utils from "./public-utils";
 
 import * as setThemes from "./setThemes";
 
@@ -70,10 +70,7 @@ document.onreadystatechange = function () {
       });
     }
 
-    if (
-      !Utils.getSSG("container") &&
-      !Utils.getSSG("changeInfo")
-    ) {
+    if (!Utils.getSSG("container") && !Utils.getSSG("changeInfo")) {
       let timer = null;
       changeInfo.style.display = "block";
       Utils.setSSG("changeInfo", true);
@@ -108,15 +105,15 @@ document.onreadystatechange = function () {
     } else {
       setThemes.shi();
     }
-    if (!Utils.getSSG('container') && Utils.getSSG("hideShadow")) {
-      closeShadow.addShadow()
+    if (!Utils.getSSG("container") && Utils.getSSG("hideShadow")) {
+      closeShadow.addShadow();
     } else {
-      closeShadow.removeShadow()
+      closeShadow.removeShadow();
     }
-    if (Utils.getSSG('hideFooter')) {
-      menuList.hideFooter()
+    if (Utils.getSSG("hideFooter")) {
+      menuList.hideFooter();
     } else {
-      menuList.showFooter()
+      menuList.showFooter();
     }
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {
