@@ -67,3 +67,35 @@
   height: calc(100vh - 95px) !important;
   transition: all 0.5s ease;
 }
+
+.toggleScrollWrap {
+  position: fixed !important;
+  bottom: 73px !important;
+  right: -68px !important;
+  top: initial !important;
+  left: initial !important;
+
+  #scrollTop {
+    &:hover {
+      bottom: 28px !important;
+      border: 20px solid;
+
+      &::before {
+        content: '' !important;
+      }
+
+      &::after {
+        content: "置 顶" !important;
+        width: 100px;
+        height: 20px;
+        line-height: 20px;
+        position: absolute;
+        bottom: -38px;
+        left: -50px;
+        font-size: 12px;
+        text-align: center;
+        color: #ffd900;
+      }
+    }
+  }
+}

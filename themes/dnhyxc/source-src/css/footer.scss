@@ -2,6 +2,7 @@
   .after-footer {
     margin-top: 10px;
     display: none;
+
     #footer {
       font-size: 12px;
       font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New",
@@ -62,7 +63,7 @@
             }
 
             &:hover {
-              bottom: 10px;
+              bottom: 23px;
               border: 20px solid;
               border-color: transparent transparent #ffd900;
 
@@ -75,13 +76,14 @@
                 color: #111;
                 font-weight: 700;
               }
-              &::before {
+
+              &::after {
                 content: "back to top";
                 width: 100px;
                 height: 20px;
                 line-height: 20px;
                 position: absolute;
-                top: -18px;
+                top: 18px;
                 left: -50px;
                 font-size: 12px;
                 text-align: center;
@@ -163,7 +165,7 @@
             }
 
             &:hover {
-              bottom: 10px;
+              bottom: 23px;
               border: 20px solid;
               border-color: transparent transparent #ffd900;
 
@@ -176,13 +178,14 @@
                 color: #111;
                 font-weight: 700;
               }
-              &::before {
+
+              &::after {
                 content: "back to top";
                 width: 100px;
                 height: 20px;
                 line-height: 20px;
                 position: absolute;
-                top: -18px;
+                top: 18px;
                 left: -50px;
                 font-size: 12px;
                 text-align: center;
@@ -268,7 +271,7 @@
         }
 
         &:hover {
-          bottom: 10px;
+          bottom: 23px;
           border: 20px solid;
           border-color: transparent transparent #ffd900;
 
@@ -281,13 +284,14 @@
             color: #111;
             font-weight: 700;
           }
-          &::before {
+
+          &::after {
             content: "back to top";
             width: 100px;
             height: 20px;
             line-height: 20px;
             position: absolute;
-            top: -18px;
+            top: 18px;
             left: -50px;
             font-size: 12px;
             text-align: center;
