@@ -96,6 +96,10 @@
 
       .outer {
         @include outerStyle;
+
+        .scrollWrap {
+          display: none;
+        }
       }
     }
   }
