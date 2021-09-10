@@ -80,7 +80,9 @@
     }
 
     .gt-comment-admin .gt-comment-content {
-      background-image: linear-gradient(-335deg, #475682, #2e5676);
+      // background-image: linear-gradient(-335deg, #475682, #2e5676);
+      background-color: rgba(225, 225, 225, 0.1);
+      border-radius: 5px;
     }
 
     .gt-comment-body p {
