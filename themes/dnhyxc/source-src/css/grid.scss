@@ -58,7 +58,7 @@ body,
   background: none;
   left: 270px;
   width: auto;
-  overflow-y: auto;
+  // overflow-y: auto;
   @extend %trans;
   &.show {
     background: none;
