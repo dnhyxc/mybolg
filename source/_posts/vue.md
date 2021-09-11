@@ -11,6 +11,122 @@ categories:
 
 ### Vue 基础
 
+#### 事件的基本使用
+
+1、使用 v-on:xxx 或 @xxx 绑定事件，其中 xxx 是事件名。
+
+2、事件的回调需要配置在 methods 对象中，最终会挂在 vm 上。
+
+3、methods 中配置的函数，都是被 vue 所管理的函数，其中 this 的指向是 vm 或组件实例对象。
+
+4、methods 中配置的函数，不要用箭头函数，否则 this 就会指向 window，不再指向 vm。
+
+5、@click="demo" 和 @click="demo($event)" 效果一致，但后者可以传递其它参数。
+
+6、示例代码如下：
+
+```html
+<div id="root">
+  <h2>dnhyxc</h2>
+  <button @click="showInfo1">不可传参</button>
+  <button @click="showInfo2($event,'dnhyxc')">不可传参</button>
+</div>
+
+<script type="text/javascript">
+  const vm = new Vue({
+    el: "#root",
+    data() {
+      return {
+        name: "dnhyxc",
+      };
+    },
+    methods: {
+      showInfo1(event) {
+        console.log(event);
+      },
+      showInfo2(event, name) {
+        console.log(event);
+        console.log(name);
+      },
+    },
+  });
+</script>
+```
+
+#### 事件修饰符
+
+1、prevent：阻止默认事件。
+
+2、stop：阻止事件冒泡。
+
+3、once：事件只触发一次。
+
+4、capture：使用事件的捕获模式，即事件会在捕获阶段触发，而不是在默认的冒泡阶段触发。
+
+5、self：只有 event.target 是当前操作的元素时才触发事件。
+
+6、passive：事件的默认行为立即执行，无需等待事件回调执行完毕。
+
+7、具体使用方式如下：
+
+```html
+<div id="root">
+  <a href="baidu.com" @click.prevent="showInfo1">阻止默认事件</a>
+
+  <div @click="showInfo2">
+    <button @click.stop="showInfo3">阻止事件冒泡</button>
+  </div>
+
+  <button @click.once="showInfo4">事件只触发一次</button>
+
+  <div @click:capture="showMsg(1)">
+    <div @click="showMsg(1)">使用事件的捕获模式</div>
+  </div>
+
+  <div @click:self="showInfo5">
+    <button @click="showInfo6">
+      只有 event.target 是当前操作的元素时才触发事件
+    </button>
+  </div>
+
+  <!-- 当使用wheel滚轮事件时，会先触发deme回调函数，再触发滚动事件。假如demo中有数量很庞大的计算，如10000次for循环，那么就需要等很长一段事件，滚动条才会动一下 -->
+  <ul @wheel.passive="demo" class="list">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+  </ul>
+</div>
+```
+
+#### 键盘事件
+
+1、vue 中常用的按键别名：
+
+- 回车：enter。
+
+- 删除：delete（捕获"删除"和"退格"键）。
+
+- 退出：esc。
+
+- 空格：space。
+
+- 换行：tab。
+
+- 上：up。
+
+- 下：down。
+
+- 左：left。
+
+- 右：right。
+
+2、vue 为提供别名的按键，可以使用按键原始的 key 值去判定，但注意要转为 kebab-case（短横线命名）。
+
+3、
+
+### Vue 高级
+
 #### setup
 
 ###### setup 方法说明
