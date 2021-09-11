@@ -129,15 +129,15 @@ categories:
 
 #### setup
 
-###### setup 方法说明
+##### setup 方法说明
 
 1，setup 是 Vue3.x 新增的一个选项，它是组件内使用 Composition API 的入口。
 
-###### setup 执行时机
+##### setup 执行时机
 
 2，setup 会在 beforeCreate 之前执行，而不是在 beforeCreate 和 created 之间执行。
 
-###### setup 参数说明
+##### setup 参数说明
 
 1，setup 接受两个参数，分别为：
 
@@ -195,7 +195,7 @@ export default defineComponent({
 
 1，在 vue2.x 中， 定义数据都是在 data 中，但是 Vue3.x 可以使用 reactive 和 ref 来进行**数据定义**。
 
-###### reactive 与 ref 的区别
+##### reactive 与 ref 的区别
 
 1，reactive 主要用于**处理对象**的双向绑定，但是不能处理基本类型，例如 string、number、boolean 等。
 
@@ -285,7 +285,7 @@ export default defineComponent({
 
 #### vue3.x 生命周期
 
-###### vue3.x 生命周期图谱
+##### vue3.x 生命周期图谱
 
 ![生命周期](vue-live.webp)
 
@@ -293,7 +293,7 @@ export default defineComponent({
 
 #### watch 与 watchEffect
 
-###### watch 方法说明
+##### watch 方法说明
 
 1，watch 函数用来侦听特定的数据源，并在回调函数中执行副作用。默认情况是惰性的，也就是说**仅在侦听的源数据变更时才执行回调**。
 
@@ -303,7 +303,7 @@ export default defineComponent({
 watch(source, callback, [options]);
 ```
 
-###### watch 参数说明
+##### watch 参数说明
 
 1，source：可以支持 string、Object、Function、Array，用于指定要侦听的响应式变量。
 
@@ -311,7 +311,7 @@ watch(source, callback, [options]);
 
 3，options：支持 deep、immediate 和 flush 选项。
 
-###### watch 具体使用
+##### watch 具体使用
 
 1，监听 reactive 定义的数据：
 
@@ -407,7 +407,7 @@ setTimeout(() => {
 }, 3000);
 ```
 
-###### watchEffect 方法说明
+##### watchEffect 方法说明
 
 1，watchEffect 与 watch 使用上的区别：
 
@@ -437,7 +437,7 @@ export default defineComponent({
 
 > 上述代码执行结果首先打印一次 state 和 year 值，然后每隔一秒，打印 state 和 year 值。从上面的代码可以看出，并没有像 watch 一样需要先传入依赖，watchEffect 会自动收集依赖, 只要指定一个回调函数。**在组件初始化时，会先执行一次来收集依赖**，然后当收集到的依赖中数据发生变化时，就会再次执行回调函数。
 
-###### watchEffect 与 watch 的区别
+##### watchEffect 与 watch 的区别
 
 1，watchEffect 不需要手动传入依赖。
 
@@ -447,7 +447,7 @@ export default defineComponent({
 
 #### slot 具名插槽语法
 
-###### vue2.x 具名插槽写法
+##### vue2.x 具名插槽写法
 
 ```js
 // 子组件中
@@ -459,7 +459,7 @@ export default defineComponent({
 <template>
 ```
 
-###### vue2.x 作用域插槽写法
+##### vue2.x 作用域插槽写法
 
 1，如果需要在 slot 上面绑定数据，可以使用作用域插槽，实现如下：
 
@@ -480,7 +480,7 @@ export default {
 <template>
 ```
 
-###### vue3.x 中使用插槽
+##### vue3.x 中使用插槽
 
 1，在 Vue2.x 中具名插槽和作用域插槽分别使用 slot 和 slot-scope 来实现，在 Vue3.0 中将 slot 和 slot-scope 进行了合并统一使用。Vue3.0 中 使用 v-slot 实现：
 
@@ -498,7 +498,7 @@ export default {
 
 #### 自定义指令
 
-###### vue2.x 实现自定义指令
+##### vue2.x 实现自定义指令
 
 1，实现实例代码如下：
 
@@ -525,7 +525,7 @@ Vue.directive("focus", {
 
 - unbind：只调用一次，指令与元素解绑时调用。
 
-###### vue3.x 对自定义指令 API 的变更
+##### vue3.x 对自定义指令 API 的变更
 
 1，vue2.x 与 vue3.x 自定义指令 API 的区别：
 
@@ -565,7 +565,7 @@ app.directive('focus', {
 
 #### 条件渲染
 
-###### v-if
+##### v-if
 
 1，v-if 写法：
 
@@ -581,7 +581,7 @@ v-else = '表达式'
 
 3，v-if 可以和 v-else-if、v-else 一起使用，但是这三者之间必须紧紧挨在一起，中间不能插入其它元素，否则判断将会被打断，导致条件判断不生效。
 
-###### v-show
+##### v-show
 
 1，v-show 写法：
 
@@ -593,7 +593,7 @@ v-show = '表达式'
 
 > 使用 v-show 时，该元素一定能获取到，但是使用 v-if 时，元素可能无法获取到。
 
-###### 条件渲染具体使用示例
+##### 条件渲染具体使用示例
 
 ```html
 <div id="root">
