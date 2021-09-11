@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>绑定样式</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      .base {
+        width: 200px;
+        height: 100px;
+        background-color: thistle;
+        text-align: center;
+        line-height: 100px;
+        cursor: pointer;
+      }
+
+      .normal {
+        background-color: skyblue;
+      }
+
+      .pink {
+        background-color: pink;
+        font-weight: 700;
+      }
+
+      .yellow {
+        background-color: yellow;
+        color: tomato;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <!-- 绑定class样式（字符串写法）适用于样式的类名不确定，需要动态指定的情况 -->
+      <div class="base" :class="color" @click="changeColor">{{name}}</div>
+      <br />
+      <!-- 绑定class样式（数组写法）适用于样式个数不确定，名字也不确定的情况 -->
+      <div class="base" :class="colorArr" @click="changeColor1">{{name}}</div>
+      <br />
+      <!-- 绑定class样式（对象写法）适用于样式个数确定，名字也也确定，但要动态决定是否使用的情况 -->
+      <div class="base" :class="colorObj" @click="changeColor2">{{name}}</div>
+      <br />
+      <!-- 绑定style样式（对象写法） -->
+      <div class="base" :style="styleObj" @click="changeColor3">{{name}}</div>
+      <br />
+      <!-- 绑定style样式（数组写法） -->
+      <div class="base" :style="styleArr" @click="changeColor4">{{name}}</div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示警告
+    const vm = new Vue({
+      el: "#root",
+      data() {
+        return {
+          name: "dnhyxc",
+          color: "normal",
+          colorArr: ["normal", "pink", "yellow"],
+          colorObj: {
+            pink: true,
+            yellow: true,
+          },
+          styleObj: {
+            fontSize: "40px",
+          },
+          styleArr: [
+            {
+              fontSize: "40px",
+            },
+            {
+              backgroundColor: "green",
+            },
+          ],
+        };
+      },
+      methods: {
+        changeColor() {
+          const arr = ["pink", "yellow", "normal"];
+          const index = Math.floor(Math.random() * arr.length);
+          this.color = arr[index];
+        },
+        changeColor1() {
+          this.colorArr = this.colorArr.slice(1);
+        },
+        changeColor2() {
+          this.colorObj.pink = !this.colorObj.pink;
+          this.colorObj.yellow = !this.colorObj.yellow;
+        },
+        changeColor3() {
+          let size = this.styleObj.fontSize.slice(
+            0,
+            this.styleObj.fontSize.length - 2
+          );
+          size++;
+          this.styleObj.fontSize = `${size}px`;
+        },
+        changeColor4() {
+          this.styleArr.push({
+            color: "yellow",
+          });
+        },
+      },
+    });
+  </script>
+</html>
