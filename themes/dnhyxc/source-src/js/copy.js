@@ -55,7 +55,11 @@ function init() {
           const info = document.createElement("info");
           btn.className = "copyBtn";
           info.className = "copyInfo";
-          btn.innerHTML = "复制代码";
+          if (i.classList.length > 1) {
+            btn.innerHTML = `${i.classList[1]} 复制代码`;
+          } else {
+            btn.innerHTML = "复制代码";
+          }
           info.innerHTML = "复制成功";
           if (i.previousElementSibling) {
             i.previousElementSibling.style.position = "relative";
