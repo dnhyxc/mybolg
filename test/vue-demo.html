@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/dayjs/1.10.6/dayjs.min.js"></script>
+    <title>过滤器</title>
+  </head>
+  <body>
+    <!-- v-for 遍历可以使用 in 也可以使用 of -->
+    <div id="root">
+      <h2>现在是： {{time | timeFormater("YYYY_MM_DD") | mySlice}}</h2>
+    </div>
+    <div id="root2">
+      <h2>现在是： {{msg | mySlice}}</h2>
+    </div>
+  </body>
+  <script type="text/javascript">
+    Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示警告
+
+    // 全局过滤器
+    Vue.filter("mySlice", function (value) {
+      return value.slice(0, 6);
+    });
+
+    const vm = new Vue({
+      el: "#root",
+      data() {
+        return {
+          time: 1630519751000,
+        };
+      },
+      // 局部过滤器
+      filters: {
+        timeFormater(value, str = "YYYY-MM-DD HH:mm:ss") {
+          return dayjs(value).format(str);
+        },
+        mySlice(value) {
+          return value.slice(0, 4);
+        },
+      },
+    });
+
+    new Vue({
+      el: "#root2",
+      data() {
+        return {
+          msg: "dnhyxc.github.io",
+        };
+      },
+    });
+  </script>
+</html>

@@ -11,6 +11,34 @@ categories:
 
 ### Vue 基础
 
+#### 内置指令
+
+1、**v-bind**：单向绑定解析表达式，可简写为：**:xxx**。
+
+2、**v-model**：双向数据绑定。
+
+3、**v-for**：遍历数组、对象、字符串。
+
+4、**v-on**：绑定事件监听，可简写为 **@xxx**（如：@click）。
+
+5、**v-if**：条件渲染（动态控制节点是否存在）。
+
+6、**v-else**：条件渲染（动态控制节点是否存在）。
+
+7、**v-show**：条件渲染（动态控制节点是否展示）。
+
+8、**v-text**：可向其所在的节点中渲染文本内容，它与插值语法的区别在于：v-text 会替换掉节点中的内容，而`{{xx}}`插值语法则不会替换。
+
+9、**v-html**：用法及作用与 v-text 类似，只不过 v-model 可以解析标签，而 v-text 则不行。
+
+```html
+<div>
+  <div>hello,{{name}}</div>
+  <div v-text="str"></div>
+  <div v-html="str"></div>
+</div>
+```
+
 #### 事件的基本使用
 
 1、使用 v-on:xxx 或 @xxx 绑定事件，其中 xxx 是事件名。
@@ -561,6 +589,487 @@ categories:
 </html>
 ```
 
+#### 条件渲染
+
+##### v-if
+
+1，v-if 写法：
+
+```js
+v-if = '表达式'
+
+v-else-if = '表达式'
+
+v-else = '表达式'
+```
+
+2，v-if 适用于切换频率较低的场景，因为它会将隐藏的元素直接从元素所在位置删除。
+
+3，v-if 可以和 v-else-if、v-else 一起使用，但是这三者之间必须紧紧挨在一起，中间不能插入其它元素，否则判断将会被打断，导致条件判断不生效。
+
+##### v-show
+
+1，v-show 写法：
+
+```js
+v-show = '表达式'
+```
+
+2，v-show 适用于切换频率较高的场景，因为其特点就是隐藏的 DOM 元素是使用 `display：none` 进行隐藏的，元素依然存在。
+
+> 使用 v-show 时，该元素一定能获取到，但是使用 v-if 时，元素可能无法获取到。
+
+##### 条件渲染具体使用示例
+
+```html
+<div id="root">
+  <h2>当前n的值为：{{n}}</h2>
+  <button @click="n++">n + 1</button>
+
+  <!-- 使用v-show进行条件渲染 -->
+  <h2 v-show="n === 1">n是1我就出来</h2>
+
+  <!-- 使用v-show进行条件渲染 -->
+  <h2 v-if="n === 1">n是1我就出来</h2>
+
+  <!-- 使用v-else-if和v-else进行条件渲染 -->
+  <h2 v-if="n === 1">n是1就出来</h2>
+  <h2 v-else-if="n === 2">n是2就嘿嘿嘿</h2>
+  <h2 v-else-if="n === 3">n是3哈哈哈</h2>
+  <h2 v-else>嘿哈嘿哈</h2>
+
+  <!-- 使用v-if与template配合使用进行条件渲染 -->
+  <template v-if="n === 1">
+    <h2>嘿嘿</h2>
+    <h2>哈哈</h2>
+    <h2>嘿哈</h2>
+  </template>
+</div>
+```
+
+> template 可以防止在 3 个 h2 元素外包一层父元素，从而导致破坏原有的 DOM 结构，但是 template 只能配合 v-if 进行使用，不能配合 v-show 进行使用。
+
+#### 列表渲染 v-for
+
+1、v-for 用于展示列表数据。
+
+2、语法：v-for="(item, index) in xxx" :key="唯一标识（如：id）"
+
+3、v-for 可遍历：数组、对象、字符串、指定对象。
+
+4、具体使用方式如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>列表渲染</title>
+  </head>
+  <body>
+    <!-- v-for 遍历可以使用 in 也可以使用 of -->
+    <div id="root">
+      <ul>
+        <!-- 遍历数组 -->
+        <h3>遍历数组</h3>
+        <li v-for="(p,index) in persons" :key="p.id">{{p.name}}:{{p.age}}</li>
+        <br />
+        <!-- 遍历对象 -->
+        <h3>遍历对象</h3>
+        <li v-for="(value,key) of car" :key="key">{{key}}:{{value}}</li>
+        <br />
+        <!-- 遍历字符串 -->
+        <h3>遍历字符串</h3>
+        <li v-for="(char,index) in chars" :key="char">{{char}}:{{index}}</li>
+        <br />
+        <!-- 遍历指定次数 -->
+        <h3>遍历指定次数</h3>
+        <li v-for="(number,index) in 5" :key="index">{{number}}:{{index}}</li>
+      </ul>
+    </div>
+  </body>
+  <script type="text/javascript">
+    Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示警告
+    const vm = new Vue({
+      el: "#root",
+      data() {
+        return {
+          persons: [
+            {
+              id: 10,
+              name: "snsn",
+              age: 26,
+            },
+            {
+              id: 20,
+              name: "hmhm",
+              age: 25,
+            },
+            {
+              id: 30,
+              name: "nhnh",
+              age: 18,
+            },
+          ],
+          car: {
+            name: "宝马",
+            price: "70w",
+            color: "黑色",
+          },
+          chars: "dnhyxc",
+        };
+      },
+    });
+  </script>
+</html>
+```
+
+#### key 的作用（原理）
+
+1、虚拟 dom 中 key 的作用：
+
+- key 是虚拟 dom 对象的标记，当数据发生变化时，vue 会根据「新数据」生成「新的虚拟 dom」，随后 vue 进行「新虚拟 dom」的差异比较。
+
+2、虚拟 dom 对比规则：
+
+- 当旧虚拟 dom 中找到了与新虚拟 dom 相同的 key 时：
+
+  - 若虚拟 dom 中内容没变，直接使用之前的真实 dom。
+
+  - 若虚拟 dom 中内容变了，则生成新的真实 dom，随后替换掉页面上之前的真实 dom。
+
+- 当旧虚拟 dom 中未找到与新虚拟 dom 相同的 key 时：
+
+  - 创建新的真实 dom，随后渲染到页面中。
+
+3、用 index 最为 key 可能引发的问题：
+
+- 若对数据进行逆序添加、逆序删除等破坏顺序操作时，会产生没有必要的真实 dom 更新，虽然对界面没有什么影响，但是效率极低。
+
+- 如果结构中还包含输入类的 dom 时，会产生错误 dom 更新，导致更新的界面出问题。
+
+4、开发中如何选择使用的 key：
+
+- 最好使用每条数据的唯一标识，比如：id。
+
+- 如果不存在对数据的逆序添加，逆序删除等破坏顺序的操作，仅用于渲染列表用于展示时，使用 index 作为 key 是没有问题的。
+
+#### 列表过滤
+
+1、可通过 watch 实现也可通过 computed 计算属性实现，具体实现方式如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>列表过滤</title>
+  </head>
+  <body>
+    <!-- v-for 遍历可以使用 in 也可以使用 of -->
+    <div id="root">
+      <h2>使用watch实现列表过滤</h2>
+      <input type="text" placeholder="请输入名字" v-model="inpValue" />
+      <ul>
+        <li v-for="(p,index) in filterName" :key="p.id">
+          {{p.name}}:{{p.age}}
+        </li>
+      </ul>
+
+      <h2>使用computed实现列表过滤</h2>
+      <input type="text" placeholder="请输入名字" v-model="keywords" />
+      <button @click="type = 2">升序</button>
+      <button @click="type = 1">降序</button>
+      <button @click="type = 0">原序</button>
+      <ul>
+        <li v-for="(p,index) in filterNames" :key="p.id">
+          {{p.name}}:{{p.age}}
+        </li>
+      </ul>
+    </div>
+  </body>
+  <script type="text/javascript">
+    Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示警告
+    const vm = new Vue({
+      el: "#root",
+      data() {
+        return {
+          type: "0",
+          inpValue: "",
+          keywords: "",
+          persons: [
+            {
+              id: 1,
+              name: "snsn",
+              age: 26,
+            },
+            {
+              id: 2,
+              name: "hmhm",
+              age: 25,
+            },
+            {
+              id: 3,
+              name: "nhnh",
+              age: 27,
+            },
+            {
+              id: 4,
+              name: "yhyh",
+              age: 18,
+            },
+          ],
+          filterName: [],
+        };
+      },
+      // 使用watch实现过滤
+      watch: {
+        inpValue: {
+          immediate: true,
+          handler(val) {
+            this.filterName = this.persons.filter((i) => i.name.includes(val));
+          },
+        },
+      },
+
+      // 使用methods实现
+      computed: {
+        filterNames() {
+          const res = this.persons.filter((i) =>
+            i.name.includes(this.keywords)
+          );
+          if (this.type) {
+            res.sort((p1, p2) => {
+              return this.type === 1 ? p2.age - p1.age : p1.age - p2.age;
+            });
+          }
+          return res;
+        },
+      },
+    });
+  </script>
+</html>
+```
+
+#### Vue 数据监听的原理
+
+1、vue 会监视 data 中所有层次的数据。
+
+2、vue 中通过 setter 实现监视，但是要在 new Vue 时就传入要监视的数据。
+
+- 对象中一开始没有定义，在后来追加的属性，vue 默认不做响应式处理。
+
+- 如果需要给后添加的属性做响应式，需要使用如下 API：
+
+  - Vue.set(target, key, value) 或 vm.$set(target, key, value)。
+
+3、如果要检测数组中的数据，需要通过包裹数组更新元素的方法实现，本质就是：
+
+- 首先调用数组原生的方法对数组进行更新。
+
+- 重新解析模版，进而更新页面。
+
+4、在 vue 修改数组中的某个元素一定要用如下方法：
+
+- push、pop、shift、unshift、splice、sort、reverse。
+
+- Vue.set() 或 vm.$set()。
+
+> 注意千万不能使用 set 给 vm 或 vm 的根数据对象中添加属性。
+
+5、具体使用实例如下：
+
+```js
+// 更新对象
+this.$set(this.student, "set", "男");
+
+// 更新数组
+this.student.friends.unshift({ name: "snsn", age: 18 });
+
+// 更新数组中的某个对象
+this.student.friends[0].name = "hmhm";
+```
+
+#### Vue 表单收集
+
+1、`<input type="text" />` 则 v-model 收集的是 input 中用户输入的 value 值。
+
+2、`<input type="radio" />` 则 v-model 收集的是 input 中的 value 值，但是需要手动给 input 设置 value 值。
+
+3、`<input type="checkbox" />` 的情况：
+
+- 没有配置 input 的 value 属性时，那么收集的就是 checked（勾选或为勾选，是个 boolen 值）。
+
+- 当配置了 input 的 value 属性时：
+
+  - v-model 的初始值是非数组，那么收集的就是 checked（勾选或为勾选，是个 boolen 值）。
+
+  - v-model 的初始值是数组，那么收集的就是 value 组成的数组。
+
+> v-model 的三个**修饰符**：
+>
+> - lazy: 失去焦点再收集数据。
+> - number: 输入字符串转为有效的数字。
+> - trim: 去除输入的首尾空格。
+
+5、具体使用示例如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>表单收集</title>
+  </head>
+  <body>
+    <!-- v-for 遍历可以使用 in 也可以使用 of -->
+    <div id="root">
+      <form @submit.prevent="onSubmit">
+        账号：<input type="text" v-model.trim="userInfo.account" /><br /><br />
+        密码：<input type="password" v-model="userInfo.password" /><br /><br />
+        年龄：<input type="number" v-model.number="userInfo.age" /><br /><br />
+        性别： 男<input type="radio" v-model="userInfo.sex" value="male" />
+        女<input type="radio" v-model="userInfo.sex" value="female" />
+        <br /><br />
+        爱好：学习<input
+          type="checkbox"
+          v-model="userInfo.hobby"
+          value="study"
+        />
+        听歌<input type="checkbox" v-model="userInfo.hobby" value="music" />
+        睡觉<input type="checkbox" v-model="userInfo.hobby" value="sleep" />
+        <br /><br />
+        所在地
+        <select v-model="userInfo.city">
+          <option value="">请选择校区</option>
+          <option value="hangzhou">杭州</option>
+          <option value="shanghai">上海</option>
+          <option value="wuhan">武汉</option>
+          <option value="shenzhen">深圳</option>
+        </select>
+        <br /><br />
+        其它信息：
+        <textarea v-model.lazy="userInfo.other"></textarea><br /><br />
+        <input type="checkbox" v-model="userInfo.agree" />阅读并接受<a
+          href="dnhyxc.github.io"
+          >《用户协议》</a
+        >
+        <button>提交</button>
+      </form>
+    </div>
+  </body>
+  <script type="text/javascript">
+    Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示警告
+    const vm = new Vue({
+      el: "#root",
+      data() {
+        return {
+          userInfo: {
+            account: "925419516@qq.com",
+            password: "",
+            sex: "male",
+            hobby: ["study"],
+            city: "hangzhou",
+            other: "",
+            agree: "",
+          },
+        };
+      },
+      methods: {
+        onSubmit() {
+          console.log(this.userInfo);
+        },
+      },
+    });
+  </script>
+</html>
+```
+
+#### 过滤器
+
+1、过滤器的定义就是对要显示的数据进行特定格式化后再显示（适用于一些简单的逻辑处理）。
+
+2、定时器语法：
+
+- 注册过滤器：`Vue.filter(name, callback)` 或 `new Vue({filters:{...}})`。
+
+- 使用过滤器：`{{xxx | 过滤器名称}}` 或 v-bind: 属性 = 'xxx | 过滤器名称'。
+
+> 过滤器说明：
+>
+> 1. 过滤器也可以接受额外的参数，但第一个参数永远都是需要过滤的属性（即`{{xxx | 过滤器名称}}`中的 xxx），第二个参数才是额外传入的参数。
+> 2. 多个过滤器可以进行串联使用。
+> 3. 过滤器并没有改变原本的数据，而是产生新的对应的数据。
+
+3、具体使用如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/dayjs/1.10.6/dayjs.min.js"></script>
+    <title>过滤器</title>
+  </head>
+  <body>
+    <!-- v-for 遍历可以使用 in 也可以使用 of -->
+    <div id="root">
+      <h2>现在是： {{time | timeFormater("YYYY_MM_DD") | mySlice}}</h2>
+    </div>
+    <div id="root2">
+      <h2>现在是： {{msg | mySlice}}</h2>
+    </div>
+  </body>
+  <script type="text/javascript">
+    Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示警告
+
+    // 全局过滤器
+    Vue.filter("mySlice", function (value) {
+      return value.slice(0, 6);
+    });
+
+    const vm = new Vue({
+      el: "#root",
+      data() {
+        return {
+          time: 1630519751000,
+        };
+      },
+      // 局部过滤器
+      filters: {
+        timeFormater(value, str = "YYYY-MM-DD HH:mm:ss") {
+          return dayjs(value).format(str);
+        },
+        mySlice(value) {
+          return value.slice(0, 4);
+        },
+      },
+    });
+
+    new Vue({
+      el: "#root2",
+      data() {
+        return {
+          msg: "dnhyxc.github.io",
+        };
+      },
+    });
+  </script>
+</html>
+```
+
 ### Vue 高级
 
 #### setup
@@ -996,63 +1505,3 @@ app.directive('focus', {
 // 使用自定义指令
 <input v-focus />
 ```
-
-#### 条件渲染
-
-##### v-if
-
-1，v-if 写法：
-
-```js
-v-if = '表达式'
-
-v-else-if = '表达式'
-
-v-else = '表达式'
-```
-
-2，v-if 适用于切换频率较低的场景，因为它会将隐藏的元素直接从元素所在位置删除。
-
-3，v-if 可以和 v-else-if、v-else 一起使用，但是这三者之间必须紧紧挨在一起，中间不能插入其它元素，否则判断将会被打断，导致条件判断不生效。
-
-##### v-show
-
-1，v-show 写法：
-
-```js
-v-show = '表达式'
-```
-
-2，v-show 适用于切换频率较高的场景，因为其特点就是隐藏的 DOM 元素是使用 `display：none` 进行隐藏的，元素依然存在。
-
-> 使用 v-show 时，该元素一定能获取到，但是使用 v-if 时，元素可能无法获取到。
-
-##### 条件渲染具体使用示例
-
-```html
-<div id="root">
-  <h2>当前n的值为：{{n}}</h2>
-  <button @click="n++">n + 1</button>
-
-  <!-- 使用v-show进行条件渲染 -->
-  <h2 v-show="n === 1">n是1我就出来</h2>
-
-  <!-- 使用v-show进行条件渲染 -->
-  <h2 v-if="n === 1">n是1我就出来</h2>
-
-  <!-- 使用v-else-if和v-else进行条件渲染 -->
-  <h2 v-if="n === 1">n是1就出来</h2>
-  <h2 v-else-if="n === 2">n是2就嘿嘿嘿</h2>
-  <h2 v-else-if="n === 3">n是3哈哈哈</h2>
-  <h2 v-else>嘿哈嘿哈</h2>
-
-  <!-- 使用v-if与template配合使用进行条件渲染 -->
-  <template v-if="n === 1">
-    <h2>嘿嘿</h2>
-    <h2>哈哈</h2>
-    <h2>嘿哈</h2>
-  </template>
-</div>
-```
-
-> template 可以防止在 3 个 h2 元素外包一层父元素，从而导致破坏原有的 DOM 结构，但是 template 只能配合 v-if 进行使用，不能配合 v-show 进行使用。
