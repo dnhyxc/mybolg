@@ -29,6 +29,8 @@ categories:
 
 8、**v-text**：可向其所在的节点中渲染文本内容，它与插值语法的区别在于：v-text 会替换掉节点中的内容，而`{{xx}}`插值语法则不会替换。
 
+<!-- more -->
+
 9、**v-html**：用法及作用与 v-text 类似，只不过 v-model 可以解析标签，而 v-text 则不行。
 
 ```html
@@ -50,8 +52,6 @@ categories:
 4、methods 中配置的函数，不要用箭头函数，否则 this 就会指向 window，不再指向 vm。
 
 5、@click="demo" 和 @click="demo($event)" 效果一致，但后者可以传递其它参数。
-
-<!-- more -->
 
 6、示例代码如下：
 
