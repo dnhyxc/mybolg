@@ -23,6 +23,8 @@ categories:
 
 5、@click="demo" 和 @click="demo($event)" 效果一致，但后者可以传递其它参数。
 
+<!-- more -->
+
 6、示例代码如下：
 
 ```html
@@ -77,6 +79,12 @@ categories:
     <button @click.stop="showInfo3">阻止事件冒泡</button>
   </div>
 
+  <div @click="showInfo2">
+    <a href="baidu.com" @click.prevent.stop="showInfo"
+      >阻止默认事件再阻止事件冒泡</a
+    >
+  </div>
+
   <button @click.once="showInfo4">事件只触发一次</button>
 
   <div @click:capture="showMsg(1)">
@@ -111,7 +119,7 @@ categories:
 
 - 空格：space。
 
-- 换行：tab。
+- 换行：tab（特殊，必须配合 keydown 去使用）。
 
 - 上：up。
 
@@ -123,29 +131,455 @@ categories:
 
 2、vue 为提供别名的按键，可以使用按键原始的 key 值去判定，但注意要转为 kebab-case（短横线命名）。
 
-3、
+3、系统修饰键（用法特殊）：ctrl、alt、shift、meta。
+
+- 配合 keyup 使用：按下修饰键的同时，再按下其它键，随后释放其它键，事件才被触发。
+
+- 配合 keydown 使用：正常触发事件。
+
+4、可以使用 keyCode 去指定具体的按键（不推荐）。
+
+5、Vue.config.keyCodes.自定义键名 = 键码，可以去定制按键别名。
+
+#### 计算属性 computed
+
+1、定义：要用的属性不存在，要通过**已有属性**计算得来。
+
+2、原理：底层借助 Object.defineproperty 方法提供的 getter 和 setter 实现。
+
+3、get 函数什么时候执行？
+
+- 初次读取时会执行一次。
+
+- 当依赖的数据发生改变时会被再次调用。
+
+4、优势：与 methods 实现相比，内部有缓存机制（复用），效率更高，调试方便。
+
+> 1. 计算属性最终会出现在 vm 上，直接读取使用即可。
+> 2. 如果计算属性要被修改，那必须写 set 函数去响应修改，且 set 中要引起计算时依赖的数据发生改变。
+
+5、具体代码示例如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>计算属性</title>
+  </head>
+  <body>
+    <div id="root">
+      <!-- 使用methods实现计算属性 -->
+      <div>
+        姓：<input type="text" v-model="firstName" /> <br /><br />
+        名：<input type="text" v-model="lastName" /> <br /><br />
+        全名：<span>{{fullName()}}</span>
+      </div>
+
+      <!-- 使用computed实现计算属性 -->
+      <div>
+        姓：<input type="text" v-model="firstName" /> <br /><br />
+        名：<input type="text" v-model="lastName" /> <br /><br />
+        全名：<span>{{fullName1}}</span>
+      </div>
+
+      <!-- 使用computed简写形式实现计算属性 -->
+      <div>
+        姓：<input type="text" v-model="firstName" /> <br /><br />
+        名：<input type="text" v-model="lastName" /> <br /><br />
+        全名：<span>{{fullName2}}</span>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示警告
+    const vm = new Vue({
+      el: "#root",
+      data() {
+        return {
+          firstName: "dnh",
+          lastName: "yxc",
+        };
+      },
+      methods: {
+        fullName() {
+          return `${this.firstName}-${this.lastName}`;
+        },
+      },
+      computed: {
+        // 计算属性完整写法
+        fullName1: {
+          /*
+            get 方法会在有人读取fullName1时被调用，且返回值就最为fullName1的值。
+            由于计算属性会做缓存，因此get会在初次读取fullName的时候调用一次，之后只会在所依赖的数据发生改变时才会被调用。
+          */
+          get() {
+            console.log("getter被调用了");
+            return `${this.firstName}-${this.lastName}`;
+          },
+          // set会在fullName1发生改变时调用
+          set(value) {
+            console.log("set", value);
+            const arr = value.split("-");
+            this.firstName = arr[0];
+            this.lastName = arr[1];
+          },
+        },
+
+        // 计算属性简写（必须确定只需要读取属性不需要改变属性时才使用简写形式）
+        fullName2() {
+          console.log("getter被调用了");
+          return `${this.firstName}-${this.lastName}`;
+        },
+      },
+    });
+  </script>
+</html>
+```
+
+#### watch 与 computed 的差异
+
+1、computed 能完成的功能，watch 都能完成。
+
+2、watch 能完成的功能，computed 不一定能完成，例如：watch 可以进行异步操作。
+
+> 1. 所被 vue 管理的函数，最好写成普通函数，这样 this 的指向才是 vm 或组件实例对象。
+> 2. 所有不被 vue 所管理的函数（定时器的回调函数、ajax 的回调函数等），最好写成箭头函数，这样 this 的指向才是 vm 或组件实例对象。
+
+3、使用 watch 实现计算属性：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>使用watch实现计算属性</title>
+  </head>
+  <body>
+    <div id="root">
+      <!-- 使用methods实现计算属性 -->
+      <div>
+        姓：<input type="text" v-model="firstName" /> <br /><br />
+        名：<input type="text" v-model="lastName" /> <br /><br />
+        全名：<span>computed {{fullName1}}</span> <br /><br />
+        全名：<span>watch {{fullName}}</span>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示警告
+    const vm = new Vue({
+      el: "#root",
+      data() {
+        return {
+          firstName: "dnh",
+          lastName: "yxc",
+          fullName: "dnh-yxc",
+        };
+      },
+      computed: {
+        fullName1() {
+          return `${this.firstName}-${this.lastName}`;
+        },
+      },
+      watch: {
+        firstName(pre) {
+          console.log(pre);
+          return (this.fullName = `${pre}-${this.lastName}`);
+        },
+        lastName(pre) {
+          return (this.fullName = `${this.firstName}-${pre}`);
+        },
+      },
+    });
+  </script>
+</html>
+```
+
+#### 监视属性 watch
+
+1、当被监视的属性变化时，回调函数（handler）自动调用。
+
+- 注意：回调函数（handler）名称不能随意乱写，否则会报错。
+
+2、监视的属性必须存在，才能进行监视。
+
+3、监视的两种写法：
+
+- new Vue 时传入 watch 配置。
+
+- 创建 vm 之后，通过 vm.$watch 实现监视。
+
+4、深度监测：
+
+- vue 中的 watch 默认不监测对象内部值的变化（单层级对象）。
+
+- 配置 deep:true 可以监测对象内部值的变化（多层级对象）。
+
+> 1. vue 自身可以监测对象内部值的改变，但 vue 提供的 watch 默认不可以。
+> 2. 使用 watch 时根据数据的具体结构，决定是否采用深度监测。
+
+5、具体使用方式如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>监听属性</title>
+  </head>
+  <body>
+    <div id="root">
+      <h3>今天好{{info}}</h3>
+      <h3>今天好{{sadInfo}}</h3>
+      <!-- 写法一 -->
+      <button @click="changeInfo">改变心情happy{{x}}</button>
+      <!-- 写法二：绑定事件(@xxx="yyy" yyy可以是一些简单的逻辑语句 -->
+      <button @click="isSad = !isSad;x++">切换心情sad{{x}}</button>
+      <hr />
+      <h3>a的值是：{{num.a}}</h3>
+      <button @click="num.a++">a++</button>
+      <h3>b的值是：{{num.b}}</h3>
+      <button @click="num = {a:666,b:999}">彻底替换num</button>
+    </div>
+  </body>
+  <script type="text/javascript">
+    Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示警告
+    const vm = new Vue({
+      el: "#root",
+      data() {
+        return {
+          isHappy: true,
+          isSad: true,
+          x: 0,
+          num: {
+            a: 0,
+            b: 0,
+          },
+        };
+      },
+      methods: {
+        changeInfo() {
+          this.isHappy = !this.isHappy;
+          this.x++;
+        },
+      },
+      computed: {
+        info() {
+          return this.isHappy ? "开心呢" : "伤心啊";
+        },
+        sadInfo() {
+          return this.isSad ? "伤心啊" : "开心呢";
+        },
+      },
+      // 监测属性写法一
+      watch: {
+        // 监测计算属性
+        info: {
+          handler(pre, cur) {
+            console.log("info改变了", pre, cur);
+          },
+        },
+        // 检测普通属性
+        isHappy: {
+          // immediate默认值为false，当为true时，会在初始化时让handler被调用一次。
+          immediate: true,
+          // 当isHappy发生改变时，isHappyHandler会被调用
+          handler(pre, cur) {
+            console.log("isHappy改变了", pre, cur);
+          },
+        },
+        num: {
+          // deep为true时，可以监视多级结构中所有属性的变化
+          deep: true,
+          handler(pre, cur) {
+            console.log("num中的a改变了", pre, cur);
+          },
+        },
+
+        // 简写形式（不需要使用deep、immediate配置项时可以使用简写）
+        isSad(pre, cur) {
+          console.log("watch中isSad改变了", pre, cur);
+        },
+      },
+    });
+    // 监测属性写法二（完整写法）
+    vm.$watch("isSad", {
+      immediate: true,
+      deep: true,
+      handler(pre, cur) {
+        console.log("完整写法isSad改变了", pre, cur);
+      },
+    });
+
+    // 简写写法
+    vm.$watch("isSad", function (pre, cur) {
+      console.log("简写写法isSad改变了", pre, cur);
+    });
+  </script>
+</html>
+```
+
+#### 绑定样式
+
+1、绑定 class 样式写法为：class="xxx"，xxx 可以是字符串，对象，数组。
+
+- 字符串写法适用于类名不确定，个数不确定，名字不确定的情况。
+
+- 对象写法适用于要绑定多个样式，个数不确定，名字也不确定的情况。
+
+- 数组写法适用于要绑定多个样式，个数确定，名字也确定，但是不确定用不用的情况。
+
+2、绑定 style 样式写法为：
+
+- :style="{fontSize: xxx}" 其中 xxx 是动态的。
+
+- :style="[a,b]" 其中 a、b 是样式对象。
+
+3、具体使用示例如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>绑定样式</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      .base {
+        width: 200px;
+        height: 100px;
+        background-color: thistle;
+        text-align: center;
+        line-height: 100px;
+        cursor: pointer;
+      }
+
+      .normal {
+        background-color: skyblue;
+      }
+
+      .pink {
+        background-color: pink;
+        font-weight: 700;
+      }
+
+      .yellow {
+        background-color: yellow;
+        color: tomato;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <!-- 绑定class样式（字符串写法）适用于样式的类名不确定，需要动态指定的情况 -->
+      <div class="base" :class="color" @click="changeColor">{{name}}</div>
+      <br />
+      <!-- 绑定class样式（数组写法）适用于样式个数不确定，名字也不确定的情况 -->
+      <div class="base" :class="colorArr" @click="changeColor1">{{name}}</div>
+      <br />
+      <!-- 绑定class样式（对象写法）适用于样式个数确定，名字也也确定，但要动态决定是否使用的情况 -->
+      <div class="base" :class="colorObj" @click="changeColor2">{{name}}</div>
+      <br />
+      <!-- 绑定style样式（对象写法） -->
+      <div class="base" :style="styleObj" @click="changeColor3">{{name}}</div>
+      <br />
+      <!-- 绑定style样式（数组写法） -->
+      <div class="base" :style="styleArr" @click="changeColor4">{{name}}</div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示警告
+    const vm = new Vue({
+      el: "#root",
+      data() {
+        return {
+          name: "dnhyxc",
+          color: "normal",
+          colorArr: ["normal", "pink", "yellow"],
+          colorObj: {
+            pink: true,
+            yellow: true,
+          },
+          styleObj: {
+            fontSize: "40px",
+          },
+          styleArr: [
+            {
+              fontSize: "40px",
+            },
+            {
+              backgroundColor: "green",
+            },
+          ],
+        };
+      },
+      methods: {
+        changeColor() {
+          const arr = ["pink", "yellow", "normal"];
+          const index = Math.floor(Math.random() * arr.length);
+          this.color = arr[index];
+        },
+        changeColor1() {
+          this.colorArr = this.colorArr.slice(1);
+        },
+        changeColor2() {
+          this.colorObj.pink = !this.colorObj.pink;
+          this.colorObj.yellow = !this.colorObj.yellow;
+        },
+        changeColor3() {
+          let size = this.styleObj.fontSize.slice(
+            0,
+            this.styleObj.fontSize.length - 2
+          );
+          size++;
+          this.styleObj.fontSize = `${size}px`;
+        },
+        changeColor4() {
+          this.styleArr.push({
+            color: "yellow",
+          });
+        },
+      },
+    });
+  </script>
+</html>
+```
 
 ### Vue 高级
 
 #### setup
 
-###### setup 方法说明
+##### setup 方法说明
 
 1，setup 是 Vue3.x 新增的一个选项，它是组件内使用 Composition API 的入口。
 
-###### setup 执行时机
+##### setup 执行时机
 
 2，setup 会在 beforeCreate 之前执行，而不是在 beforeCreate 和 created 之间执行。
 
-###### setup 参数说明
+##### setup 参数说明
 
 1，setup 接受两个参数，分别为：
 
 - props: 组件传入的属性。
 
 - context：是一个对象，由于 **setup 中不能访问 Vue2 中最常用的 this 对象**，所以 context 中就提供了 this 中最常用的三个属性：attrs、slot 和 emit，分别对应 Vue2.x 中的 $attr属性、slot插槽 和$emit 发射事件。并且这几个属性都是自动同步最新的值，所以我们每次使用拿到的都是最新值。
-
-<!-- more -->
 
 2，setup 中接受的 props 是响应式的， 当传入新的 props 时，会及时被更新。由于是响应式的， 所以不可以使用 ES6 解构，解构会消除它的响应式。如下写法就会消除响应式：
 
@@ -195,7 +629,7 @@ export default defineComponent({
 
 1，在 vue2.x 中， 定义数据都是在 data 中，但是 Vue3.x 可以使用 reactive 和 ref 来进行**数据定义**。
 
-###### reactive 与 ref 的区别
+##### reactive 与 ref 的区别
 
 1，reactive 主要用于**处理对象**的双向绑定，但是不能处理基本类型，例如 string、number、boolean 等。
 
@@ -285,7 +719,7 @@ export default defineComponent({
 
 #### vue3.x 生命周期
 
-###### vue3.x 生命周期图谱
+##### vue3.x 生命周期图谱
 
 ![生命周期](vue-live.webp)
 
@@ -293,7 +727,7 @@ export default defineComponent({
 
 #### watch 与 watchEffect
 
-###### watch 方法说明
+##### watch 方法说明
 
 1，watch 函数用来侦听特定的数据源，并在回调函数中执行副作用。默认情况是惰性的，也就是说**仅在侦听的源数据变更时才执行回调**。
 
@@ -303,7 +737,7 @@ export default defineComponent({
 watch(source, callback, [options]);
 ```
 
-###### watch 参数说明
+##### watch 参数说明
 
 1，source：可以支持 string、Object、Function、Array，用于指定要侦听的响应式变量。
 
@@ -311,7 +745,7 @@ watch(source, callback, [options]);
 
 3，options：支持 deep、immediate 和 flush 选项。
 
-###### watch 具体使用
+##### watch 具体使用
 
 1，监听 reactive 定义的数据：
 
@@ -407,7 +841,7 @@ setTimeout(() => {
 }, 3000);
 ```
 
-###### watchEffect 方法说明
+##### watchEffect 方法说明
 
 1，watchEffect 与 watch 使用上的区别：
 
@@ -437,7 +871,7 @@ export default defineComponent({
 
 > 上述代码执行结果首先打印一次 state 和 year 值，然后每隔一秒，打印 state 和 year 值。从上面的代码可以看出，并没有像 watch 一样需要先传入依赖，watchEffect 会自动收集依赖, 只要指定一个回调函数。**在组件初始化时，会先执行一次来收集依赖**，然后当收集到的依赖中数据发生变化时，就会再次执行回调函数。
 
-###### watchEffect 与 watch 的区别
+##### watchEffect 与 watch 的区别
 
 1，watchEffect 不需要手动传入依赖。
 
@@ -447,7 +881,7 @@ export default defineComponent({
 
 #### slot 具名插槽语法
 
-###### vue2.x 具名插槽写法
+##### vue2.x 具名插槽写法
 
 ```js
 // 子组件中
@@ -459,7 +893,7 @@ export default defineComponent({
 <template>
 ```
 
-###### vue2.x 作用域插槽写法
+##### vue2.x 作用域插槽写法
 
 1，如果需要在 slot 上面绑定数据，可以使用作用域插槽，实现如下：
 
@@ -480,7 +914,7 @@ export default {
 <template>
 ```
 
-###### vue3.x 中使用插槽
+##### vue3.x 中使用插槽
 
 1，在 Vue2.x 中具名插槽和作用域插槽分别使用 slot 和 slot-scope 来实现，在 Vue3.0 中将 slot 和 slot-scope 进行了合并统一使用。Vue3.0 中 使用 v-slot 实现：
 
@@ -498,7 +932,7 @@ export default {
 
 #### 自定义指令
 
-###### vue2.x 实现自定义指令
+##### vue2.x 实现自定义指令
 
 1，实现实例代码如下：
 
@@ -525,7 +959,7 @@ Vue.directive("focus", {
 
 - unbind：只调用一次，指令与元素解绑时调用。
 
-###### vue3.x 对自定义指令 API 的变更
+##### vue3.x 对自定义指令 API 的变更
 
 1，vue2.x 与 vue3.x 自定义指令 API 的区别：
 
@@ -565,7 +999,7 @@ app.directive('focus', {
 
 #### 条件渲染
 
-###### v-if
+##### v-if
 
 1，v-if 写法：
 
@@ -581,7 +1015,7 @@ v-else = '表达式'
 
 3，v-if 可以和 v-else-if、v-else 一起使用，但是这三者之间必须紧紧挨在一起，中间不能插入其它元素，否则判断将会被打断，导致条件判断不生效。
 
-###### v-show
+##### v-show
 
 1，v-show 写法：
 
@@ -593,7 +1027,7 @@ v-show = '表达式'
 
 > 使用 v-show 时，该元素一定能获取到，但是使用 v-if 时，元素可能无法获取到。
 
-###### 条件渲染具体使用示例
+##### 条件渲染具体使用示例
 
 ```html
 <div id="root">
