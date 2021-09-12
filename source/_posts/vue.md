@@ -41,6 +41,46 @@ categories:
 </div>
 ```
 
+> 注意：v-model 处在安全性问题，在网站上动态渲染任意 HTML 是非常危险的，容易导致 XSS 攻击。因此一定要在可信的内容上使用 v-html，不要用在用户提交的内容上。
+
+10、**v-cloak**：该指令没有值，本质上是一个特殊属性，Vue 实例创建完毕并接管容器后，会删除 v-cloak 属性。可以使用 css 配合 v-cloak 解决网速慢时页面展示出`{{xxx}}`的问题。
+
+```html
+<style>
+  [v-cloak] {
+    display: none;
+  }
+</style>
+<body>
+  <div id="root">
+    <h2 v-cloak>{{name}}</h2>
+  </div>
+</body>
+```
+
+11、**v-once**：该指令所在节点在初次动态渲染后，就视为静态内容了，以后数据的改变不会引起 v-once 所在结构的更新，可以用于优化性能。
+
+```html
+<body>
+  <div id="root">
+    <h2 v-cloak>初始化n的值是：{{n}}</h2>
+    <h2 v-cloak>当前n的值是：{{n}}</h2>
+    <button @click="n++">n++</button>
+  </div>
+</body>
+
+<script>
+  new Vue({
+    el: "#root",
+    data: {
+      n: 1,
+    },
+  });
+</script>
+```
+
+12、**v-pre**：该指令会跳过所在节点的编译过程。可以利用该指令跳过没有使用 vue 的指令语法，或没有使用 vue 插值语法的节点，加快编译。
+
 #### 事件的基本使用
 
 1、使用 v-on:xxx 或 @xxx 绑定事件，其中 xxx 是事件名。
