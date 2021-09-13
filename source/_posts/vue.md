@@ -1235,8 +1235,6 @@ Vue.directive("指令名", "回调函数");
 </html>
 ```
 
-#### Vue 生命周期
-
 ### Vue 高级
 
 #### setup
