@@ -1110,6 +1110,8 @@ this.student.friends[0].name = "hmhm";
 </html>
 ```
 
+#### Vue 生命周期
+
 ### Vue 高级
 
 #### setup
