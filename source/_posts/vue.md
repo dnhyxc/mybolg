@@ -1110,6 +1110,131 @@ this.student.friends[0].name = "hmhm";
 </html>
 ```
 
+#### 自定义指令
+
+1、局部指令定义语法：
+
+```js
+// 写法一
+new Vue({
+  directives: {
+    指令名: "配置对象",
+  },
+});
+
+// 写法二
+new Vue({
+  指令名: "回调函数",
+});
+```
+
+2、全局指令：
+
+```js
+// 写法一
+Vue.directive("指令名", "配置对象");
+
+// 写法二
+Vue.directive("指令名", "回调函数");
+```
+
+3、配置对象中常用的 3 个回调：
+
+- bind：在指令与元素成功绑定时调用。
+
+- inserted：在指令所在元素被插入页面时调用。
+
+- update：在指令所在模版结构被重新解析时调用。
+
+> 指令定义时不加 v-，但使用时要加 v-。指令名如果是多个单词，要使用 kebab-case 命名方式，不要用 camelCase 命名。
+
+4、具体使用方式如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>自定义指令</title>
+  </head>
+  <body>
+    <div id="root">
+      <h2>放大10倍后n的值是：<span v-big="n"></span></h2>
+      <button @click="n++">现身吧input</button>
+      <input type="text" v-fbind:value="n" />
+      <input type="text" v-fbind-global:value="n" />
+    </div>
+  </body>
+  <script>
+    // 全局指令
+    Vue.directive("fbind-global", {
+      // 在指令与元素成功绑定时会被调用
+      bind(element, binding) {
+        console.log("bind");
+        element.value = binding.value;
+      },
+      // 指令所在元素被插入页面时被动用
+      inserted(element, binding) {
+        console.log("inserted");
+        element.focus();
+      },
+      // 指令所在的模版被重新解析时被调用
+      update(element, binding) {
+        console.log("update");
+        element.value = binding.value;
+      },
+    });
+
+    // 全局指令
+    Vue.directive("big-global", function (element, binding) {
+      console.log(element, binding.value);
+      console.log(this); // window
+      element.innerText = binding.value * 10;
+    });
+
+    new Vue({
+      el: "#root",
+      data: {
+        n: 1,
+      },
+      // 注意：指令中的this都是指向window
+      directives: {
+        // v-big会在指令与元素成功绑定时会被调用一次（初始化）以及指令所在的模版重新被解析时也会调用
+        big(element, binding) {
+          console.log(element, binding.value);
+          console.log(this); // window
+          element.innerText = binding.value * 10;
+        },
+        // 局部指令
+        fbind: {
+          // 在指令与元素成功绑定时会被调用
+          bind(element, binding) {
+            console.log("bind");
+            element.value = binding.value;
+            console.log(this); // window
+          },
+          // 指令所在元素被插入页面时被动用
+          inserted(element, binding) {
+            console.log("inserted");
+            element.focus();
+            console.log(this); // window
+          },
+          // 指令所在的模版被重新解析时被调用
+          update(element, binding) {
+            console.log("update");
+            element.value = binding.value;
+            console.log(this); // window
+          },
+        },
+      },
+    });
+  </script>
+</html>
+```
+
 #### Vue 生命周期
 
 ### Vue 高级
