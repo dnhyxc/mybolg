@@ -1173,25 +1173,20 @@ Vue.directive("指令名", "回调函数");
     Vue.directive("fbind-global", {
       // 在指令与元素成功绑定时会被调用
       bind(element, binding) {
-        console.log("bind");
         element.value = binding.value;
       },
       // 指令所在元素被插入页面时被动用
       inserted(element, binding) {
-        console.log("inserted");
         element.focus();
       },
       // 指令所在的模版被重新解析时被调用
       update(element, binding) {
-        console.log("update");
         element.value = binding.value;
       },
     });
 
     // 全局指令
     Vue.directive("big-global", function (element, binding) {
-      console.log(element, binding.value);
-      console.log(this); // window
       element.innerText = binding.value * 10;
     });
 
