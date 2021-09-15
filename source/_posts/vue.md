@@ -13,7 +13,7 @@ categories:
 
 #### 内置指令
 
-1、**v-bind**：单向绑定解析表达式，可简写为：**:xxx**。
+1、**v-bind**：单向绑定解析表达式，可简写为：`:xxx`。
 
 2、**v-model**：双向数据绑定。
 
@@ -1245,6 +1245,20 @@ Vue.directive("指令名", "回调函数");
 - 销毁后自定义事件会失效，但原生 DOM 事件依然有效。
 
 - 一般不会在 beforDestory 中操作数据、因为即使操作数据，也不会再触发更新流程了。
+
+#### VueComponent
+
+1、vue 中每个组件本质是一个名为 VueComponent 的构造函数，且不失程序员定义的，而是 Vue.extend 生成的。
+
+2、如我们只需要写一个`<demo /> 或者 <demo><demo />`，Vue 解析时就会帮我们创建 school 组件的实例对象，即 Vue 帮我们执行：`new VueComponent(options)`。
+
+3、特别注意：每次调用 Vue.extend，返回的都是一个全新的 VueComponent。
+
+4、关于 this 的指向：
+
+- 组件配置中：data 函数、methods 中的函数、watch 中的函数、computed 中的函数它们的 this 都是 VueComponent 实例对象。
+
+- new Vue(options)配置中，data 函数、methods 中的函数、watch 中的函数、computed 中的函数都是指向 Vue 实例对象。
 
 ### Vue 高级
 
