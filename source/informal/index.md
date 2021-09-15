@@ -1393,7 +1393,7 @@ const beginTime = moment().subtract(6, "days").startOf("day").valueOf();
 const endTime = moment().endOf("day").valueOf();
 ```
 
-### Dva & React
+### Dva & React & Vue
 
 #### Dva 中实现请求轮循
 
@@ -1595,6 +1595,31 @@ export default CheckList;
 >
 > 1，当 activeMult 为 true 时，说明当前点击的这一项已经存在于 activeMultIds 中，是处于选中状态的，需要将其从 activeMultIds（选中列表）中移除。
 > 2，当 activeMult 为 false 时，说明当前点击的这一项不在 activeMultIds 中，即还没有被选中，需要将其加入到 activeMultIds（选中列表）中。
+
+#### React 获取 query 参数
+
+```js
+export const getQueryParams = (url) => {
+  return url
+    .slice(1)
+    .split("&")
+    .reduce((pre, cur) => {
+      const [k, v] = cur.split("=").map(decodeURIComponent);
+      pre[k] = v;
+
+      return pre;
+    }, {});
+};
+
+// 使用方式传入location.search
+const { formId, formGroupId } = getQueryParams(location.search);
+```
+
+#### Vue 获取 query 参数
+
+```js
+const { formId, formGroupId, active } = this.$route.query;
+```
 
 ### 实现复制功能
 

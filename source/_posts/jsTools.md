@@ -517,22 +517,3 @@ const onBackToTop = () => {
   requestAnimationFrame(toTop);
 };
 ```
-
-#### 获取 url 中携带的 query 参数
-
-```js
-export const getQueryParams = (url) => {
-  return url
-    .slice(1)
-    .split("&")
-    .reduce((pre, cur) => {
-      const [k, v] = cur.split("=").map(decodeURIComponent);
-      pre[k] = v;
-
-      return pre;
-    }, {});
-};
-
-// 使用方式传入location.search
-const { formId, formGroupId } = getQueryParams(location.search);
-```
