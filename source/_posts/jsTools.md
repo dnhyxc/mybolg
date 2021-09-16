@@ -517,3 +517,64 @@ const onBackToTop = () => {
   requestAnimationFrame(toTop);
 };
 ```
+
+#### 数组转树形结构
+
+1、使用递归实现：
+
+```js
+const arrayToTree = (arr, pid) => {
+  let res = [];
+  arr.forEach((item) => {
+    if (item.pid === pid) {
+      let itemChildren = arrayToTree(arr, item.id);
+      if (itemChildren.length) {
+        item.children = itemChildren;
+      }
+      res.push(item);
+    }
+  });
+  return res;
+};
+```
+
+2、非递归实现：
+
+```js
+const arrayToTree = (arr) => {
+  let result = [];
+  if (!Array.isArray(arr) || arr.length === 0) {
+    return result;
+  }
+  let map = {};
+  arr.forEach((item) => (map[item.id] = item));
+  arr.forEach((item) => {
+    const parent = map[item.pid];
+    if (parent) {
+      (parent.children || (parent.children = [])).push(item);
+    } else {
+      result.push(item);
+    }
+  });
+  return result;
+};
+```
+
+#### 筛选符合条件的数据并返回树结构
+
+```js
+const filterTreeByFunc = (tree, func) => {
+  if (!Array.isArray(tree) || tree.length === 0) {
+    return [];
+  }
+  return tree.filter((item) => {
+    item.children = item.children && filterTreeByFunc(item.children, func);
+    return func(item) || (item.children && item.children.length);
+  });
+};
+
+// 条件为show为true
+const func = (item) => {
+  return item.show === true;
+};
+```
