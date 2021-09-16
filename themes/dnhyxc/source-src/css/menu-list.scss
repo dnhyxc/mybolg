@@ -4,7 +4,6 @@
   left: -270px;
   width: 100%;
   height: 46px;
-  // padding: 0 7px;
   transition: all 0.3s ease;
   background: rgba(0, 0, 0, 0.5);
   z-index: 999999;
@@ -12,16 +11,18 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  padding-left: 5px;
 
   .changeFooter {
     display: inline-block;
-    width: 32px;
+    flex: 1;
     height: 32px;
-    line-height: 29px;
-    border-radius: 32px;
+    line-height: 31px;
+    border-radius: 5px;
     border: 2px solid #ffd900;
     color: #ffd900;
     cursor: pointer;
+    margin-right: 5px;
 
     &:hover {
       box-shadow: 0 0 10px #fff inset;
@@ -81,7 +82,7 @@
       border: 20px solid;
 
       &::before {
-        content: '' !important;
+        content: "" !important;
       }
 
       &::after {
