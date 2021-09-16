@@ -110,10 +110,10 @@
 
   .end-footer {
     // display: block;
-    position: absolute;
-    width: 100%;
+    position: fixed;
+    width: calc(100% - 270px);
     right: 0;
-    bottom: 0px;
+    bottom: 0;
     transition: all 0.5s ease;
 
     #footer {
@@ -134,8 +134,8 @@
 
   .toggleEndFooter {
     // display: none;
-    position: absolute;
-    width: 100%;
+    position: fixed;
+    width: calc(100% - 270px);
     right: 0;
     bottom: -80px;
     transition: all 0.5s ease;
