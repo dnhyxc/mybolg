@@ -13,7 +13,7 @@
 
   .list {
     white-space: nowrap;
-    line-height: 45px;
+    line-height: 38px;
   }
 
   .changeFooter {
@@ -28,8 +28,10 @@
     cursor: pointer;
 
     &:hover {
-      box-shadow: 0 0 5px #fff inset;
+      // box-shadow: 0 0 5px #fff inset;
+      border-bottom: 2px solid #ffd900;
       color: #d9ff00;
+      font-weight: 700
     }
   }
 
