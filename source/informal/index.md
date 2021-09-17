@@ -1064,6 +1064,54 @@ ul.on("click", "li", (e) => {
 </html>
 ```
 
+#### 不设置宽度文本超出隐藏
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>不设宽度文本超出隐藏</title>
+    <style>
+      .box {
+        border: 1px solid red;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 500px;
+      }
+
+      .context {
+        flex: 1;
+        width: 0;
+      }
+
+      .desc {
+        display: block;
+        margin-right: 30px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <div class="context">
+        <span class="desc">
+          不设宽度文本超出隐藏不设宽度文本超出隐藏不设宽度文本超出隐藏不设宽度文本超出隐藏不设宽度文本超出隐藏不设宽度文本超出隐藏不设宽度文本超出隐藏
+        </span>
+      </div>
+      <div>button</div>
+    </div>
+  </body>
+</html>
+```
+
+> 需要设置超出隐藏的元素必须是**块级元素**，否则设置将不生效。
+
 #### 图片层叠显示效果实现
 
 ```html
