@@ -1,12 +1,14 @@
 .article-entry {
   figure {
     position: relative;
+
     &::-webkit-scrollbar {
       width: 8px;
       height: 8px;
       display: block;
     }
   }
+
   .copyBtn {
     position: absolute;
     right: 5px;
@@ -18,6 +20,7 @@
     font-weight: initial;
     letter-spacing: normal;
   }
+
   .copyInfo {
     position: absolute;
     right: 5px;
@@ -26,7 +29,10 @@
     color: #ffae00;
     z-index: 888;
     visibility: hidden;
+    font-weight: initial;
+    letter-spacing: initial;
   }
+
   .showCopyInfo {
     bottom: -10px;
     visibility: visible;
