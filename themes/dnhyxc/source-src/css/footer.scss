@@ -109,9 +109,8 @@
   }
 
   .end-footer {
-    // display: block;
     position: fixed;
-    width: calc(100% - 270px);
+    width: calc(100vw - 270px);
     right: 0;
     bottom: 0;
     transition: all 0.5s ease;
@@ -132,8 +131,12 @@
     }
   }
 
+  .isShowEndFooter {
+    width: 100%;
+    transition: none;
+  }
+
   .toggleEndFooter {
-    // display: none;
     position: fixed;
     width: calc(100% - 270px);
     right: 0;

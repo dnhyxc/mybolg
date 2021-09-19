@@ -38,6 +38,7 @@ import section from "./section-height";
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
+const container = document.querySelector("#container");
 
 addLoadEvent(function () {
   // Share.init()
@@ -115,6 +116,7 @@ document.onreadystatechange = function () {
     } else {
       menuList.showFooter();
     }
+    console.log(container.classList, "------------");
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {
       passive: false,
