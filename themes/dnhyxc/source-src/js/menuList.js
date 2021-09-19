@@ -79,6 +79,8 @@ function init() {
       }
       if (Utils.getSSG("hideFooter")) {
         hideFooter();
+      } else {
+        showFooter();
       }
     });
 
