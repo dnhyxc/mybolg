@@ -1,163 +1,169 @@
 import closeShadow from "./closeShadow";
-import * as Utils from './public-utils'
+import * as Utils from "./public-utils";
 
 function init() {
-  const container = document.querySelector('#container');
-  const toolsCol = document.querySelector('.tools-col');
-  const btnctn = document.querySelector('.btnctn');
-  const intrudeLess = document.querySelector('#intrude-less');
-  const dark = document.querySelector('.dark');
-  const toggleMusic = document.querySelector('.toggleMusic');
-  const mobileDark = document.querySelector('.mobileDark');
-  const toTopDark = document.querySelector('.toTopDark');
-  const changeInfo = document.querySelector('.changeInfo');
-  const lightChangeInfo = document.querySelector('.lightChangeInfo');
+  const container = document.querySelector("#container");
+  const toolsCol = document.querySelector(".tools-col");
+  const btnctn = document.querySelector(".btnctn");
+  const intrudeLess = document.querySelector("#intrude-less");
+  const dark = document.querySelector(".dark");
+  const toggleMusic = document.querySelector(".toggleMusic");
+  const mobileDark = document.querySelector(".mobileDark");
+  const toTopDark = document.querySelector(".toTopDark");
+  const changeInfo = document.querySelector(".changeInfo");
+  const lightChangeInfo = document.querySelector(".lightChangeInfo");
 
   function toggleLight() {
-    if (container.getAttribute('class') && container.getAttribute('class').includes('container')) {
-      container.classList.remove('container');
-      Utils.removeSSG('container');
+    if (
+      container.getAttribute("class") &&
+      container.getAttribute("class").includes("container")
+    ) {
+      container.classList.remove("container");
+      Utils.removeSSG("container");
     } else {
-      container.classList.add('container');
-      Utils.setSSG('container', true);
+      container.classList.add("container");
+      Utils.setSSG("container", true);
     }
-    if (toolsCol.getAttribute('class').includes('lightToolsCol')) {
-      toolsCol.classList.remove('lightToolsCol');
-      Utils.removeSSG('lightToolsCol');
+    if (toolsCol.getAttribute("class").includes("lightToolsCol")) {
+      toolsCol.classList.remove("lightToolsCol");
+      Utils.removeSSG("lightToolsCol");
     } else {
-      toolsCol.classList.add('lightToolsCol');
-      Utils.setSSG('lightToolsCol', true);
+      toolsCol.classList.add("lightToolsCol");
+      Utils.setSSG("lightToolsCol", true);
     }
-    if (btnctn.getAttribute('class').includes('lightBtnctn')) {
-      btnctn.classList.remove('lightBtnctn');
-      Utils.removeSSG('lightBtnctn');
+    if (btnctn.getAttribute("class").includes("lightBtnctn")) {
+      btnctn.classList.remove("lightBtnctn");
+      Utils.removeSSG("lightBtnctn");
     } else {
-      btnctn.classList.add('lightBtnctn');
-      Utils.setSSG('lightBtnctn', true);
+      btnctn.classList.add("lightBtnctn");
+      Utils.setSSG("lightBtnctn", true);
     }
-    if (intrudeLess.getAttribute('class').includes('lightIntrudeLess')) {
-      intrudeLess.classList.remove('lightIntrudeLess');
-      Utils.removeSSG('lightIntrudeLess');
+    if (intrudeLess.getAttribute("class").includes("lightIntrudeLess")) {
+      intrudeLess.classList.remove("lightIntrudeLess");
+      Utils.removeSSG("lightIntrudeLess");
     } else {
-      intrudeLess.classList.add('lightIntrudeLess');
-      Utils.setSSG('lightIntrudeLess', true);
+      intrudeLess.classList.add("lightIntrudeLess");
+      Utils.setSSG("lightIntrudeLess", true);
     }
-    if (dark.getAttribute('class').includes('light')) {
-      dark.classList.remove('light');
-      dark.innerHTML = '白天';
-      Utils.removeSSG('light');
+    if (dark.getAttribute("class").includes("light")) {
+      dark.classList.remove("light");
+      dark.innerHTML = "白天";
+      Utils.removeSSG("light");
     } else {
-      dark.classList.add('light');
-      dark.innerHTML = '炫酷';
-      Utils.setSSG('light', true);
+      dark.classList.add("light");
+      dark.innerHTML = "炫酷";
+      Utils.setSSG("light", true);
     }
-    if (toggleMusic.getAttribute('class').includes('light')) {
-      toggleMusic.classList.remove('light');
+    if (toggleMusic.getAttribute("class").includes("light")) {
+      toggleMusic.classList.remove("light");
     } else {
-      toggleMusic.classList.add('light');
+      toggleMusic.classList.add("light");
     }
-    if (mobileDark.getAttribute('class').includes('mobileLight')) {
-      mobileDark.classList.remove('mobileLight');
-      mobileDark.innerHTML = '白天';
-      Utils.removeSSG('mobileLight');
+    if (mobileDark.getAttribute("class").includes("mobileLight")) {
+      mobileDark.classList.remove("mobileLight");
+      mobileDark.innerHTML = "白天";
+      Utils.removeSSG("mobileLight");
     } else {
-      mobileDark.classList.add('mobileLight');
-      mobileDark.innerHTML = '炫酷';
-      Utils.setSSG('mobileLight', true);
+      mobileDark.classList.add("mobileLight");
+      mobileDark.innerHTML = "炫酷";
+      Utils.setSSG("mobileLight", true);
     }
-    if (toTopDark.getAttribute('class').includes('mobileLight')) {
-      toTopDark.classList.remove('mobileLight');
-      Utils.removeSSG('mobileLight');
+    if (toTopDark.getAttribute("class").includes("mobileLight")) {
+      toTopDark.classList.remove("mobileLight");
+      Utils.removeSSG("mobileLight");
     } else {
-      toTopDark.classList.add('mobileLight');
-      Utils.setSSG('mobileLight', true);
+      toTopDark.classList.add("mobileLight");
+      Utils.setSSG("mobileLight", true);
     }
   }
   // PC端头像
   dark.onclick = function () {
     toggleLight();
-    if (Utils.getSSG('container')) {
-      changeInfo.style.display = 'none';
-      closeShadow.removeShadow()
+    if (Utils.getSSG("container")) {
+      changeInfo.style.display = "none";
+      closeShadow.removeShadow();
     } else {
-      lightChangeInfo.style.opacity = '0';
+      lightChangeInfo.style.opacity = "0";
       if (Utils.getSSG("hideShadow")) {
-        closeShadow.addShadow()
+        closeShadow.addShadow();
       }
     }
-  }
+  };
   // 移动端头像
   mobileDark.onclick = function () {
     toggleLight();
+  };
+
+  if (Utils.getSSG("container")) {
+    container.classList.add("container");
+  } else {
+    container.classList.remove("container");
   }
 
-  if (Utils.getSSG('container')) {
-    container.classList.add('container');
+  if (Utils.getSSG("light")) {
+    dark.classList.add("light");
+    toggleMusic.classList.add("light");
+    dark.innerHTML = "炫酷";
   } else {
-    container.classList.remove('container');
+    dark.classList.remove("light");
+    toggleMusic.classList.remove("light");
+    dark.innerHTML = "白天";
+  }
+  if (Utils.getSSG("mobileLight")) {
+    mobileDark.classList.add("mobileLight");
+    toTopDark.classList.add("mobileLight");
+    mobileDark.innerHTML = "炫酷";
+  } else {
+    mobileDark.classList.remove("mobileLight");
+    toTopDark.classList.remove("mobileLight");
+    mobileDark.innerHTML = "白天";
   }
 
-  if (Utils.getSSG('light')) {
-    dark.classList.add('light');
-    toggleMusic.classList.add('light');
-    dark.innerHTML = '炫酷';
+  if (Utils.getSSG("lightBtnctn")) {
+    btnctn.classList.add("lightBtnctn");
   } else {
-    dark.classList.remove('light');
-    toggleMusic.classList.remove('light');
-    dark.innerHTML = '白天';
+    btnctn.classList.remove("lightBtnctn");
   }
-  if (Utils.getSSG('mobileLight')) {
-    mobileDark.classList.add('mobileLight')
-    toTopDark.classList.add('mobileLight')
-    mobileDark.innerHTML = '炫酷';
+  if (Utils.getSSG("lightToolsCol")) {
+    toolsCol.classList.add("lightToolsCol");
   } else {
-    mobileDark.classList.remove('mobileLight');
-    toTopDark.classList.remove('mobileLight');
-    mobileDark.innerHTML = '白天';
+    toolsCol.classList.remove("lightToolsCol");
   }
-
-  if (Utils.getSSG('lightBtnctn')) {
-    btnctn.classList.add('lightBtnctn');
+  if (Utils.getSSG("lightIntrudeLess")) {
+    intrudeLess.classList.add("lightIntrudeLess");
   } else {
-    btnctn.classList.remove('lightBtnctn');
-  }
-  if (Utils.getSSG('lightToolsCol')) {
-    toolsCol.classList.add('lightToolsCol');
-  } else {
-    toolsCol.classList.remove('lightToolsCol');
-  }
-  if (Utils.getSSG('lightIntrudeLess')) {
-    intrudeLess.classList.add('lightIntrudeLess');
-  } else {
-    intrudeLess.classList.remove('lightIntrudeLess');
+    intrudeLess.classList.remove("lightIntrudeLess");
   }
 
   let timer;
-  document.body.onscroll = function () {
-    mobileDark.style.visibility = 'visible';
-    mobileDark.style.transition = 'all 0.5s';
-    toTopDark.style.visibility = 'visible';
-    toTopDark.style.transition = 'all 0.5s';
+  document.querySelector("#container").onscroll = function () {
+    // document.body.onscroll = function () {
+    mobileDark.style.visibility = "visible";
+    mobileDark.style.transition = "all 0.5s";
+    toTopDark.style.visibility = "visible";
+    toTopDark.style.transition = "all 0.5s";
     clearTimeout(timer);
     timer = setTimeout(() => {
-      mobileDark.style.visibility = 'hidden';
-      mobileDark.style.transition = 'all 0.5s';
-      toTopDark.style.visibility = 'hidden';
-      toTopDark.style.transition = 'all 0.5s';
+      mobileDark.style.visibility = "hidden";
+      mobileDark.style.transition = "all 0.5s";
+      toTopDark.style.visibility = "hidden";
+      toTopDark.style.transition = "all 0.5s";
     }, 2000);
-  }
+  };
 
   toTopDark.onclick = function () {
     const clock = setInterval(function () {
-      if (document.documentElement.scrollTop !== 0) {
-        document.documentElement.scrollTop -= Math.fround(document.documentElement.scrollTop / 10);
+      if (document.querySelector("#container").scrollTop !== 0) {
+        document.querySelector("#container").scrollTop -= Math.fround(
+          document.querySelector("#container").scrollTop / 10
+        );
       } else {
         clearInterval(clock);
       }
     }, 10);
-  }
+  };
 }
 
 module.exports = {
-  init: init
-}
+  init: init,
+};
