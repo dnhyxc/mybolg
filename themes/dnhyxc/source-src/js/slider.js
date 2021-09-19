@@ -64,10 +64,6 @@ function init() {
         if (!type) {
           type = "innerArchive";
         }
-        console.log(
-          document.querySelector("#container").classList,
-          "=============="
-        );
         app.$set("innerArchive", false); // innerArchive: '所有文章'
         app.$set("friends", false); // friends: '友情链接'
         app.$set("aboutme", false); // aboutme: '关于我'
