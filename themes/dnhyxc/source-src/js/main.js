@@ -37,6 +37,8 @@ import section from "./section-height";
 
 import hideLeft from "./hideLeft";
 
+import rotate from "./rotate";
+
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
@@ -56,6 +58,7 @@ addLoadEvent(function () {
   menuList.init();
   section.init();
   hideLeft.init();
+  rotate.init();
 });
 
 function stopTouchmove(e) {
