@@ -602,7 +602,7 @@
 
 // all-transition
 %transition-all {
-    transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease;
 }
 
 // translate3d
@@ -685,13 +685,13 @@
 }
 
 %trans {
-    transition: all 0.2s ease-in;
-    -ms-transition: all 0.2s ease-in;
+    transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
 }
 
 %trans8 {
-    transition: all 0.8s ease-in;
-    -ms-transition: all 0.8s ease-in;
+    transition: all 0.8s ease;
+    -ms-transition: all 0.8s ease;
 }
 
 %line-bg {

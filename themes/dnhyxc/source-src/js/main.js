@@ -35,6 +35,8 @@ import menuList from "./menuList";
 
 import section from "./section-height";
 
+import hideLeft from "./hideLeft";
+
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
@@ -53,6 +55,7 @@ addLoadEvent(function () {
   closeShadow.init();
   menuList.init();
   section.init();
+  hideLeft.init();
 });
 
 function stopTouchmove(e) {
@@ -114,6 +117,11 @@ document.onreadystatechange = function () {
       menuList.hideFooter();
     } else {
       menuList.showFooter();
+    }
+    if (Utils.getSSG("hideMenu")) {
+      menuList.onHideMenu();
+    } else {
+      hideLeft.onShowMenu();
     }
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {

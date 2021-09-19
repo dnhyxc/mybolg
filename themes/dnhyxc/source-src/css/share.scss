@@ -97,8 +97,8 @@
     opacity: 0;
     filter: alpha(opacity=0);
     pointer-events: none;
-    -webkit-transition: .3s ease-in-out;
-    transition: .3s ease-in-out;
+    -webkit-transition: .3s ease;
+    transition: .3s ease;
     &.in {
         visibility: visible;
         pointer-events: auto;

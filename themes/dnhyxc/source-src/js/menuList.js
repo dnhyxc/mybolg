@@ -46,10 +46,25 @@ function showFooter() {
   changeFooter.innerHTML = "隐底";
 }
 
+function onHideMenu() {
+  const leftCol = document.querySelector(".left-col");
+  const midCol = document.querySelector(".mid-col");
+  const endfooter = document.querySelector(".end-footer");
+  const leftMenu = document.querySelector(".left-menu");
+  const toolsCol = document.querySelector(".tools-col");
+
+  leftCol.classList.add("hideLeft");
+  midCol.classList.add("fullScreen");
+  endfooter.classList.add("full");
+  leftMenu.classList.add("show_menu");
+  toolsCol.classList.add("hideTools");
+}
+
 function init() {
   const authorName = document.querySelector(".authorName");
   const menuList = document.querySelector(".menuList");
   const changeFooter = document.querySelector(".changeFooter");
+  const hideMenu = document.querySelector(".hideMenu");
 
   if (document.body.clientWidth > 800) {
     authorName.addEventListener("click", () => {
@@ -64,8 +79,15 @@ function init() {
       }
       if (Utils.getSSG("hideFooter")) {
         hideFooter();
-      } else {
-        showFooter();
+      }
+    });
+
+    hideMenu.addEventListener("click", () => {
+      if (!Utils.getSSG("hideMenu")) {
+        Utils.setSSG("hideMenu", true);
+      }
+      if (Utils.getSSG("hideMenu")) {
+        onHideMenu();
       }
     });
   }
@@ -75,4 +97,5 @@ module.exports = {
   init: init,
   hideFooter,
   showFooter,
+  onHideMenu,
 };

@@ -34,6 +34,8 @@
 @import "./toggle-shadow";
 @import "./menu-list";
 @import "./perception";
+@import "./hideLeft.scss";
+
 @media screen and (max-width: 800px) {
   @import "./mobile";
   @import "./mobile-slider";

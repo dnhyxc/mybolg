@@ -1,0 +1,39 @@
+.main,
+.isShowShadow {
+
+  .show_menu {
+    display: block !important;
+  }
+
+  .left-menu {
+    position: absolute;
+    left: 0;
+    border-top-left-radius: 5px;
+    box-shadow: 0 0 5px #ccc inset;
+    z-index: 999999;
+    cursor: pointer;
+    display: none;
+
+    .menu {
+      display: inline-block;
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
+
+.hideLeft {
+  left: -280px;
+  transition: all 0.3s ease;
+}
+
+.fullScreen {
+  left: 0;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.full {
+  width: 100vw;
+  transition: all 0.3s ease;
+}

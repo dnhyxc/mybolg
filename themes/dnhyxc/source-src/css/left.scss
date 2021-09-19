@@ -4,13 +4,16 @@
   box-shadow: 0px 0px 10px #cecece inset;
   width: 260px;
   position: fixed;
+  left: 0;
   opacity: 1;
-  transition: all 0.2s ease-in;
+  transition: all 0.3s ease;
   height: calc(100% - 20px);
   z-index: 999;
+
   &.show {
     box-shadow: 0px 0px 10px #ccc inset;
   }
+
   .overlay {
     width: 100%;
     height: 180px;
@@ -58,6 +61,7 @@
               color: #ffd900;
               background-color: rgba(225, 225, 225, 0.6);
             }
+
             -moz-user-select: none;
             /*火狐*/
             -webkit-user-select: none;
@@ -72,11 +76,10 @@
           .light {
             background-color: none;
             color: #333;
-            background-image: linear-gradient(
-              to bottom,
-              #fff1eb 0%,
-              #ace0f9 100%
-            ) !important;
+            background-image: linear-gradient(to bottom,
+                #fff1eb 0%,
+                #ace0f9 100%) !important;
+
             &:hover {
               color: #5f72bd;
             }
@@ -204,6 +207,7 @@
             }
           }
         }
+
         -moz-user-select: none;
         /*火狐*/
         -webkit-user-select: none;
@@ -220,6 +224,7 @@
           color: rgb(255, 217, 0);
         }
       }
+
       .header-subtitle {
         text-align: center;
         color: #999;
@@ -263,13 +268,16 @@
           }
         }
       }
+
       .header-smart-menu {
         font-size: 12px;
         margin-bottom: 20px;
+
         a {
           &:after {
             content: "/";
           }
+
           &:last-child {
             &:after {
               content: "";
@@ -282,6 +290,7 @@
         0% {
           transform: rotateY(0deg);
         }
+
         100% {
           transform: rotateY(360deg);
         }
@@ -305,12 +314,14 @@
         -webkit-box-align: center;
         text-align: center;
         cursor: pointer;
+
         img {
           border-radius: 300px;
           opacity: 1;
           -webkit-transition: -webkit-transform 1s ease-out;
           -moz-transition: -moz-transform 1s ease-out;
           transition: transform 1s ease-out;
+
           &:hover {
             // animation-name: turnY;
             // animation-duration: 3s;
@@ -319,6 +330,7 @@
             -moz-transform: rotateZ(360deg);
             transform: rotateZ(360deg);
           }
+
           &.show {
             width: 100%;
             height: 100%;
@@ -326,6 +338,7 @@
           }
         }
       }
+
       .header-author {
         text-align: center;
         margin: 10px 0;
@@ -333,6 +346,7 @@
         font-size: 33px;
         transition: 0.3s;
         font-weight: 700;
+
         a,
         .authorName {
           // color: #ffec8b;
@@ -340,30 +354,24 @@
 
           font-family: "黑体";
           color: #898989;
-          background: -webkit-linear-gradient(
-            45deg,
-            #39eef6,
-            #f86527,
-            #fcd72d,
-            #5f2cf8,
-            #bed5f5
-          );
-          -moz-linear-gradient: (
-            45 deg,
-            #70f7fe,
-            #fbd7c6,
-            #fdefac,
-            #bfb5dd,
-            #bed5f5
-          );
-          -ms-linear-gradient: (
-            45 deg,
-            #70f7fe,
-            #fbd7c6,
-            #fdefac,
-            #bfb5dd,
-            #bed5f5
-          );
+          background: -webkit-linear-gradient(45deg,
+              #39eef6,
+              #f86527,
+              #fcd72d,
+              #5f2cf8,
+              #bed5f5);
+          -moz-linear-gradient: (45 deg,
+              #70f7fe,
+              #fbd7c6,
+              #fdefac,
+              #bfb5dd,
+              #bed5f5);
+          -ms-linear-gradient: (45 deg,
+              #70f7fe,
+              #fbd7c6,
+              #fdefac,
+              #bfb5dd,
+              #bed5f5);
           color: transparent;
           /*设置字体颜色透明*/
           -webkit-background-clip: text;
@@ -402,11 +410,13 @@
         background-color: #fff;
         background-size: 100% 100%;
       }
+
       .juejin {
         background: url(./img/juejin.png) no-repeat;
         background-color: #007fff;
         background-size: 100% 100%;
       }
+
       .zhihu {
         background: url(./img/zhihu.png) no-repeat;
         background-color: #fff;
@@ -420,6 +430,7 @@
   from {
     backgroud-position: 0 0;
   }
+
   to {
     background-position: 2000px 0;
   }
