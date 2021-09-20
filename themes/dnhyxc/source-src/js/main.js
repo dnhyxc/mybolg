@@ -123,8 +123,10 @@ document.onreadystatechange = function () {
     }
     if (Utils.getSSG("hideMenu")) {
       menuList.onHideMenu();
+      atticleNarrow.setNarrow();
     } else {
       hideLeft.onShowMenu();
+      atticleNarrow.removeNarrow();
     }
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {
