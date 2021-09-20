@@ -44,6 +44,24 @@ const getRotate = function (el) {
   return angle;
 };
 
+function toBottom(domWrapper, time) {
+  function scrollToBottom() {
+    (function smoothscroll() {
+      const currentScroll = domWrapper.scrollTop;
+      const clientHeight = domWrapper.offsetHeight;
+      const scrollHeight = domWrapper.scrollHeight;
+      if (scrollHeight - 10 > currentScroll + clientHeight) {
+        requestAnimationFrame(smoothscroll);
+        domWrapper.scrollTo(
+          0,
+          currentScroll + (scrollHeight - currentScroll - clientHeight) / 2
+        );
+      }
+    })();
+  }
+  setTimeout(scrollToBottom, time);
+}
+
 module.exports = {
   isArticle,
   isInformal,
@@ -55,4 +73,5 @@ module.exports = {
   setSSG,
   removeSSG,
   getRotate,
+  toBottom,
 };

@@ -14,6 +14,14 @@
   </header>
   <% } %>
   <div class="article-entry-wrap">
+    <% if (!index){ %>
+    <div class="article-action">
+      <div class="talk-narrow">评论<span class="talk-count"></span></div>
+        <div class="share-narrow icon icon-weixin">
+          <%- partial('post/share-narrow') %>
+        </div>
+    </div>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
       <% if (post.excerpt && index){ %>
       <%- post.excerpt %>
@@ -89,7 +97,7 @@
       <div class="share icon icon-share">
         <%- partial('post/share') %>
       </div>
-      <% } %>
+    <% } %>
     <div class="clearfix"></div>
   </div>
   </div>

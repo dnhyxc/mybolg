@@ -6,6 +6,8 @@ import {
   isArchives,
   isPerception,
   isHome,
+  toBottom,
+  getSSG,
 } from "./public-utils";
 
 function init() {
@@ -17,10 +19,20 @@ function init() {
     !isHome
   ) {
     const url = location.pathname;
-    new QRcode(
-      document.getElementById("qrcode"),
-      `https://dnhyxc.github.io/${url}`
-    );
+    const qrcode = document.querySelector("#qrcode");
+    const qrcodeNarrow = document.querySelector("#qrcode-narrow");
+    const talkNarrow = document.querySelector(".talk-narrow");
+    const domWrapper = document.querySelector("#wrapper");
+    const talkCount = document.querySelector(".talk-count");
+
+    new QRcode(qrcodeNarrow, `https://dnhyxc.github.io/${url}`);
+    new QRcode(qrcode, `https://dnhyxc.github.io/${url}`);
+
+    talkNarrow.onclick = function () {
+      toBottom(domWrapper, 200);
+    };
+
+    talkCount.innerHTML = getSSG("cnt");
   }
 }
 
