@@ -83,23 +83,28 @@
   margin-bottom: 10px;
   display: inline;
 }
+
 .article-entry {
   line-height: 1.8em;
   padding-right: 7.6923%;
   padding-left: 7.6923%;
-  transition: all 0.3s ease;
+  transition: width 0.3s ease;
   width: 100%;
+
   .hbe-button {
     margin-top: 20px;
   }
+
   p {
     margin-top: 10px;
     font-size: 14px;
   }
+
   ul li {
     font-size: 14px;
     text-align: justify;
   }
+
   p code,
   li code {
     // padding: 3px 3px 1px;
@@ -112,20 +117,24 @@
     font-size: 14px;
     color: #9bff00;
   }
+
   blockquote {
     padding: 10px 10px;
     margin-top: 10px;
     border-left: 5px solid #ffd900;
     background: rgba(225, 225, 225, 0.3);
     color: #000;
+
     p {
       margin-top: 0;
       margin-bottom: 0;
     }
   }
+
   em {
     font-style: italic;
   }
+
   ul {
     li:before {
       content: "";
@@ -141,32 +150,40 @@
       margin-left: 10px;
     }
   }
+
   ol {
     counter-reset: item;
+
     li:before {
       counter-increment: item;
       content: counter(item) ".";
       margin-right: 10px;
     }
   }
+
   ul,
   ol {
     font-size: 14px;
     margin: 10px 0px;
   }
+
   li {
+
     ul,
     ol {
       margin-left: 16px;
+
       li:before {
         content: "";
         background: #ccc;
       }
     }
   }
+
   h1 {
     margin-top: 30px;
   }
+
   h2 {
     margin-top: 20px;
     font-weight: bold;
@@ -174,9 +191,11 @@
     padding-bottom: 5px;
     border-bottom: 1px solid #ddd;
   }
+
   h3 {
     border-bottom: 1px solid #999;
   }
+
   h3,
   h4,
   h5,
@@ -186,21 +205,26 @@
     color: #ffec8b;
     padding-bottom: 4px;
   }
+
   h5 {
     color: #dbff6e;
   }
+
   video {
     max-width: 100%;
   }
+
   strong {
     font-weight: bold;
     color: #d69e19;
   }
+
   .caption {
     display: block;
     font-size: 0.8em;
     color: #aaa;
   }
+
   hr {
     height: 0;
     margin-top: 20px;
@@ -210,6 +234,7 @@
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #fff;
   }
+
   pre {
     white-space: pre;
     line-height: 1.5;
@@ -222,42 +247,50 @@
     font-size: 12px;
     font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New",
       monospace;
+
     code {
       font-size: 14px;
     }
   }
+
   table {
     width: 100%;
     border: 1px solid #dedede;
     margin: 15px 0;
     border-collapse: collapse;
+
     tr,
     td {
       height: 35px;
     }
+
     thead {
       tr {
         width: 100%;
         background: #3b3b3b;
       }
     }
+
     tbody {
       tr:hover {
         background: #cff18f;
         color: black;
       }
     }
+
     td,
     th {
       border: 1px solid #dedede;
       padding: 0 10px;
     }
   }
+
   figure {
     table {
       border: none;
       width: auto;
       margin: 0;
+
       tbody {
         tr:hover {
           background: none;

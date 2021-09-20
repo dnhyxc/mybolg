@@ -1,4 +1,5 @@
 import * as Utils from "./public-utils";
+import atticleNarrow from "./atticle-narrow";
 
 function onShowMenu() {
   const leftCol = document.querySelector(".left-col");
@@ -12,14 +13,13 @@ function onShowMenu() {
   endfooter.classList.remove("full");
   leftMenu.classList.remove("show_menu");
   toolsCol.classList.remove("hideTools");
+
+  // 控制隐藏左侧菜单栏时右侧文章的尺寸
+  if (Utils.getSSG("narrow")) atticleNarrow.setNarrow();
 }
 
 function init() {
   const leftMenu = document.querySelector(".left-menu");
-  // const leftCol = document.querySelector(".left-col");
-  // const midCol = document.querySelector(".mid-col");
-  // const endfooter = document.querySelector(".end-footer");
-
   leftMenu.addEventListener("click", () => {
     if (Utils.getSSG("hideMenu")) {
       Utils.removeSSG("hideMenu");
@@ -28,12 +28,6 @@ function init() {
       onShowMenu();
     }
   });
-
-  // leftMenu.onclick = function () {
-  //   leftCol.classList.toggle("hideLeft");
-  //   midCol.classList.toggle("fullScreen");
-  //   endfooter.classList.toggle("full");
-  // };
 }
 
 module.exports = {

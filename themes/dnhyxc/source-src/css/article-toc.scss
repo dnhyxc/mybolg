@@ -20,7 +20,7 @@
       font-size: 16px;
     }
 
-    .toc-level-3 > a {
+    .toc-level-3>a {
       font-weight: 700;
       color: #eee;
     }
@@ -37,13 +37,6 @@
     }
 
     a:hover {
-      // background-image: linear-gradient(
-      //   -45deg,
-      //   rgb(43, 88, 118) 0%,
-      //   rgb(78, 67, 118) 100%
-      // );
-      // background: rgba(225, 225, 225, 0.1);
-      // box-shadow: 0 0 3px #ccc inset;
       padding: 0px 5px;
       font-weight: 700;
       color: #d9ff00 !important;

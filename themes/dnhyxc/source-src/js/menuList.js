@@ -1,4 +1,5 @@
 import * as Utils from "./public-utils";
+import atticleNarrow from "./atticle-narrow";
 
 function hideFooter() {
   const endFooter = document.querySelector(".end-footer");
@@ -58,6 +59,8 @@ function onHideMenu() {
   endfooter.classList.add("full");
   leftMenu.classList.add("show_menu");
   toolsCol.classList.add("hideTools");
+  // 控制隐藏左侧菜单栏时右侧文章的尺寸
+  if (Utils.getSSG("narrow")) atticleNarrow.setNarrow();
 }
 
 function init() {
