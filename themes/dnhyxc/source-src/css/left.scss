@@ -286,7 +286,7 @@
         }
       }
 
-      @keyframes turnY {
+      @keyframes turnZ {
         0% {
           transform: rotateZ(0deg);
         }
@@ -318,18 +318,8 @@
         img {
           border-radius: 300px;
           opacity: 1;
-          -webkit-transition: -webkit-transform 1s ease-out;
-          -moz-transition: -moz-transform 1s ease-out;
-          transition: transform 1s ease-out;
-          // animation: turnY 8s linear infinite;
-          transform: rotateZ(0deg);
-
-          &:hover {
-            // -webkit-transform: rotateZ(360deg);
-            // -moz-transform: rotateZ(360deg);
-            // transform: rotateZ(360deg);
-            // animation: none;
-          }
+          animation: turnZ 8s linear infinite;
+          // transition: all 0.3s ease;
 
           &.show {
             width: 100%;
