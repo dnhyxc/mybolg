@@ -123,10 +123,18 @@ document.onreadystatechange = function () {
     }
     if (Utils.getSSG("hideMenu")) {
       menuList.onHideMenu();
-      atticleNarrow.setNarrow();
+      if (Utils.getSSG("narrow")) {
+        atticleNarrow.setNarrow();
+      } else {
+        atticleNarrow.removeNarrow();
+      }
     } else {
       hideLeft.onShowMenu();
-      atticleNarrow.removeNarrow();
+      if (Utils.getSSG("narrow")) {
+        atticleNarrow.setNarrow();
+      } else {
+        atticleNarrow.removeNarrow();
+      }
     }
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {

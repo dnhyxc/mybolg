@@ -60,7 +60,7 @@ function onHideMenu() {
   leftMenu.classList.add("show_menu");
   toolsCol.classList.add("hideTools");
   // 控制隐藏左侧菜单栏时右侧文章的尺寸
-  atticleNarrow.setNarrow();
+  if (Utils.getSSG("narrow")) atticleNarrow.setNarrow();
 }
 
 function init() {
