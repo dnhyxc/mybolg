@@ -36,7 +36,7 @@ function removeNarrow() {
 
   articleToc.style.display = "none";
   headerToc.style.display = "block";
-  changeInfo.style.right = "120px";
+  changeInfo.style.right = "123px";
 }
 
 function init() {
