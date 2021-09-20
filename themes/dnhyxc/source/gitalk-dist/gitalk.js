@@ -17579,16 +17579,20 @@ object-assign
                 var cnt = (issue && issue.comments) + localComments.length;
                 var isDesc = pagerDirection === "last";
                 var updateCountCallback = this.options.updateCountCallback;
-
-                sessionStorage.setItem("cnt", cnt);
-
+                if (cnt && cnt !== 0) {
+                  document.querySelector(".talk-count").style.display = "block";
+                }
+                document.querySelector(".talk-count").innerHTML = cnt;
                 if (
                   updateCountCallback &&
                   {}.toString.call(updateCountCallback) === "[object Function]"
                 ) {
                   try {
                     updateCountCallback(cnt);
-                    sessionStorage.setItem("cnt", cnt);
+                    if (cnt && cnt !== 0) {
+                      document.querySelector(".talk-count").style.display = "block";
+                    }
+                    document.querySelector(".talk-count").innerHTML = cnt;
                   } catch (err) {
                     console.log(
                       "An error occurred executing the updateCountCallback:",

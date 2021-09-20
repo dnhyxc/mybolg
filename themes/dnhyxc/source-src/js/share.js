@@ -23,7 +23,7 @@ function init() {
     const qrcodeNarrow = document.querySelector("#qrcode-narrow");
     const talkNarrow = document.querySelector(".talk-narrow");
     const domWrapper = document.querySelector("#wrapper");
-    const talkCount = document.querySelector(".talk-count");
+    // const talkCount = document.querySelector(".talk-count");
 
     new QRcode(qrcodeNarrow, `https://dnhyxc.github.io/${url}`);
     new QRcode(qrcode, `https://dnhyxc.github.io/${url}`);
@@ -32,7 +32,7 @@ function init() {
       toBottom(domWrapper, 200);
     };
 
-    talkCount.innerHTML = getSSG("cnt");
+    // talkCount.innerHTML = getSSG("cnt");
   }
 }
 
