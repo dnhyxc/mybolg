@@ -39,6 +39,8 @@ import hideLeft from "./hideLeft";
 
 import rotate from "./rotate";
 
+import share from "./share";
+
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
@@ -59,6 +61,7 @@ addLoadEvent(function () {
   section.init();
   hideLeft.init();
   rotate.init();
+  share.init();
 });
 
 function stopTouchmove(e) {
