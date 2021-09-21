@@ -17,8 +17,11 @@
     line-height: 32px;
     text-align: center;
     font-size: 12px;
-    background-color: rgba(225, 225, 225, 0.5);
     margin-bottom: 10px;
+    background: url(../css/img/msg.svg) no-repeat;
+    background-size: 18px 18px;
+    background-position: center;
+    background-color: rgba(225, 225, 225, 0.5);
     cursor: pointer;
 
     .talk-count {
