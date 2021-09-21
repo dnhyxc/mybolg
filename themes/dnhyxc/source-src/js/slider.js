@@ -75,6 +75,7 @@ function init() {
         if (app.isShow && document.body.clientWidth <= 800) {
           elScrollTop = document.documentElement.scrollTop;
           document.querySelector("#container").style.position = "fixed";
+          document.querySelector("#container").style.overflowY = "hidden";
           if (elScrollTop) {
             document.querySelector("#container").style.top =
               -elScrollTop + "px";
@@ -184,6 +185,7 @@ function init() {
       document.querySelector("#container").style.position = "relative";
       document.querySelector("#container").style.top = "0px";
       document.documentElement.scrollTop = elScrollTop;
+      document.querySelector("#container").style.overflowY = "auto";
       setTimeout(() => {
         app.$set("isCtnShow", false);
       }, 300);
@@ -246,6 +248,7 @@ function init() {
           document.querySelector("#container").style.position = "relative";
           document.querySelector("#container").style.top = "0px";
           document.documentElement.scrollTop = elScrollTop;
+          document.querySelector("#container").style.overflowY = "auto";
           setTimeout(() => {
             app.$set("isCtnShow", false);
           }, 300);
