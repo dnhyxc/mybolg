@@ -8,6 +8,7 @@ function setNarrow() {
   const changeInfo = document.querySelector(".change-info");
   const articleAction = document.querySelector(".article-action");
   const share = document.querySelector(".share");
+  const articleInfo = document.querySelector(".article-info");
 
   if (document.body.clientWidth > 800 && changeSize) {
     if (Utils.getSSG("hideMenu")) {
@@ -24,6 +25,7 @@ function setNarrow() {
     if (share) share.style.display = "none";
     if (articleAction) articleAction.style.display = "flex";
   }
+  articleInfo.classList.add("artNobb");
   articleToc.style.display = "block";
   headerToc.style.display = "none";
   changeInfo.style.right = "75px";
@@ -37,6 +39,7 @@ function removeNarrow() {
   const changeInfo = document.querySelector(".change-info");
   const articleAction = document.querySelector(".article-action");
   const share = document.querySelector(".share");
+  const articleInfo = document.querySelector(".article-info");
 
   if (document.body.clientWidth > 800 && changeSize) {
     article.classList.remove("narrow");
@@ -47,6 +50,7 @@ function removeNarrow() {
     if (articleAction) articleAction.style.display = "none";
   }
 
+  articleInfo.classList.remove("artNobb");
   articleToc.style.display = "none";
   headerToc.style.display = "block";
   changeInfo.style.right = "123px";
@@ -54,11 +58,9 @@ function removeNarrow() {
 
 function init() {
   const changeSize = document.querySelector(".changeSize");
-  const articleInfo = document.querySelector(".article-info");
 
   changeSize.onclick = function () {
     if (document.body.clientWidth > 800 && changeSize) {
-      articleInfo.classList.toggle("artNobb");
       if (!Utils.getSSG("narrow")) {
         Utils.setSSG("narrow", true);
         setNarrow();
