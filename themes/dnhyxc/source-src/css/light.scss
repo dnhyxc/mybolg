@@ -472,11 +472,15 @@
   }
 
   .article-action .talk-narrow {
-    background-color: #999;
+    background-color: #ccc;
   }
 
   .article-action .share-narrow {
-    background-color: #999;
+    background-color: #ccc;
+  }
+
+  .article-action .talk-narrow .talk-count {
+    background-color: #d9d9d9;
   }
 
   .archives-wrap {
