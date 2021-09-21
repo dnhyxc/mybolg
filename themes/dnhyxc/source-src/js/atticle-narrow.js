@@ -21,9 +21,9 @@ function setNarrow() {
       articleAction && articleAction.classList.add("_share-_narrow");
       articleAction && articleAction.classList.remove("_share-narrow");
     }
+    if (share) share.style.display = "none";
+    if (articleAction) articleAction.style.display = "flex";
   }
-  if (articleAction) articleAction.style.display = "flex";
-  if (share) share.style.display = "none";
   articleToc.style.display = "block";
   headerToc.style.display = "none";
   changeInfo.style.right = "75px";
@@ -43,10 +43,10 @@ function removeNarrow() {
     article.classList.remove("_narrow");
     articleAction && articleAction.classList.remove("_share-narrow");
     articleAction && articleAction.classList.remove("_share-_narrow");
+    if (share) share.style.display = "block";
+    if (articleAction) articleAction.style.display = "none";
   }
 
-  if (articleAction) articleAction.style.display = "none";
-  if (share) share.style.display = "block";
   articleToc.style.display = "none";
   headerToc.style.display = "block";
   changeInfo.style.right = "123px";
