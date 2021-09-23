@@ -1394,6 +1394,27 @@ document.addEventListener(
 );
 ```
 
+### H5 相关
+
+#### H5 判断系统类型
+
+```js
+function getSystemType() {
+  if (
+    navigator.userAgent.indexOf("Android") > -1 ||
+    navigator.userAgent.indexOf("Adr") > -1 ||
+    /(Android)/i.test(navigator.userAgent)
+  ) {
+    return "Android";
+  } else if (
+    navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) ||
+    /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)
+  ) {
+    return "IOS";
+  }
+}
+```
+
 ### Fetch API
 
 #### text()
