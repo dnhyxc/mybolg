@@ -578,3 +578,61 @@ const func = (item) => {
   return item.show === true;
 };
 ```
+
+#### findFibonacci 函数
+
+1、在一堆正整数中，找到最长的一组斐波那契数列段：
+
+```js
+// 实现方式一
+function findFibnacci(list) {
+  const map = {},
+    results = [];
+  for (let num1 of list) {
+    map[num1] = true;
+    for (let num2 of list) {
+      if (num2 > num1) {
+        results.push([num1, num2]);
+      }
+    }
+  }
+  let longest = [];
+  while (results.length) {
+    for (let i = results.length - 1; i >= 0; i--) {
+      let result = results[i];
+      let n1 = result[result.length - 2];
+      let n2 = result[result.length - 1];
+      let next = n1 + n2;
+      if (!map[next]) {
+        if (result.length > longest.length) {
+          longest = result;
+        }
+        results.splice(i, 1);
+        continue;
+      }
+      result.push(next);
+    }
+  }
+  return longest;
+}
+
+let res = findFibnacci([13, 9, 3, 8, 5, 25, 31, 11, 21]);
+console.log(res);
+
+// 实现方式二
+var arr1 = arr.sort(function (a, b) {
+  return a - b;
+});
+var tempArr = [];
+tempArr.push(arr1[0], arr[1]);
+for (var i = 2; i < arr1.length; i++) {
+  if (arr1[i] == arr1[i - 2] + arr1[i - 1]) {
+    tempArr.push(arr1[i]);
+  } else {
+    arr1.splice(i, 1);
+    arr1 = arr1;
+    i--;
+  }
+}
+return tempArr;
+```
