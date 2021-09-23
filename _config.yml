@@ -13,7 +13,8 @@ timezone: ""
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://example.com/child' and root as '/child/'
-url: https://dnhyxc.github.io/
+url: https://dnhyxc.gitee.io
+# url: https://dnhyxc.github.io/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -105,7 +106,9 @@ theme: dnhyxc
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/dnhyxc/dnhyxc.github.io.git
+  repo: 
+    github: https://github.com/dnhyxc/dnhyxc.github.io.git
+    gitee: https://gitee.com/dnhyxc/dnhyxc.git
   branch: master
 
 #
