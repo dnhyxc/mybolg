@@ -31,7 +31,7 @@
       // box-shadow: 0 0 5px #fff inset;
       border-bottom: 2px solid #ffd900;
       color: #d9ff00;
-      font-weight: 700
+      font-weight: 700;
     }
   }
 
@@ -66,6 +66,11 @@
 
 .toggleBrowserCover {
   height: calc(100vh - 288px) !important;
+  transition: all 0.3s ease;
+}
+
+.toggleBrowserCover-windows {
+  height: calc(100vh - 286px) !important;
   transition: all 0.3s ease;
 }
 

@@ -44,6 +44,7 @@ import share from "./share";
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
+const browserCover = document.querySelector(".browserCover");
 
 addLoadEvent(function () {
   // Share.init()
@@ -138,6 +139,9 @@ document.onreadystatechange = function () {
       } else {
         atticleNarrow.removeNarrow();
       }
+    }
+    if (Utils.getSystem() !== 'mac') {
+      browserCover.style.height = 'calc(100vh - 356px)'
     }
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {

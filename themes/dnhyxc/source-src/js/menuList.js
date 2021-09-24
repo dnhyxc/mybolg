@@ -15,12 +15,16 @@ function hideFooter() {
   afterFooter && afterFooter.classList.add("toggleAfterFooter");
   bodyWrap && bodyWrap.classList.add("toggleWrap");
   articleToc && articleToc.classList.add("toggleArticleToc");
-  browserCover && browserCover.classList.add("toggleBrowserCover");
   perceptionLife && perceptionLife.classList.add("togglePerceptionLife");
   scrollWrap &&
     scrollWrap.forEach((i) => {
       i.classList.add("toggleScrollWrap");
     });
+  if (Utils.getSystem() === 'mac') {
+    browserCover && browserCover.classList.add("toggleBrowserCover");
+  } else {
+    browserCover && browserCover.classList.add("toggleBrowserCover-windows");
+  }
   changeFooter.innerHTML = "显底";
 }
 
@@ -38,12 +42,16 @@ function showFooter() {
   afterFooter && afterFooter.classList.remove("toggleAfterFooter");
   bodyWrap && bodyWrap.classList.remove("toggleWrap");
   articleToc && articleToc.classList.remove("toggleArticleToc");
-  browserCover && browserCover.classList.remove("toggleBrowserCover");
   perceptionLife && perceptionLife.classList.remove("togglePerceptionLife");
   scrollWrap &&
     scrollWrap.forEach((i) => {
       i.classList.remove("toggleScrollWrap");
     });
+  if (Utils.getSystem() === 'mac') {
+    browserCover && browserCover.classList.remove("toggleBrowserCover");
+  } else {
+    browserCover && browserCover.classList.remove("toggleBrowserCover-windows");
+  }
   changeFooter.innerHTML = "隐底";
 }
 

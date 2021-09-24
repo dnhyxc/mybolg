@@ -62,6 +62,20 @@ function toBottom(domWrapper, time) {
   setTimeout(scrollToBottom, time);
 }
 
+const getSystem = function () {
+  var agent = navigator.userAgent.toLowerCase();
+  var isMac = /macintosh|mac os x/i.test(navigator.userAgent);
+  if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
+    return 'windows32'
+  }
+  if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
+    return 'windows64'
+  }
+  if (isMac) {
+    return 'mac'
+  }
+}
+
 module.exports = {
   isArticle,
   isInformal,
@@ -74,4 +88,5 @@ module.exports = {
   removeSSG,
   getRotate,
   toBottom,
+  getSystem
 };
