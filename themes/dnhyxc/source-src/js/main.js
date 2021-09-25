@@ -41,6 +41,8 @@ import rotate from "./rotate";
 
 import share from "./share";
 
+import music from "./music";
+
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
@@ -63,6 +65,7 @@ addLoadEvent(function () {
   hideLeft.init();
   rotate.init();
   share.init();
+  music.init();
 });
 
 function stopTouchmove(e) {
