@@ -127,7 +127,7 @@ aplayerMiniswitcher.addEventListener('click', function () {
 
 const toggleMusic = document.querySelector('.toggleMusic');
 
-toggleMusic.onclick = function () {
+const showMusicControl = function () {
   aplayer.classList.toggle("aplayer-narrow");
   aplayerBody.classList.toggle('showBody');
   aplayerLrc.classList.toggle('hideLrc');
@@ -141,4 +141,8 @@ toggleMusic.onclick = function () {
   }
   changeInfo.style.display = 'none';
   lightChangeInfo.style.opacity = '0';
+}
+
+toggleMusic.onclick = function () {
+  showMusicControl()
 }
