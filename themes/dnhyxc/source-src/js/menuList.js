@@ -104,7 +104,6 @@ function init() {
       }
       if (Utils.getSSG("hideMenu")) {
         onHideMenu();
-        // Utils.hideMusicControl()
         if (aplayer.getAttribute('class').includes('aplayer-narrow')) {
           hideMusicControl()
         } else {
