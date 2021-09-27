@@ -88,5 +88,5 @@ module.exports = {
   removeSSG,
   getRotate,
   toBottom,
-  getSystem
+  getSystem,
 };

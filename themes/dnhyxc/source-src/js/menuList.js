@@ -1,5 +1,7 @@
 import * as Utils from "./public-utils";
 import atticleNarrow from "./atticle-narrow";
+import { showMusicControl, hideMusicControl } from "./music"
+
 
 function hideFooter() {
   const endFooter = document.querySelector(".end-footer");
@@ -76,6 +78,7 @@ function init() {
   const menuList = document.querySelector(".menuList");
   const changeFooter = document.querySelector(".changeFooter");
   const hideMenu = document.querySelector(".hideMenu");
+  const aplayer = document.querySelector("#aplayer");
 
   if (document.body.clientWidth > 800) {
     authorName.addEventListener("click", () => {
@@ -101,6 +104,11 @@ function init() {
       }
       if (Utils.getSSG("hideMenu")) {
         onHideMenu();
+        if (aplayer.getAttribute('class').includes('aplayer-narrow')) {
+          hideMusicControl()
+        } else {
+          showMusicControl()
+        }
       }
     });
   }
