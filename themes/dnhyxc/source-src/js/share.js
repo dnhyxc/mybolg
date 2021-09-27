@@ -25,8 +25,8 @@ function init() {
     const domWrapper = document.querySelector("#wrapper");
     // const talkCount = document.querySelector(".talk-count");
 
-    new QRcode(qrcodeNarrow, `https://dnhyxc.github.io/${url}`);
-    new QRcode(qrcode, `https://dnhyxc.github.io/${url}`);
+    new QRcode(qrcodeNarrow, `https://dnhyxc.gitee.io${url}`);
+    new QRcode(qrcode, `https://dnhyxc.gitee.io${url}`);
 
     talkNarrow.onclick = function () {
       toBottom(domWrapper, 200);
