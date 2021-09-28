@@ -1987,3 +1987,55 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCfmlAt2plCVbeObPxuWawsQovYcoanwwRZKVnA5O/
 ```
 
 - 即将上述 ssh 公钥中的邮箱：**xxx@xx.com** 换成刚刚设置邮箱地址即可设置到 github 中生效。
+
+#### git 合并分支
+
+1、git rebase -i HEAD~「需要合并的数量」进行合并：
+
+```js
+// 方式一：指定合并条数
+git rebase -i HEAD~10
+
+// 方式二：选中最近的
+git rebase -i HEAD^^
+```
+
+- 当使用 git rebase -i HEAD~「需要合并的数量」命令时，会进入 vim 编辑界面，将内容更改为如下形式，只保留第一个 pick，之后所有 pick 改为 s，具体如下：
+
+```js
+pick dsa123ws 更改xxx
+
+s sdsad211 xxxxx
+
+s sdsad211 xxxxx
+
+s sdsad211 xxxxx
+
+...
+```
+
+2、git rebase --abort 撤销合并。
+
+3、当有冲突时的操作：
+
+- 首先使用 git add .，之后使用 git rebase --continue 保存：
+
+```js
+git add .
+
+git rebase --continue
+```
+
+### vim 命令相关
+
+1、多选：v + 上下键。
+
+2、更改每行开头的指定内容：
+
+- 首先输入英文模式下的「：」。
+
+- 之后输入「起始行数,终止行数」s/^pick/s（如：2，10 s/^pick/s 则表示将 2 到 10 行开头的 pick 全部改为 s）：
+
+```js
+:2,10 s/^pick/s
+```
