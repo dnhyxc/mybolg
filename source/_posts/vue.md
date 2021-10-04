@@ -1260,6 +1260,16 @@ Vue.directive("指令名", "回调函数");
 
 - new Vue(options)配置中，data 函数、methods 中的函数、watch 中的函数、computed 中的函数都是指向 Vue 实例对象。
 
+#### render 函数
+
+1、vue.js 与 vue.runtime.xxx.js 的区别：
+
+- vue.js 是完整版的 vue，包含核心功能和模板解析器。
+
+- vue.runtime.xxx.js 是运行版的 vue，只包含核心功能，没有模板解析器。
+
+2、因为 vue.runtime.xxx.js 没有模板解析器，所以不能使用 template 配置项，需要使用 render 函数接收到的 createElement 函数去指定具体内容。
+
 ### Vue 高级
 
 #### setup
