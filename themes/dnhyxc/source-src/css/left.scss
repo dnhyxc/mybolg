@@ -76,9 +76,10 @@
           .light {
             background-color: none;
             color: #333;
-            background-image: linear-gradient(to bottom,
-                #fff1eb 0%,
-                #ace0f9 100%) !important;
+            // background-image: linear-gradient(to bottom,
+            //     #fff1eb 0%,
+            //     #ace0f9 100%) !important;
+            box-shadow: 0 0 5px #ccc;
 
             &:hover {
               color: #5f72bd;
@@ -344,24 +345,30 @@
 
           font-family: "黑体";
           color: #898989;
-          background: -webkit-linear-gradient(45deg,
-              #39eef6,
-              #f86527,
-              #fcd72d,
-              #5f2cf8,
-              #bed5f5);
-          -moz-linear-gradient: (45 deg,
-              #70f7fe,
-              #fbd7c6,
-              #fdefac,
-              #bfb5dd,
-              #bed5f5);
-          -ms-linear-gradient: (45 deg,
-              #70f7fe,
-              #fbd7c6,
-              #fdefac,
-              #bfb5dd,
-              #bed5f5);
+          background: -webkit-linear-gradient(
+            45deg,
+            #39eef6,
+            #f86527,
+            #fcd72d,
+            #5f2cf8,
+            #bed5f5
+          );
+          -moz-linear-gradient: (
+            45 deg,
+            #70f7fe,
+            #fbd7c6,
+            #fdefac,
+            #bfb5dd,
+            #bed5f5
+          );
+          -ms-linear-gradient: (
+            45 deg,
+            #70f7fe,
+            #fbd7c6,
+            #fdefac,
+            #bfb5dd,
+            #bed5f5
+          );
           color: transparent;
           /*设置字体颜色透明*/
           -webkit-background-clip: text;
