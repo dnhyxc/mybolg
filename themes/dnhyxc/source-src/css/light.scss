@@ -26,7 +26,7 @@
 
 .container {
   position: relative;
-  background-image: linear-gradient(-225deg, #fff 0%, #fff 100%) !important;
+  background-image: linear-gradient(-225deg, #f4f5f7 0%, #f4f5f7 100%) !important;
 
   .icon-book:before {
     content: "\e6fe";
@@ -51,28 +51,28 @@
   .scroll_top {
     .topBar {
       background: rgba(225, 225, 225, 0.02) !important;
-      box-shadow: 0 0 3px #ccc inset;
+      // box-shadow: 0 0 3px #ccc inset;
     }
   }
 
   .scrollbottom {
     .bottomBar {
       background: rgba(225, 225, 225, 0.02) !important;
-      box-shadow: 0 0 3px #ccc inset;
+      // box-shadow: 0 0 3px #ccc inset;
     }
   }
 
   .scrollright {
     .rightBar {
       background: rgba(225, 225, 225, 0.02) !important;
-      box-shadow: 0 0 3px #ccc inset;
+      // box-shadow: 0 0 3px #ccc inset;
     }
   }
 
   .scrollLeft {
     .leftBar {
       background: rgba(225, 225, 225, 0.02) !important;
-      box-shadow: 0 0 3px #ccc inset;
+      // box-shadow: 0 0 3px #ccc inset;
     }
   }
 
@@ -88,7 +88,7 @@
   }
 
   .left-col {
-    background-image: linear-gradient(to bottom, #fbf6fb 0%, #d7fffe 100%);
+    background-image: linear-gradient(to bottom, #fff 0%, #fff 100%);
     box-shadow: initial;
 
     .intrude-less {
@@ -311,7 +311,7 @@
 
   .mid-col {
     .main {
-      background-color: #f4f5f5 !important;
+      background-color: #fff !important;
       box-shadow: initial;
       color: #333;
 
@@ -348,7 +348,7 @@
     }
 
     .article {
-      background-color: #f4f5f5 !important;
+      background-color: #fff !important;
       box-shadow: initial;
 
       .coverInfo {
@@ -528,7 +528,7 @@
 
     .outer {
       box-shadow: initial;
-      background-color: #f4f5f5;
+      background-color: #fff;
       color: #999 !important;
 
       .scrollWrap {
@@ -632,7 +632,7 @@
 
 .lightToolsCol {
   .tools-section {
-    background-color: #f4f5f5;
+    background-color: #fff;
     color: #333;
     box-shadow: none;
 
