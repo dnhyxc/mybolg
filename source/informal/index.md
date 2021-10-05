@@ -1690,6 +1690,10 @@ const { formId, formGroupId } = getQueryParams(location.search);
 const { formId, formGroupId, active } = this.$route.query;
 ```
 
+#### react 动态路径匹配
+
+1、使用 `.*?/detail` 或者 `.*+/detail` 进行动态的路径匹配。
+
 ### 实现复制功能
 
 #### react-copy-to-clipboard
@@ -1911,131 +1915,3 @@ npm i npm@版本号 -g
 2，变更版本号的命令：npm version [major | minor | patch]。
 
 3，版本号更改完毕即可使用 npm publish 进行发布更新了。
-
-### git 相关
-
-#### git 生成 ssh
-
-1，查看是否设置用户名及邮箱：
-
-```js
-git config user.name  // 查看用户名
-
-git config user.email // 查看邮箱
-```
-
-2，设置用户名及邮箱：
-
-```js
-git config --global user.name "xxxxx" // 设置用户名
-
-git config --global user.email "xxxxx" // 设置邮箱
-```
-
-3，查看是否配置过 ssh 文件：
-
-```js
-cd ~/.ssh
-```
-
-> 如果存在就能进入，说明已经创建过 ssh key 了，就不需要进行下面的步骤生成 ssh key 了。否则就不存在就说明还没有生成 ssh，使用如下步骤生成。
-
-4，生成 ssh key：
-
-```js
-ssh-keygen -t rsa -C "你的邮箱地址"
-```
-
-> 此处会提示 Enter file in which to save the key (/Users/shutong/.ssh/id_rsa): 这样一段内容，让我们输入文件名，如果第 3 步的 ssh 文件存在的话最好在这里修改一下文件名以防覆盖之前的内容，如果第 3 步的 ssh 文件不存在的话则直接按 enter 键就好了。
->
-> 之后会有提示你是否需要设置密码，如果设置了每次使用 Git 都会用到密码，一般都是直接不写为空，直接 enter 就好了。
-
-5，查看生成的 ssh 公钥：
-
-```js
-cat ~/.ssh/id_rsa.pub
-```
-
-#### git 删除远程分支
-
-1，使用如下命令查看远程分支：
-
-```js
-git branch -r
-```
-
-2，使用如下命令删除查到的远程分支：
-
-```js
-git push origin --delete [branch_name]
-```
-
-#### github 没有提交记录解决方式
-
-1，出现问题的原因：本地 ssh 生成的邮箱与 github 上的邮箱不一致导致。
-
-2，处理方式：
-
-- 在需要提交到 github 的项目中使用 **git config user.name '用户名'** 生成局部用户名。使用 **git config user.email '邮箱'** 生成局部邮箱。
-
-- 再使用 **ssh-keygen -t rsa -C "刚设置的邮箱地址"** 生成 ssh 公钥，生成的公钥最好改一下名称，否则会覆盖原来的。
-
-3，最后将生成的 ssh 公钥设置到 github 中，或者将全局的 ssh 公钥中处于公钥最后位置的邮箱地址修改为刚刚设置的局部邮箱地址也能达到相同的目的。
-
-```
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCfmlAt2plCVbeObPxuWawsQovYcoanwwRZKVnA5O/oMnGsyzjUWl+4dLOnSHmOo6dtEa9TDTZO7eWXtkVjMSLHyGTm5QvzrX31r/kbkhC0E23ZUqB4uA8Re0fPnDWC8O1sFVvD1QGd1qjs+hQS/sM0b+prwE0vWueM0zhuKpffjqSsbac9+6TkaCvGcaVvFIMNUWhGkhNWA4OjjhXTJEuDCwH+hT0orxzO/mW9Si3aHJtXi0xptiX3zzTNFFO9gYmnH80KGgwwlMrbRC+SPlFBzGQybniN9quhzs7VYwOffY3jcCM81NRrdR+K9sJF+A6/F2xV3VP+WAIjh1TQtVck2FF3k/BdqMuVI4yo2JBHrhUG7apSwTN7vwasou3CGL4wygQatt+tdsGSDGyuQvVkImqPgBvS54fWzGb36pq4vI9Ix/eLbVaunOwy+NnZGm1NU0oj1w203GS6OfO7yguxuoheeGoESn/tiTmgcjkHbxNnl6oeCok= xxx@xx.com
-```
-
-- 即将上述 ssh 公钥中的邮箱：**xxx@xx.com** 换成刚刚设置邮箱地址即可设置到 github 中生效。
-
-#### git 合并分支
-
-1、git rebase -i HEAD~「需要合并的数量」进行合并：
-
-```js
-// 方式一：指定合并条数
-git rebase -i HEAD~10
-
-// 方式二：选中最近的
-git rebase -i HEAD^^
-```
-
-- 当使用 git rebase -i HEAD~「需要合并的数量」命令时，会进入 vim 编辑界面，将内容更改为如下形式，只保留第一个 pick，之后所有 pick 改为 s，具体如下：
-
-```js
-pick dsa123ws 更改xxx
-
-s sdsad211 xxxxx
-
-s sdsad211 xxxxx
-
-s sdsad211 xxxxx
-
-...
-```
-
-2、git rebase --abort 撤销合并。
-
-3、当有冲突时的操作：
-
-- 首先使用 git add .，之后使用 git rebase --continue 保存：
-
-```js
-git add .
-
-git rebase --continue
-```
-
-### vim 命令相关
-
-1、多选：v + 上下键。
-
-2、更改每行开头的指定内容：
-
-- 首先输入英文模式下的「：」。
-
-- 之后输入「起始行数,终止行数」s/^pick/s（如：2，10 s/^pick/s 则表示将 2 到 10 行开头的 pick 全部改为 s）：
-
-```js
-:2,10 s/^pick/s
-```
