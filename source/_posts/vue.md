@@ -1418,9 +1418,41 @@ new Vue({
 
 #### 自定义事件
 
-1、自定义事件具体写法：
+1、自定义事件说明：
 
-- App 组件：
+- 自定义事件是一种组件间通信的方式，适用于：**子组件像父组件传递数据**。
+
+- 使用场景：A 是父组件，B 是子组件，B 想给 A 传递数据，那么就要在 A 中给 B 绑定自定义事件（事件的回调在 A 中）。
+
+- 绑定自定义事件的方式：
+
+  - 方式一：在父组件中：`<Demo @demo="demo" />` 或 `<Demo v-on:demo="demo" />`
+
+  - 方式二：在父组件中：
+
+  ```html
+  <Demo ref="demo" />
+
+  <!-- ... -->
+
+  mounted(){ this.$refs.demo.$on('xxx', () => {
+  <!-- do something... -->
+  }) }
+  ```
+
+  - 如果想让自定义事件只能触发一次，可以使用 once 修饰符，或者 $once 方法。
+
+- 触发自定义事件：`this.$emit('xxx', data)`。
+
+- 解绑自定义事件：`this.$off('xxx')`。
+
+- 组件上也可以绑定原生 DOM 事件，需要使用 native 修饰符。
+
+- 注意：通过 `this.$refs.xxx.$on('xxx', 回调)` 绑定自定义事件时，回调要么配置在 methods 中，要么就用箭头函数，否则 this 指向会出现问题。
+
+2、自定义事件具体写法：
+
+- App 组件
 
 ```html
 <template>
@@ -1428,20 +1460,25 @@ new Vue({
     <!-- 通过父组件给子组件传递函数类型的的props实现：子给父传递数据 -->
     <School :getSchoolName="getSchoolName" />
     <!-- 通过父组件给子组建绑定一个自定义事件实现：子给父传递数据（第一种写法，使用@或者v-on） -->
-    <Student @getName="getStudentName" />
-    <!-- 通过父组件给子组建绑定一个自定义事件实现：子给父传递数据（第二种写法，使用ref，该写法比第一种写法更加灵活） -->
-    <Student ref="“student”" />
+    <Student @getName="getStudentName" v-on:demo="demo" @test="test" />
+    <!-- 
+      通过父组件给子组建绑定一个自定义事件实现：子给父传递数据（第二种写法，使用ref，该写法比第一种写法更加灵活），
+      如果需要给组件绑定原生事件需要给事件加上native修饰符
+    -->
+    <Teacher ref="teacher" @click.native="show" />
   </div>
 </template>
 <script>
   import Student from "./components/Student";
   import School from "./components/School";
+  import Teacher from "./components/Teacher";
 
   export default {
     name: "app",
     components: {
       School,
       Student,
+      Teacher
     },
     data() {
       return {
@@ -1455,14 +1492,34 @@ new Vue({
       getStudentName(name){
         console.log('App收到了学生名：'，name)
       }
+      demo(){
+        console.log('demo触发了>>>>>>>>>>>>')
+      }
+      test(){
+        console.log('>>>>>>>>>>>>test触发了')
+      }
+      show(){
+        alert('原生事件click触发了')
+      }
     },
     mounted(){
       // 该写法可以规定事件绑定的时机，比如在组件渲染完成后延迟5秒再绑定该事件
-      this.$refs.student.$on('getName', this.getStudentName)
+      this.$refs.teacher.$on('getName', this.getTeacherName)
+      /*
+      this.$refs.teacher.$on('getName', function (name) {
+        console.log(this) // 当前this指向Student实例对象，并不是指向App的实例对象，可以通过箭头函数接解决该this指向问题
+      })
+      this.$refs.teacher.$on('getName', (name) => {
+        console.log(this) // 当前this指向App实例对象
+      })
+      */
     }
   };
 </script>
 ```
+
+> 使用 ref 实现自定义事件时，绑定的回调需要注意 this 指向问题，最好在 methods 中先定义好回调，或者使用箭头函数。
+> 如果要给组件绑定原生事件（如：click），需要给事件加上 native 修饰符，否则将被视为自定义事件，需要在被绑定的组件中使用$emit 触发该事件。
 
 - School 组件
 
@@ -1499,6 +1556,147 @@ new Vue({
 <template>
   <div class="student">
     <h3>学生姓名：{{name}}</h3>
+    <h3>学生数量：{{number}}</h3>
+    <button @click="add">number++</button>
+    <button @click="sendStudentName">把名字给App组件</button>
+    <button @click="demo">触发App组件demo方法</button>
+    <button @click="test">触发App组件test方法</button>
+    <button @click="unbind">解绑getName自定义事件</button>
+    <button @click="unbindAll">批量解绑自定义事件</button>
+    <button @click="kill">销毁当前Student组件的实例（vc）</button>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "student",
+    data() {
+      return {
+        name: "张三",
+      };
+    },
+    methods: {
+      add(){
+        console.log('add 方法被调用')
+        this.numbner++
+      }
+      sendStudentName() {
+        // 触发Student组件实例身上的getName事件
+        this.$emit("getName", this.name);
+      },
+      demo(){
+        this.$emit("demo");
+      }
+      test(){
+        this.$emit("test");
+      }
+      unbind() {
+        // 解绑单个事件
+        this.$off('getName')
+      },
+      unbindAll() {
+        // 解绑多个事件
+        this.$off(['demo','test'])
+      },
+      kill(){
+        // 销毁了当前Student组件的实例，销毁后所有Student实例的自定义事件全部不奏效
+        this.$destroy()
+      }
+    },
+  };
+</script>
+```
+
+- Teacher 组件
+
+```html
+<template>
+  <div class="teacher">
+    <h3>学生姓名：{{name}}</h3>
+    <button @click="sendTeacherName">把名字给App组件</button>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "teacher",
+    data() {
+      return {
+        name: "snsn",
+      };
+    },
+    methods: {
+      sendTeacherName() {
+        // 触发Student组件实例身上的getName事件
+        this.$emit("getName", this.name);
+      },
+    },
+  };
+</script>
+```
+
+#### 全局事件总线
+
+1、全局事件总线是一种组件通信的方式，适用于任意组件间的通信。
+
+2、安装全局事件总线：
+
+```js
+new Vue({
+  ...
+  beforeCreate(){
+    // 安装全局事件总线，$bus就是当前应用的vm
+    Vue.prototype.$bus = this
+  }
+})
+```
+
+3、使用事件总线：
+
+- 接收数据：A 组件想接收数据，则在 A 组件中给 $bus 绑定自定义事件，事件的回调留在 A 组件自身。
+
+```js
+mothods(){
+  demo(data){
+    ...
+  }
+},
+mounted(){
+  this.$bus.$on('xxx',this.demo)
+}
+```
+
+- 提供数据：`this.$bus.$emit('xxx', data)`
+
+4、最好在 **beforeDestroy** 生命周期钩子中，用 `$off` **解绑当前组件所用到的**事件。
+
+5、事件总线具体使用：
+
+- main.js
+
+```js
+import Vue from "vue";
+
+import App from "./App.vue";
+
+Vue.config.productionTip = false;
+
+new Vue({
+  el: "#app",
+  render: (h) => h(App),
+  beforeCreate() {
+    // 安装全局事件总线
+    Vue.prototype.$bus = this;
+  },
+});
+```
+
+- Student.vue
+
+```html
+<template>
+  <div class="student">
+    <h3>学生姓名：{{name}}</h3>
     <button @click="sendStudentName">把名字给App组件</button>
   </div>
 </template>
@@ -1513,12 +1711,65 @@ new Vue({
     },
     methods: {
       sendStudentName() {
-        // 触发Student组件实例身上的getName事件
-        this.$emit("getName", this.name);
+        this..$bus.$emit("test", this.name);
       },
     },
   };
 </script>
+```
+
+- School.vue
+
+```html
+<template>
+  <div class="school">
+    <h3>学校姓名：{{name}}</h3>
+    <button @click="sendStudentName">把名字给App组件</button>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "school",
+    data() {
+      return {
+        name: "dnhyxc",
+      };
+    },
+    mounted() {
+      this.$bus.$on("test", (data) => {
+        console.log("收到了Student组件中传递过来的数据", data);
+      });
+    },
+    beforeDestory() {
+      this.$bus.$off("test");
+    },
+  };
+</script>
+```
+
+#### nextTick
+
+1、语法：`this.$nextTick(callback)`。
+
+2、作用：在下一次 DOM 更新结束后再执行其指定的回调。
+
+3、使用时机：当改变数据后，要基于更新后新的 DOM 元素进行某些操作时，要在 nextTick 所指定的回调函数中执行。
+
+```js
+methods () {
+  handleEdit (todo) {
+    if (todo.hasOwnProperty('isEdit')) {
+      todo.isEdit = true
+    } else {
+      // ...
+    }
+    this.$nextTick(function () {
+      // 必须要在组件挂在完毕获取焦点才能生效，所以需要放在nextTick中执行
+      this.$refs.inputTitle.focus()
+    })
+  }
+}
 ```
 
 ### Vue 高级
