@@ -1270,6 +1270,257 @@ Vue.directive("指令名", "回调函数");
 
 2、因为 vue.runtime.xxx.js 没有模板解析器，所以不能使用 template 配置项，需要使用 render 函数接收到的 createElement 函数去指定具体内容。
 
+#### 混合 mixin
+
+1、混合功能：可以把多个组件共用的配置提取成一个混入对象。
+
+2、混合的定义方式如下：
+
+```js
+export const mixin = {
+  data(){
+    return {
+      ...
+    }
+  },
+  methods:{
+    ...
+  },
+  mounted(){
+    ...
+  }
+}
+```
+
+3、混合的使用，有如下两种方式：
+
+- 全局混入：Vue.mixin(xxx)。
+
+- 局部混入：mixins:['mixin1', 'mixin2']。
+
+4、混合具体使用方式：
+
+```html
+<script>
+  import { mixin1, mixin2 } from "../mixin";
+
+  export default {
+    name: "xxx",
+    data(){
+      return {
+        ...,
+      }
+    },
+    mixins:[mixin1, mixin2],
+    mounted(){
+      ...
+    }
+  };
+</script>
+```
+
+> 说明：在定义 state 属性时，如果组件自身上存在于混合中相同的属性，那么以自身的为准，如果在生命周期中如 mounted 中同时定义了某些方法，那么会将它们进行混合，两者并存，并且会先执行混合中的方法。
+
+#### plugins（插件）
+
+1、定义 plugins.js 文件：
+
+```js
+export default {
+  install(Vue) {
+    // 全局过滤器
+    Vue.filter("mySlice", function (value) {
+      return value.slice(0, 4);
+    });
+    // 定义全局指令
+    Vue.directive("fbind", {
+      bind(element, binding) {
+        element.value = binding.value;
+      },
+      inserted(element, binding) {
+        element.focus();
+      },
+      update(element, binding) {
+        element.value = binding.value;
+      },
+    });
+    // 定义混入
+    Vue.mixin({
+      data() {
+        return {
+          x: 100,
+          y: 200,
+        };
+      },
+    });
+
+    // 在原型上定义方法
+    Vue.prototype.hello = () => {
+      console.log("我是Vue原型上的方法");
+    };
+  },
+};
+```
+
+2、应用 plugins：
+
+```js
+import Vue from 'vue'
+
+import App from './App.vue'
+
+import plugins from './plugins
+
+Vue.config.productionTip = false
+
+// 应用 plugins
+Vue.use(plugins)
+
+new Vue({
+  el: '#app',
+  render: h => h(App)
+})
+```
+
+3、在组件中使用 plugins 中定义的全局指令，过滤器等：
+
+```html
+<template>
+  <div>
+    <!-- 应用全局过滤器 -->
+    <h2>名字：{{name | mySlice}}</h2>
+    <!-- 使用mixin混合 -->
+    <h2>x：{{x}}</h2>
+    <h2>y：{{y}}</h2>
+    <!-- 应用全局指令 -->
+    <input type="text" v-fbind:value="name" />
+    <button @click="“test”">测试hello方法</button>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "xxx",
+    data() {
+      return {
+        name: "xxx",
+      };
+    },
+    methods: {
+      test() {
+        // 调用plugins中定义在原型上的方法
+        this.hello();
+      },
+    },
+  };
+</script>
+```
+
+#### 自定义事件
+
+1、自定义事件具体写法：
+
+- App 组件：
+
+```html
+<template>
+  <div class="app">
+    <!-- 通过父组件给子组件传递函数类型的的props实现：子给父传递数据 -->
+    <School :getSchoolName="getSchoolName" />
+    <!-- 通过父组件给子组建绑定一个自定义事件实现：子给父传递数据（第一种写法，使用@或者v-on） -->
+    <Student @getName="getStudentName" />
+    <!-- 通过父组件给子组建绑定一个自定义事件实现：子给父传递数据（第二种写法，使用ref，该写法比第一种写法更加灵活） -->
+    <Student ref="“student”" />
+  </div>
+</template>
+<script>
+  import Student from "./components/Student";
+  import School from "./components/School";
+
+  export default {
+    name: "app",
+    components: {
+      School,
+      Student,
+    },
+    data() {
+      return {
+        msg: "hello",
+      };
+    },
+    methods:{
+      getSchoolName(name){
+        console.log('App收到了学校名：'，name)
+      }
+      getStudentName(name){
+        console.log('App收到了学生名：'，name)
+      }
+    },
+    mounted(){
+      // 该写法可以规定事件绑定的时机，比如在组件渲染完成后延迟5秒再绑定该事件
+      this.$refs.student.$on('getName', this.getStudentName)
+    }
+  };
+</script>
+```
+
+- School 组件
+
+```html
+<template>
+  <div class="school">
+    <h3>学校姓名：{{name}}</h3>
+    <button @click="sendStudentName">把名字给App组件</button>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "school",
+    props: ["getSchoolName"],
+    data() {
+      return {
+        name: "dnhyxc",
+      };
+    },
+    methods: {
+      sendSchoolName() {
+        // 触发Student组件实例身上的getName事件
+        this.getSchoolName(this.name);
+      },
+    },
+  };
+</script>
+```
+
+- Student 组件
+
+```html
+<template>
+  <div class="student">
+    <h3>学生姓名：{{name}}</h3>
+    <button @click="sendStudentName">把名字给App组件</button>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "student",
+    data() {
+      return {
+        name: "张三",
+      };
+    },
+    methods: {
+      sendStudentName() {
+        // 触发Student组件实例身上的getName事件
+        this.$emit("getName", this.name);
+      },
+    },
+  };
+</script>
+```
+
 ### Vue 高级
 
 #### setup
