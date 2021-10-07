@@ -1280,14 +1280,14 @@ Vue.directive("指令名", "回调函数");
 export const mixin = {
   data(){
     return {
-      ...
+      // ...
     }
   },
   methods:{
-    ...
+    // ...
   },
   mounted(){
-    ...
+    // ...
   }
 }
 ```
@@ -1807,7 +1807,7 @@ export default {
 
 3，如果在开发中即想使用解构，又不消除 props 的响应式，就可以使用 toRefs 解决，因为 toRefs 能将 reactive 对象转化为属性全部为 ref 对象的普通对象。具体使用方式如下：
 
-```js
+```html
 <template>
   <div class="homePage">
     <p>第 {{ year }} 年</p>
@@ -1863,7 +1863,7 @@ setup() {
 
 - 不使用 toRefs 的书写方式如下：
 
-```js
+```html
 <template>
   <div class="homePage">
     <p>第 {{ year }} 年</p>
@@ -1895,7 +1895,7 @@ export default defineComponent({
 
 - 使用 toRefs 的书写方式如下：
 
-```js
+```html
 <template>
   <div class="homePage">
     <p>第 {{ year }} 年</p>
