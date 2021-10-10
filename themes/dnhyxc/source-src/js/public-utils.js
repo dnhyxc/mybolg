@@ -63,18 +63,20 @@ function toBottom(domWrapper, time) {
 }
 
 const getSystem = function () {
-  var agent = navigator.userAgent.toLowerCase();
-  var isMac = /macintosh|mac os x/i.test(navigator.userAgent);
+  const agent = navigator.userAgent.toLowerCase();
+  const isMac = /macintosh|mac os x/i.test(navigator.userAgent);
   if (agent.indexOf("win32") >= 0 || agent.indexOf("wow32") >= 0) {
-    return 'windows32'
+    return "windows32";
   }
   if (agent.indexOf("win64") >= 0 || agent.indexOf("wow64") >= 0) {
-    return 'windows64'
+    return "windows64";
   }
   if (isMac) {
-    return 'mac'
+    return "mac";
   }
-}
+};
+
+const DPR = window.devicePixelRatio;
 
 module.exports = {
   isArticle,
@@ -89,4 +91,5 @@ module.exports = {
   getRotate,
   toBottom,
   getSystem,
+  DPR,
 };

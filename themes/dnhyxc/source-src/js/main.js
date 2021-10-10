@@ -143,8 +143,12 @@ document.onreadystatechange = function () {
         atticleNarrow.removeNarrow();
       }
     }
-    if (Utils.getSystem() !== 'mac') {
-      browserCover.style.height = 'calc(100vh - 356px)'
+    if (Utils.getSystem() !== "mac" && Utils.DPR < 2 && browserCover) {
+      console.log("-----------------", browserCover);
+      browserCover.style.height = "calc(100vh - 356px)";
+    }
+    if (Utils.getSystem() !== "mac" && Utils.DPR >= 2 && browserCover) {
+      browserCover.style.height = "calc(100vh - 355px)";
     }
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {

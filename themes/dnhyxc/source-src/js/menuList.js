@@ -1,7 +1,6 @@
 import * as Utils from "./public-utils";
 import atticleNarrow from "./atticle-narrow";
-import { showMusicControl, hideMusicControl } from "./music"
-
+import { showMusicControl, hideMusicControl } from "./music";
 
 function hideFooter() {
   const endFooter = document.querySelector(".end-footer");
@@ -22,10 +21,13 @@ function hideFooter() {
     scrollWrap.forEach((i) => {
       i.classList.add("toggleScrollWrap");
     });
-  if (Utils.getSystem() === 'mac') {
+  if (Utils.getSystem() === "mac") {
     browserCover && browserCover.classList.add("toggleBrowserCover");
-  } else {
+  } else if (Utils.DPR < 2) {
     browserCover && browserCover.classList.add("toggleBrowserCover-windows");
+  } else {
+    browserCover &&
+      browserCover.classList.add("toggleBrowserCover-windows-retina");
   }
   changeFooter.innerHTML = "显底";
 }
@@ -49,10 +51,13 @@ function showFooter() {
     scrollWrap.forEach((i) => {
       i.classList.remove("toggleScrollWrap");
     });
-  if (Utils.getSystem() === 'mac') {
+  if (Utils.getSystem() === "mac") {
     browserCover && browserCover.classList.remove("toggleBrowserCover");
-  } else {
+  } else if (Utils.DPR < 2) {
     browserCover && browserCover.classList.remove("toggleBrowserCover-windows");
+  } else {
+    browserCover &&
+      browserCover.classList.remove("toggleBrowserCover-windows-retina");
   }
   changeFooter.innerHTML = "隐底";
 }
@@ -104,10 +109,10 @@ function init() {
       }
       if (Utils.getSSG("hideMenu")) {
         onHideMenu();
-        if (aplayer.getAttribute('class').includes('aplayer-narrow')) {
-          hideMusicControl()
+        if (aplayer.getAttribute("class").includes("aplayer-narrow")) {
+          hideMusicControl();
         } else {
-          showMusicControl()
+          showMusicControl();
         }
       }
     });

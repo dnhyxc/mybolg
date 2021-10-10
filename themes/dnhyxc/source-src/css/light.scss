@@ -284,11 +284,7 @@
   }
 
   .toc-container.tooltip-left .tooltip-east .tooltip-content {
-    // background-image: linear-gradient(
-    //   to bottom,
-    //   #fff1eb 0%,
-    //   #ace0f9 100%
-    // ) !important;
+    background-image: linear-gradient(to bottom, #fff 100%, #fff 100%) !important;
 
     a {
       color: #333;
@@ -310,10 +306,10 @@
   .toc-container.tooltip-left .tooltip-east .tooltip-content .toc-article li {
     a:hover {
       color: #9b23ea;
-      background-color: #d7fffe;
+      background-color: #ccc;
 
       .toc-text {
-        background-color: #d7fffe;
+        background-color: #ccc;
       }
     }
   }

@@ -74,6 +74,11 @@
   transition: all 0.3s ease;
 }
 
+.toggleBrowserCover-windows-retina {
+  height: calc(100vh - 285px) !important;
+  transition: all 0.3s ease;
+}
+
 .togglePerceptionLife {
   height: calc(100vh - 95px) !important;
   transition: all 0.3s ease;
