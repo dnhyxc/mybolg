@@ -1711,7 +1711,7 @@ new Vue({
     },
     methods: {
       sendStudentName() {
-        this..$bus.$emit("test", this.name);
+        this.$bus.$emit("test", this.name);
       },
     },
   };
