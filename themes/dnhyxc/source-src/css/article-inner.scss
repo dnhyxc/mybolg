@@ -107,15 +107,13 @@
 
   p code,
   li code {
-    // padding: 3px 3px 1px;
     margin: 0 3px;
-    // background: green;
-    background: rgba(225, 225, 225, 0.5);
+    background: rgba(225, 225, 225, 0.2);
     font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New",
       monospace;
     word-wrap: break-word;
     font-size: 14px;
-    color: #9bff00;
+    color: #adff2f;
   }
 
   blockquote {

@@ -10,6 +10,7 @@
 }
 
 @media screen and (min-width: 800px) {
+
   .article-entry pre,
   .article-entry .highlight {
     background: #1d1d1c;
@@ -34,8 +35,7 @@
 }
 
 .article-entry code {
-  // background: rgba(0, 0, 0, 0.6);
-  padding: 0 0.3em;
+  padding: 3px 3px;
   border: none;
 }
 
