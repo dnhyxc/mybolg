@@ -41,9 +41,11 @@ body,
     .mobileLight {
       background-color: none;
       color: #333;
-      background-image: linear-gradient(to bottom,
-          #fff1eb 0%,
-          #ace0f9 100%) !important;
+      background-image: linear-gradient(
+        to bottom,
+        #fff1eb 0%,
+        #ace0f9 100%
+      ) !important;
     }
   }
 
@@ -74,9 +76,11 @@ body,
     .mobileLight {
       background-color: none;
       color: #333;
-      background-image: linear-gradient(to bottom,
-          #fff1eb 0%,
-          #ace0f9 100%) !important;
+      background-image: linear-gradient(
+        to bottom,
+        #fff1eb 0%,
+        #ace0f9 100%
+      ) !important;
     }
   }
 }
@@ -169,7 +173,7 @@ body,
             }
 
             a:hover {
-              background-color: #2580b3;
+              // background-color: #2580b3;
             }
           }
 
@@ -177,9 +181,17 @@ body,
             .toc-text {
               display: inline-block;
               width: 100%;
-              background-color: #2580b3;
+              // background-color: #2580b3;
             }
           }
+        }
+
+        .select-toc {
+          color: #222 !important;
+          background-color: #f3f5f7 !important;
+          box-sizing: border-box;
+          padding-left: 5px;
+          border-radius: 3px;
         }
 
         a {

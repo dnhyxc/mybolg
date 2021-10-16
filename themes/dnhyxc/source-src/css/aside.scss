@@ -129,7 +129,7 @@
     .toc-article {
       max-height: 500px;
       max-width: 250px;
-      overflow: auto;
+      overflow-x: hidden;
     }
     .toc-article li ol,
     .toc-article li ul {
@@ -139,12 +139,11 @@
       white-space: nowrap;
       cursor: pointer;
       a:hover {
-        color: #ffd900 !important;
+        color: #ffd900;
         background-color: rgba(225, 225, 225, 0.3);
         border-radius: 5px;
 
         .toc-text {
-          // background-color: rgba(0, 0, 0, 0.5);
           display: inline-block;
           height: 100%;
           border-radius: 5px;
