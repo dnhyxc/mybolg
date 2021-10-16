@@ -1772,7 +1772,7 @@ methods () {
 }
 ```
 
-### slot 插槽
+#### slot 插槽
 
 1、slot 默认插槽的基本使用方式：
 
@@ -1866,9 +1866,196 @@ methods () {
 </template>
 ```
 
-3、作用域插槽基本使用：
+3、作用域插槽理解：**数据在组件自身，但根据数据生成的结构需要组件的使用者来决定**（games 数据在 Category 组件中，但使用数据所遍历出来的结构由 App 组件决定）。具体使用如下：
 
 - App.vue
+
+```html
+<template>
+  <div class="container">
+    <Category title="游戏">
+      <template scope="data">
+        <ul>
+          <li v-for="(i, index) in data.games" :key="index">{{i}}</li>
+        </ul>
+      </template>
+    </Category>
+
+    <Category title="游戏">
+      <!-- 使用解构 -->
+      <template scope="{games}">
+        <ol>
+          <li v-for="(i, index) in games" :key="index">{{i}}</li>
+        </ol>
+      </template>
+    </Category>
+
+    <Category title="游戏">
+      <!-- slot-scope 等价于 scope -->
+      <template slot-scope="{games}">
+        <h4 v-for="(i, index) in games" :key="index">{{i}}</h4>
+      </template>
+    </Category>
+  </div>
+</template>
+```
+
+- Category.vue
+
+```html
+<template>
+  <div class="category">
+    <!-- 定义一个插槽（挖坑，等使用者填坑） -->
+    <slot :games="games">
+      我是默认值，使用者没传结构是，我就会出现，否则隐身1
+    </slot>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "Category",
+    props: ["title"],
+    data() {
+      return {
+        games: ["xx", "xxx", "xxxx", "xxxxx"],
+      };
+    },
+  };
+</script>
+```
+
+### Vuex
+
+1、Vuex 基本使用：
+
+- main.js
+
+```js
+import Vue from "vue";
+import App from "./App.vue";
+// import Vuex from "vuex";
+import store from "./store";
+
+Vue.config.productionTip = false;
+
+// Vue规定，必须在创建store之前use Vuex，因此不能在此处use Vuex，否则会报错，因此需要在store/index中use vuex
+// Vue.use(Vuex);
+
+new Vue({
+  el: "App",
+  render: (h) => h(App),
+  store,
+  beforeCreate() {
+    Vue.prototype.$bus = this;
+  },
+});
+```
+
+- store/index
+
+```js
+import Vue from "vue";
+import Vuex from "vuex";
+
+Vue.use(Vuex);
+
+// action：用于响应组件中的动作
+const action = {
+  increment(context, value) {
+    context.commit("INCREMENT", value);
+  },
+  decrement(context, value) {
+    context.commit("DECREMENT", value);
+  },
+  incrementOdd(context, value) {
+    if (context.state.sum % 2) {
+      context.commit("INCREMENT", value);
+    }
+  },
+  incrementWait(context, value) {
+    setTimeout(() => {
+      context.commit("INCREMENT", value);
+    }, 500);
+  },
+};
+
+// mutations：用于操作数据
+const mutations = {
+  INCREMENT(state, value) {
+    state.sum += value;
+  },
+  DECREMENT(state, value) {
+    state.sum -= value;
+  },
+};
+
+// state：用于存储数据
+const state = {
+  sum: 0,
+};
+
+// getters: 用于将state中的数值进行加工
+const getters = {
+  bigSum(state) {
+    return state.sum * 10;
+  },
+};
+
+export default new Vuex.Store({
+  action,
+  mutations,
+  state,
+  getters,
+});
+```
+
+- count.vue
+
+```html
+<template>
+  <div class="count">
+    <h1>当前求和为：{{$store.state.sum}}</h1>
+    <h3>当前求和放大10倍为：{{$store.getters.bigSum}}</h1>
+    <select v-model.number="n">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <button @click="increment">+</button>
+    <button @click="decrement">-</button>
+    <button @click="incrementOdd">当前求和为奇数在加</button>
+    <button @click="incrementWait">等一等再加</button>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "Count",
+    date() {
+      return {
+        n: 1,
+      };
+    },
+    methods: {
+      increment() {
+        // 触发action写法
+        this.$store.dispatch("increment", this.n);
+      },
+      decrement() {
+        // 不触发action，直接触发mutations写法：如果操作的数据不是异步的，可以直接触发mutations进行操作数据
+        this.$store.commit("decrement", this.n);
+      },
+      incrementOdd() {
+        this.$store.dispatch("incrementOdd", this.n);
+      },
+      incrementWait() {
+        this.$store.dispatch("incrementWait", this.n);
+      },
+    },
+  };
+</script>
+```
 
 ### Vue 高级
 
