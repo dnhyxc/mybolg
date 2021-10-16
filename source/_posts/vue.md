@@ -1278,18 +1278,18 @@ Vue.directive("指令名", "回调函数");
 
 ```js
 export const mixin = {
-  data(){
+  data() {
     return {
       // ...
-    }
+    };
   },
-  methods:{
+  methods: {
     // ...
   },
-  mounted(){
+  mounted() {
     // ...
-  }
-}
+  },
+};
 ```
 
 3、混合的使用，有如下两种方式：
@@ -1772,7 +1772,103 @@ methods () {
 }
 ```
 
-### Vue xxx
+### slot 插槽
+
+1、slot 默认插槽的基本使用方式：
+
+- App.vue
+
+```html
+<template>
+  <div class="container">
+    <Category title="美食">
+      <img src="xxx" />
+    </Category>
+
+    <Category title="美食">
+      <ul>
+        <li v-for="(i, index) in xxx" :key="index">{{i}}</li>
+      </ul>
+    </Category>
+
+    <Category title="美食">
+      <video controls src="xxx" />
+    </Category>
+  </div>
+</template>
+```
+
+- Category.vue
+
+```html
+<template>
+  <div class="category">
+    <h3>{{title}}分类</h3>
+    <!-- 定义一个插槽（挖坑，等使用者填坑） -->
+    <slot>我是默认值，使用者没传结构是，我就会出现，否则隐身</slot>
+  </div>
+</template>
+```
+
+2、具名插槽的基本使用：
+
+- App.vue
+
+```html
+<template>
+  <div class="container">
+    <Category title="美食">
+      <!-- 使用slot属性表明需要往哪个插槽中追加结构 -->
+      <img slot="center" src="xxx" />
+      <a slot="footer" href="xxx">更多美食</a>
+    </Category>
+
+    <Category title="美食">
+      <ul slot="center">
+        <li v-for="(i, index) in xxx" :key="index">{{i}}</li>
+      </ul>
+      <div slot="footer">
+        <a href="xxx">手机游戏</a>
+        <a href="xxx">网络游戏</a>
+      </div>
+    </Category>
+
+    <Category title="美食">
+      <video slot="center" controls src="xxx" />
+      <!-- 注意：v-slot:slotNmae 只能配合template标签一起使用 -->
+      <template v-slot:footer>
+        <div class="foot">
+          <a href="xxx">经典</a>
+          <a href="xxx">热门</a>
+          <a href="xxx">推荐</a>
+        </div>
+        <h4>欢迎前来观影</h4>
+      </div>
+    </Category>
+  </div>
+</template>
+```
+
+- Category.vue
+
+```html
+<template>
+  <div class="category">
+    <h3>{{title}}分类</h3>
+    <!-- 定义一个插槽（挖坑，等使用者填坑） -->
+    <slot name="center">
+      我是默认值，使用者没传结构是，我就会出现，否则隐身1
+    </slot>
+    <slot name="footer">
+      我是默认值，使用者没传结构是，我就会出现，否则隐身2
+    </slot>
+  </div>
+</template>
+```
+
+3、作用域插槽基本使用：
+
+- App.vue
 
 ### Vue 高级
 
@@ -1819,22 +1915,22 @@ export default {
 </template>
 
 <script>
-import { defineComponent, reactive, ref, toRefs } from "vue";
-export default defineComponent({
-  setup() {
-    const year = ref(0);
-    const user = reactive({ nickname: "snsn", age: 26, gender: "女" });
-    setInterval(() => {
-      year.value++;
-      user.age++;
-    }, 1000);
-    return {
-      year,
-      // 使用reRefs
-      ...toRefs(user),
-    };
-  },
-});
+  import { defineComponent, reactive, ref, toRefs } from "vue";
+  export default defineComponent({
+    setup() {
+      const year = ref(0);
+      const user = reactive({ nickname: "snsn", age: 26, gender: "女" });
+      setInterval(() => {
+        year.value++;
+        user.age++;
+      }, 1000);
+      return {
+        year,
+        // 使用reRefs
+        ...toRefs(user),
+      };
+    },
+  });
 </script>
 ```
 
@@ -1875,23 +1971,23 @@ setup() {
 </template>
 
 <script>
-import { defineComponent, reactive, ref, toRefs } from "vue";
-export default defineComponent({
-  setup() {
-    // ref 使用方式
-    const year = ref(0);
-    // reactive 使用方式
-    const user = reactive({ nickname: "snsn", age: 26, gender: "女" });
-    setInterval(() => {
-      year.value++;
-      user.age++;
-    }, 1000);
-    return {
-      year,
-      user,
-    };
-  },
-});
+  import { defineComponent, reactive, ref, toRefs } from "vue";
+  export default defineComponent({
+    setup() {
+      // ref 使用方式
+      const year = ref(0);
+      // reactive 使用方式
+      const user = reactive({ nickname: "snsn", age: 26, gender: "女" });
+      setInterval(() => {
+        year.value++;
+        user.age++;
+      }, 1000);
+      return {
+        year,
+        user,
+      };
+    },
+  });
 </script>
 ```
 
@@ -1907,24 +2003,24 @@ export default defineComponent({
 </template>
 
 <script>
-import { defineComponent, reactive, ref, toRefs } from "vue";
-export default defineComponent({
-  setup() {
-    // ref 使用方式
-    const year = ref(0);
-    // reactive 使用方式
-    const user = reactive({ nickname: "snsn", age: 26, gender: "女" });
-    setInterval(() => {
-      year.value++;
-      user.age++;
-    }, 1000);
-    return {
-      year,
-      // reRefs使用方式
-      ...toRefs(user),
-    };
-  },
-});
+  import { defineComponent, reactive, ref, toRefs } from "vue";
+  export default defineComponent({
+    setup() {
+      // ref 使用方式
+      const year = ref(0);
+      // reactive 使用方式
+      const user = reactive({ nickname: "snsn", age: 26, gender: "女" });
+      setInterval(() => {
+        year.value++;
+        user.age++;
+      }, 1000);
+      return {
+        year,
+        // reRefs使用方式
+        ...toRefs(user),
+      };
+    },
+  });
 </script>
 ```
 
