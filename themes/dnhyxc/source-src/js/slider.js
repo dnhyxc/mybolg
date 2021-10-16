@@ -27,8 +27,6 @@ function setScrollZero() {
   });
 }
 
-let elScrollTop;
-
 function init() {
   let app = new Q({
     el: "#container",
@@ -73,13 +71,10 @@ function init() {
         app.$set("isCtnShow", true);
         setScrollZero();
         if (app.isShow && document.body.clientWidth <= 800) {
-          elScrollTop = document.documentElement.scrollTop;
-          document.querySelector("#container").style.position = "fixed";
+          const containerTop = document.querySelector("#container").scrollTop;
+          document.querySelector(".btnctn").style.top =
+            containerTop - 5 + "px";
           document.querySelector("#container").style.overflowY = "hidden";
-          if (elScrollTop) {
-            document.querySelector("#container").style.top =
-              -elScrollTop + "px";
-          }
         }
       },
     },
@@ -113,7 +108,7 @@ function init() {
         );
       },
     },
-    ready: () => {},
+    ready: () => { },
   });
 
   function handleSearch(val) {
@@ -182,9 +177,7 @@ function init() {
     if (app.isShow) {
       app.$set("isShow", false);
       app.$set("isShowEndFooter", false);
-      document.querySelector("#container").style.position = "relative";
-      document.querySelector("#container").style.top = "0px";
-      document.documentElement.scrollTop = elScrollTop;
+      document.querySelector(".btnctn").style.top = "-5px";
       document.querySelector("#container").style.overflowY = "auto";
       setTimeout(() => {
         app.$set("isCtnShow", false);
@@ -245,9 +238,7 @@ function init() {
         if (app.isShow) {
           app.$set("isShow", false);
           app.$set("isShowEndFooter", false);
-          document.querySelector("#container").style.position = "relative";
-          document.querySelector("#container").style.top = "0px";
-          document.documentElement.scrollTop = elScrollTop;
+          document.querySelector(".btnctn").style.top = "-5px";
           document.querySelector("#container").style.overflowY = "auto";
           setTimeout(() => {
             app.$set("isCtnShow", false);
