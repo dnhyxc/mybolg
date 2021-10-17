@@ -72,8 +72,7 @@ function init() {
         setScrollZero();
         if (app.isShow && document.body.clientWidth <= 800) {
           const containerTop = document.querySelector("#container").scrollTop;
-          document.querySelector(".btnctn").style.top =
-            containerTop - 5 + "px";
+          document.querySelector(".btnctn").style.top = containerTop - 5 + "px";
           document.querySelector("#container").style.overflowY = "hidden";
         }
       },
@@ -108,7 +107,7 @@ function init() {
         );
       },
     },
-    ready: () => { },
+    ready: () => {},
   });
 
   function handleSearch(val) {
@@ -177,7 +176,9 @@ function init() {
     if (app.isShow) {
       app.$set("isShow", false);
       app.$set("isShowEndFooter", false);
-      document.querySelector(".btnctn").style.top = "-5px";
+      document.querySelector(".btnctn").style.position = "absolute";
+      const containerTop = document.querySelector("#container").scrollTop;
+      document.querySelector(".btnctn").style.top = containerTop - 5 + "px";
       document.querySelector("#container").style.overflowY = "auto";
       setTimeout(() => {
         app.$set("isCtnShow", false);
@@ -238,7 +239,9 @@ function init() {
         if (app.isShow) {
           app.$set("isShow", false);
           app.$set("isShowEndFooter", false);
-          document.querySelector(".btnctn").style.top = "-5px";
+          document.querySelector(".btnctn").style.position = "absolute";
+          const containerTop = document.querySelector("#container").scrollTop;
+          document.querySelector(".btnctn").style.top = containerTop - 5 + "px";
           document.querySelector("#container").style.overflowY = "auto";
           setTimeout(() => {
             app.$set("isCtnShow", false);

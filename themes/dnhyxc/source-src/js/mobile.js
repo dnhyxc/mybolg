@@ -85,6 +85,8 @@ function handleScroll() {
 
 function bindScroll() {
   document.querySelector("#container").addEventListener("scroll", (e) => {
+    document.querySelector(".btnctn").style.position = "fixed";
+    document.querySelector(".btnctn").style.top = "-5px";
     handleScroll();
   });
 
