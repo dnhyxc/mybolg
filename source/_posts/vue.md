@@ -3324,6 +3324,70 @@ this.$router.go(1);
 
 #### 路由守卫
 
+1、作用：对路由进行权限控制。
+
+2、分类：**全局路由守卫**、**独享守卫**、**组件内守卫**。
+
+3、全局路由守卫：
+
+```js
+// 全局前置路由守卫，会在初始化的时候被调用，以及每次路由切换之前被调用
+router.beforeEatch((to, from, next) => {
+  if (to.path === "/home/news" || to.path === "/home/message") {
+    if (localStorage.getItem("name") === "dnhyxc") {
+      next();
+    } else {
+      alert("暂无权限，请联系商务人员添加");
+    }
+  } else {
+    next();
+  }
+});
+
+// 全局后置路由守卫，会在初始化的时候被调用，以及每次路由切换之后被调用
+router.afterEatch((to, from) => {
+  if (to.meta.title) {
+    document.title = to.meta.title;
+  } else {
+    document.title = "dnhyxc管理系统";
+  }
+});
+```
+
+4、独享路由守卫：
+
+```js
+beforeEnter: (to, from, next) => {
+  if (to.meta.isAuth) {
+    if (localStorage.getItem("name") === "dnhyxc") {
+      next();
+    } else {
+      alert("暂无权限，请联系商务人员添加");
+    }
+  } else {
+    next();
+  }
+},
+```
+
+> 独享路由守卫只有前置守卫，没有后置守卫，但是可以配合全局后置守卫一起使用实现具体功能。
+
+5、组件内路由守卫：
+
+```js
+// 进入守卫，通过路由规则点击router-link或者使用$route.push()），进入该组件时被调用
+beforeRouteEnter(to, from, next){
+  // ...
+}
+
+// 离开守卫，通过路由规则点击router-link或者使用$route.push()），离开该组件时被调用
+beforeRouteLeave(to, from, next){
+  // ...
+}
+```
+
+6、beforeEatch 前置路由守卫具体使用：
+
 - router/index
 
 ```js
@@ -3361,13 +3425,7 @@ const router = new VueRouter({
               name: "detail",
               path: "detail/:id/:title",
               component: Detail,
-              // props的第一种写法，值为对象，该对象中所有key-value都会以props的形式传给Detail组件
-              // props:{a:1, b: "dnhyxc"}
-
-              // props的第二种写法，值为布尔值，如果props为真，就会把该路由组件接收到的所有props参数，以props的形式传给Detail组件。该写法只适用于params，对query参数无效
-              // props: true,
-
-              // props的第三种写法，值为函数,同时适用于params与query传参
+              // props值为函数的写法，同时适用于params与query传参
               props($route) {
                 return {
                   id: $route.query.id,
@@ -3468,6 +3526,265 @@ router.beforeEatch((to, from, next) => {
   } else {
     next();
   }
+});
+
+export default router;
+```
+
+7、afterEatch 后置路由守卫具体使用：
+
+- 使用后置路由守卫实现 document.title 的实时更改
+
+```js
+import VueRouter from "vue-router";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import News from "./pages/News";
+import Message from "./pages/Message";
+import Detail from "./pages/Detail";
+
+const router = new VueRouter({
+  routes: [
+    {
+      name: "about",
+      path: "/about",
+      component: About,
+      meta: {
+        title: "关于",
+      },
+    },
+    {
+      name: "home",
+      path: "/home",
+      component: Home,
+      meta: {
+        title: "首页",
+      },
+      children: [
+        {
+          name: "news",
+          path: "news",
+          component: News,
+          // meta用于配置是否需要进行权限校验
+          meta: {
+            isAuth: true,
+            title: "新闻",
+          },
+        },
+        {
+          name: "message",
+          path: "message",
+          component: Message,
+          // meta用于配置是否需要进行权限校验
+          meta: {
+            isAuth: true,
+            title: "消息",
+          },
+          children: [
+            {
+              name: "detail",
+              path: "detail/:id/:title",
+              component: Detail,
+              meta: {
+                isAuth: true,
+                title: "详情",
+              },
+              props($route) {
+                return {
+                  id: $route.query.id,
+                  title: $route.query.title,
+                };
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ],
+});
+
+// 配置前置路由守卫，会在初始化的时候被调用，以及每次路由切换之后被调用
+router.afterEatch((to, from) => {
+  document.title = to.meta.title || "dnhyxc管理系统";
+});
+
+export default router;
+```
+
+8、beforeEnter 独享路由守卫具体使用：
+
+```js
+import VueRouter from "vue-router";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import News from "./pages/News";
+import Message from "./pages/Message";
+import Detail from "./pages/Detail";
+
+const router = new VueRouter({
+  routes: [
+    {
+      name: "about",
+      path: "/about",
+      component: About,
+      meta: {
+        title: "关于",
+      },
+    },
+    {
+      name: "home",
+      path: "/home",
+      component: Home,
+      meta: {
+        title: "首页",
+      },
+      children: [
+        {
+          name: "news",
+          path: "news",
+          component: News,
+          // meta用于配置是否需要进行权限校验
+          meta: {
+            isAuth: true,
+            title: "新闻",
+          },
+          // 配置独享路由守卫，注意：独享路由守卫没有后置守卫，但可以配合全局后置守卫一起使用
+          beforeEnter: (to, from, next) => {
+            if (to.meta.isAuth) {
+              if (localStorage.getItem("name") === "dnhyxc") {
+                next();
+              } else {
+                alert("暂无权限，请联系商务人员添加");
+              }
+            } else {
+              next();
+            }
+          },
+        },
+        {
+          name: "message",
+          path: "message",
+          component: Message,
+          // meta用于配置是否需要进行权限校验
+          meta: {
+            isAuth: true,
+            title: "消息",
+          },
+          children: [
+            {
+              name: "detail",
+              path: "detail/:id/:title",
+              component: Detail,
+              meta: {
+                isAuth: true,
+                title: "详情",
+              },
+              props($route) {
+                return {
+                  id: $route.query.id,
+                  title: $route.query.title,
+                };
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ],
+});
+
+// 配置前置路由守卫，会在初始化的时候被调用，以及每次路由切换之后被调用
+router.afterEatch((to, from) => {
+  document.title = to.meta.title || "dnhyxc管理系统";
+});
+
+export default router;
+```
+
+9、组件内路由守卫具体使用：
+
+```js
+<template>
+  <div class="about">
+    <h2>About</h2>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "About",
+
+    // 通过路由规则（点击router-link或者使用$route.push()），进入该组件时被调用
+    beforeRouteEnter(to,from ,next){
+      if(to.meta.isAuth){
+        if(localStorage.gitItem("name") === 'dnhyxc'){
+          next()
+        }else{
+          alert('没有权限')
+        }
+      } else {
+        next()
+      }
+    },
+
+    // 通过路由规则（点击router-link或者使用$route.push()），离开该组件时被调用
+    beforeRouteLeave(to,from ,next){
+      next()
+    }
+  };
+</script>
+```
+
+#### 路由器的两种工作模式
+
+1、对于一个 url 来说，什么是 hash 值？#及其后面的内容就是 hash 值。
+
+2、hash 值不会包含在 HTTP 请求中，即 hash 值不会带给服务器。
+
+3、hash 模式：
+
+- 地址中永远带着#号，不美观。
+
+- 若以后将地址通过第三方手机 App 分享，若 App 校验严格，则地址会被标记为不合法。
+
+- 兼容性较好。
+
+4、history 模式：
+
+- 地址干净，美观。
+
+- 兼容性和 hash 模式相比略差。
+
+- 应用部署上线时需要后端人员支持，解决刷新页面服务端出现 404 的问题。
+
+5、更改路由工作方式的方法：
+
+```js
+import VueRouter from "vue-router";
+import Home from "./pages/Home";
+import About from "./pages/About";
+
+const router = new VueRouter({
+  // 更改路由为history模式，不配置mode，默认为hash模式
+  mode: "history",
+  routes: [
+    {
+      name: "about",
+      path: "/about",
+      component: About,
+      meta: {
+        title: "关于",
+      },
+    },
+    {
+      name: "home",
+      path: "/home",
+      component: Home,
+      meta: {
+        title: "首页",
+      },
+    },
+  ],
 });
 
 export default router;
