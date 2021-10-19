@@ -144,7 +144,6 @@ document.onreadystatechange = function () {
       }
     }
     if (Utils.getSystem() !== "mac" && Utils.DPR < 2 && browserCover) {
-      console.log("-----------------", browserCover);
       browserCover.style.height = "calc(100vh - 356px)";
     }
     if (Utils.getSystem() !== "mac" && Utils.DPR >= 2 && browserCover) {

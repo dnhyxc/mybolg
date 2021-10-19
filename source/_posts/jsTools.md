@@ -636,3 +636,27 @@ for (var i = 2; i < arr1.length; i++) {
 }
 return tempArr;
 ```
+
+#### 过滤出数组对象 B 不存在与数组对象 A 中的所有相
+
+```js
+const A = [
+  { id: 1, name: "dnh" },
+  { id: 2, name: "dnhy" },
+  { id: 3, name: "dnhyx" },
+  { id: 4, name: "dnhyxc" },
+  { id: 5, name: "dnhyxcn" },
+  { id: 6, name: "dnhyxcnt" },
+];
+
+const B = [
+  { id: 11, name: "nt" },
+  { id: 2, name: "ntd" },
+  { id: 33, name: "ntdn" },
+  { id: 77, name: "ntdnh" },
+  { id: 6, name: "ntdnhy" },
+];
+
+const newArr = B.filter((i) => !A.some((j) => j.id === i.id));
+console.log(newArr);
+```

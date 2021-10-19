@@ -1692,7 +1692,60 @@ const { formId, formGroupId, active } = this.$route.query;
 
 #### react 动态路径匹配
 
-1、使用 `.*?/detail` 或者 `.*+/detail` 进行动态的路径匹配。
+1、使用 `(.*)?/detail` 进行动态的路径匹配。
+
+#### 实时监听 url 中路由路径的变化
+
+1、通过 hashchange 监听：
+
+- 适用于 hash 路由模式。
+
+```js
+window.onhashchange = (event) => {
+  console.log(event);
+};
+
+// 或者
+window.addEventListener("hashchange", function (event) {
+  console.log(event);
+  console.log(window.localtion.hash);
+});
+```
+
+2、通过 popstate 监听：
+
+- 注意：popstate 只能监听到 history.back()、history.forward()、history.go()。
+
+```js
+window.addEventListener("popstate", function (event) {
+  console.log(event);
+});
+```
+
+3、实现 replaceState 和 pushState 的监听：
+
+```js
+const listenPath = function (type) {
+  const historyType = history[type];
+  return function () {
+    const _history = historyType.apply(this, arguments);
+    const e = new Event(type);
+    e.arguments = arguments;
+    window.dispatchEvent(e);
+    return _history;
+  };
+};
+history.pushState = listenPath("pushState");
+history.replaceState = listenPath("replaceState");
+
+// 监听
+window.addEventListener("replaceState", function (e) {
+  console.log("replaceState");
+});
+window.addEventListener("pushState", function (e) {
+  console.log("pushState");
+});
+```
 
 ### 实现复制功能
 
