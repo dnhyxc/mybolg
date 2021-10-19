@@ -10,9 +10,11 @@ textarea {
   font-size: 1rem;
   line-height: 1.75;
 }
+
 body {
   overflow-y: hidden;
 }
+
 html,
 body,
 #container {
@@ -25,13 +27,16 @@ body,
 #mobile-nav {
   display: none;
 }
+
 #container {
   position: relative;
   min-height: 100%;
+
   .anm-canvas {
     display: none;
     position: fixed;
   }
+
   &.show {
     .anm-canvas {
       display: block;
@@ -39,6 +44,7 @@ body,
     }
   }
 }
+
 .body-wrap {
   height: calc(100% - 158px);
   overflow-x: hidden;
@@ -48,6 +54,19 @@ body,
 .artWrap {
   width: 100%;
   height: calc(100% - 20px);
+}
+
+
+@media screen and (min-width: 800px) {
+  .btnctn {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .btnctn {
+    display: block;
+  }
 }
 
 .mid-col {
@@ -60,15 +79,18 @@ body,
   width: auto;
   // overflow-y: auto;
   @extend %trans;
+
   &.show {
     background: none;
     opacity: 0.9;
     @extend %anmLeftIn;
+
     .article {
       @extend %trans;
       // background: rgba(255, 255, 255, 0.3);
     }
   }
+
   &.hide {
     @extend %anmLeftOut;
   }

@@ -1,55 +1,60 @@
 <% var defaultBg = '#4d4d4d'; %>
 <nav id="mobile-nav">
-  <div class="overlay js-overlay"
-    style="background: <%= theme.style && theme.style.header ? theme.style.header : defaultBg %>"></div>
-  <div class="btnctn js-mobile-btnctn" style="<%=theme.style && theme.style.btnctn%>">
-    <div class="slider-trigger list" q-on="click: openSlider(e)">
-      <i class="icon icon-sort"></i>
-    </div>
-    <span class="btnctn-name">loading...</span>
-  </div>
+  <div
+    class="overlay js-overlay"
+    style="background: <%= theme.style && theme.style.header ? theme.style.header : defaultBg %>"
+  ></div>
   <div class="intrude-less" id="intrude-less">
     <header id="header" class="inner">
       <div class="profilepic" id="profilepic">
-        <img src="<%=theme.avatar%>" class="js-avatar">
+        <img src="<%=theme.avatar%>" class="js-avatar" />
       </div>
       <hgroup class="atthorName" id="atthorName">
         <h1 class="header-author js-header-author"><%=theme.author%></h1>
       </hgroup>
       <% if (theme.subtitle){ %>
-      <p class="header-subtitle"><i class="icon icon-quo-left"></i><%=theme.subtitle%><i
-          class="icon icon-quo-right"></i></p>
-      <% } %>
-      <% var count = 0%>
-      <% for (var i in theme.menu){ %>
-      <% count++ %>
-      <% } %>
-      <% var ulWidth = count > 2 ? '70%' : '50%' %>
+      <p class="header-subtitle">
+        <i class="icon icon-quo-left"></i><%=theme.subtitle%><i
+          class="icon icon-quo-right"
+        ></i>
+      </p>
+      <% } %> <% var count = 0%> <% for (var i in theme.menu){ %> <% count++ %>
+      <% } %> <% var ulWidth = count > 2 ? '70%' : '50%' %>
       <nav class="header-nav">
         <div class="social">
           <% for (var i in theme.subnav){ %>
           <div class="icon-wrap">
-            <a class="<%= i %>" target="_blank" href="<%- url_for(theme.subnav[i]) %>" title="<%= i %>"></a>
+            <a
+              class="<%= i %>"
+              target="_blank"
+              href="<%- url_for(theme.subnav[i]) %>"
+              title="<%= i %>"
+            ></a>
           </div>
           <%}%>
-				</div>
-			</nav>
+        </div>
+      </nav>
 
-			<nav class="header-menu js-header-menu">
-				<ul style="width: <%= ulWidth %>">
-          <% var divide = 100 / count + '%' %>
-          <% for (var i in theme.menu){ %>
-          <li style="width: <%= divide %>"><a href="<%- url_for(theme.menu[i]) %>"><%= i %></a></li>
+      <nav class="header-menu js-header-menu">
+        <ul style="width: <%= ulWidth %>">
+          <% var divide = 100 / count + '%' %> <% for (var i in theme.menu){ %>
+          <li style="width: <%= divide %>">
+            <a href="<%- url_for(theme.menu[i]) %>"><%= i %></a>
+          </li>
           <%}%>
-				</ul>
-			</nav>
-		</header>				
-	</div>
-	<div class="mobile-mask" style="display:none" q-show="isShow"></div>
+        </ul>
+      </nav>
+    </header>
+  </div>
+  <div class="mobile-mask" style="display: none" q-show="isShow"></div>
   <div class="mobileToggleLight">
-    <span class="mobileDark" style="<%=theme.style && theme.style.btnctn%>">黑夜</span>
+    <span class="mobileDark" style="<%=theme.style && theme.style.btnctn%>"
+      >黑夜</span
+    >
   </div>
   <div class="toTop">
-    <span class="toTopDark" style="<%=theme.style && theme.style.btnctn%>">Top</span>
+    <span class="toTopDark" style="<%=theme.style && theme.style.btnctn%>"
+      >Top</span
+    >
   </div>
 </nav>

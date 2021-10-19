@@ -41,11 +41,9 @@ body,
     .mobileLight {
       background-color: none;
       color: #333;
-      background-image: linear-gradient(
-        to bottom,
-        #fff1eb 0%,
-        #ace0f9 100%
-      ) !important;
+      background-image: linear-gradient(to bottom,
+          #fff1eb 0%,
+          #ace0f9 100%) !important;
     }
   }
 
@@ -76,11 +74,9 @@ body,
     .mobileLight {
       background-color: none;
       color: #333;
-      background-image: linear-gradient(
-        to bottom,
-        #fff1eb 0%,
-        #ace0f9 100%
-      ) !important;
+      background-image: linear-gradient(to bottom,
+          #fff1eb 0%,
+          #ace0f9 100%) !important;
     }
   }
 }
@@ -279,6 +275,7 @@ body,
   top: -5px;
   z-index: 20;
   text-align: center;
+  display: block;
 
   .slider-trigger {
     position: absolute;
@@ -307,6 +304,83 @@ body,
       font-weight: 700;
       line-height: 42px;
     }
+  }
+}
+
+.hideBtnctn {
+  top: -5px;
+  animation-duration: .8s;
+  animation-fill-mode: both;
+  animation-name: leftIn;
+}
+
+.showBtnctn {
+  animation-duration: .8s;
+  animation-name: leftOut;
+}
+
+
+/*弹性动画*/
+@keyframes leftIn {
+
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  60% {
+    transform: translate3d(358px, 0, 0);
+  }
+
+  75% {
+    transform: translate3d(323px, 0, 0);
+  }
+
+  90% {
+    transform: translate3d(338px, 0, 0);
+  }
+
+  to {
+    transform: translate3d(333px, 0, 0);
+  }
+}
+
+
+@keyframes leftOut {
+
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    transform: translate3d(333px, 0, 0);
+  }
+
+  60% {
+    transform: translate3d(-25px, 0, 0);
+  }
+
+  75% {
+    transform: translate3d(10px, 0, 0);
+  }
+
+  90% {
+    transform: translate3d(-5px, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
   }
 }
 

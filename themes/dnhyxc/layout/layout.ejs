@@ -5,6 +5,12 @@
   <%- partial('_partial/cover') %>
   <% } %>
   <div id="container" q-class="show:isCtnShow" style="<%=theme.style && theme.style.slider%>">
+    <div class="btnctn js-mobile-btnctn" style="<%=theme.style && theme.style.btnctn%>">
+      <div class="slider-trigger list" q-on="click: openSlider(e)">
+        <i class="icon icon-sort"></i>
+      </div>
+      <span class="btnctn-name">loading...</span>
+    </div>
     <% if(theme.scrollBar){%>
     <%- partial('_partial/scrollBar') %>
     <% } %>
