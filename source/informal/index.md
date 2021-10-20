@@ -1690,6 +1690,20 @@ const { formId, formGroupId } = getQueryParams(location.search);
 const { formId, formGroupId, active } = this.$route.query;
 ```
 
+#### Vue H5 页面回退刷新页面
+
+1、问题描述：当从 B 应用页面返回 A 应用页面时，使 A 页面能够实时刷新。
+
+2、处理方式：使用 visibilitychange 事件。
+
+- 在 mounted 中监听该方法。
+
+```js
+document.addEventListener("visibilitychange", function () {
+  console.log(document.visibilityState);
+});
+```
+
 #### react 动态路径匹配
 
 1、使用 `(.*)?/detail` 进行动态的路径匹配。
