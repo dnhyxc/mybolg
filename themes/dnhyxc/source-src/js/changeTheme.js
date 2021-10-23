@@ -59,7 +59,7 @@ function init() {
     };
     changeSSItems('xin');
     e.stopPropagation();
-    setThemes.xin();
+    setThemes.setBgcThemes(0, 'xin');
     setColor(setThemes.themeColors.xin)
     setTocBgc()
   }
@@ -71,7 +71,7 @@ function init() {
     };
     changeSSItems('dao');
     e.stopPropagation();
-    setThemes.dao();
+    setThemes.setBgcThemes(1, 'dao');
     setColor(setThemes.themeColors.dao)
     setTocBgc()
   }
@@ -83,7 +83,7 @@ function init() {
     };
     changeSSItems('shui');
     e.stopPropagation();
-    setThemes.shui();
+    setThemes.setBgcThemes(2, 'shui');
     setColor(setThemes.themeColors.shui)
     setTocBgc()
   }
@@ -95,7 +95,7 @@ function init() {
     };
     changeSSItems('qiong');
     e.stopPropagation();
-    setThemes.qiong();
+    setThemes.setBgcThemes(3, 'qiong');
     setColor(setThemes.themeColors.qiong)
     setTocBgc()
   }
@@ -107,7 +107,7 @@ function init() {
     };
     changeSSItems('chu');
     e.stopPropagation();
-    setThemes.chu();
+    setThemes.setBgcThemes(4, 'chu');
     setColor(setThemes.themeColors.chu)
     setTocBgc()
   }
@@ -119,7 +119,7 @@ function init() {
     };
     changeSSItems('zuo');
     e.stopPropagation();
-    setThemes.zuo();
+    setThemes.setBgcThemes(5, 'zuo');
     setColor(setThemes.themeColors.zuo)
     setTocBgc()
   }
@@ -131,7 +131,7 @@ function init() {
     };
     changeSSItems('kan');
     e.stopPropagation();
-    setThemes.kan();
+    setThemes.setBgcThemes(6, 'kan');
     setColor(setThemes.themeColors.kan)
     setTocBgc()
   }
@@ -143,7 +143,7 @@ function init() {
     };
     changeSSItems('yun');
     e.stopPropagation();
-    setThemes.yun();
+    setThemes.setBgcThemes(7, 'yun');
     setColor(setThemes.themeColors.yun)
     setTocBgc()
   }
@@ -155,7 +155,7 @@ function init() {
     };
     changeSSItems('qi');
     e.stopPropagation();
-    setThemes.qi();
+    setThemes.setBgcThemes(8, 'qi');
     setColor(setThemes.themeColors.qi)
     setTocBgc()
   }
@@ -167,7 +167,7 @@ function init() {
     };
     changeSSItems('shi');
     e.stopPropagation();
-    setThemes.shi();
+    setThemes.setBgcThemes(9, 'shi');
     setColor(setThemes.themeColors.shi)
     setTocBgc()
   }

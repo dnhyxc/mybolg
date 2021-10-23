@@ -1,9 +1,8 @@
 const container = document.querySelector('#container');
-const dark = document.querySelector('.dark');
-const toggleMusic = document.querySelector('.toggleMusic');
 const mobileDark = document.querySelector('.mobileDark');
 const toTopDark = document.querySelector('.toTopDark');
 const btnctn = document.querySelector('.btnctn');
+import * as Utils from "./public-utils";
 
 const themeColors = {
   xin: 'rgb(43, 88, 118) 0%, rgb(78, 67, 118) 100%',
@@ -48,108 +47,41 @@ function getColor(direction, color1, color2) {
   return `linear-gradient(${direction}, ${color1} 0%, ${color2} 100%)`;
 }
 
-function xin() {
-  container.style.backgroundImage = themes[0];
-  // dark.style.backgroundImage = getColor('to bottom', colors.xin.color1, colors.xin.color2);
-  // toggleMusic.style.backgroundImage = getColor('to bottom', colors.xin.color1, colors.xin.color2);
-  mobileDark.style.backgroundImage = getColor('to bottom', colors.xin.color1, colors.xin.color2);
-  toTopDark.style.backgroundImage = getColor('to bottom', colors.xin.color1, colors.xin.color2);
-  btnctn.style.backgroundImage = getColor('to top', colors.xin.color1, colors.xin.color2);
+function setBgcThemes(index, name) {
+  container.style.backgroundImage = themes[index];
+  mobileDark.style.backgroundImage = getColor('to bottom', colors[name].color1, colors[name].color2);
+  toTopDark.style.backgroundImage = getColor('to bottom', colors[name].color1, colors[name].color2);
+  btnctn.style.backgroundImage = getColor('to top', colors[name].color1, colors[name].color2);
 }
 
-function dao() {
-  container.style.backgroundImage = themes[1];
-  // dark.style.backgroundImage = getColor('to bottom', colors.dao.color1, colors.dao.color2);
-  // toggleMusic.style.backgroundImage = getColor('to bottom', colors.dao.color1, colors.dao.color2);
-  mobileDark.style.backgroundImage = getColor('to bottom', colors.dao.color1, colors.dao.color2);
-  toTopDark.style.backgroundImage = getColor('to bottom', colors.dao.color1, colors.dao.color2);
-  btnctn.style.backgroundImage = getColor('to top', colors.dao.color1, colors.dao.color2);
-}
-
-function shui() {
-  container.style.backgroundImage = themes[2];
-  // dark.style.backgroundImage = getColor('to bottom', colors.shui.color1, colors.shui.color2);
-  // toggleMusic.style.backgroundImage = getColor('to bottom', colors.shui.color1, colors.shui.color2);
-  mobileDark.style.backgroundImage = getColor('to bottom', colors.shui.color1, colors.shui.color2);
-  toTopDark.style.backgroundImage = getColor('to bottom', colors.shui.color1, colors.shui.color2);
-  btnctn.style.backgroundImage = getColor('to top', colors.shui.color1, colors.shui.color2);
-}
-
-function qiong() {
-  container.style.backgroundImage = themes[3];
-  // dark.style.backgroundImage = getColor('to bottom', colors.qiong.color1, colors.qiong.color2);
-  // toggleMusic.style.backgroundImage = getColor('to bottom', colors.qiong.color1, colors.qiong.color2);
-  mobileDark.style.backgroundImage = getColor('to bottom', colors.qiong.color1, colors.qiong.color2);
-  toTopDark.style.backgroundImage = getColor('to bottom', colors.qiong.color1, colors.qiong.color2);
-  btnctn.style.backgroundImage = getColor('to top', colors.qiong.color1, colors.qiong.color2);
-}
-
-function chu() {
-  container.style.backgroundImage = themes[4];
-  // dark.style.backgroundImage = getColor('to bottom', colors.chu.color1, colors.chu.color2);
-  // toggleMusic.style.backgroundImage = getColor('to bottom', colors.chu.color1, colors.chu.color2);
-  mobileDark.style.backgroundImage = getColor('to bottom', colors.chu.color1, colors.chu.color2);
-  toTopDark.style.backgroundImage = getColor('to bottom', colors.chu.color1, colors.chu.color2);
-  btnctn.style.backgroundImage = getColor('to top', colors.chu.color1, colors.chu.color2);
-}
-
-function zuo() {
-  container.style.backgroundImage = themes[5];
-  // dark.style.backgroundImage = getColor('to bottom', colors.zuo.color1, colors.zuo.color2);
-  // toggleMusic.style.backgroundImage = getColor('to bottom', colors.zuo.color1, colors.zuo.color2);
-  mobileDark.style.backgroundImage = getColor('to bottom', colors.zuo.color1, colors.zuo.color2);
-  toTopDark.style.backgroundImage = getColor('to bottom', colors.qiong.color1, colors.zuo.color2);
-  btnctn.style.backgroundImage = getColor('to top', colors.zuo.color1, colors.zuo.color2);
-}
-
-function kan() {
-  container.style.backgroundImage = themes[6];
-  // dark.style.backgroundImage = getColor('to bottom', colors.kan.color1, colors.kan.color2);
-  // toggleMusic.style.backgroundImage = getColor('to bottom', colors.kan.color1, colors.kan.color2);
-  mobileDark.style.backgroundImage = getColor('to bottom', colors.kan.color1, colors.kan.color2);
-  toTopDark.style.backgroundImage = getColor('to bottom', colors.kan.color1, colors.kan.color2);
-  btnctn.style.backgroundImage = getColor('to top', colors.kan.color1, colors.kan.color2);
-}
-
-function yun() {
-  container.style.backgroundImage = themes[7];
-  // dark.style.backgroundImage = getColor('to bottom', colors.yun.color1, colors.yun.color2);
-  // toggleMusic.style.backgroundImage = getColor('to bottom', colors.yun.color1, colors.yun.color2);
-  mobileDark.style.backgroundImage = getColor('to bottom', colors.yun.color1, colors.yun.color2);
-  toTopDark.style.backgroundImage = getColor('to bottom', colors.yun.color1, colors.yun.color2);
-  btnctn.style.backgroundImage = getColor('to top', colors.yun.color1, colors.yun.color2);
-}
-
-function qi() {
-  container.style.backgroundImage = themes[8];
-  // dark.style.backgroundImage = getColor('to bottom', colors.qi.color1, colors.qi.color2);
-  // toggleMusic.style.backgroundImage = getColor('to bottom', colors.qi.color1, colors.qi.color2);
-  mobileDark.style.backgroundImage = getColor('to bottom', colors.qi.color1, colors.qi.color2);
-  toTopDark.style.backgroundImage = getColor('to bottom', colors.qi.color1, colors.qi.color2);
-  btnctn.style.backgroundImage = getColor('to top', colors.qi.color1, colors.qi.color2);
-}
-
-function shi() {
-  container.style.backgroundImage = themes[9];
-  // dark.style.backgroundImage = getColor('to bottom', colors.shi.color1, colors.shi.color2);
-  // toggleMusic.style.backgroundImage = getColor('to bottom', colors.shi.color1, colors.shi.color2);
-  mobileDark.style.backgroundImage = getColor('to bottom', colors.shi.color1, colors.shi.color2);
-  toTopDark.style.backgroundImage = getColor('to bottom', colors.shi.color1, colors.shi.color2);
-  btnctn.style.backgroundImage = getColor('to top', colors.shi.color1, colors.shi.color2);
+function initSetThemes() {
+  if (Utils.getSSG("xin")) {
+    setBgcThemes(0, 'xin')
+  } else if (Utils.getSSG("dao")) {
+    setBgcThemes(1, 'dao')
+  } else if (Utils.getSSG("shui")) {
+    setBgcThemes(2, 'shui')
+  } else if (Utils.getSSG("qiong")) {
+    setBgcThemes(3, 'qiong')
+  } else if (Utils.getSSG("chu")) {
+    setBgcThemes(4, 'chu')
+  } else if (Utils.getSSG("zuo")) {
+    setBgcThemes(5, 'zuo')
+  } else if (Utils.getSSG("kan")) {
+    setBgcThemes(6, 'kan')
+  } else if (Utils.getSSG("yun")) {
+    setBgcThemes(7, 'yun')
+  } else if (Utils.getSSG("qi")) {
+    setBgcThemes(8, 'qi')
+  } else {
+    setBgcThemes(9, 'shi')
+  }
 }
 
 module.exports = {
-  xin: xin,
-  dao: dao,
-  shui: shui,
-  qiong: qiong,
-  chu: chu,
-  zuo: zuo,
-  kan: kan,
-  yun: yun,
-  qi: qi,
-  shi: shi,
   themes: themes,
   themeColors: themeColors,
   colors: colors,
+  initSetThemes,
+  setBgcThemes
 }

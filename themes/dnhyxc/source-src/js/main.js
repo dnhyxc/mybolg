@@ -97,27 +97,7 @@ document.onreadystatechange = function () {
       hideCoverBtn.addEventListener("click", function () {
         cover && cover.classList.add("hideCover");
       });
-    if (Utils.getSSG("xin")) {
-      setThemes.xin();
-    } else if (Utils.getSSG("dao")) {
-      setThemes.dao();
-    } else if (Utils.getSSG("shui")) {
-      setThemes.shui();
-    } else if (Utils.getSSG("qiong")) {
-      setThemes.qiong();
-    } else if (Utils.getSSG("chu")) {
-      setThemes.chu();
-    } else if (Utils.getSSG("zuo")) {
-      setThemes.zuo();
-    } else if (Utils.getSSG("kan")) {
-      setThemes.kan();
-    } else if (Utils.getSSG("yun")) {
-      setThemes.yun();
-    } else if (Utils.getSSG("qi")) {
-      setThemes.qi();
-    } else {
-      setThemes.shi();
-    }
+    setThemes.initSetThemes()
     if (!Utils.getSSG("container") && Utils.getSSG("hideShadow")) {
       closeShadow.addShadow();
     } else {
