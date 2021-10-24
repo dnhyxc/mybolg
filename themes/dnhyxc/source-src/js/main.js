@@ -83,7 +83,11 @@ document.onreadystatechange = function () {
       });
     }
 
-    if (!Utils.getSSG("container") && !Utils.getSSG("changeInfo")) {
+    if (
+      !Utils.getSSG("container") &&
+      !Utils.getSSG("changeInfo") &&
+      Utils.isDarkOfLight() !== "light"
+    ) {
       let timer = null;
       changeInfo.style.display = "block";
       Utils.setSSG("changeInfo", true);
@@ -97,7 +101,7 @@ document.onreadystatechange = function () {
       hideCoverBtn.addEventListener("click", function () {
         cover && cover.classList.add("hideCover");
       });
-    setThemes.initSetThemes()
+    setThemes.initSetThemes();
     if (!Utils.getSSG("container") && Utils.getSSG("hideShadow")) {
       closeShadow.addShadow();
     } else {
