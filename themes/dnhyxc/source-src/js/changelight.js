@@ -54,7 +54,7 @@ function setLight() {
 }
 
 function initLight() {
-  if (Utils.isDarkOfLight === "light") {
+  if (Utils.isDarkOfLight() === "light") {
     Utils.setSSG("container", true);
     Utils.setSSG("lightToolsCol", true);
     Utils.setSSG("lightBtnctn", true);
