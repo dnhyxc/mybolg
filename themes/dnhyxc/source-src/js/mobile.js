@@ -8,6 +8,7 @@ import Fix from "./fix";
 
 import mobileAction from "./mobile-action";
 import mobileComputed from "./mobile-computed";
+import mobileToggle from "./mobile-toggle";
 
 import { addLoadEvent } from "./util";
 
@@ -107,6 +108,7 @@ addLoadEvent(function () {
   Fix.init();
   mobileAction.init();
   mobileComputed.init();
+  mobileToggle.init();
 });
 
 module.exports = {};
