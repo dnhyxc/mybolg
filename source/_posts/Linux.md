@@ -8,6 +8,8 @@ categories:
   - 操作系统
 ---
 
+### Linux 简介
+
 #### Linux 系统内核与 Linux 发行套件的区别
 
 1、Linux 系统内核指的是由 Linus Torvalds 负责维护，提供硬件抽象层、硬盘及文件系统控制及多任务功能的系统核心程序。
@@ -48,8 +50,6 @@ categories:
 
 6、Fedora ：由红帽公司发布的桌面版系统套件，用户可以免费体验到最新的技术或工具，这些技术或工具在成熟后会被加入到 RHEL 系统中，因此 Fedora 也成为 RHEL 系统的试验版本。
 
-#### 用户与权限
-
 #### 常见目录说明
 
 1、/bin： 存放二进制可执行文件(ls,cat,mkdir 等)，常用命令一般都在这里。
@@ -58,9 +58,9 @@ categories:
 
 3、/home： 存放所有用户文件的根目录，是用户主目录的基点，比如用户 user 的主目录就是/home/user，可以用~user 表示。
 
-4、/usr ： 用于存放系统应用程序；
+4、/usr ： 用于存放系统应用程序。
 
-5、/opt： 额外安装的可选应用程序包所放置的位置。一般情况下，我们可以把 tomcat 等都安装到这里；
+5、/opt： 额外安装的可选应用程序包所放置的位置。一般情况下，我们可以把 tomcat 等都安装到这里。
 
 6、/proc： 虚拟文件系统目录，是系统内存的映射。可直接访问这个目录来获取系统信息。
 
@@ -80,7 +80,134 @@ categories:
 
 14、/var： 用于存放运行时需要改变数据的文件，也是某些大文件的溢出区，比方说各种服务的日志文件（系统启动日志等。）等。
 
-15、/lost+found： 这个目录平时是空的，系统非正常关机而留下“无家可归”的文件（windows 下叫什么.chk）就在这里。
+15、/lost+found： 这个目录平时是空的，系统非正常关机而留下“无家可归”的文件就在这里。
+
+### 用户与权限
+
+#### 用户
+
+1、Linux 是一个多用户的操作系统。在 Linux 中，理论上来说，我们可以创建无数个用户，但是这些用户是被划分到不同的群组里面的，有一个用户，名叫 root ，是一个很特殊的用户，它是超级用户，拥有最高权限。
+
+2、自己创建的用户是有限权限的用户，这样大大提高了 Linux 系统的安全性，有效防止误操作或是病毒攻击，但是我们执行的某些命令需要更高权限时可以使用 **sudo** 命令。
+
+##### sudo
+
+1、使用该命令可使自己创建的用户以 root 身份运行命令。
+
+```js
+sudo shutdown // 关机
+```
+
+##### useradd 与 passwd
+
+1、useradd：用于添加新用户。
+
+2、passwd：用于修改用户密码。
+
+```js
+sudo useradd dnhyxc	// 添加一个lion用户，添加完之后在 /home 路径下可以查看
+sudo passwd dnhyxc	  // 修改lion用户的密码
+```
+
+> 说明：这两个命令需要 root 用户权限才能执行成功。
+
+##### userdel
+
+1、userdel：用于删除用户，需要 root 用户权限。
+
+```js
+userdel dnhyxc	// 只会删除用户名，不会从/home中删除对应文件夹
+userdel dnhyxc -r	// 会同时删除/home下的对应文件夹
+```
+
+##### su
+
+1、用于切换用户，需要 root 用户权限。
+
+```js
+sudo su   // 切换为root用户（exit 命令或 CTRL + D 快捷键都可以使普通用户切换为 root 用户）
+su dnhyxc	  // 切换为普通用户
+su -	// 切换为root用户
+```
+
+#### 群组管理
+
+1、Linux 中每个用户都属于一个特定的群组，如果你不设置用户的群组，默认会创建一个和它的用户名一样的群组，并且把用户划归到这个群组。
+
+##### groupadd
+
+1、groupadd：用于创建群组，用法和 useradd 类似。
+
+```js
+groupadd friends  // 创建friends群组
+```
+
+##### groupdel
+
+1、groupdel：用于删除一个已存在的群组。
+
+```js
+groupdel friends 	// 删除foo群组
+```
+
+##### groups
+
+1、groups：用于查看用户所在群组。
+
+```js
+groups dnhyxc   // 查看 lion 用户所在的群组
+```
+
+##### usermod
+
+1、usermod：用于修改用户的账户。
+
+2、常用参数：
+
+- `-l`：对用户重命名。需要注意的是 /home 中的用户家目录的名字不会改变，需要手动修改。
+
+- `-g`：修改用户所在的群组，例如 `usermod -g friends dnhyxc` 修改 dnhyxc 用户的群组为 friends 。
+
+- `-G`：一次性让用户添加多个群组，例如 `usermod -G friends,foo,bar dnhyxc` 。
+
+- `-a -G`：会让你离开原先的群组，如果你不想这样做的话，就得再添加 -a 参数，意味着 append 追加的意思。
+
+##### chgrp
+
+1、用于修改文件的群组。
+
+```js
+chgrp bar file.txt	// file.txt文件的群组修改为bar
+```
+
+##### chown
+
+1、用于改变文件的所有者，需要 root 身份才能运行。
+
+```js
+chown dnhyxc file.txt	  // 把其它用户创建的file.txt转让给dnhyxc用户
+chown dnhyxc:bar file.txt	  // 把file.txt的用户改为dnhyxc，群组改为bar
+```
+
+2、常用参数：
+
+- `-R`：递归设置子目录和子文件， `chown -R dnhyxc:dnhyxc /home/frank` 把 frank 文件夹的用户和群组都改为 dnhyxc 。
+
+#### 文件权限管理
+
+##### chmod
+
+1、chmod：用于修改访问权限。
+
+```js
+chmod 740 file.txt
+```
+
+2、常用参数：
+
+- `-R`：可以递归地修改文件访问权限，例如 chmod -R 777 /home/dnhyxc。
+
+3、修改权限的确简单，但是理解其深层次的意义才是更加重要的。下面我们来系统的学习 Linux 的文件权限。
 
 ### 常用命令
 
@@ -149,4 +276,3 @@ categories:
 - r：表示递归删除。
 
 2、如果在删除的时候不想频繁的输入 y 进行确认，可以输入 -f 进行强制删除。
-
