@@ -1,21 +1,14 @@
 function init() {
-  let timer;
   const mobileDark = document.querySelector(".mobileDark");
   const mobileToggleLight = document.querySelector(".mobileToggleLight");
   const toTopDark = document.querySelector(".toTopDark");
+  const toTop = document.querySelector(".toTop");
 
   document.querySelector("#container").onscroll = function () {
     mobileDark.style.visibility = "visible";
     mobileDark.style.transition = "all 0.5s";
     toTopDark.style.visibility = "visible";
     toTopDark.style.transition = "all 0.5s";
-    clearTimeout(timer);
-    // timer = setTimeout(() => {
-    //   mobileDark.style.visibility = "hidden";
-    //   mobileDark.style.transition = "all 0.5s";
-    //   toTopDark.style.visibility = "hidden";
-    //   toTopDark.style.transition = "all 0.5s";
-    // }, 2000);
   };
 
   toTopDark.onclick = function () {
@@ -30,55 +23,106 @@ function init() {
     }, 10);
   };
 
-  let moveX = 0;
-  let moveY = 0;
-  let translateY = 65;
-  let translateX = 20;
-  let tempX = 0;
-  let tempY = 0;
-  let isDown = false;
+  const params = {
+    moveX: 0,
+    moveY: 0,
+    translateY: 65,
+    translateX: 20,
+    tempX: 0,
+    tempY: 0,
+    isDown: false,
+  };
+
+  const toTopParams = {
+    moveX: 0,
+    moveY: 0,
+    translateY: 20,
+    translateX: 20,
+    tempX: 0,
+    tempY: 0,
+    isDown: false,
+  };
+
+  function touchStart(params, clientX, clientY) {
+    params.tempX = params.translateX;
+    params.tempY = params.translateY;
+    params.moveX = clientX;
+    params.moveY = clientY;
+    params.isDown = true;
+  }
+
+  function touchMove(params, clientX, clientY, dom, bottomSize) {
+    if (params.isDown) {
+      params.translateX = params.moveX - parseInt(clientX) + params.tempX;
+      params.translateY = params.moveY - parseInt(clientY) + params.tempY;
+
+      if (params.translateX < 20) {
+        params.translateX = 20;
+        dom.style.right = "20px";
+      } else if (parseInt(params.translateX) + 58 > document.body.offsetWidth) {
+        params.translateX = document.body.offsetWidth - 58;
+        dom.style.right = document.body.offsetWidth - 58 + "px";
+      } else {
+        dom.style.right = params.translateX + "px";
+      }
+
+      if (params.translateY < bottomSize) {
+        params.translateY = bottomSize;
+        dom.style.bottom = bottomSize + "px";
+      } else if (
+        parseInt(params.translateY) + 85 >
+        document.body.offsetHeight
+      ) {
+        params.translateY = document.body.offsetHeight - 85;
+        dom.style.bottom = document.body.offsetHeight - 85 + "px";
+      } else {
+        dom.style.bottom = params.translateY + "px";
+      }
+    }
+  }
+
+  function touchEnd(params, dom) {
+    if (params.translateX + 19 > document.body.offsetWidth / 2) {
+      params.translateX = document.body.offsetWidth - 58;
+      dom.style.right = document.body.offsetWidth - 58 + "px";
+    } else {
+      params.translateX = 20;
+      dom.style.right = "20px";
+    }
+    params.isDown = false;
+  }
 
   mobileDark.ontouchstart = (e) => {
     const clientX = e.touches[0].clientX;
     const clientY = e.touches[0].clientY;
-    tempX = translateX;
-    tempY = translateY;
-    moveX = clientX;
-    moveY = clientY;
-    isDown = true;
+    touchStart(params, clientX, clientY);
   };
 
   mobileDark.ontouchmove = (e) => {
     const clientX = e.touches[0].clientX;
     const clientY = e.touches[0].clientY;
-    if (isDown) {
-      translateX = moveX - parseInt(clientX) + tempX;
-      translateY = moveY - parseInt(clientY) + tempY;
-
-      if (translateX < 20) {
-        translateX = 20;
-        mobileToggleLight.style.right = "20px";
-      } else if (parseInt(translateX) + 58 > document.body.offsetWidth) {
-        translateX = document.body.offsetWidth - 58;
-        mobileToggleLight.style.right = document.body.offsetWidth - 58 + "px";
-      } else {
-        mobileToggleLight.style.right = translateX + "px";
-      }
-
-      if (translateY < 65) {
-        translateY = 65;
-        mobileToggleLight.style.bottom = "65px";
-      } else if (parseInt(translateY) + 85 > document.body.offsetHeight) {
-        translateY = document.body.offsetHeight - 85;
-        mobileToggleLight.style.bottom = document.body.offsetHeight - 85 + "px";
-      } else {
-        mobileToggleLight.style.bottom = translateY + "px";
-      }
-    }
+    touchMove(params, clientX, clientY, mobileToggleLight, 65);
   };
 
-  mobileDark.ontouchend = (e) => {
-    isDown = false;
+  mobileDark.ontouchend = () => {
+    touchEnd(params, mobileToggleLight);
+  };
+
+  // 置顶移动
+  toTop.ontouchstart = (e) => {
+    const clientX = e.touches[0].clientX;
+    const clientY = e.touches[0].clientY;
+    touchStart(toTopParams, clientX, clientY);
+  };
+
+  toTop.ontouchmove = (e) => {
+    const clientX = e.touches[0].clientX;
+    const clientY = e.touches[0].clientY;
+    touchMove(toTopParams, clientX, clientY, toTop, 20);
+  };
+
+  toTop.ontouchend = () => {
+    touchEnd(toTopParams, toTop);
   };
 }
 
