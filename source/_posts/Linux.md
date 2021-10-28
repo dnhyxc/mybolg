@@ -207,7 +207,20 @@ chmod 740 file.txt
 
 - `-R`：可以递归地修改文件访问权限，例如 chmod -R 777 /home/dnhyxc。
 
-3、修改权限的确简单，但是理解其深层次的意义才是更加重要的。下面我们来系统的学习 Linux 的文件权限。
+##### Linux 的文件权限11
+
+1、以下方记录为例，**drwxr-xr-x** 表示文件或目录的权限。
+
+```js
+[root@dnhyxc ~]# ls -l
+drwxr-xr-x 5 root root 4096 Apr 13  2020 climb
+lrwxrwxrwx 1 root root    7 Jan 14 06:41 hello2.c -> hello.c
+-rw-r--r-- 1 root root  149 Jan 13 06:14 hello.c
+```
+
+2、具体说明如下：
+
+- d ：表示目录，就是说这是一个目录，普通文件是 - ，链接是 l 。
 
 ### 常用命令
 
