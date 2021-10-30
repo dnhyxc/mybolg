@@ -105,7 +105,7 @@ const isDarkOfLight = () => {
   // 获取当前小时
   let hours = timeNow.getHours();
 
-  if (hours >= 0 && hours <= 18) {
+  if (hours >= 6 && hours <= 18) {
     return "light";
   } else {
     return "dark";

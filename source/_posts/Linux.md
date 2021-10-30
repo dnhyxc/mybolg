@@ -209,7 +209,7 @@ chmod 740 file.txt
 
 - `-R`：可以递归地修改文件访问权限，例如 chmod -R 777 /home/dnhyxc。
 
-##### Linux 的文件权限11
+##### Linux 的文件权限
 
 1、以下方记录为例，**drwxr-xr-x** 表示文件或目录的权限。
 
