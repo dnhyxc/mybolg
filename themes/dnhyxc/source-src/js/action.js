@@ -155,7 +155,6 @@ function init() {
         i.style.display = "none";
       });
       leftColBar.style.display = "none";
-      s;
       headerBar.style.display = "none";
       footerBar.forEach((i) => {
         i.style.display = "none";
