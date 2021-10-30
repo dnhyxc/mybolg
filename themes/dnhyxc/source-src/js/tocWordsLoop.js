@@ -2,6 +2,7 @@ import { setTimeInLoop } from "./public-utils";
 
 const init = () => {
   const tocLinks = document.querySelectorAll('.toc-link')
+  const tooltipLeft = document.querySelector('.tooltip-left')
 
   const links = []
   tocLinks && tocLinks.length && tocLinks.forEach(i => {
@@ -12,9 +13,17 @@ const init = () => {
     }
   })
 
-  setTimeInLoop.call(links, (item => {
-    item.classList.add('toc-scroll')
-  }), 500)
+  tooltipLeft.onmouseenter = () => {
+    setTimeInLoop.call(links, (item => {
+      item.classList.add('toc-scroll')
+    }), 500)
+  }
+
+  tooltipLeft.onmouseleave = () => {
+    links.forEach(i => {
+      i.classList.remove('toc-scroll')
+    })
+  }
 }
 
 module.exports = {
