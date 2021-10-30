@@ -112,6 +112,24 @@ const isDarkOfLight = () => {
   }
 };
 
+// 每隔指定时间操作一次元素
+const setTimeInLoop = function (fn, time) {
+  let _self = this,
+    timer = null,
+    index = 0;
+  function setTimeGetValue(i) {
+    fn(_self[i], i);
+  }
+  timer = setInterval(() => {
+    setTimeGetValue(index);
+    index++;
+    if (index === _self.length) {
+      clearInterval(timer)
+    }
+  }, time);
+};
+
+
 module.exports = {
   isArticle,
   isInformal,
@@ -128,4 +146,5 @@ module.exports = {
   DPR,
   isDarkOfLight,
   getTimeState,
+  setTimeInLoop
 };

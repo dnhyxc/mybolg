@@ -135,19 +135,19 @@
     .toc-article li ul {
       margin-left: 20px;
     }
+
     .toc-article li {
       white-space: nowrap;
       cursor: pointer;
+
       a:hover {
         color: #ffd900;
-        background-color: rgba(225, 225, 225, 0.3);
         border-radius: 5px;
+        font-weight: 700;
+      }
 
-        .toc-text {
-          display: inline-block;
-          height: 100%;
-          border-radius: 5px;
-        }
+      .toc-scroll {
+        animation: 5s wordsLoop linear infinite;
       }
 
       .select-toc {
@@ -158,5 +158,20 @@
   }
   .tooltip:hover .tooltip-content {
     transform: translate(0);
+  }
+}
+
+@keyframes wordsLoop {
+  0% {
+    transform: translateX(0px);
+  }
+  25% {
+    transform: translateX(0px);
+  }
+  75% {
+    transform: translateX(calc(-90%));
+  }
+  100% {
+    transform: translateX(0px);
   }
 }
