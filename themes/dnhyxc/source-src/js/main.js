@@ -43,6 +43,8 @@ import share from "./share";
 
 import music from "./music";
 
+import tocWordsLoop from "./tocWordsLoop";
+
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
@@ -66,6 +68,7 @@ addLoadEvent(function () {
   rotate.init();
   share.init();
   music.init();
+  tocWordsLoop.init();
 });
 
 function stopTouchmove(e) {
