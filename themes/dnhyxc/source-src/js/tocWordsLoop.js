@@ -6,24 +6,29 @@ const init = () => {
 
   if (document.body.clientWidth > 800 && tooltipLeft) {
     const links = []
-    tocLinks && tocLinks.length && tocLinks.forEach(i => {
-      const tocText = i.querySelector('.toc-text')
-      const tocNumber = i.querySelector('.toc-number')
-      if (tocText.offsetWidth + tocNumber.offsetWidth > i.offsetWidth) {
-        links.push(i)
-      }
-    })
 
     tooltipLeft.onmouseenter = () => {
-      setTimeInLoop.call(links, (item => {
-        item.classList.add('toc-scroll')
-      }), 500)
+      tocLinks && tocLinks.length && tocLinks.forEach(i => {
+        const tocText = i.querySelector('.toc-text')
+        const tocNumber = i.querySelector('.toc-number')
+        if (tocText.offsetWidth + tocNumber.offsetWidth > i.offsetWidth) {
+          links.push(i)
+        }
+      })
+
+      if (links.length > 0) {
+        setTimeInLoop.call(links, (item => {
+          item.classList.add('toc-scroll')
+        }), 500)
+      }
     }
 
     tooltipLeft.onmouseleave = () => {
-      links.forEach(i => {
-        i.classList.remove('toc-scroll')
-      })
+      if (links.length > 0) {
+        links.forEach(i => {
+          i.classList.remove('toc-scroll')
+        })
+      }
     }
   }
 }
