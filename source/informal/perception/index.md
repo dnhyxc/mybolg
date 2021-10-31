@@ -1,4 +1,12 @@
-<article class="article perception">
+---
+title: perception
+date: 2021-09-02 09:02:02
+toc: false
+comments: false
+layout: perception
+---
+
+<div class="perception">
   <div class="perception-life">
     <div class="perceptionWrap">
       <h1 class="title">人生</h1>
@@ -64,4 +72,4 @@
     <p class="line">无论面对怎样的艰难</p>
     <p class="line">我们 “依然一笑作春温”</p>
   </div>
-</article>
+</div>

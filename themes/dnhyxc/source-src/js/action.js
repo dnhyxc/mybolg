@@ -123,6 +123,12 @@ function init() {
   let mainLoadingText;
   let scrollTimer = null;
 
+  const setHeaderText = (text) => {
+    changeSize.style.display = "block";
+    mainLoading.innerHTML = text;
+    mainLoadingText = text;
+  }
+
   // 滚动事件
   function scroll() {
     const countInfo = `${parseInt(
@@ -416,12 +422,16 @@ function init() {
         mainLoading.innerHTML = `${res.split("/")[0][0].toUpperCase() + res.split("/")[0].slice(1)
           }-${res.split("/")[1]}`;
       } else {
+        // 设置头部main的逻辑
         const subPath = res.slice(0, res.length - 1);
         if (subPath === "informal") {
-          changeSize.style.display = "block";
-          mainLoading.innerHTML = "Informal Essay";
-          mainLoading.innerHTML = "Informal Essay";
-          mainLoadingText = "Informal Essay";
+          setHeaderText("Informal Essay")
+        } else if (subPath === "network") {
+          setHeaderText("Network Principle")
+        } else if (subPath === "computer") {
+          setHeaderText("Computer Organization")
+        } else if (subPath === "perception") {
+          setHeaderText("Perception")
         } else if (
           Utils.isArticle &&
           !Utils.isCategories &&
