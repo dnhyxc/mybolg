@@ -81,9 +81,13 @@ function onHideMenu() {
 function init() {
   const authorName = document.querySelector(".authorName");
   const menuList = document.querySelector(".menuList");
+  const listWrap = menuList.querySelector(".listWrap");
+  const list = menuList.querySelector(".list");
   const changeFooter = document.querySelector(".changeFooter");
   const hideMenu = document.querySelector(".hideMenu");
   const aplayer = document.querySelector("#aplayer");
+  const goLeft = document.querySelector(".goLeft");
+  const goRight = document.querySelector(".goRight");
 
   if (document.body.clientWidth > 800) {
     authorName.addEventListener("click", () => {
@@ -114,6 +118,37 @@ function init() {
         } else {
           showMusicControl();
         }
+      }
+    });
+
+    // 切换左右list
+    let scrollLeft;
+    let scrollWidth;
+    let menuListCW;
+
+    goLeft.addEventListener("click", () => {
+      menuListCW = Math.round(menuList.clientWidth);
+      scrollLeft = Math.round(listWrap.scrollLeft);
+      scrollWidth = Math.round(listWrap.scrollWidth);
+
+      if (scrollLeft <= 0) {
+        listWrap.scrollLeft = scrollWidth;
+      } else {
+        const newLeft = scrollLeft - menuListCW;
+        listWrap.scrollLeft = newLeft;
+      }
+    });
+
+    goRight.addEventListener("click", () => {
+      menuListCW = Math.round(menuList.clientWidth);
+      scrollLeft = Math.round(listWrap.scrollLeft);
+      scrollWidth = Math.round(listWrap.scrollWidth);
+
+      if (scrollWidth - scrollLeft <= menuListCW) {
+        listWrap.scrollLeft = 0;
+      } else {
+        const newLeft = scrollLeft + menuListCW;
+        listWrap.scrollLeft = newLeft;
       }
     });
   }

@@ -9,7 +9,63 @@
   z-index: 999999;
   font-size: 14px;
   padding-left: 3px;
-  overflow-x: auto;
+  padding-right: 3px;
+
+  .listWrap {
+    overflow-x: auto;
+  }
+
+  &:hover {
+    .goLeft {
+      display: flex;
+    }
+
+    .goRight {
+      display: flex;
+    }
+  }
+
+  .goLeft {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 9px #ccc;
+    cursor: pointer;
+    color: #ffd900;
+    width: 18px;
+    background-color: rgba(0, 0, 0, 0.65);
+    display: none;
+
+    .leftIcon {
+      font-size: 14px;
+    }
+  }
+
+  .goRight {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 9px #ccc;
+    cursor: pointer;
+    color: #ffd900;
+    width: 18px;
+    background-color: rgba(0, 0, 0, 0.65);
+    display: none;
+
+    .rightIcon {
+      font-size: 14px;
+    }
+  }
 
   .list {
     white-space: nowrap;

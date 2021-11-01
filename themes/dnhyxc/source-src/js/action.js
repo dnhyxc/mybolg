@@ -127,7 +127,7 @@ function init() {
     changeSize.style.display = "block";
     mainLoading.innerHTML = text;
     mainLoadingText = text;
-  }
+  };
 
   // 滚动事件
   function scroll() {
@@ -419,19 +419,20 @@ function init() {
             decodeURIComponent(newPath).lastIndexOf("/") - 1
           ) + 1
         );
-        mainLoading.innerHTML = `${res.split("/")[0][0].toUpperCase() + res.split("/")[0].slice(1)
-          }-${res.split("/")[1]}`;
+        mainLoading.innerHTML = `${
+          res.split("/")[0][0].toUpperCase() + res.split("/")[0].slice(1)
+        }-${res.split("/")[1]}`;
       } else {
         // 设置头部main的逻辑
         const subPath = res.slice(0, res.length - 1);
         if (subPath === "informal") {
-          setHeaderText("Informal Essay")
+          setHeaderText("Informal Essay");
         } else if (subPath === "network") {
-          setHeaderText("Network Principle")
+          setHeaderText("Network Principle");
         } else if (subPath === "computer") {
-          setHeaderText("Computer Organization")
+          setHeaderText("Computer Organization");
         } else if (subPath === "perception") {
-          setHeaderText("Perception")
+          setHeaderText("Perception");
         } else if (
           Utils.isArticle &&
           !Utils.isCategories &&

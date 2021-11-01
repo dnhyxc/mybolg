@@ -105,7 +105,7 @@ const isDarkOfLight = () => {
   // 获取当前小时
   let hours = timeNow.getHours();
 
-  if (hours >= 6 && hours <= 18) {
+  if (hours >= 6 && hours < 18) {
     return "light";
   } else {
     return "dark";
@@ -124,11 +124,10 @@ const setTimeInLoop = function (fn, time) {
     setTimeGetValue(index);
     index++;
     if (index === _self.length) {
-      clearInterval(timer)
+      clearInterval(timer);
     }
   }, time);
 };
-
 
 module.exports = {
   isArticle,
@@ -146,5 +145,5 @@ module.exports = {
   DPR,
   isDarkOfLight,
   getTimeState,
-  setTimeInLoop
+  setTimeInLoop,
 };
