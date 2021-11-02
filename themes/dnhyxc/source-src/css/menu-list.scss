@@ -5,11 +5,12 @@
   width: 100%;
   height: 46px;
   transition: all 0.3s ease;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.3);
   z-index: 999999;
   font-size: 14px;
   padding-left: 3px;
   padding-right: 3px;
+  border-radius: 5px;
 
   .listWrap {
     overflow-x: auto;
@@ -34,12 +35,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 9px #ccc;
+    box-shadow: 0 0 8px #ccc inset;
     cursor: pointer;
     color: #ffd900;
     width: 18px;
     background-color: rgba(0, 0, 0, 0.65);
     display: none;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
 
     .leftIcon {
       font-size: 14px;
@@ -55,12 +58,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 9px #ccc;
+    box-shadow: 0 0 8px #ccc inset;
     cursor: pointer;
     color: #ffd900;
     width: 18px;
     background-color: rgba(0, 0, 0, 0.65);
     display: none;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
 
     .rightIcon {
       font-size: 14px;
