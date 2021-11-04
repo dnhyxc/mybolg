@@ -793,5 +793,3 @@ grep -E path /etc/profile // 完全匹配path
 grep -E ^path /etc/profile  // 匹配path开头的字符串
 grep -E [Pp]ath /etc/profile  // 匹配path或Path
 ```
-
-### 
