@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>切片上传</title>
+    <style>
+      .upload_inp {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="item">
+        <h3>单一文件上传「FORM-DATA」</h3>
+        <section class="upload_box" id="upload1">
+          <input type="file" class="upload_inp" />
+          <div class="upload_button_box">
+            <button class="upload_button select">选择文件</button>
+            <button class="upload_button upload">上传到服务器</button>
+          </div>
+          <div class="upload_tip">
+            只能上传 PNG/JPG/JPEG 格式图片，且大小不能超过2MB
+          </div>
+          <ul class="upload_list">
+            <li>
+              <span>文件：...</span>
+              <span>移除</span>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <script src="./upload.js"></script>
+  </body>
+</html>
