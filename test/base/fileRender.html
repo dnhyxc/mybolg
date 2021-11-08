@@ -112,7 +112,6 @@
             读取操作完成的时候，readyState 会变成已完成DONE，并触发 loadend (en-US) 事件，
             同时 result 属性将包含一个data:URL格式的字符串（base64编码）以表示所读取文件的内容。
           */
-          fr.readAsDataURL(file);
 
           /*
             当 FileReader 读取文件的方式为  readAsArrayBuffer, readAsBinaryString, readAsDataURL 或者 readAsText 的时候，会触发一个 load (en-US) 事件。
@@ -122,6 +121,34 @@
             // console.log(e.target.result, "e.target.result");
             document.getElementById("portrait").src = e.target.result;
           };
+
+          fr.onprogress = function (e) {
+            console.log(e.loaded, "loaded");
+            console.log(e.total, "total");
+            console.log((e.loaded / e.total) * 100);
+          };
+
+          fr.onabort = function (e) {
+            console.log(e, "onabort");
+            console.log(e.target, "onabort-target");
+          };
+
+          fr.onerror = function (e) {
+            console.log(e, "onerror");
+            console.log(e.target, "onerror-target");
+          };
+
+          fr.onloadstart = function (e) {
+            console.log(e, "onloadstart");
+            console.log(e.target.readyState, "onloadstart-readyState");
+          };
+
+          fr.onloadend = function (e) {
+            console.log(e, "onloadend");
+            console.log(e.target.readyState, "onloadend-readyState");
+          };
+
+          fr.readAsDataURL(file);
         }
       });
     </script>
