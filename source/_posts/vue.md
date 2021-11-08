@@ -1,12 +1,15 @@
 ---
 title: Vue
 date: 2021-08-16 11:25:22
-tags: Vue2 Vue3
+tags:
+  - Vue2
+  - Vue3
 draft: true
 toc: true
 declare: true
 categories:
   - 前端框架
+  - vue
 ---
 
 ### Vue 基础

@@ -11,7 +11,7 @@ top: true
 declare: true
 categories:
   - 项目构建
-    - dva
+  - dva
 ---
 
 <div class="coverInfo coverInfoTop">

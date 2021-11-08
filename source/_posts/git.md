@@ -5,6 +5,7 @@ tags: git
 toc: true
 categories:
   - 代码托管
+  - git
 ---
 
 #### git 生成 ssh

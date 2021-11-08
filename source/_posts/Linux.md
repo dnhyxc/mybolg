@@ -6,6 +6,7 @@ toc: true
 declare: true
 categories:
   - 操作系统
+  - Linux
 ---
 
 ### Linux 简介

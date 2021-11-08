@@ -6,6 +6,7 @@ toc: true
 declare: true
 categories:
   - 通信协议
+  - websocket
 ---
 
 ### websocket 简介
