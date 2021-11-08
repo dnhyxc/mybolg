@@ -80,25 +80,28 @@
     </div>
   </div>
   <div class="article-info article-info-index">
-    <%if(post.top){%>
-    <div class="article-pop-out tagcloud">
-      <i class="icon-tuding"></i>
-      <a class="article-tag-list-link color3">置顶</a>
+    <div>
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud tagclouds">
+          <i class="icon-tuding"></i>
+          <a class="article-tag-list-link color3">置顶</a>
+        </div>
+        <% } %>
+        <%- partial('post/tag') %>
+        <%- partial('post/category') %>
+        
+        <% if (!index){ %>
+          <div class="share icon icon-share">
+            <%- partial('post/share') %>
+          </div>
+        <% } %>
+        <div class="clearfix"></div>
     </div>
-    <% } %>
-    <%- partial('post/tag') %>
-    <%- partial('post/category') %>
     <% if (index && theme.show_all_link){ %>
-    <div class="article-more-link">
-      <a class="article-more-a" href="<%- url_for(post.path) %>"><%= theme.show_all_link %> >></a>
-    </div>
-    <% } %>
-    <% if (!index){ %>
-      <div class="share icon icon-share">
-        <%- partial('post/share') %>
+      <div class="article-more-link">
+        <a class="article-more-a" href="<%- url_for(post.path) %>"><%= theme.show_all_link %> >></a>
       </div>
     <% } %>
-    <div class="clearfix"></div>
   </div>
   </div>
   <div class="artBar">

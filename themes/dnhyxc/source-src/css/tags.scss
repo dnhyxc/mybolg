@@ -1,19 +1,23 @@
 #header .tagcloud a {
   color: #fff;
 }
+
+.tagclouds {
+  display: flex;
+  align-items: center;
+}
 .tagcloud {
   a {
+    display: flex;
+    align-items: center;
     display: inline-block;
     text-decoration: none;
     font-weight: normal;
     font-size: 10px;
     color: #fff;
-    height: 18px;
-    line-height: 18px;
-    float: left;
     padding: 0 5px 0px 10px;
     position: relative;
-    border-radius: 0 5px 5px 0;
+    border-radius: 3px 5px 5px 3px;
     margin: 5px 9px 5px 8px;
     font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New",
       monospace;
@@ -25,8 +29,9 @@
       width: 0px;
       height: 0px;
       position: absolute;
-      top: 0;
-      left: -18px;
+      top: 50%;
+      left: -17px;
+      transform: translateY(-50%);
       border: 9px solid transparent;
     }
     &:after {
@@ -37,8 +42,9 @@
       border-radius: 4px;
       box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.3);
       position: absolute;
-      top: 7px;
+      top: 50%;
       left: 2px;
+      transform: translateY(-50%);
     }
   }
   a.color1 {
@@ -84,7 +90,6 @@
     color: #999;
     float: left;
     margin-right: 10px;
-    margin-top: 6px;
   }
 }
 .article-tag,
@@ -97,7 +102,6 @@
     color: #999;
     float: left;
     margin-right: 10px;
-    margin-top: 6px;
   }
 }
 .article-pop-out {

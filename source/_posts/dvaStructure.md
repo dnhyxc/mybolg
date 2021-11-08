@@ -1,7 +1,11 @@
 ---
 title: DvaStructure
-date: 2021-05-15 17:58:02
-tags: dva webpack ts eslint
+date: 2021-02-09 11:09:02
+tags:
+  - dva
+  - webpack
+  - ts
+  - eslint
 toc: true
 top: true
 declare: true

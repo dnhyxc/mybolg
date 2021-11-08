@@ -1,11 +1,12 @@
 ---
 title: FileOperation
 date: 2021-11-08 16:02:09
-tags: FileReader Blob MediaSource
-categories:
+tags:
   - FileReader
   - Blob
   - MediaSource
+categories:
+  - File
 ---
 
 ### FileReader
