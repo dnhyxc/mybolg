@@ -161,6 +161,76 @@ const res = encodeURIComponent(url);
 console.log(res); // http%3A%2F%2Fwww.baidu.com
 ```
 
+### 文件流相关
+
+#### 文件切片
+
+1、使用 file 的 slice 方法将文件进行切片。
+
+2、切片的规则可以根据规定的文件大小进行切分、也可以根据规定的份数进行切分、也可以两者结合，具体操作如下：
+
+```js
+// 已规定的最大切片大小进行切片，算出需要切出的份数，如果超过了规定切分的最大份数10，那么就将文件切成10份，以10份为标准，算出每份的size
+const chunks = [];
+
+function fileSlice(file) {
+  let maxChunkSize = 1024 * 10;
+  let count = Math.ceil(file.size / maxChunkSize);
+  if (count > 10) {
+    maxChunkSize = file.size / 10;
+    count = 10;
+  }
+
+  for (let start = 0; start < count; start++) {
+    console.log(maxChunkSize);
+    const chunk = file.slice(start * maxChunkSize, (start + 1) * maxChunkSize);
+    chunks.push({
+      file: chunk,
+      filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`,
+    });
+  }
+}
+
+// 根据规定份数进行切分
+const chunksByCount = [];
+
+function fileSliceByCount(file) {
+  const count = 10;
+  const maxChunkSize = Math.ceil(file.size / 10);
+
+  for (let start = 0; start < file.size; start += maxChunkSize) {
+    const chunk = file.slice(start, start + maxChunkSize + 1);
+    chunksByCont.push({
+      file: chunk,
+      filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`,
+    });
+  }
+}
+
+// 根据规定文件大小进行切分
+const chunksBySize = [];
+
+function fileSliceBySize(file) {
+  const maxChunkSize = 1024 * 10;
+  const count = Math.ceil(file.size / maxChunkSize);
+
+  for (let start = 0; start < count; start++) {
+    const chunk = file.slice(start * maxChunkSize, (start + 1) * maxChunkSize);
+    chunksBySize.push({
+      file: chunk,
+      filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`,
+    });
+  }
+}
+
+fileSlice(file);
+fileSliceByCount(file);
+fileSliceBySize(file);
+console.log(chunks, "chunks");
+console.log(chunksByCount, "chunksByCount");
+console.log(chunksBySize, "chunksBySize");
+```
+
 ### 构造函数相关
 
 #### 构造函数 this

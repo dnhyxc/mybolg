@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FileRender</title>
+  </head>
+  <body>
+    <input type="file" name="file" class="fileInp" />
+    <img id="portrait" src="" width="70" height="75" />
+
+    <script type="text/javascript">
+      const fileInp = document.querySelector(".fileInp");
+
+      const count = 20;
+
+      fileInp.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+
+        const chunks = [];
+        const chunksByCont = [];
+        const chunksBySize = [];
+
+        function fileSlice() {
+          // 已规定的最大切片大小进行切片，算出需要切出的份数，如果超过了规定切分的最大份数10，那么就将文件切成10份，以10份为标准，算出每份的size
+          let maxChunkSize = 1024 * 10;
+          let count = Math.ceil(file.size / maxChunkSize);
+          if (count > 10) {
+            maxChunkSize = file.size / 10;
+            count = 10;
+          }
+
+          for (let start = 0; start < count; start++) {
+            console.log(maxChunkSize);
+            const chunk = file.slice(
+              start * maxChunkSize,
+              (start + 1) * maxChunkSize
+            );
+            chunks.push({
+              file: chunk,
+              filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`,
+            });
+          }
+        }
+
+        function fileSliceByCount() {
+          let maxChunkSize = Math.ceil(file.size / 10);
+          const count = 10;
+
+          for (let start = 0; start < file.size; start += maxChunkSize) {
+            const chunk = file.slice(start, start + maxChunkSize + 1);
+            chunksByCont.push({
+              file: chunk,
+              filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`,
+            });
+          }
+        }
+
+        function fileSliceBySize() {
+          let maxChunkSize = 1024 * 10;
+          const count = Math.ceil(file.size / maxChunkSize);
+
+          for (let start = 0; start < count; start++) {
+            const chunk = file.slice(
+              start * maxChunkSize,
+              (start + 1) * maxChunkSize
+            );
+            chunksBySize.push({
+              file: chunk,
+              filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`,
+            });
+          }
+        }
+
+        fileSlice();
+        fileSliceByCount();
+        fileSliceBySize();
+        console.log(chunks, "chunks");
+        console.log(chunksByCont, "chunksByCont");
+        console.log(chunksBySize, "chunksBySize");
+
+        if (window.FileReader) {
+          var fr = new FileReader();
+          /*
+            readAsText 方法可以将 Blob 或者 File 对象转根据特殊的编码格式转化为内容(字符串形式)。
+
+            这个方法是异步的，也就是说，只有当执行完成后才能够查看到结果，如果直接查看是无结果的，并返回undefined。
+            也就是说必须要挂载 实例下的 onload 或 onloadend 的方法处理转化后的结果。
+
+            当转化完成后， readyState 这个参数就会转换 为 done 即完成态， event("loadend") 挂载的事件会被触发，
+            并可以通过事件返回的形参得到中的 FileReader.result 属性得到转化后的结果。
+          */
+          // fr.readAsText(file);
+
+          /*
+            FileReader 接口提供的 readAsArrayBuffer() 方法用于启动读取指定的 Blob 或 File 内容。
+            当读取操作完成时，readyState 变成 DONE（已完成），并触发 loadend (en-US) 事件，
+            同时 result 属性中将包含一个 ArrayBuffer 对象以表示所读取文件的数据。
+          */
+          // fr.readAsArrayBuffer(file);
+
+          /*
+            readAsBinaryString 方法会读取指定的 Blob 或 File 对象，
+            当读取完成的时候，readyState  会变成DONE（已完成），并触发 loadend (en-US) 事件，
+            同时 result 属性将包含所读取文件原始二进制格式。
+          */
+          // fr.readAsBinaryString(file);
+
+          /*
+            readAsDataURL 方法会读取指定的 Blob 或 File 对象。
+            读取操作完成的时候，readyState 会变成已完成DONE，并触发 loadend (en-US) 事件，
+            同时 result 属性将包含一个data:URL格式的字符串（base64编码）以表示所读取文件的内容。
+          */
+          fr.readAsDataURL(file);
+
+          /*
+            当 FileReader 读取文件的方式为  readAsArrayBuffer, readAsBinaryString, readAsDataURL 或者 readAsText 的时候，会触发一个 load (en-US) 事件。
+            从而可以使用  FileReader.onload 属性对该事件进行处理。
+          */
+          fr.onload = function (e) {
+            // console.log(e.target.result, "e.target.result");
+            document.getElementById("portrait").src = e.target.result;
+          };
+        }
+      });
+    </script>
+  </body>
+</html>

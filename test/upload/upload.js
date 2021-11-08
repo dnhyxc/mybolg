@@ -672,7 +672,7 @@ const delay = function delay(interval) {
     let already = [];
 
     // 获取文件HASH，suffix后缀名
-    let { HASH, suffix } = await  (file);
+    let { HASH, suffix } = await changeBuffer(file);
 
     // 获取已经上传的切片信息
     try {
@@ -687,14 +687,16 @@ const delay = function delay(interval) {
     } catch (err) {}
 
     // 实现文件的切片处理的方式：固定数量 & 固定大小
-    let max = 1024 * 100;
-    let count = Math.ceil(file.size / max);
     let index = 0;
     let chunks = [];
+
+    let max = 1024 * 100;
+    let count = Math.ceil(file.size / max);
     if (count > 100) {
       max = file.size / 100;
       count = 100;
     }
+
     while (index < count) {
       chunks.push({
         file: file.slice(index * max, (index + 1) * max),
