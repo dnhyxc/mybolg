@@ -2,7 +2,6 @@ html,
 body,
 #container {
   height: 100vh;
-  // height: auto;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -31,7 +30,6 @@ body,
       text-align: center;
       line-height: 36px;
       border-radius: 50px;
-      // background-image: linear-gradient(to bottom, #2b5876 0%, #4e4376 100%);
       box-shadow: 0 0 5px #ccc inset;
       font-size: 10px;
       color: #ccc;
@@ -66,7 +64,6 @@ body,
       text-align: center;
       line-height: 36px;
       border-radius: 50px;
-      // background-image: linear-gradient(to bottom, #2b5876 0%, #4e4376 100%);
       box-shadow: 0 0 5px #ccc inset;
       font-size: 10px;
       color: #ccc;
@@ -137,7 +134,6 @@ body,
   font-size: 10px;
 
   .tooltip-left .tooltip-content:before {
-    // content: none;
     position: absolute;
     width: 100%;
     height: 30px;
