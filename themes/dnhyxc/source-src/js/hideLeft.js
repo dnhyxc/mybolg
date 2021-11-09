@@ -15,7 +15,9 @@ function onShowMenu() {
   toolsCol.classList.remove("hideTools");
 
   // 控制隐藏左侧菜单栏时右侧文章的尺寸
-  if (Utils.getSSG("narrow")) atticleNarrow.setNarrow();
+  if (Utils.isArticle && !Utils.isHome && Utils.getSSG("narrow")) {
+    atticleNarrow.setNarrow();
+  }
 }
 
 function init() {

@@ -11,6 +11,9 @@ const isPerception = decodeURIComponent(path)
   .includes("perception");
 const isHome = path === "/";
 
+const url = new URL(location.href);
+const isPage = url.pathname.includes("page");
+
 const getSSG = function (name) {
   return sessionStorage.getItem(name);
 };
@@ -136,6 +139,7 @@ module.exports = {
   isArchives,
   isPerception,
   isHome,
+  isPage,
   getSSG,
   setSSG,
   removeSSG,

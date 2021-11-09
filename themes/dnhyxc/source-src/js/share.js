@@ -28,9 +28,10 @@ function init() {
     new QRcode(qrcodeNarrow, `https://dnhyxc.gitee.io${url}`);
     new QRcode(qrcode, `https://dnhyxc.gitee.io${url}`);
 
-    talkNarrow.onclick = function () {
-      toBottom(domWrapper, 200);
-    };
+    if (talkNarrow)
+      talkNarrow.onclick = function () {
+        toBottom(domWrapper, 200);
+      };
 
     // talkCount.innerHTML = getSSG("cnt");
   }
