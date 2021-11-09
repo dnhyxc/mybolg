@@ -16,6 +16,116 @@
 
       console.log(res); // dnhyxc
       console.log(res1); // dnhyxc
+
+      const params1 = new URLSearchParams("?n=dnhyxc");
+      params1.append("from", "snsn");
+      console.log(params1.toString()); // n=dnhyxc&from=snsn
+
+      const params2 = new URLSearchParams("n=dnhyxc&from=snsn");
+      params2.delete("from");
+      console.log(params2.toString()); // n=dnhyxc
+
+      let searchParams = new URLSearchParams("n=dnhyxc&from=snsn&id=209");
+      console.log(searchParams.entries()); // Iterator {}
+
+      const params = {};
+      for (let arr of searchParams.entries()) {
+        console.log(arr[0] + ", " + arr[1]);
+        /*
+          n, dnhyxc
+          from, snsn
+          id, 209
+        */
+        params[arr[0]] = arr[1];
+      }
+      console.log(params, "params"); // {n: 'dnhyxc', from: 'snsn', id: '209'}
+
+      const searchParams1 = new URLSearchParams("n=dnhyxc&from=snsn&id=209");
+      // 输出值和键的内容
+      searchParams1.forEach(function (value, key) {
+        console.log(key, value);
+        /*
+          n dnhyxc
+          from snsn
+          id 209
+        */
+      });
+
+      const params3 = new URLSearchParams("n=dnhyxc&from=snsn&id=209");
+      console.log(params3.get("n")); // dnhyxc
+
+      const params4 = new URLSearchParams("n=dnhyxc&from=snsn&n=209");
+      console.log(params4.getAll("n")); // ['dnhyxc', '209']
+
+      const params5 = new URLSearchParams("n=dnhyxc&from=snsn&id=209");
+      console.log(params5.has("n")); // true
+
+      const searchParams2 = new URLSearchParams("n=dnhyxc&from=snsn");
+      // 显示所有的键
+      for (let key of searchParams2.keys()) {
+        console.log(key); // n from
+      }
+
+      const searchParams3 = new URLSearchParams("n=dnhyxc&from=snsn");
+      // 显示所有的值
+      for (let value of searchParams3.values()) {
+        console.log(value); // dnhyxc snsn
+      }
+
+      const params6 = new URLSearchParams("n=dnhyxc&from=snsn");
+      params6.set("from", "hz");
+      params6.set("id", "209");
+      console.log(params6.toString()); // n=dnhyxc&from=hz&id=209
+
+      const searchParams4 = new URLSearchParams("c=6&a=2&d=9&b=3&a=1");
+      // 键值对排序
+      searchParams4.sort();
+      // 显示排序后的查询字符串
+      console.log(searchParams4.toString()); // a=2&a=1&b=3&c=6&d=9
+
+      const base2 = "https://dnhyxc.gitee.io";
+      console.log(new URL("dnhyxc", base2).href); // https://dnhyxc.gitee.io/dnhyxc
+      console.log(new URL("/dnhyxc", base2).href); // https://dnhyxc.gitee.io/dnhyxc
+
+      const base1 = "https://dnhyxc.gitee.io";
+      const urlFromBase = new URL("dnhyxc", base1);
+      console.log(new URL(urlFromBase).href); // https://dnhyxc.gitee.io/dnhyxc
+      console.log(new URL("snsn", urlFromBase).href); // https://dnhyxc.gitee.io/snsn
+
+      const base = "https://dnhyxc.gitee.io/dnhyxc/a/b/c";
+      console.log(new URL("study/url", base).href); // https://dnhyxc.gitee.io/dnhyxc/a/b/study/url
+      // ./和裸露相对地址没有区别
+      console.log(new URL("./study/url", base).href); // https://dnhyxc.gitee.io/dnhyxc/a/b/study/url
+      // 向上一层URL层级深度
+      console.log(new URL("../study/url", base).href); // https://dnhyxc.gitee.io/dnhyxc/a/study/url
+      // 层级按照斜杠进行计算
+      console.log(new URL("../study/url", base + "/").href); // https://dnhyxc.gitee.io/dnhyxc/a/b/study/url
+      // 斜杠开头表示从origin开始匹配，即从io开始
+      console.log(new URL("/study/url", base).href); // https://dnhyxc.gitee.io/study/url
+
+      const base4 = "https://www.baidu.com";
+      // 没有协议的url认为是相对地址，协议取自base地址
+      console.log(new URL("//gitee.dnhyxc.com", "http://www.baidu.com").href); // http://gitee.dnhyxc.com/
+      console.log(new URL("//gitee.dnhyxc.com", "https://www.baidu.com").href); // https://gitee.dnhyxc.com/
+      // 这里url是完整的绝对地址，因此，忽略后面的base参数
+      console.log(new URL("https://gitee.dnhyxc.com", base4).href); // https://gitee.dnhyxc.com/
+
+      const fileList = new URL(
+        "https://dnhyxc.gitee.io:80/dnhyxc/snsn/?n=dnhyxc#fileList"
+      );
+
+      console.log(fileList.hash); // #fileList
+      console.log(fileList.pathname); // /dnhyxc/snsn/
+      console.log(fileList.host, "host"); // dnhyxc.gitee.io:80
+      console.log(fileList.hostname, "hostname"); // dnhyxc.gitee.io
+      console.log(fileList.origin, "origin"); // https://dnhyxc.gitee.io:80
+      console.log(fileList.search, "search"); // ?n=dnhyxc
+      console.log(fileList.searchParams.get("n")); // dnhyxc
+
+      fileList.port = "8080";
+
+      console.log(fileList.toString()); // https://dnhyxc.gitee.io:8080/dnhyxc/snsn/?n=dnhyxc#fileList
+      console.log(fileList.toJSON()); // https://dnhyxc.gitee.io:8080/dnhyxc/snsn/?n=dnhyxc#fileList
     </script>
   </body>
 </html>

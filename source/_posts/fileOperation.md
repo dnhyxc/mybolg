@@ -259,5 +259,319 @@ const params3 = new URLSearchParams([
 - objSearchKeyValue：键值对形式的查询对象。
 
 ```js
-const params4 = new URLSearchParams({"n": "dnhyxc", "id": 2})
+const params4 = new URLSearchParams({ n: "dnhyxc", id: 2 });
+```
+
+#### URLSearchParams 实例方法
+
+1、执行 new URLSearchParams() 的返回值 myUrlSearchParams 就是一个 URLSearchParams 实例。
+
+##### URLSearchParams.toString()
+
+1、把 URLSearchParams 对象转换成查询字符串。
+
+```js
+const params = new URLSearchParams("?n=dnhyxc"); // 可以省略问号直接'n=dnhyxc'
+params.append("from", "snsn");
+console.log(params1.toString()); // n=dnhyxc&from=snsn
+```
+
+##### URLSearchParams.append(name, key)
+
+1、append 方法可以添加新的键值对作为查询参数：
+
+```js
+const params = new URLSearchParams("?n=dnhyxc"); // 可以省略问号直接'n=dnhyxc'
+params.append("from", "snsn");
+console.log(params1.toString()); // n=dnhyxc&from=snsn
+```
+
+##### URLSearchParams.delete(name)
+
+1、删除已存在的查询参数：
+
+```js
+const params2 = new URLSearchParams("n=dnhyxc&from=snsn");
+params2.delete("from");
+console.log(params2.toString()); // n=dnhyxc
+```
+
+##### URLSearchParams.entries()
+
+1、返回查询参数的迭代器对象，可以遍历该迭代器对象获得所有的键值对，如使用 for..of 进行遍历：
+
+```js
+let searchParams = new URLSearchParams("n=dnhyxc&from=snsn&id=209");
+
+console.log(searchParams.entries()); // Iterator {}
+
+const params = {};
+
+for (let arr of searchParams.entries()) {
+  console.log(arr[0] + ", " + arr[1]);
+  /*
+    n, dnhyxc
+    from, snsn
+    id, 209
+  */
+  params[arr[0]] = arr[1];
+}
+console.log(params, "params"); // {n: 'dnhyxc', from: 'snsn', id: '209'}
+```
+
+##### URLSearchParams.forEach(callback)
+
+1、该方法可以遍历查询对象，其中 callback 是遍历方法，支持两个参数，分别是每个键值对的值和键。
+
+```js
+const searchParams = new URLSearchParams("n=dnhyxc&from=snsn&id=209");
+// 输出值和键的内容
+searchParams.forEach(function (value, key) {
+  console.log(key, value);
+  /*
+    n dnhyxc
+    from snsn
+    id 209
+  */
+});
+```
+
+##### URLSearchParams.get(name)
+
+1、该方法可以返回指定关键字对象的值，如果没有对应的值，则返回 null。
+
+```js
+const params = new URLSearchParams("n=dnhyxc&from=snsn&id=209");
+console.log(params.get("n")); // dnhyxc
+```
+
+##### URLSearchParams.getAll(name)
+
+1、以数组形式返回所有当前查询关键字对应的值。
+
+```js
+const params = new URLSearchParams("n=dnhyxc&from=snsn&n=209");
+console.log(params.getAll("n")); // ['dnhyxc', '209']
+```
+
+##### URLSearchParams.has(name)
+
+1、返回布尔值，true 或者 false，是否包含某个查询关键字。
+
+```js
+const params = new URLSearchParams("n=dnhyxc&from=snsn&id=209");
+console.log(params.has("n")); // true
+```
+
+##### URLSearchParams.keys()
+
+1、返回一个迭代器对象，允许迭代该对象中所有的关键字。
+
+```js
+const searchParams = new URLSearchParams("n=dnhyxc&from=snsn");
+// 显示所有的键
+for (let key of searchParams.keys()) {
+  console.log(key); // n from
+}
+```
+
+##### URLSearchParams.values()
+
+1、返回一个迭代器对象，允许迭代该对象中所有的关键字值。
+
+```js
+const searchParams = new URLSearchParams("n=dnhyxc&from=snsn");
+// 显示所有的值
+for (let value of searchParams.values()) {
+  console.log(value); // dnhyxc snsn
+}
+```
+
+##### URLSearchParams.set(name, value)
+
+1、当存在该属性时，将其属性值替换为传入的新值，不存在该属性值则直接设置。
+
+```js
+const params = new URLSearchParams("n=dnhyxc&from=snsn");
+params.set("from", "hz");
+params.set("id", "209");
+consol.log(params.toString()); // n=dnhyxc&from=hz&id=209
+```
+
+##### URLSearchParams.sort()
+
+1、该方法将此对象中包含的所有键/值对就地排序，并返回 undefined。排序顺序是以 Unicode 码位为依据。该方法使用一种稳定的排序算法（即保留具有相同键的键/值对之间的相对顺序）。
+
+```js
+const searchParams = new URLSearchParams("c=6&a=2&d=9&b=3&a=1");
+// 键值对排序
+searchParams.sort();
+// 显示排序后的查询字符串
+console.log(searchParams.toString()); // a=2&a=1&b=3&c=6&d=9
+```
+
+#### URL() 语法
+
+1、URL() 语法如下：
+
+```js
+const myUrl = new URL(url, [base]);
+```
+
+2、参数说明：
+
+- url：相对地址或者绝对地址。如果是相对地址，需要设置 base 参数，如果是绝对地址，则会忽略 base 设置。我们也可以使用 URL 对象作为 url 参数。此时作用的值是 URL 对象中的 href 属性值。
+
+- base：如果 URL 地址是相对地址，则需要这个参数，作用是作为相对计算的基础地址。我们也可以使用 URL 对象作为 base 参数，此时作用的值是 URL 对象中的 href 属性值。如果不设置该参数，则会按照空字符串''进行处理。
+
+> 如果参数值无法组合成完整 URL 地址，则会报 TypeError 错误。
+
+3、具体用法如下：
+
+```js
+const base = "https://dnhyxc.gitee.io";
+console.log(new URL("dnhyxc", base).href); // https://dnhyxc.gitee.io/dnhyxc
+console.log(new URL("/dnhyxc", base).href); // https://dnhyxc.gitee.io/dnhyxc
+```
+
+- 使用 URL 对象作为参数：
+
+```js
+const base = "https://dnhyxc.gitee.io";
+const urlFromBase = new URL("dnhyxc", base);
+console.log(new URL(urlFromBase).href); // https://dnhyxc.gitee.io/dnhyxc
+console.log(new URL("snsn", urlFromBase).href); // https://dnhyxc.gitee.io/snsn
+```
+
+- 带有较深层级 base 地址和不同相对地址形式：
+
+```js
+const base = "https://dnhyxc.gitee.io/dnhyxc/a/b/c";
+console.log(new URL("study/url", base).href); // https://dnhyxc.gitee.io/dnhyxc/a/b/study/url
+// ./和裸露相对地址没有区别
+console.log(new URL("./study/url", base).href); // https://dnhyxc.gitee.io/dnhyxc/a/b/study/url
+// 向上一层URL层级深度
+console.log(new URL("../study/url", base).href); // https://dnhyxc.gitee.io/dnhyxc/a/study/url
+// 层级按照斜杠进行计算
+console.log(new URL("../study/url", base + "/").href); // https://dnhyxc.gitee.io/dnhyxc/a/b/study/url
+// 斜杠开头表示从origin开始匹配，即从io开始
+console.log(new URL("/study/url", base).href); // https://dnhyxc.gitee.io/study/url
+```
+
+- 不同域名：
+
+```js
+const base = "https://www.baidu.com";
+// 没有协议的url认为是相对地址，协议取自base地址
+console.log(new URL("//gitee.dnhyxc.com", "http://www.baidu.com").href); // http://gitee.dnhyxc.com/
+console.log(new URL("//gitee.dnhyxc.com", "https://www.baidu.com").href); // https://gitee.dnhyxc.com/
+// 这里url是完整的绝对地址，因此，忽略后面的base参数
+console.log(new URL("https://gitee.dnhyxc.com", base).href); // https://gitee.dnhyxc.com/
+```
+
+#### URL 实例对象的属性
+
+1、new URL()返回值就是一个实例对象。
+
+```js
+const giteeUrl = new URL(
+  "https://dnhyxc.gitee.io:80/dnhyxc/snsn?n=dnhyxc#fileList"
+);
+const ftp = new URL("ftp://username:password@192.168.1.1/path/file");
+```
+
+##### hash
+
+1、URL 地址中的锚链值，包含字符串'#'，例如上述 giteeUrl 中，url.hash 的返回值是'#fileList'。
+
+##### host
+
+1、URL 地址中 host 主机地址，包括协议端口号，上述 giteeUrl.host 的返回值是'dnhyxc.gitee.io:80'。
+
+##### hostname
+
+1、URL 地址中主机名称，不包括端口号，上述 giteeUrl.hostname 的返回值是'dnhyxc.gitee.io'。
+
+##### href
+
+1、完成的 URL 地址。
+
+##### pathname
+
+1、返回 URL 中的目录+文件名。例如上述 ftp.pathname 的返回值是'/dnhyxc/snsn/'。
+
+##### search
+
+1、返回 URL 地址的查询字符串，如果有参数，则返回值以问号'?'开头。例如上述 giteeUrl.search 的返回值是'?n=dnhyxc'。
+
+##### origin （只读）
+
+1、返回 URL 地址的来源，会包含 URL 协议，域名和端口。如：'https://dnhyxc.gitee.io:80'。
+
+##### password
+
+1、返回 URL 地址域名前的密码。ftp 协议中比较常见。如：上述 ftp 中的 ftp.password 的返回值是'password'。
+
+##### username
+
+1、返回 URL 地址域名前的用户名。ftp 协议中比较常见。如：上述 ftp 中的 ftp.username 的返回值是'username'。
+
+##### port
+
+1、返回 URL 地址中的端口号。例如上述 giteeUrl 中 giteeUrl.port 的返回值是'80'，ftp.port 的返回值是''。
+
+##### protocol
+
+1、返回 URL 地址的协议，包括后面的冒号':'。例如上述 giteeUrl.protocol 的返回值是'https:'，ftp.protocol 的返回值是'ftp:'。
+
+##### searchParams
+
+1、返回一个 URLSearchParams 对象，可以调用 URLSearchParams 对象各种方法，对查询字符串进行非常方便的处理。例如我们想要知道查询关键字 n 对应的值，可以：
+
+```js
+giteeUrl.searchParams.get("n"); // dnhyxc
+```
+
+> 上述属性中，除了 origin 属性是只读的之外，其它属性都可以用来给 url 实例进行赋值操作，即可读可写。
+
+#### URL 实例的方法
+
+##### toString()
+
+1、返回的完整的 URL 地址，可以理解为 URL.href 的另外一种形式，不过这个只能输出，不能修改值。
+
+##### toJSON()
+
+1、同样返回完整的 URL 地址，返回的字符串和 URL.href 属性一样。
+
+#### URL 实例的静态方法
+
+##### URL.createObjectURL(object)
+
+1、可以把 File，Blob 或者 MediaSource 对象变成一个一个唯一的 blob URL。其中参数 object 可以是 File，Blob 或者 MediaSource 对象。
+
+##### URL.revokeObjectURL(objectURL)
+
+1、撤消之前使用 URL.createObjectURL()创建的 URL 对象。其中参数 objectURL 表示之前使用 URL.createObjectURL()创建的 URL 返回值。
+
+##### 静态方法使用示例
+
+1、使用 Ajax 请求一个跨域图片避免 canvas 产生跨域问题，即可以使用这两个静态方法：
+
+```js
+const xhr = new XMLHttpRequest();
+xhr.onload = function () {
+  const url = URL.createObjectURL(this.response);
+  const img = new Image();
+  img.onload = function () {
+    // 此时你就可以使用canvas对img为所欲为了
+    // ... code ...
+    // 图片用完后记得释放内存
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+};
+xhr.open("GET", url, true);
+xhr.responseType = "blob";
+xhr.send();
 ```
