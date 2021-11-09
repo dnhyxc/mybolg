@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File</title>
+  </head>
+  <body>
+    <input type="file" name="file" class="fileInp" />
+
+    <input type="file" name="file" class="multipleInp" multiple />
+    <script>
+      const myFile = document.querySelector(".fileInp");
+      myFile.addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        // console.log(file.name);
+        // console.log(file.size);
+        // console.log(file.type);
+        // console.log(file.lastModified);
+        // console.log(file.lastModifiedDate);
+        // console.log(file.webkitRelativePath);
+      });
+
+      const multipleInp = document.querySelector(".multipleInp");
+      multipleInp.addEventListener("change", function (e) {
+        const files = e.target.files;
+        console.log(files instanceof FileList); // true
+        console.log(files);
+        /*
+          FileList {0: File, 1: File, length: 2}
+            0: File
+              lastModified: 1636091486080
+              lastModifiedDate: Fri Nov 05 2021 13:51:26 GMT+0800 (中国标准时间) {}
+              name: "4m.jpg"
+              size: 215626
+              type: "image/jpeg"
+              webkitRelativePath: ""
+              [[Prototype]]: File
+            1: File
+              lastModified: 1636091419330
+              lastModifiedDate: Fri Nov 05 2021 13:50:19 GMT+0800 (中国标准时间) {}
+              name: "11.jpg"
+              size: 26050
+              type: "image/jpeg"
+              webkitRelativePath: ""
+              [[Prototype]]: File
+              length: 2
+              [[Prototype]]: FileList
+        */
+
+        console.log(files[0]);
+        /*
+          lastModified: 1636091486080
+          lastModifiedDate: Fri Nov 05 2021 13:51:26 GMT+0800 (中国标准时间) {}
+          name: "4m.jpg"
+          size: 215626
+          type: "image/jpeg"
+          webkitRelativePath: ""
+        */
+
+        const firstItem = files.item(1);
+        console.log(firstItem, "firstItem");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>定时刷新</title>
+  </head>
+  <body>
+    <div>定时刷新</div>
+    <select class="timer">
+      <option value="15">15min</option>
+      <option value="30">30min</option>
+      <option value="45">45min</option>
+      <option value="60">60min</option>
+    </select>
+    <button class="handle">手动刷新</button>
+    <script>
+      const selectTime = document.querySelector(".timer");
+      const handle = document.querySelector(".handle");
+
+      let timer;
+
+      const addTime15s = 1500; // 15s
+      const addTime30s = 3000; // 30s
+      const addTime45s = 4500; // 45s
+      const addTime60s = 6000; // 60s
+
+      let selectAddTime = addTime15s;
+
+      selectTime.addEventListener("change", (e) => {
+        if (e.target.value === "15") {
+          selectAddTime = addTime15s;
+          begin(selectAddTime);
+        }
+        if (e.target.value === "30") {
+          selectAddTime = addTime30s;
+          begin(selectAddTime);
+        }
+        if (e.target.value === "45") {
+          selectAddTime = addTime45s;
+          begin(selectAddTime);
+        }
+        if (e.target.value === "60") {
+          selectAddTime = addTime60s;
+          begin(selectAddTime);
+        }
+      });
+
+      const reflash = () => {
+        setTimeout(async () => {
+          await console.log("刷新页面,刷新页面");
+          begin(selectAddTime);
+        }, 1000);
+      };
+
+      window.onload = () => {
+        begin(selectAddTime);
+      };
+
+      handle.addEventListener("click", () => {
+        if (timer) clearInterval(timer);
+        reflash();
+      });
+
+      const begin = (time) => {
+        if (timer) clearInterval(timer);
+        timer = setInterval(() => {
+          reflash();
+        }, time);
+      };
+    </script>
+  </body>
+</html>

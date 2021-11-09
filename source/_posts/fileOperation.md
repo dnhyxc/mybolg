@@ -1,6 +1,7 @@
 ---
 title: FileOperation
 date: 2021-11-08 16:02:09
+toc: true
 tags:
   - FileReader
   - Blob
@@ -10,6 +11,150 @@ categories:
 ---
 
 ### File
+
+#### File 概述
+
+1、File 对象提供有关文件的信息，并允许网页中的 JavaScript 读写文件，它继承了 Blob。
+
+2、最常见的使用场合是表单的文件上传控件，用户在一个 `<input type="file">` 元素上选择文件后，浏览器会生成一个数组，里面是每一个用户选中的文件，它们都是 File 实例对象。
+
+3、**特别说明**：File 对象是一种特殊 **Blob** 对象，并且可以用在任意的 Blob 对象的 context 中。比如说， FileReader, **URL.createObjectURL()**, **createImageBitmap()**, 及 **XMLHttpRequest.send()** 都能处理 Blob 和 File。
+
+```js
+const file = document.getElementById("fileItem").files[0];
+file instanceof File; // true
+```
+
+<!-- more -->
+
+#### File 构造函数
+
+1、浏览器原生提供一个 File() 构造函数，用来生成 File 实例对象。
+
+```js
+const myFile = new File(bits, name[, options]);
+```
+
+2、参数说明：
+
+- **bits**：一个包含 ArrayBuffer，ArrayBufferView，Blob，或者 DOMString 对象的数组，或者任何这些对象的组合。这是 UTF-8 编码的文件内容。通过这个参数，也可以实现 ArrayBuffer，ArrayBufferView，Blob 转换为 File 对象。
+
+- **name**：字符串，表示文件名或文件路径。
+
+- **options**：配置对象，设置实例的属性。该参数可选。可选值有如下两种：
+
+  - `type`：DOMString，表示将要放到文件中的内容的 MIME 类型。默认值为 "" 。
+
+  - `lastModified`：数值，表示文件最后修改时间的 Unix 时间戳（毫秒）。默认值为 Date.now()。
+
+3、使用示例如下：
+
+```js
+const myFile = new File(["dnhyxc1", "dnhyxc2"], "dnhyxc.txt", {
+  type: "text/plain",
+});
+```
+
+4、根据已有 blob 对象创建 File 对象：
+
+```js
+const myFile = new File([blob], "leo.png", { type: "image/png" });
+```
+
+#### File 实例属性
+
+1、**File.lastModified**：只读属性，用户获取最后修改时间，是个时间戳（自 UNIX 时间起始值（1970 年 1 月 1 日 00:00:00 UTC）以来的毫秒数）。
+
+2、**File.name**：只读属性，返回文件名。
+
+3、**File.size**：只读属性，返回文件大小（单位字节）。
+
+4、**File.type**：只读属性，返回文件的 MIME 类型。
+
+5、**File.lastModifiedDate**：只读属性，返回文件最后的修改时间，一个 Date 对象。
+
+```js
+const myFile = document.querySelector(".fileInp");
+
+myFile.addEventListener("change", function (e) {
+  const file = e.target.files[0];
+  console.log(file.name); // 4m.jpg
+  console.log(file.size); // 215626
+  console.log(file.type); // image/jpeg
+  console.log(file.lastModified); // 1636091486080
+  console.log(file.lastModifiedDate); // Fri Nov 05 2021 13:51:26 GMT+0800 (中国标准时间)
+});
+```
+
+#### File 实例方法
+
+1、File 对象没有定义任何方法，但是它从 Blob 接口继承了以下方法：
+
+```js
+File.slice([start[, end[, contentType]]])
+```
+
+2、slice 方法会返回一个新的 File 对象，它包含有源 File 对象中指定范围内的数据。
+
+### FileList
+
+#### FileList 概述
+
+1、FileList 对象是一个类数组对象，每个成员都是一个 File 实例，主要出现在两种场合：
+
+- 通过 `<input type="file" multiple>` 控件的 files 属性，返回一个 FileList 实例。另外，当 input 元素拥有 **multiple** 属性，则可以用它来选择多个文件。
+
+- 通过拖放文件，查看 DataTransfer.files 属性，返回一个 FileList 实例。
+
+```js
+const multipleInp = document.querySelector(".multipleInp");
+multipleInp.addEventListener("change", function (e) {
+  const files = e.target.files;
+  console.log(files instanceof FileList); // true
+  console.log(files);
+  /*
+  FileList {0: File, 1: File, length: 2}
+    0: File
+      lastModified: 1636091486080
+      lastModifiedDate: Fri Nov 05 2021 13:51:26 GMT+0800 (中国标准时间) {}
+      name: "4m.jpg"
+      size: 215626
+      type: "image/jpeg"
+      webkitRelativePath: ""
+      [[Prototype]]: File
+    1: File
+      lastModified: 1636091419330
+      lastModifiedDate: Fri Nov 05 2021 13:50:19 GMT+0800 (中国标准时间) {}
+      name: "11.jpg"
+      size: 26050
+      type: "image/jpeg"
+      webkitRelativePath: ""
+      [[Prototype]]: File
+      length: 2
+      [[Prototype]]: FileList        
+  */
+
+  console.log(files[0]);
+  /*
+    lastModified: 1636091486080
+    lastModifiedDate: Fri Nov 05 2021 13:51:26 GMT+0800 (中国标准时间) {}
+    name: "4m.jpg"
+    size: 215626
+    type: "image/jpeg"
+    webkitRelativePath: ""
+  */
+});
+```
+
+#### FileList 实例属性
+
+1、**FileList.length**：只读属性，返回列表中的文件数量。
+
+#### FileList 实例方法
+
+1、FileList.item()：用来返回指定位置的实例，从 0 开始，类似于通过索引获取`files[0]、files[1]`。
+
+> 由于 FileList 实例是个类数组对象，可以直接用方括号运算符，即 myFileList[0] 等同于 myFileList.item(0) ，所以一般用不到 item()方法。
 
 ### FileReader
 
@@ -28,8 +173,6 @@ reader.onload = function (evt) {
 };
 reader.readAsText(file);
 ```
-
-<!-- more -->
 
 #### FileReader 属性
 
@@ -55,12 +198,12 @@ reader.readAsText(file);
 
 #### FileReader 方法
 
-1、**fr.abort()**：终止读取操作，readyState 属性将变成 2。
+1、**fr.abort** ( )：终止读取操作，readyState 属性将变成 2。
 
-2、**fr.readAsArrayBuffer()**：以 ArrayBuffer 的格式读取文件，读取完成后 result 属性将返回一个 `ArrayBuffer` 实例。
+2、**fr.readAsArrayBuffer** ( )：以 ArrayBuffer 的格式读取文件，读取完成后 result 属性将返回一个 `ArrayBuffer` 实例。
 
-3、**fr.readAsDataURL()**：读取完成后，result 属性将返回一个 `Data URL 格式（Base64 编码）的字符串`，代表文件内容。
+3、**fr.readAsDataURL** ( )：读取完成后，result 属性将返回一个 `Data URL 格式（Base64 编码）的字符串`，代表文件内容。
 
-4、**fr.readAsText()**：读取完成后，result 属性将返回文件内容的`文本字符串`。
+4、**fr.readAsText**( )：读取完成后，result 属性将返回文件内容的`文本字符串`。
 
-5、**fr.readAsBinaryString()**：读取完成后，result 属性将返回原始的`二进制数据（二进制字符串）`。
+5、**fr.readAsBinaryString** ( )：读取完成后，result 属性将返回原始的`二进制数据（二进制字符串）`。
