@@ -204,6 +204,25 @@ reader.readAsText(file);
 
 3、**fr.readAsDataURL** ( )：读取完成后，result 属性将返回一个 `Data URL 格式（Base64 编码）的字符串`，代表文件内容。
 
-4、**fr.readAsText**( )：读取完成后，result 属性将返回文件内容的`文本字符串`。
+4、**fr.readAsText** ( )：读取完成后，result 属性将返回文件内容的`文本字符串`。
 
 5、**fr.readAsBinaryString** ( )：读取完成后，result 属性将返回原始的`二进制数据（二进制字符串）`。
+
+### URL
+
+#### URL 概述
+
+1、URL 接口用于解析、构造、规范化和编码 URL。其构造的实例支持若干属性和方法，可以用来读写 URL 相关的属性值。我们甚至可以把文件内容作为 URL 的一部分进行呈现。
+
+2、由于 URL 存在兼容性
+https://www.zhangxinxu.com/wordpress/2019/08/js-url-urlsearchparams/
+
+https://juejin.cn/post/6844904023758225422#heading-1
+
+https://juejin.cn/post/6915795898609975309
+
+https://juejin.cn/post/7022528039678377992#heading-6
+
+https://juejin.cn/post/6844904023758225422#heading-5
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/URL
