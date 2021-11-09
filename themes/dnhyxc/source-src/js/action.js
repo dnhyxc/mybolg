@@ -436,7 +436,9 @@ function init() {
         } else if (
           Utils.isArticle &&
           !Utils.isCategories &&
-          !Utils.isArchives
+          !Utils.isArchives &&
+          !Utils.isPage &&
+          !Utils.isHome
         ) {
           changeSize.style.display = "block";
           mainLoading.innerHTML =
@@ -445,6 +447,8 @@ function init() {
             "Article-" + subPath[0].toUpperCase() + subPath.slice(1);
           mainLoadingText =
             "Article-" + subPath[0].toUpperCase() + subPath.slice(1);
+        } else if (Utils.isPage) {
+          mainLoading.innerHTML = "HOME";
         } else {
           mainLoading.innerHTML = subPath[0].toUpperCase() + subPath.slice(1);
         }
