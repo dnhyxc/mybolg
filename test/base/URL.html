@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL</title>
+  </head>
+  <body>
+    <script>
+      const res = new URL(
+        "https://dnhyxc.gitee.io/file/?n=dnhyxc"
+      ).searchParams.get("n");
+
+      const res1 = new URLSearchParams("?n=dnhyxc").get("n");
+
+      console.log(res); // dnhyxc
+      console.log(res1); // dnhyxc
+    </script>
+  </body>
+</html>

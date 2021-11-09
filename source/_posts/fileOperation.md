@@ -208,21 +208,56 @@ reader.readAsText(file);
 
 5、**fr.readAsBinaryString** ( )：读取完成后，result 属性将返回原始的`二进制数据（二进制字符串）`。
 
-### URL
+### URL & URLSearchParams
 
 #### URL 概述
 
 1、URL 接口用于解析、构造、规范化和编码 URL。其构造的实例支持若干属性和方法，可以用来读写 URL 相关的属性值。我们甚至可以把文件内容作为 URL 的一部分进行呈现。
 
-2、由于 URL 存在兼容性
-https://www.zhangxinxu.com/wordpress/2019/08/js-url-urlsearchparams/
+#### URL 与 URLSearchParams 的作用
 
-https://juejin.cn/post/6844904023758225422#heading-1
+1、当需要对地址栏中的 URL 地址进行分析处理，需要自己进行字符串分析，例如：`https://dnhyxc.gitee.io/file/?s=url`，如果我们需要获取 s 的属性值，就需要进行字符串切割或者进行正则匹配。而 URL 与 URLSearchParams 就是用来对 url 进行处理的，如下：
 
-https://juejin.cn/post/6915795898609975309
+```js
+new URL("https://dnhyxc.gitee.io/file/?n=dnhyxc").searchParams.get("n"); // dnhyxc
 
-https://juejin.cn/post/7022528039678377992#heading-6
+new URLSearchParams("?n=dnhyxc").get("n"); // dnhyxc
+```
 
-https://juejin.cn/post/6844904023758225422#heading-5
+#### URLSearchParams() 语法
 
-https://developer.mozilla.org/zh-CN/docs/Web/API/URL
+1、URLSearchParams() 语法如下：
+
+```js
+// URL查询字符串
+const myUrlSearchParams = new URLSearchParams(strSearchParams);
+// 查询字符序列
+const myUrlSearchParams = new URLSearchParams(arrSearchSequence);
+// 查询键值对象
+const myUrlSearchParams = new URLSearchParams(objSearchKeyValue);
+```
+
+2、参数说明：
+
+- strSearchParams：表示 URL 查询字符串，或者对当前地址栏地址的查询字符串。
+
+```js
+const params1 = new URLSearchParams("?n=dnhyxc");
+
+const params2 = new URLSearchParams(location.search);
+```
+
+- arrSearchSequence：数组形式的查询字符序列。
+
+```js
+const params3 = new URLSearchParams([
+  ["n", "dnhyxc"],
+  ["id", 1],
+]);
+```
+
+- objSearchKeyValue：键值对形式的查询对象。
+
+```js
+const params4 = new URLSearchParams({"n": "dnhyxc", "id": 2})
+```
