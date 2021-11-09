@@ -2,6 +2,12 @@
   color: #fff;
 }
 
+.tagclouds-wrap {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .tagclouds {
   display: flex;
   align-items: center;
@@ -18,7 +24,7 @@
     padding: 0 5px 0px 10px;
     position: relative;
     border-radius: 3px 5px 5px 3px;
-    margin: 5px 9px 5px 8px;
+    margin: 5px 9px 5px 5px;
     font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New",
       monospace;
     &:hover {
@@ -94,7 +100,7 @@
 }
 .article-tag,
 .article-category {
-  float: left;
+  // float: left;
   .article-tag-list {
     float: left;
   }
