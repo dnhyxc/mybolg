@@ -1,7 +1,7 @@
 import * as Utils from "./public-utils";
 
 function init() {
-  if (Utils.isArticle || Utils.isInformal) {
+  if ((Utils.isArticle || Utils.isInformal) && !Utils.isPage && !Utils.isHome) {
     const article = document.querySelector(".article-entry");
     const code = article && article.querySelectorAll("figure");
 
