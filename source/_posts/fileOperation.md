@@ -266,7 +266,7 @@ const params4 = new URLSearchParams({ n: "dnhyxc", id: 2 });
 
 1、执行 new URLSearchParams() 的返回值 myUrlSearchParams 就是一个 URLSearchParams 实例。
 
-##### URLSearchParams.toString()
+##### toString()
 
 1、把 URLSearchParams 对象转换成查询字符串。
 
@@ -276,7 +276,7 @@ params.append("from", "snsn");
 console.log(params1.toString()); // n=dnhyxc&from=snsn
 ```
 
-##### URLSearchParams.append(name, key)
+##### append(name, key)
 
 1、append 方法可以添加新的键值对作为查询参数：
 
