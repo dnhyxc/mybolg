@@ -167,7 +167,6 @@ body,
               display: flex;
               white-space: normal;
             }
-
           }
 
           a:hover {
@@ -906,18 +905,6 @@ body,
   }
 }
 
-#page-nav .page-number {
-  width: 20px;
-  height: 25px;
-  background: #4d4d4d;
-  display: inline-block;
-  color: #fff;
-  line-height: 25px;
-  font-size: 12px;
-  margin: 0 5px 25px;
-  border-radius: 2px;
-}
-
 #page-nav {
   text-align: center;
   margin-top: 30px;
@@ -925,42 +912,32 @@ body,
   .page-number {
     width: 20px;
     height: 25px;
-    background: #999;
     display: inline-block;
     color: #fff;
+    box-shadow: 0 0 3px #ccc inset;
     line-height: 25px;
     font-size: 12px;
     margin: 0 5px 23px;
     border-radius: 2px;
 
     &:hover {
-      background: #5e5e5e;
+      box-shadow: 0 0 5px #ccc inset;
     }
   }
 
   .current {
-    background: #88acdb;
     cursor: default;
-
-    &:hover {
-      background: #88acdb;
-    }
+    color: gold;
+    box-shadow: 0 0 5px #ccc inset;
   }
 
   .extend {
-    color: #999;
+    color: #ccc;
     margin: 0 27px;
-    opacity: 1;
     font-size: 14px;
 
     &:hover {
-      color: #88acdb;
-    }
-  }
-
-  &:hover {
-    .extend {
-      opacity: 1;
+      color: gold;
     }
   }
 }

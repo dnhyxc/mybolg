@@ -4,23 +4,25 @@
   .page-number {
     width: 20px;
     height: 25px;
-    background: rgba(225, 225, 225, 0.45);
     display: inline-block;
     color: #fff;
     line-height: 25px;
     font-size: 12px;
     margin: 0 5px 23px;
     border-radius: 2px;
+    box-shadow: 0 0 3px #ccc inset;
+
     &:hover {
-      background: #d9ff00;
-      color: #000;
+      color: gold;
       font-weight: 700;
+      box-shadow: 0 0 5px #ccc inset;
     }
   }
   .current {
-    background: #d9ff00;
-    cursor: default;
-    color: #000;
+    cursor: pointer;
+    font-weight: 700;
+    color: gold;
+    box-shadow: 0 0 5px #ccc inset;
     font-weight: 700;
   }
   .extend {
@@ -29,7 +31,7 @@
     opacity: 1;
     font-size: 14px;
     &:hover {
-      color: #d9ff00;
+      color: gold;
     }
   }
 
@@ -52,21 +54,22 @@
     .page-number {
       width: 20px;
       height: 25px;
-      background: rgba(225, 225, 225, 0.45);
       display: inline-block;
       color: #666;
       line-height: 25px;
       font-size: 12px;
       margin: 0 5px 23px;
       border-radius: 2px;
+      box-shadow: 0 0 4px #c9c9c9;
+
       &:hover {
-        background: #d9ff00;
+        box-shadow: 0 0 3px #9c9c9c;
         color: #000;
         font-weight: 700;
       }
     }
     .current {
-      background: #d9ff00;
+      box-shadow: 0 0 3px #9c9c9c;
       cursor: default;
       color: #000;
       font-weight: 700;
@@ -77,7 +80,7 @@
       opacity: 1;
       font-size: 14px;
       &:hover {
-        color: #000;
+        color: gold;
       }
     }
 

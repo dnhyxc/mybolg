@@ -281,6 +281,11 @@ function init() {
       app.$set("isShowEndFooter", true);
       app.$set("isCtnShow", true);
       app.$set("search", "#" + $em.innerHTML);
+      if (app.isShow && document.body.clientWidth <= 800) {
+        document.querySelector(".btnctn").classList.add("hideBtnctn");
+        document.querySelector(".btnctn").classList.remove("showBtnctn");
+        document.querySelector("#container").style.overflowY = "hidden";
+      }
       setScrollZero();
       return false;
     };
