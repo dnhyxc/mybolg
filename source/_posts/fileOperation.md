@@ -286,7 +286,7 @@ params.append("from", "snsn");
 console.log(params1.toString()); // n=dnhyxc&from=snsn
 ```
 
-##### URLSearchParams.delete(name)
+##### delete(name)
 
 1、删除已存在的查询参数：
 
@@ -296,7 +296,7 @@ params2.delete("from");
 console.log(params2.toString()); // n=dnhyxc
 ```
 
-##### URLSearchParams.entries()
+##### entries()
 
 1、返回查询参数的迭代器对象，可以遍历该迭代器对象获得所有的键值对，如使用 for..of 进行遍历：
 
@@ -319,7 +319,7 @@ for (let arr of searchParams.entries()) {
 console.log(params, "params"); // {n: 'dnhyxc', from: 'snsn', id: '209'}
 ```
 
-##### URLSearchParams.forEach(callback)
+##### forEach(callback)
 
 1、该方法可以遍历查询对象，其中 callback 是遍历方法，支持两个参数，分别是每个键值对的值和键。
 
@@ -336,7 +336,7 @@ searchParams.forEach(function (value, key) {
 });
 ```
 
-##### URLSearchParams.get(name)
+##### get(name)
 
 1、该方法可以返回指定关键字对象的值，如果没有对应的值，则返回 null。
 
@@ -345,7 +345,7 @@ const params = new URLSearchParams("n=dnhyxc&from=snsn&id=209");
 console.log(params.get("n")); // dnhyxc
 ```
 
-##### URLSearchParams.getAll(name)
+##### getAll(name)
 
 1、以数组形式返回所有当前查询关键字对应的值。
 
@@ -354,7 +354,7 @@ const params = new URLSearchParams("n=dnhyxc&from=snsn&n=209");
 console.log(params.getAll("n")); // ['dnhyxc', '209']
 ```
 
-##### URLSearchParams.has(name)
+##### has(name)
 
 1、返回布尔值，true 或者 false，是否包含某个查询关键字。
 
@@ -363,7 +363,7 @@ const params = new URLSearchParams("n=dnhyxc&from=snsn&id=209");
 console.log(params.has("n")); // true
 ```
 
-##### URLSearchParams.keys()
+##### keys()
 
 1、返回一个迭代器对象，允许迭代该对象中所有的关键字。
 
@@ -375,7 +375,7 @@ for (let key of searchParams.keys()) {
 }
 ```
 
-##### URLSearchParams.values()
+##### values()
 
 1、返回一个迭代器对象，允许迭代该对象中所有的关键字值。
 
@@ -387,7 +387,7 @@ for (let value of searchParams.values()) {
 }
 ```
 
-##### URLSearchParams.set(name, value)
+##### set(name, value)
 
 1、当存在该属性时，将其属性值替换为传入的新值，不存在该属性值则直接设置。
 
@@ -398,7 +398,7 @@ params.set("id", "209");
 consol.log(params.toString()); // n=dnhyxc&from=hz&id=209
 ```
 
-##### URLSearchParams.sort()
+##### sort()
 
 1、该方法将此对象中包含的所有键/值对就地排序，并返回 undefined。排序顺序是以 Unicode 码位为依据。该方法使用一种稳定的排序算法（即保留具有相同键的键/值对之间的相对顺序）。
 
