@@ -14,6 +14,12 @@ const isHome = path === "/";
 const url = new URL(location.href);
 const isPage = url.pathname.includes("page");
 
+const getPathname = () => {
+  const url = new URL(location.href);
+  const pathname = url.pathname;
+  return pathname;
+};
+
 const getSSG = function (name) {
   return sessionStorage.getItem(name);
 };
@@ -150,4 +156,5 @@ module.exports = {
   isDarkOfLight,
   getTimeState,
   setTimeInLoop,
+  getPathname,
 };
