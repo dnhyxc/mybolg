@@ -17,13 +17,13 @@ function setNarrow() {
     !Utils.isPage
   ) {
     if (Utils.getSSG("hideMenu")) {
-      article.classList.remove("narrow");
-      article.classList.add("_narrow");
+      article && article.classList.remove("narrow");
+      article && article.classList.add("_narrow");
       articleAction && articleAction.classList.add("_share-narrow");
       articleAction && articleAction.classList.remove("_share-_narrow");
     } else {
-      article.classList.add("narrow");
-      article.classList.remove("_narrow");
+      article && article.classList.add("narrow");
+      article && article.classList.remove("_narrow");
       articleAction && articleAction.classList.add("_share-_narrow");
       articleAction && articleAction.classList.remove("_share-narrow");
     }
@@ -32,10 +32,10 @@ function setNarrow() {
   }
 
   if (!Utils.isHome && !Utils.isPage) {
-    articleInfo.classList.add("artNobb");
-    articleToc.style.display = "block";
-    headerToc.style.display = "none";
-    changeInfo.style.right = "75px";
+    articleInfo && articleInfo.classList.add("artNobb");
+    if (articleToc) articleToc.style.display = "block";
+    if (headerToc) headerToc.style.display = "none";
+    if (changeInfo) changeInfo.style.right = "75px";
   }
 }
 
@@ -55,8 +55,8 @@ function removeNarrow() {
     !Utils.isHome &&
     !Utils.isPage
   ) {
-    article.classList.remove("narrow");
-    article.classList.remove("_narrow");
+    article && article.classList.remove("narrow");
+    article && article.classList.remove("_narrow");
     articleAction && articleAction.classList.remove("_share-narrow");
     articleAction && articleAction.classList.remove("_share-_narrow");
     if (share) share.style.display = "block";
@@ -64,10 +64,10 @@ function removeNarrow() {
   }
 
   if (!Utils.isHome && !Utils.isPage) {
-    articleInfo.classList.remove("artNobb");
-    articleToc.style.display = "none";
-    headerToc.style.display = "block";
-    changeInfo.style.right = "123px";
+    articleInfo && articleInfo.classList.remove("artNobb");
+    if (articleToc) articleToc.style.display = "none";
+    if (headerToc) headerToc.style.display = "block";
+    if (changeInfo) changeInfo.style.right = "123px";
   }
 }
 

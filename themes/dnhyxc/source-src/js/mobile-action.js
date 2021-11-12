@@ -148,7 +148,6 @@ function init() {
     const reg = /\d/;
     const isArticle = reg.test(decodeURIComponent(path).substr("/"));
     if (path !== "/" && document.body.clientWidth <= 800) {
-      console.log(path, "path");
       const res = decodeURIComponent(path).substr(
         decodeURIComponent(path).lastIndexOf(
           "/",
