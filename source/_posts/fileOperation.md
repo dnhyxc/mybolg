@@ -940,6 +940,34 @@ giteeUrl.searchParams.get("n"); // dnhyxc
 
 1、可以把 File，Blob 或者 MediaSource 对象变成一个一个唯一的 blob URL。其中参数 object 可以是 File，Blob 或者 MediaSource 对象。
 
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>createObjectURL</title>
+  </head>
+  <body>
+    <input id="upload" type="file" />
+    <img id="preview" src="" alt="预览" />
+
+    <script>
+      const upload = document.querySelector("#upload");
+      const preview = document.querySelector("#preview");
+
+      upload.onchange = function () {
+        const file = upload.files[0]; //File对象
+        const src = URL.createObjectURL(file);
+        preview.src = src;
+      };
+    </script>
+  </body>
+</html>
+
+```
+
 ##### URL.revokeObjectURL(objectURL)
 
 1、撤消之前使用 URL.createObjectURL()创建的 URL 对象。其中参数 objectURL 表示之前使用 URL.createObjectURL()创建的 URL 返回值。
