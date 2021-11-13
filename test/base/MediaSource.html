@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="container">
+      <video
+        id="video"
+        controls="controls"
+        width="800"
+        src="./xxx.mp4"
+        type="video/mp4"
+      />
+    </div>
+    <div id="extras">切换清晰度</div>
+    <script>
+      const switchButton = document.querySelector("#extras");
+      const video = document.querySelector("#video");
+      const handleClick = () => {
+        const currentTime = video.currentTime;
+        const src = video.src;
+        video.src = src === "./hd.mp4" ? "./sd.mp4" : "./hd.mp4";
+        video.currentTime = currentTime;
+        video.play();
+      };
+      switchButton.addEventListener("click", handleClick);
+    </script>
+  </body>
+</html>

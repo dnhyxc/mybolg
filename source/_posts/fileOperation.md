@@ -10,6 +10,7 @@ tags:
 categories:
   - Blob
   - File
+  - javaScript
 ---
 
 ### Blob
@@ -965,7 +966,6 @@ giteeUrl.searchParams.get("n"); // dnhyxc
     </script>
   </body>
 </html>
-
 ```
 
 ##### URL.revokeObjectURL(objectURL)
