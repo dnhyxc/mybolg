@@ -9,6 +9,7 @@
     "server": "hexo server",
     "pro": "hexo deploy",
     "cgs": "hexo clean & hexo generate & hexo server",
+    "cgd": "hexo clean & hexo generate & hexo deploy",
     "start": "hexo server"
   },
   "hexo": {
