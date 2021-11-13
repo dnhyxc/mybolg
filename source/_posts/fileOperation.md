@@ -206,6 +206,200 @@ downloadBtn.addEventListener("click", (event) => {
 });
 ```
 
+##### Blob 转换为 Base64
+
+1、URL.createObjectURL 的一个替代方法是，将 Blob 转换为 base64 编码的字符串。Base64 是一种基于 64 个可打印字符来表示二进制数据的表示方法，它常用于在处理文本数据的场合，表示、传输、存储一些二进制数据，包括 MIME 的电子邮件及 XML 的一些复杂数据。
+
+2、在 MIME 格式的电子邮件中，base64 可以用来将二进制的字节序列数据编码成 ASCII 字符序列构成的文本。使用时，在传输编码方式中指定 base64。使用的字符包括大小写拉丁字母各 26 个、数字 10 个、加号 + 和斜杠 /，共 64 个字符，等号 = 用来作为后缀用途。
+
+3、如何在 HTML 中嵌入 base64 编码的图片：
+
+- 在编写 HTML 网页时，对于一些简单图片，通常会选择将图片内容直接内嵌在网页中，从而减少不必要的网络请求，但是图片数据是二进制数据，该怎么嵌入呢？绝大多数现代浏览器都支持一种名为 Data URLs 的特性，允许使用 base64 对图片或其他文件的二进制数据进行编码，将其作为文本字符串嵌入网页中。
+
+4、Data URLs 由四个部分组成：前缀（data:）、指示数据类型的 MIME 类型、如果非文本则为可选的 base64 标记、数据本身：
+
+```
+data:[<mediatype>][;base64],<data>
+```
+
+- mediatype 是个 MIME 类型的字符串，例如 "image/jpeg" 表示 JPEG 图像文件。如果被省略，则默认值为 text/plain;charset=US-ASCII。如果数据是文本类型，你可以直接将文本嵌入（根据文档类型，使用合适的实体字符或转义字符）。如果是二进制数据，你可以将数据进行 base64 编码之后再进行嵌入。比如嵌入一张图片：
+
+```
+<img alt="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUg...">
+```
+
+5、如果图片较大，图片的色彩层次比较丰富，则不适合使用这种方式，因为该图片经过 base64 编码后的字符串非常大，会明显增大 HTML 页面的大小，从而影响加载速度。 除此之外，利用 FileReader API，我们也可以方便的实现图片本地预览功能，具体代码如下：
+
+```html
+<input type="file" accept="image/*" onchange="loadFile(event)" />
+<img id="output" />
+
+<script>
+  const loadFile = function (event) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      const output = document.querySelector("output");
+      output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  };
+</script>
+```
+
+##### 图片压缩
+
+1、在一些场合中，我们希望在上传本地图片时，先对图片进行一定的压缩，然后再提交到服务器，从而减少传输的数据量。在前端要实现图片压缩，我们可以利用 Canvas 对象提供的 `toDataURL()` 方法，该方法接收 **type** 和 **encoderOptions** 两个可选参数。其中 `type` 表示**图片格式**，默认为 image/png。而 `encoderOptions` 用于表示**图片的质量**，在指定图片格式为 image/jpeg 或 image/webp 的情况下，可以从 0 到 1 的区间内选择图片的质量。如果超出取值范围，将会使用默认值 0.92，其他参数会被忽略。
+
+2、具体实现图片压缩的方式：
+
+```js
+const MAX_WIDTH = 800; // 图片最大宽度
+
+function compress(base64, quality, mimeType) {
+  let canvas = document.createElement("canvas");
+  let img = document.createElement("img");
+  img.crossOrigin = "anonymous";
+  return new Promise((resolve, reject) => {
+    img.src = base64;
+    img.onload = () => {
+      let targetWidth, targetHeight;
+      if (img.width > MAX_WIDTH) {
+        targetWidth = MAX_WIDTH;
+        targetHeight = (img.height * MAX_WIDTH) / img.width;
+      } else {
+        targetWidth = img.width;
+        targetHeight = img.height;
+      }
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+      let ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, targetWidth, targetHeight); // 清除画布
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      let imageData = canvas.toDataURL(mimeType, quality / 100);
+      resolve(imageData);
+    };
+  });
+}
+```
+
+- 对于返回的 Data URL 格式的图片数据，为了进一步减少传输的数据量，我们可以把它转换为 Blob 对象：
+
+```js
+function dataUrlToBlob(base64, mimeType) {
+  let bytes = window.atob(base64.split(",")[1]);
+  let ab = new ArrayBuffer(bytes.length);
+  let ia = new Uint8Array(ab);
+  for (let i = 0; i < bytes.length; i++) {
+    ia[i] = bytes.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeType });
+}
+```
+
+- 在转换完成后，我们就可以压缩后的图片对应的 Blob 对象封装在 FormData 对象中，然后再通过 AJAX 提交到服务器上：
+
+```js
+function uploadFile(url, blob) {
+  let formData = new FormData();
+  let request = new XMLHttpRequest();
+  formData.append("image", blob);
+  request.open("POST", url, true);
+  request.send(formData);
+}
+```
+
+3、Canvas 对象除了提供 toDataURL() 方法之外，它还提供了一个 toBlob() 方法，该方法的语法为：`canvas.toBlob(callback, mimeType, qualityArgument)`。
+
+- 和 toDataURL() 方法相比，toBlob() 方法是异步的，因此多了个 callback 参数，这个 callback 回调方法默认的第一个参数就是转换好的 blob 文件信息。
+
+4、本地图片压缩的完整示例：
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>本地图片压缩</title>
+  </head>
+  <body>
+    <input type="file" accept="image/*" onchange="loadFile(event)" />
+    <script src="./compress.js"></script>
+    <script>
+      const loadFile = function (event) {
+        const reader = new FileReader();
+        reader.onload = async function () {
+          let compressedDataURL = await compress(
+            reader.result,
+            90,
+            "image/jpeg"
+          );
+          let compressedImageBlob = dataUrlToBlob(compressedDataURL);
+          uploadFile("https://httpbin.org/post", compressedImageBlob);
+        };
+        reader.readAsDataURL(event.target.files[0]);
+      };
+    </script>
+  </body>
+</html>
+```
+
+##### 生成 PDF 文档
+
+1、PDF（便携式文件格式，Portable Document Format）是由 Adobe Systems 在 1993 年用于文件交换所发展出的文件格式。在浏览器端，利用一些现成的开源库，比如 jsPDF，我们也可以方便地生成 PDF 文档。
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>客户端生成 PDF 示例</title>
+  </head>
+  <body>
+    <h3>客户端生成 PDF 示例</h3>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+    <script>
+      (function generatePdf() {
+        const doc = new jsPDF();
+        doc.text("Hello semlinker!", 66, 88);
+        const blob = new Blob([doc.output()], { type: "application/pdf" });
+        blob.text().then((blobAsText) => {
+          console.log(blobAsText);
+        });
+      })();
+    </script>
+  </body>
+</html>
+```
+
+- 在以上示例中，首先创建 PDF 文档对象，然后调用该对象上的 text() 方法在指定的坐标点上添加 Hello semlinker! 文本，然后我们利用生成的 PDF 内容来创建对应的 Blob 对象，需要注意的是我们设置 Blob 的类型为 application/pdf，最后把 Blob 对象中保存的内容转换为文本并输出到控制台。截取部分输出结果如下：
+
+```
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.28 841.89]
+/Contents 4 0 R
+>>
+endobj
+....
+```
+
+2、jsPDF 除了支持纯文本之外，它也可以生成带图片的 PDF 文档，比如：
+
+```js
+let imgData = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/...";
+let doc = new jsPDF();
+
+doc.setFontSize(40);
+doc.text(35, 25, "Paranyan loves jsPDF");
+doc.addImage(imgData, "JPEG", 15, 40, 180, 160);
+```
+
 ### File
 
 #### File 概述
@@ -768,4 +962,206 @@ xhr.onload = function () {
 xhr.open("GET", url, true);
 xhr.responseType = "blob";
 xhr.send();
+```
+
+### Blob、ArrayBuffer、File 的区别
+
+#### Blob、ArrayBuffer、File 的类别
+
+1、Blob、ArrayBuffer、File 可以归为一类，它们都是数据。
+
+- File 对象是一种特殊 Blob 对象。
+
+#### Blob 与 ArrayBuffer 的区别
+
+1、ArrayBuffer 对象用于表示`通用的，固定长度的原始二进制数据缓冲区`。你不能直接操纵 ArrayBuffer 的内容，而是需要创建一个类型化数组对象或 **DataView** 对象，该对象以特定格式表示缓冲区，并使用该对象读取和写入缓冲区的内容。
+
+2、Blob 类型的对象表示`不可变的类似文件对象的原始数据`。Blob 表示的不一定是 JavaScript 原生格式的数据。File 接口基于 Blob，继承了 Blob 功能并将其扩展为支持用户系统上的文件。
+
+3、除非你需要使用 ArrayBuffer 提供的写入/编辑的能力，否则 Blob 格式可能是最好的。
+
+4、Blob 对象是不可变的，而 ArrayBuffer 是可以通过 TypedArrays 或 DataView 来操作。
+
+5、ArrayBuffer 是存在内存中的，可以直接操作。而 Blob 可以位于磁盘、高速缓存内存和其他不可用的位置。
+
+6、虽然 Blob 可以直接作为参数传递给其他函数，比如 window.URL.createObjectURL()。但是，你可能仍需要 FileReader 之类的 File API 才能与 Blob 一起使用。
+
+7、Blob 与 ArrayBuffer 对象之间是可以相互转化的：
+
+- 使用 FileReader 的 readAsArrayBuffer() 方法，可以把 Blob 对象转换为 ArrayBuffer 对象。
+
+- 使用 Blob 构造函数，如 `new Blob([new Uint8Array(data])`，可以把 ArrayBuffer 对象转换为 Blob 对象。
+
+8、对于 HTTP 的场景，比如在 AJAX 场景下，Blob 和 ArrayBuffer 可以通过以下方式来使用：
+
+```js
+function GET(url, callback) {
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+  xhr.responseType = "arraybuffer"; // or xhr.responseType = "blob";
+  xhr.send();
+
+  xhr.onload = function (e) {
+    if (xhr.status != 200) {
+      alert("Unexpected status code " + xhr.status + " for " + url);
+      return false;
+    }
+    callback(new Uint8Array(xhr.response)); // or new Blob([xhr.response]);
+  };
+}
+```
+
+### 文件互相转换方法
+
+#### File 文件转换为 Blob 对象
+
+```js
+let aBlob = new Blob([file], { type: file.type });
+```
+
+#### Blob 转换为 File
+
+```js
+let files = new File([blob], file.name, { type: file.type });
+```
+
+#### url 转 base64
+
+1、原理是：利用 canvas.toDataURL 的 API 转化成 base64：
+
+```js
+function urlToBase64(url) {
+  return new Promise ((resolve,reject) => {
+    let image = new Image();
+    image.onload = function() {
+      let canvas = document.createElement('canvas');
+      canvas.width = this.naturalWidth;
+      canvas.height = this.naturalHeight;
+      // 将图片插入画布并开始绘制
+      canvas.getContext('2d').drawImage(image, 0, 0);
+      // result
+      let result = canvas.toDataURL('image/png')
+      resolve(result);
+    };
+    // CORS 策略，会存在跨域问题https://stackoverflow.com/questions/20424279/canvas-todataurl-securityerror
+    image.setAttribute("crossOrigin",'Anonymous');
+    image.src = url;
+    // 图片加载失败的错误处理
+    image.onerror = () => {
+      reject(new Error('urlToBase64 error'));
+  };
+}
+
+// 调用
+let imgUrL = `http://XXX.jpg`
+urlToBase64(imgUrL).then(res => {
+  console.log('base64', res)  // 转化后的base64图片地址
+})
+```
+
+#### base64 转 blob
+
+1、原理：利用 URL.createObjectURL 为 blob 对象创建临时的 URL：
+
+- 方式一：
+
+```js
+function base64ToBlob({
+  b64data = "",
+  contentType = "",
+  sliceSize = 512,
+} = {}) {
+  return new Promise((resolve, reject) => {
+    // 使用 atob() 方法将数据解码
+    let byteCharacters = atob(b64data);
+    let byteArrays = [];
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+      let byteNumbers = [];
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers.push(slice.charCodeAt(i));
+      }
+      // 8 位无符号整数值的类型化数组。内容将初始化为 0。
+      // 如果无法分配请求数目的字节，则将引发异常。
+      byteArrays.push(new Uint8Array(byteNumbers));
+    }
+    let result = new Blob(byteArrays, {
+      type: contentType,
+    });
+    result = Object.assign(result, {
+      // 这里一定要处理一下 URL.createObjectURL
+      preview: URL.createObjectURL(result),
+      name: `XXX.png`,
+    });
+    resolve(result);
+  });
+}
+
+// 调用
+let base64 = base64.split(",")[1];
+base64ToBlob({ b64data: base64, contentType: "image/png" }).then((res) => {
+  console.log("blob", res); // 转后后的blob对象
+});
+```
+
+- 方式二：
+
+```js
+base64ToBlob(base64Data) {
+  let arr = base64Data.split(','),
+      fileType = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      l = bstr.length,
+      u8Arr = new Uint8Array(l);
+
+  while (l--) {
+      u8Arr[l] = bstr.charCodeAt(l);
+  }
+  return new Blob([u8Arr], {
+      type: fileType
+  });
+},
+```
+
+#### blob 转 base64
+
+1、原理：利用 fileReader 的 readAsDataURL，将 blob 转为 base64：
+
+```js
+blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      resolve(e.target.result);
+    };
+    fileReader.readAsDataURL(blob);
+    fileReader.onerror = () => {
+      reject(new Error('blobToBase64 error'));
+    };
+  });
+}
+
+// 调用
+blobToBase64(blob).then(res => {
+  console.log('base64', res)  // 转化后的base64
+})
+```
+
+2、可以用于在浏览器上预览本地图片或者视频：
+
+```js
+function getWebUrl(file) {
+  let url = null;
+  // basic
+  if (window.createObjectURL != undefined) {
+    url = window.createObjectURL(file);
+  } else if (window.URL != undefined) {
+    // mozilla(firefox)
+    url = window.URL.createObjectURL(file);
+  } else if (window.webkitURL != undefined) {
+    // webkit or chrome
+    url = window.webkitURL.createObjectURL(file);
+  }
+  return url;
+}
 ```
