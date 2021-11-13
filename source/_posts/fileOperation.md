@@ -5,8 +5,10 @@ toc: true
 tags:
   - FileReader
   - Blob
-  - MediaSource
+  - URL
+  - URLSearchParams
 categories:
+  - Blob
   - File
 ---
 
