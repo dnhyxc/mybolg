@@ -499,10 +499,9 @@
 
   .archives-wrap {
     background-color: #fff !important;
+    box-shadow: none;
 
     .archive-year-wrap {
-      background-color: #eee;
-
       .archive-year {
         color: #333;
 
@@ -518,12 +517,6 @@
 
         &:hover {
           color: gold;
-        }
-      }
-
-      .archive-article-inner {
-        .archive-article-header {
-          background-color: #eee;
         }
       }
     }

@@ -11,6 +11,14 @@ function init() {
     toTopDark.style.transition = "all 0.5s";
   };
 
+  console.log(document.querySelector("#container").scrollHeight, 'document.querySelector("#container").scrollHeight')
+  console.log(document.querySelector("#container").clientHeight, 'document.querySelector("#container").innerHeight')
+
+  if (document.querySelector("#container").scrollHeight <= document.querySelector("#container").clientHeight) {
+    console.log('有滚动条')
+    mobileDark.style.visibility = "visible";
+  }
+
   toTopDark.onclick = function () {
     const clock = setInterval(function () {
       if (document.querySelector("#container").scrollTop !== 0) {
@@ -27,7 +35,7 @@ function init() {
     moveX: 0,
     moveY: 0,
     translateY: 65,
-    translateX: 20,
+    translateX: 10,
     tempX: 0,
     tempY: 0,
     isDown: false,
@@ -36,8 +44,8 @@ function init() {
   const toTopParams = {
     moveX: 0,
     moveY: 0,
-    translateY: 20,
-    translateX: 20,
+    translateY: 10,
+    translateX: 10,
     tempX: 0,
     tempY: 0,
     isDown: false,
@@ -56,12 +64,12 @@ function init() {
       params.translateX = params.moveX - parseInt(clientX) + params.tempX;
       params.translateY = params.moveY - parseInt(clientY) + params.tempY;
 
-      if (params.translateX < 20) {
-        params.translateX = 20;
-        dom.style.right = "20px";
-      } else if (parseInt(params.translateX) + 58 > document.body.offsetWidth) {
-        params.translateX = document.body.offsetWidth - 58;
-        dom.style.right = document.body.offsetWidth - 58 + "px";
+      if (params.translateX < 10) {
+        params.translateX = 10;
+        dom.style.right = "10px";
+      } else if (parseInt(params.translateX) + 47 > document.body.offsetWidth) {
+        params.translateX = document.body.offsetWidth - 47;
+        dom.style.right = document.body.offsetWidth - 47 + "px";
       } else {
         dom.style.right = params.translateX + "px";
       }
@@ -82,12 +90,12 @@ function init() {
   }
 
   function touchEnd(params, dom) {
-    if (params.translateX + 19 > document.body.offsetWidth / 2) {
-      params.translateX = document.body.offsetWidth - 58;
-      dom.style.right = document.body.offsetWidth - 58 + "px";
+    if (params.translateX + 10 > document.body.offsetWidth / 2) {
+      params.translateX = document.body.offsetWidth - 47;
+      dom.style.right = document.body.offsetWidth - 47 + "px";
     } else {
-      params.translateX = 20;
-      dom.style.right = "20px";
+      params.translateX = 10;
+      dom.style.right = "10px";
     }
     params.isDown = false;
   }
