@@ -19,8 +19,8 @@ categories:
 2、Blob 由一个可选的字符串 type（通常是 MIME 类型）和 blobParts 组成：
 
 ```
-                  blobParts                           type(MIME)
-                      |                                   |
+                 blobParts                            type(MIME)
+                     |                                    |
 Blob = [Blob ArrayBuffer DOMString]  +  image/png 或 text/html 或 text/plain...
 ```
 
