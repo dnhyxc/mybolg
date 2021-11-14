@@ -5,7 +5,7 @@ tags: js
 toc: true
 declare: true
 categories:
-  - javaScript
+  - JavaScript
 ---
 
 #### 检测当前页面是否被隐藏

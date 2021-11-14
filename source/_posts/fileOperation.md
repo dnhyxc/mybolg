@@ -10,7 +10,7 @@ tags:
 categories:
   - Blob
   - File
-  - javaScript
+  - JavaScript
 ---
 
 ### Blob

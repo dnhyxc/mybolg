@@ -3,9 +3,10 @@ title: MediaSource
 date: 2021-11-13 23:09:22
 toc: true
 tags:
+  - MSE
   - MediaSource
 categories:
-  - javaScript
+  - JavaScript
 ---
 
 ### Media Source Extensions
