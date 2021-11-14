@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class</title>
+  </head>
+  <body>
+    <script>
+      class MyClass {
+        constructor(name) {
+          this.name = name;
+        }
+
+        get prop() {
+          return this.name;
+        }
+
+        // set 方法必须传入一个参数，否则将会报错
+        set prop(value) {
+          if (value !== this.name) {
+            this.name = value;
+            return this.name;
+          }
+        }
+      }
+
+      let inst = new MyClass("snsn");
+
+      inst.prop = "hmhm"; // setter: 123
+
+      console.log(inst.prop); // 'hmhm'
+    </script>
+  </body>
+</html>
