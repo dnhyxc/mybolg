@@ -11,11 +11,7 @@ function init() {
     toTopDark.style.transition = "all 0.5s";
   };
 
-  console.log(document.querySelector("#container").scrollHeight, 'document.querySelector("#container").scrollHeight')
-  console.log(document.querySelector("#container").clientHeight, 'document.querySelector("#container").innerHeight')
-
   if (document.querySelector("#container").scrollHeight <= document.querySelector("#container").clientHeight) {
-    console.log('有滚动条')
     mobileDark.style.visibility = "visible";
   }
 

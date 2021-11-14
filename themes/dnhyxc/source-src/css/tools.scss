@@ -123,7 +123,7 @@
         width: 14px;
         height: 14px;
         position: absolute;
-        top: 15px;
+        top: 16px;
         left: 1px;
         -webkit-transform: translateY(-50%);
         border-radius: 100%;
@@ -133,6 +133,13 @@
         transition: left 0.3s;
         cursor: pointer;
       }
+
+      @media screen and (max-width: 800px) {
+        .search-switch input:after {
+          top: 15px;
+        }
+      }
+
       .article-tag-list {
         @extend %trans;
         display: none;

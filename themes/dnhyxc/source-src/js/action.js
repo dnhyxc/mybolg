@@ -242,7 +242,7 @@ function init() {
 
     if (
       Utils.isInformal ||
-      (Utils.isArticle && !Utils.isArchives && !Utils.isCategories)
+      (Utils.isArticle && !Utils.isArchives && !Utils.isCategories && !Utils.isPage && !Utils.isHome)
     ) {
       if (wrapper.scrollTop <= 0) {
         articleToc.style.height = "calc(100vh - 225px)";
@@ -419,9 +419,8 @@ function init() {
             decodeURIComponent(newPath).lastIndexOf("/") - 1
           ) + 1
         );
-        mainLoading.innerHTML = `${
-          res.split("/")[0][0].toUpperCase() + res.split("/")[0].slice(1)
-        }-${res.split("/")[1]}`;
+        mainLoading.innerHTML = `${res.split("/")[0][0].toUpperCase() + res.split("/")[0].slice(1)
+          }-${res.split("/")[1]}`;
       } else {
         // 设置头部main的逻辑
         const subPath = res.slice(0, res.length - 1);
