@@ -5,7 +5,7 @@ tags: interview
 toc: true
 declare: true
 categories:
-  - javaScript
+  - JavaScript
 ---
 
 ### JS 概念相关

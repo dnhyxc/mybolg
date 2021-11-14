@@ -8,9 +8,9 @@ tags:
   - URL
   - URLSearchParams
 categories:
+  - JavaScript
   - Blob
   - File
-  - JavaScript
 ---
 
 ### Blob
