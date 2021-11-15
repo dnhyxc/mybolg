@@ -17,13 +17,13 @@ categories:
 
 2、该规范允许通过 JavaScript 为 `<audio>` 和 `<video>` 动态构造媒体源，它定义了 MediaSource 对象，作为 HTML5 中 HTMLMediaElement 的媒体数据源。**MediaSource 对象可以有一个或多个 SourceBuffer 对象**。应用程序可以向 SourceBuffer 对象动态添加数据片段，并可以根据系统系能及其他因素自适应调整所添加媒体数据的数据质量。来自 SourceBuffer 对象的数据可以解码为音频、视频或文本数据，并由浏览器或播放器处理。与媒体源扩展一同使用，还是包括媒体原扩展字节流格式注册表及一组预定义的字节流格式规范。
 
-<!-- more -->
-
 #### 为什么需要 MSE
 
 1、随着 HTML5 的普及，web 逐渐淘汰 flash 开始使用 `<audio>/<video>` 标签进行视频播放。但在没有 MSE 标准出现之前，前端对于 video 的操作仅限于`<video>` 标签提供的一些能力，不能对视频流进行做任何操作。
 
 2、假设我们需要开发一个切换清晰度的功能，很容易就能想到动态更改 `<video>` 标签 src 的方案。
+
+<!-- more -->
 
 ```html
 <!DOCTYPE html>

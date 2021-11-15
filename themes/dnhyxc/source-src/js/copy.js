@@ -61,10 +61,21 @@ function init() {
             btn.innerHTML = "复制代码";
           }
           info.innerHTML = "复制成功";
+
           if (i.previousElementSibling) {
-            i.previousElementSibling.style.position = "relative";
-            i.previousElementSibling.appendChild(btn);
-            i.previousElementSibling.appendChild(info);
+            if (
+              i.previousElementSibling.id &&
+              i.previousElementSibling.id === "more"
+            ) {
+              i.previousElementSibling.previousElementSibling.style.position =
+                "relative";
+              i.previousElementSibling.previousElementSibling.appendChild(btn);
+              i.previousElementSibling.previousElementSibling.appendChild(info);
+            } else {
+              i.previousElementSibling.style.position = "relative";
+              i.previousElementSibling.appendChild(btn);
+              i.previousElementSibling.appendChild(info);
+            }
           }
 
           const onCopy = function () {
