@@ -739,3 +739,90 @@ console.log(newArr);
   </body>
 </html>
 ```
+
+#### 标记搜索关键字
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .search {
+        color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="sign">
+      <div id="text">
+        <p>得意时 “一日看尽长安花”</p>
+        <p>艰难时 “潦倒新停浊酒杯”</p>
+        <p>哪怕 “畏途巉岩不可攀”</p>
+        <p>也要 “会当凌绝顶”</p>
+        <p>napa “无人会，登临意”</p>
+        <p>yeyao “猛志固常在”</p>
+      </div>
+      <p>dnhyxc</p>
+      <p>DNHYXC</p>
+      <p>TeSt</p>
+      <p>tEsT</p>
+    </div>
+    <div class="outSign">
+      <p>TeSt</p>
+      <p>tEsT</p>
+    </div>
+  </body>
+  <script>
+    function find(keyword, color, element) {
+      let sText = element.innerHTML;
+
+      // 去掉script标签
+      let reg1 = /<script[^>]*>(.|\n)*<\/script>/gi;
+      sText = sText.replace(reg1, "");
+      let bgColor = color || "#ffba00";
+      let num = -1;
+
+      // 匹配传入的搜索值不区分大小写 i表示不区分大小写，g表示全局搜索
+      let rStr = new RegExp(keyword, "gi");
+
+      // 匹配html元素
+      let rHtml = new RegExp("\<.*?\>", "ig");
+
+      // 存放html元素的数组
+      let aHtml = sText.match(rHtml);
+      let arr = sText.match(rStr);
+      a = -1;
+
+      // 替换html标签
+      sText = sText.replace(rHtml, "{~}");
+      sText = sText.replace(rStr, function () {
+        a++;
+        return (
+          "<span name='addSpan' style='background-color: " +
+          bgColor +
+          ";'>" +
+          arr[a] +
+          "</span>"
+        );
+      });
+
+      // 替换key
+      sText = sText.replace(/{~}/g, function () {
+        // 恢复html标签
+        num++;
+        return aHtml[num];
+      });
+      element.innerHTML = sText;
+    }
+
+    let oDiv = document.querySelector(".sign");
+
+    find("TeSt", "gold", oDiv);
+  </script>
+</html>
+```
