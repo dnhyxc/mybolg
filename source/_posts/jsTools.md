@@ -780,10 +780,6 @@ console.log(newArr);
   <script>
     function find(keyword, color, element) {
       let sText = element.innerHTML;
-
-      // 去掉script标签
-      let reg1 = /<script[^>]*>(.|\n)*<\/script>/gi;
-      sText = sText.replace(reg1, "");
       let bgColor = color || "#ffba00";
       let num = -1;
 
@@ -800,7 +796,7 @@ console.log(newArr);
 
       // 替换html标签
       sText = sText.replace(rHtml, "{~}");
-      sText = sText.replace(rStr, function () {
+      sText = sText.replace(rStr, () => {
         a++;
         return (
           "<span name='addSpan' style='background-color: " +
@@ -812,7 +808,7 @@ console.log(newArr);
       });
 
       // 替换key
-      sText = sText.replace(/{~}/g, function () {
+      sText = sText.replace(/{~}/g, () => {
         // 恢复html标签
         num++;
         return aHtml[num];
@@ -820,9 +816,9 @@ console.log(newArr);
       element.innerHTML = sText;
     }
 
-    let oDiv = document.querySelector(".sign");
+    let element = document.querySelector(".sign");
 
-    find("TeSt", "gold", oDiv);
+    find("TeSt", "gold", element);
   </script>
 </html>
 ```
