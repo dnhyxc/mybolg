@@ -1774,9 +1774,41 @@ document.addEventListener("visibilitychange", function () {
 });
 ```
 
-#### react 动态路径匹配
+#### react 路由任意匹配路径
 
-1、使用 `(.*)?/detail` 进行动态的路径匹配。
+1、使用场景：当多个一级路由需要同时引用同一个路由组建时，比如 `/home/detail`、`about/detail`，这个时候如果不使用任意匹配，就需要同时为 home 及 about 同时加一个二级路由，如果不设置二级路由，直接将 detail 设置为一级路由，当跳转到 detail 页面时，如果页面左侧存在 menu 菜单，那么菜单将失去选中状态，因为此时路由路径是 `detail` 而不是 `/home/detail`，因此任意匹配就是用来解决这个问题的。
+
+2、将详情页设置为任意匹配路径，即使用 `(.*)?/detail` 的形式，具体配置方式如下：
+
+- router/config.js 配置文件：
+
+```js
+const config = [
+  {
+    key: "home",
+    name: "home",
+    path: "/home",
+  },
+  {
+    key: "about",
+    name: "about",
+    path: "/about",
+  },
+  {
+    key: "detail",
+    name: "detail",
+    path: "(.*)?/detail",
+  },
+];
+```
+
+- 跳转到详情的方式：
+
+```js
+history.push("/home/detail"); // 从home跳转到详情
+
+history.push("/about/detail"); // 从about跳转到详情
+```
 
 #### 实时监听 url 中路由路径的变化
 
