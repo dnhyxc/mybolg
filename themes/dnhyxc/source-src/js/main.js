@@ -117,9 +117,20 @@ document.onreadystatechange = function () {
     }
     if (Utils.getSSG("hideMenu")) {
       menuList.onHideMenu();
+      if (Utils.getSSG("narrow") && Utils.isArticle) {
+        atticleNarrow.setNarrow();
+      } else {
+        atticleNarrow.removeNarrow();
+      }
     } else {
       hideLeft.onShowMenu();
+      if (Utils.getSSG("narrow") && Utils.isArticle) {
+        atticleNarrow.setNarrow();
+      } else {
+        atticleNarrow.removeNarrow();
+      }
     }
+
     if (Utils.getSSG("narrow") && !Utils.isHome && Utils.isArticle) {
       atticleNarrow.setNarrow();
     } else {
