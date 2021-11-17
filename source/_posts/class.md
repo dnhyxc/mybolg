@@ -887,3 +887,90 @@ const y = new Rectangle(3, 4); // 正确
 ```
 
 > 注意，不能在在函数外部使用 new.target，否则将会报错。
+
+#### class 实现单例模式
+
+1、单例模式概述：一个类创建出来的实例都是相等的，换句话说，每次创建出的实例都是同一个。
+
+2、单例模式的作用：方便在项目中传递数据。
+
+3、设计思路：首次创建实例对象时，会创建新的对象，除了首次之外，返回的都是第一次创建的实例对象。
+
+4、具体实现方式如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>单例模式</title>
+  </head>
+  <body>
+    <script>
+      class SingMode {
+        constructor(name, address) {
+          if (!SingMode.instance) {
+            this.name = name;
+            this.address = address;
+            SingMode.instance = this;
+          }
+          return SingMode.instance;
+        }
+
+        setAge(age) {
+          this.age = age;
+        }
+
+        toString() {
+          console.log(`the name is ${this.name}.`);
+          console.log(`the address is ${this.address}.`);
+          console.log(`the age is ${this.age}.`);
+        }
+
+        static getInstance(name, address) {
+          if (!this.instance) {
+            return (this.instance = new SingMode(name, address));
+          }
+          return this.instance;
+        }
+      }
+
+      let sing1 = SingMode.getInstance("dnhyxc", "hz");
+      let sing2 = SingMode.getInstance("snsn", "zx");
+      let sing3 = new SingMode("yhyh", 18);
+      let sing4 = new SingMode("hmhm", 26);
+
+      console.log(sing1 === sing2); // true
+      console.log(sing2 === sing3); // true
+      console.log(sing3 === sing4); // true
+
+      console.log(sing1, "sing1"); // SingMode {name: 'dnhyxc', age: 'hz'}
+      console.log(sing2, "sing2"); // SingMode {name: 'dnhyxc', age: 'hz'}
+      console.log(sing3, "sing3"); // SingMode {name: 'dnhyxc', age: 'hz'}
+      console.log(sing4, "sing4"); // SingMode {name: 'dnhyxc', age: 'hz'}
+
+      sing1.setAge(18);
+      console.log(sing1); // SingMode {name: 'dnhyxc', address: 'hz', age: 18}
+      sing2.setAge(26);
+      console.log(sing1, "sing1"); // SingMode {name: 'dnhyxc', address: 'hz', age: 26} 'sing1'
+      console.log(sing2, "sing2"); // SingMode {name: 'dnhyxc', address: 'hz', age: 26} 'sing2'
+
+      sing1.toString();
+      /*
+        the name is dnhyxc.
+        the address is hz.
+        the age is 26.
+      */
+
+      sing2.toString();
+      /*
+        the name is dnhyxc.
+        the address is hz.
+        the age is 26.
+      */
+    </script>
+  </body>
+</html>
+```
