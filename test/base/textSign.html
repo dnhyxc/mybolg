@@ -19,7 +19,7 @@
         <p>艰难时 “潦倒新停浊酒杯”</p>
         <p>哪怕 “畏途巉岩不可攀”</p>
         <p>也要 “会当凌绝顶”</p>
-        <p>napa “无人会，登临意”</p>
+        <p>哪怕 “无人会，登临意”</p>
         <p>yeyao “猛志固常在”</p>
       </div>
       <p>dnhyxc</p>
@@ -79,5 +79,112 @@
     let oDiv = document.querySelector(".sign");
 
     find("TeSt", "gold", oDiv);
+
+    // 获取匹配字段高亮 显示数组
+    /**
+     *
+     * @param text
+     * @param keyword
+     * @param comC  非高亮颜色
+     * @param hlc   高亮颜色
+     */
+    const getMatchedList = (
+      text = "",
+      keyword = "",
+      label = "",
+      isTitle = false,
+      width = "260px",
+      comC = "#959BA3",
+      hlc = "#FF4D4D"
+    ) => {
+      let list = [],
+        isMatched = false;
+
+      let reg = new RegExp("([\\s\\S]{0,}?)(" + keyword + ")([\\s\\S]{0,})");
+      let data = text.match(reg);
+      if (data && keyword) {
+        isMatched = true;
+        let before = data[1],
+          len1 = before.length;
+        let match = data[2],
+          len2 = match.length;
+        let after = data[3],
+          len3 = after.length;
+
+        list = [
+          {
+            text: before,
+            color: comC,
+          },
+          {
+            text: match,
+            color: hlc,
+          },
+          {
+            text: after,
+            color: comC,
+          },
+        ];
+
+        // 判断整行文字是否可以全部显示
+        // 做简单优化，针对名字一般不会超过8个字符不做下面的dom处理判断，减少消耗
+        if (isTitle && text.length < 8) {
+          return {
+            isMatched,
+            list: list,
+          };
+        } else {
+          let el = document.createElement("div");
+          el.style = `position:fixed;z-index:-99;left:-1000px;overflow:auto;white-space: nowrap;`;
+          el.style.width = width;
+          el.style.fontSize = "12px";
+          document.body.appendChild(el);
+          el.innerText = label + ": " + text;
+          if (el.scrollWidth == el.offsetWidth) {
+            // 如果可以容纳所有字符串，直接返回
+            document.body.removeChild(el);
+            return {
+              isMatched,
+              list: list,
+            };
+          }
+          document.body.removeChild(el);
+        }
+
+        if (len1 <= 5) {
+          list = list;
+        } else {
+          list = [
+            {
+              text: text.substr(0, 3) + "...",
+              color: comC,
+            },
+            {
+              text: match,
+              color: hlc,
+            },
+            {
+              text: after,
+              color: comC,
+            },
+          ];
+        }
+      } else {
+        list = [
+          {
+            text: text,
+            color: comC,
+          },
+        ];
+      }
+
+      return {
+        isMatched,
+        list,
+      };
+    };
+
+    let sText = oDiv.innerHTML;
+    console.log(getMatchedList(sText, "哪怕"));
   </script>
 </html>
