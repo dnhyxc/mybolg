@@ -905,71 +905,53 @@ const y = new Rectangle(3, 4); // 正确
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>单例模式</title>
+    <title>class单例模式</title>
   </head>
   <body>
     <script>
-      class SingMode {
-        constructor(name, address) {
-          if (!SingMode.instance) {
+      class SingleMode {
+        constructor(name, age) {
+          if (!SingleMode.isSingle) {
             this.name = name;
-            this.address = address;
-            SingMode.instance = this;
+            this.age = age;
+            SingleMode.isSingle = this;
           }
-          return SingMode.instance;
+          return SingleMode.isSingle;
         }
 
-        setAge(age) {
-          this.age = age;
+        setAddress(address) {
+          this.address = address;
         }
 
-        toString() {
-          console.log(`the name is ${this.name}.`);
-          console.log(`the address is ${this.address}.`);
-          console.log(`the age is ${this.age}.`);
+        getInfo() {
+          console.log(this.name, "toString-name");
+          console.log(this.age, "toString-age");
+          console.log(this.address, "toString-address");
         }
 
-        static getInstance(name, address) {
-          if (!this.instance) {
-            return (this.instance = new SingMode(name, address));
+        static getSingle(name, age) {
+          if (!SingleMode.isSingle) {
+            return new SingleMode(name, age);
+          } else {
+            return SingleMode.isSingle;
           }
-          return this.instance;
         }
       }
 
-      let sing1 = SingMode.getInstance("dnhyxc", "hz");
-      let sing2 = SingMode.getInstance("snsn", "zx");
-      let sing3 = new SingMode("yhyh", 18);
-      let sing4 = new SingMode("hmhm", 26);
+      const sing1 = new SingleMode("dnhyxc", 20);
+      const sing2 = SingleMode.getSingle("hmhm", 18);
+      const sing3 = SingleMode.getSingle("snsn", 28);
+      const sing4 = new SingleMode("cxcx", 25);
+
+      sing1.setAddress("hz");
+
+      sing1.getInfo();
+      sing2.getInfo();
 
       console.log(sing1 === sing2); // true
       console.log(sing2 === sing3); // true
       console.log(sing3 === sing4); // true
-
-      console.log(sing1, "sing1"); // SingMode {name: 'dnhyxc', age: 'hz'}
-      console.log(sing2, "sing2"); // SingMode {name: 'dnhyxc', age: 'hz'}
-      console.log(sing3, "sing3"); // SingMode {name: 'dnhyxc', age: 'hz'}
-      console.log(sing4, "sing4"); // SingMode {name: 'dnhyxc', age: 'hz'}
-
-      sing1.setAge(18);
-      console.log(sing1); // SingMode {name: 'dnhyxc', address: 'hz', age: 18}
-      sing2.setAge(26);
-      console.log(sing1, "sing1"); // SingMode {name: 'dnhyxc', address: 'hz', age: 26} 'sing1'
-      console.log(sing2, "sing2"); // SingMode {name: 'dnhyxc', address: 'hz', age: 26} 'sing2'
-
-      sing1.toString();
-      /*
-        the name is dnhyxc.
-        the address is hz.
-        the age is 26.
-      */
-
-      sing2.toString();
-      /*
-        the name is dnhyxc.
-        the address is hz.
-        the age is 26.
-      */
+      console.log(sing4, "sing4"); // SingleMode {name: 'dnhyxc', age: 20, address: 'hz'}
     </script>
   </body>
 </html>
