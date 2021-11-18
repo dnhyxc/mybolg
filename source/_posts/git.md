@@ -1,6 +1,6 @@
 ---
 title: git
-date: 2021-03-06 20:09:10
+date: 2020-03-06 20:09:10
 tags: git
 toc: true
 categories:
