@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用Class方法操作元素</title>
+  </head>
+  <body>
+    <input type="file" class="file" />
+    <img src="" class="image" />
+    <script>
+      const ele = document.querySelector(".file");
+      const image = document.querySelector(".image");
+
+      class Upload {
+        constructor(element, image) {
+          this.element = element;
+          this.image = image;
+          this.element.onchange = (e) => this.onClick(e, image);
+        }
+
+        onClick(e, image) {
+          const file = e.target.files[0];
+          Upload.setPreviewImage(file);
+        }
+
+        static setPreviewImage(file) {
+          const fr = new FileReader();
+          fr.onload = (e) => {
+            image.src = e.target.result;
+          };
+          fr.readAsDataURL(file);
+        }
+      }
+
+      class UploadFile extends Upload {
+        constructor(ele, image) {
+          super(ele, image);
+          this.ele = ele;
+          this.image = image;
+        }
+      }
+
+      const uploadFile = new UploadFile(ele, image);
+      console.log(uploadFile);
+    </script>
+  </body>
+</html>
