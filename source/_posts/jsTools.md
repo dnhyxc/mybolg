@@ -822,3 +822,33 @@ console.log(newArr);
   </script>
 </html>
 ```
+
+#### 判断父元素是否包含子元素
+
+1、原理：使用 **contains** 方法实现，如果 A 元素包含 B 元素，则返回 true，否则 false。
+
+- 注意：contains 存在兼容性问题，firefox 有些版本不兼容该方法，但可以使用 compareDocumentPosition() 方法代替。它的使用形式与 contains 差不多，但返回的不是 一个布尔值，而是一个很奇怪的数值。[具体请戳这里查看](https://developer.mozilla.org/zh-CN/docs/Web/API/Node/compareDocumentPosition)。
+
+2、contains 语法：
+
+```js
+ParentElement.contains(childElement);
+```
+
+3、处理 contains 兼容性：
+
+```js
+const contains = function (a, b, itself) {
+  // 第一个节点是否包含第二个节点
+  // contains 方法支持情况：chrome+ firefox9+ ie5+，opera9.64+(估计从9.0+)，safari5.1.7+
+  if (itself && a === b) return true;
+  if (a.contains) {
+    if (a.nodeType === 9) return true;
+    return a.contains(b);
+  } else if (a.compareDocumentPosition) {
+    return !!(a.compareDocumentPosition(b) & 16);
+  }
+  while ((b = b.parentNode)) if (a === b) return true;
+  return false;
+};
+```
