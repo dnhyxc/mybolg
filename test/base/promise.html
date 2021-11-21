@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promise</title>
+  </head>
+  <body>
+    <script>
+      class Promise {
+        constructor(fn) {
+          this.state = "inital";
+          this.successes = [];
+          this.errors = [];
+          fn(this.resolve, this.reject);
+        }
+
+        resolve = (data) => {
+          this.state = "resolved";
+          this.successes.forEach((i) => i(data));
+        };
+
+        reject = (error) => {
+          this.state = "failed";
+          this.errors.forEach((i) => i(error));
+        };
+
+        then(success, error) {
+          this.successes.push(success);
+          this.errors.push(error);
+        }
+      }
+
+      const p = new Promise((resolve, reject) => {
+        const timer = setInterval(() => {
+          let num = Math.random();
+          if (num < 0.2) clearInterval(timer);
+          if (num > 0.5) {
+            resolve(num);
+          } else {
+            reject(num);
+          }
+        }, 500);
+      });
+
+      p.then(
+        (data) => console.log("成功", data),
+        (error) => console.log("失败", error)
+      );
+    </script>
+  </body>
+</html>
