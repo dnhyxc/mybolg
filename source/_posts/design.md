@@ -5,7 +5,7 @@ toc: true
 tags:
   - JavaScript
 categories:
-  - JavaScript
+  - 设计模式
 ---
 
 #### 设计模式
