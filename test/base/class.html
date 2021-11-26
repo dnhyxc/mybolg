@@ -31,6 +31,32 @@
       inst.prop = "hmhm"; // setter: 123
 
       console.log(inst.prop); // 'hmhm'
+
+      const Storage = (function () {
+        let init = null;
+
+        class Storage {
+          constructor(name) {
+            this.name = name;
+          }
+          clear() {
+            localStorage.clear();
+          }
+        }
+
+        return function (name) {
+          if (!init) {
+            init = new Storage(name);
+          }
+          return init;
+        };
+      })();
+
+      const storage1 = Storage("snsn");
+      const storage = Storage("dnhyxc");
+      console.log(storage);
+      console.log(storage1);
+      console.log(storage.clear);
     </script>
   </body>
 </html>
