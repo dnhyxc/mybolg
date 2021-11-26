@@ -10,7 +10,7 @@ function removeShadow() {
   const outer = document.querySelectorAll(".outer");
   const dark = document.querySelector(".dark");
   const toggleMusic = document.querySelector(".toggleMusic");
-  const toolsSection = document.querySelector(".tools-section");
+  const toolsSections = document.querySelectorAll(".tools-section");
   const articleMoreLink = document.querySelectorAll(".article-more-link");
   const headerBar = document.querySelector(".headerBar");
   const leftColBar = document.querySelector(".leftColBar");
@@ -43,7 +43,9 @@ function removeShadow() {
   leftColBar.classList.remove("isShowShadow-left");
   main.classList.remove("isShowShadow");
   // outer.classList.remove("isShowShadow");
-  toolsSection.classList.remove("isShowShadow");
+  toolsSections && toolsSections.length > 0 && toolsSections.forEach(i => {
+    i.classList.remove("isShowShadow");
+  })
   dark.classList.remove("isShow-shadow");
   toggleMusic.classList.remove("isShow-shadow");
   closeShadow.innerHTML = "隐影";
@@ -59,7 +61,7 @@ function addShadow() {
   const outer = document.querySelectorAll(".outer");
   const dark = document.querySelector(".dark");
   const toggleMusic = document.querySelector(".toggleMusic");
-  const toolsSection = document.querySelector(".tools-section");
+  const toolsSections = document.querySelectorAll(".tools-section");
   const articleMoreLink = document.querySelectorAll(".article-more-link");
   const headerBar = document.querySelector(".headerBar");
   const leftColBar = document.querySelector(".leftColBar");
@@ -89,7 +91,9 @@ function addShadow() {
   });
   leftCol.classList.add("isShowShadow");
   main.classList.add("isShowShadow");
-  toolsSection.classList.add("isShowShadow");
+  toolsSections.forEach(i => {
+    i.classList.add("isShowShadow");
+  })
   headerBar.classList.add("isShowShadow-header");
   leftColBar.classList.add("isShowShadow-left");
   dark.classList.add("isShow-shadow");
@@ -107,7 +111,6 @@ function setShadow() {
 
 function init() {
   const closeShadow = document.querySelector(".closeShadow");
-  // const profilepic = document.querySelector(".profilepic");
   const toggleShadow = function () {
     if (!Utils.getSSG("container")) {
       if (Utils.getSSG("hideShadow")) {
