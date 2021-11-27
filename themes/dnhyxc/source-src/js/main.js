@@ -139,7 +139,7 @@ document.onreadystatechange = function () {
     if (Utils.getSystem() !== "mac" && Utils.DPR < 1.2 && browserCover) {
       browserCover.style.height = "calc(100vh - 353px)";
     }
-    if (Utils.getSystem() !== "mac" && Utils.DPR > 1.2 && Utils.DPR > 1.3 && browserCover) {
+    if (Utils.getSystem() !== "mac" && Utils.DPR > 1.2 && Utils.DPR < 1.3 && browserCover) {
       browserCover.style.height = "calc(100vh - 353px)";
     }
     if (Utils.getSystem() !== "mac" && Utils.DPR >= 2 && browserCover) {
