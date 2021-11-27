@@ -55,8 +55,12 @@ function showFooter() {
     });
   if (Utils.getSystem() === "mac") {
     browserCover && browserCover.classList.remove("toggleBrowserCover");
-  } else if (Utils.DPR < 2) {
-    browserCover && browserCover.classList.remove("toggleBrowserCover-windows");
+  } else if (Utils.DPR < 1.2) {
+    browserCover &&
+      browserCover.classList.remove("toggleBrowserCover-windows-h");
+  } else if (Utils.DPR > 1.2 && Utils.DPR < 1.3) {
+    browserCover &&
+      browserCover.classList.remove("toggleBrowserCover-windows-l");
   } else {
     browserCover &&
       browserCover.classList.remove("toggleBrowserCover-windows-retina");
