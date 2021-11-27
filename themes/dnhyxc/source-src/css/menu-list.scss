@@ -130,8 +130,13 @@
   transition: all 0.3s ease;
 }
 
-.toggleBrowserCover-windows {
+.toggleBrowserCover-windows-h {
   height: calc(100vh - 287px) !important;
+  transition: all 0.3s ease;
+}
+
+.toggleBrowserCover-windows-l {
+  height: calc(100vh - 286px) !important;
   transition: all 0.3s ease;
 }
 

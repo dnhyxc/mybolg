@@ -203,13 +203,9 @@
   justify-content: space-between;
   position: relative;
   padding-top: 11px;
-  margin: 0px $articlePadding 10px $articlePadding;
-  min-height: 58px;
+  margin: 0px $articlePadding 24px $articlePadding;
+  // min-height: 58px;
   border-top: 1px solid #999;
-
-  // .clearfix {
-  //   margin-bottom: 20px;
-  // }
 }
 
 .article-info-post.article-info {
