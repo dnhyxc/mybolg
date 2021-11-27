@@ -136,11 +136,14 @@ document.onreadystatechange = function () {
     } else {
       atticleNarrow.removeNarrow();
     }
-    if (Utils.getSystem() !== "mac" && Utils.DPR < 2 && browserCover) {
-      browserCover.style.height = "calc(100vh - 356px)";
+    if (Utils.getSystem() !== "mac" && Utils.DPR < 1.2 && browserCover) {
+      browserCover.style.height = "calc(100vh - 353px)";
+    }
+    if (Utils.getSystem() !== "mac" && Utils.DPR > 1.2 && Utils.DPR > 1.3 && browserCover) {
+      browserCover.style.height = "calc(100vh - 353px)";
     }
     if (Utils.getSystem() !== "mac" && Utils.DPR >= 2 && browserCover) {
-      browserCover.style.height = "calc(100vh - 355px)";
+      browserCover.style.height = "calc(100vh - 353px)";
     }
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {
