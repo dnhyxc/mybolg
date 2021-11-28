@@ -1,13 +1,17 @@
-// 延迟函数
-const delay = function delay(interval) {
-  typeof interval !== "number" ? (interval = 1000) : null;
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, interval);
-  });
-};
+---
+title: uploadFile
+date: 2020-06-13 10:32:18
+tags:
+  - File
+  - canvas
+  - JavaScript
+categories:
+  - 文件上传
+---
 
+#### 基于 formData 上传
+
+```js
 // 基于formData实现文件上传
 (function () {
   const upload = document.querySelector("#upload1");
@@ -120,8 +124,11 @@ const delay = function delay(interval) {
       });
   });
 })();
+```
 
-// 基于base64实现文件上传
+#### 基于 base64 上传
+
+```js
 (function () {
   const upload = document.querySelector("#upload2");
   const upload_inp = upload.querySelector(".upload_inp");
@@ -197,7 +204,11 @@ const delay = function delay(interval) {
     upload_inp.click();
   });
 })();
+```
 
+#### 上传时生成唯一 fileName 传给后端
+
+```js
 // 文件缩略图并自己生成filename传给服务器（如果服务端不将传入的文件名处理成唯一的前提就需要前端自己生成唯一的filename）
 (function () {
   const upload = document.querySelector("#upload3");
@@ -333,14 +344,27 @@ const delay = function delay(interval) {
       });
   });
 })();
+```
 
-// 文件上传并生成进度条
+#### 文件上传并生成进度条
+
+```js
 (function () {
   const upload = document.querySelector("#upload4");
   const upload_inp = upload.querySelector(".upload_inp");
   const upload_button_select = upload.querySelector(".upload_button.select");
   const upload_progress = upload.querySelector(".upload_progress");
   const upload_progress_value = upload_progress.querySelector(".value");
+
+  // 延迟函数
+  const delay = function delay(interval) {
+    typeof interval !== "number" ? (interval = 1000) : null;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, interval);
+    });
+  };
 
   // 检测按钮是否可点击
   const checkDisable = (element) => {
@@ -403,8 +427,11 @@ const delay = function delay(interval) {
     upload_inp.click();
   });
 })();
+```
 
-// 多文件上传
+#### 多文件上传
+
+```js
 (function () {
   const upload = document.querySelector("#upload5");
   const upload_inp = upload.querySelector(".upload_inp");
@@ -541,8 +568,11 @@ const delay = function delay(interval) {
       });
   });
 })();
+```
 
-// 拖拽上传
+#### 拖拽上传
+
+```js
 (function () {
   let upload = document.querySelector("#upload6");
   const upload_inp = upload.querySelector(".upload_inp");
@@ -608,8 +638,11 @@ const delay = function delay(interval) {
     upload_inp.click();
   });
 })();
+```
 
-// 大文件上传
+#### 大文件上传(切片上传)
+
+```js
 (function () {
   const upload = document.querySelector("#upload7");
   const upload_inp = upload.querySelector(".upload_inp");
@@ -776,3 +809,214 @@ const delay = function delay(interval) {
     upload_inp.click();
   });
 })();
+```
+
+#### index.html 内容
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>切片上传</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/qs/6.10.1/qs.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/spark-md5/3.0.0/spark-md5.min.js"></script>
+    <style>
+      .upload_inp {
+        display: none;
+      }
+
+      .upload_list {
+        display: none;
+      }
+
+      .disable {
+        background-color: #ccc;
+      }
+
+      .loading {
+        background-color: #ccc;
+      }
+
+      .upload_abbre {
+        display: none;
+      }
+
+      .upload_progress {
+        width: 500px;
+        height: 10px;
+        background-color: #eee;
+        margin-top: 20px;
+        border-radius: 10px;
+        display: none;
+      }
+
+      .value {
+        width: 0;
+        height: 10px;
+        background-color: skyblue;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      }
+
+      em {
+        cursor: pointer;
+        color: red;
+      }
+
+      .upload_box {
+        position: relative;
+      }
+
+      .upload_drag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 500px;
+        height: 150px;
+        border: 1px dotted #ccc;
+      }
+
+      .upload_mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 500px;
+        height: 150px;
+        background-color: #ccc;
+        color: #333;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="item">
+        <h3>单一文件上传「FORM-DATA」</h3>
+        <section class="upload_box" id="upload1">
+          <input type="file" class="upload_inp" accept=".png,.jpg,.jpeg" />
+          <div class="upload_button_box">
+            <button class="upload_button select">选择文件</button>
+            <button class="upload_button upload">上传到服务器</button>
+          </div>
+          <div class="upload_tip">
+            只能上传 PNG/JPG/JPEG 格式图片，且大小不能超过2MB
+          </div>
+          <ul class="upload_list">
+            <li>
+              <span>文件：...</span>
+              <span><em>移除</em></span>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="item">
+        <h3>单一文件上传[BASE64]，只适合图片</h3>
+        <section class="upload_box" id="upload2">
+          <input type="file" class="upload_inp" />
+          <div class="upload_button_box">
+            <button class="upload_button select">上传图片</button>
+          </div>
+          <div class="upload_tip">
+            只能上传jpg/png格式图片，且大小不能超过2mb
+          </div>
+        </section>
+      </div>
+
+      <div class="item">
+        <h3>单一文件上传[缩略图处理]</h3>
+        <section class="upload_box" id="upload3">
+          <input type="file" class="upload_inp" accept=".png,.jpg,.jpeg" />
+          <div class="upload_button_box">
+            <button class="upload_button select">选择文件</button>
+            <button class="upload_button upload">上传到服务器</button>
+          </div>
+          <div class="upload_abbre">
+            <img src="" alt="" />
+          </div>
+        </section>
+      </div>
+
+      <div class="item">
+        <h3>单一文件上传[进度条处理]</h3>
+        <section class="upload_box" id="upload4">
+          <input type="file" class="upload_inp" accept=".png,.jpg,.jpeg" />
+          <div class="upload_button_box">
+            <button class="upload_button select">上传文件</button>
+          </div>
+          <div class="upload_progress">
+            <div class="value"></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="item">
+        <h3>多文件上传</h3>
+        <section class="upload_box" id="upload5">
+          <!-- multiple可允许同时上传多个文件 -->
+          <input
+            type="file"
+            class="upload_inp"
+            multiple
+            accept=".png,.jpg,.jpeg"
+          />
+          <div class="upload_button_box">
+            <button class="upload_button select">上传文件</button>
+            <button class="upload_button upload">上传到服务器</button>
+          </div>
+          <ul class="upload_list">
+            <li>
+              <span>文件：...</span>
+              <span><em>移除</em></span>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="item">
+        <h3>拖拽上传</h3>
+        <section class="upload_box" id="upload6">
+          <input type="file" class="upload_inp" accept=".png,.jpg,.jpeg" />
+          <div class="upload_drag">
+            <i class="icon">拖到此处上传</i>
+            <span class="text">
+              将文件拖到此处，或
+              <a href="javascript:;" class="upload_submit">点击上传</a>
+            </span>
+          </div>
+          <div class="upload_mark">正在上传中，请稍等...</div>
+        </section>
+      </div>
+
+      <div class="item">
+        <h3>大文件上传</h3>
+        <section class="upload_box" id="upload7">
+          <input type="file" class="upload_inp" />
+          <div class="upload_button_box">
+            <button class="upload_button select">上传文件</button>
+          </div>
+          <div class="upload_progress">
+            <div class="value"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script src="./instance.js"></script>
+    <script src="./upload.js"></script>
+  </body>
+</html>
+```
+
+#### canvas 压缩上传图片
+
+```html
+
+```
