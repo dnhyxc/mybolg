@@ -134,7 +134,7 @@ categories:
 
 ### qiankun
 
-#### qiankun 简介
+#### [qiankun](https://qiankun.umijs.org/zh) 简介
 
 1、由于 qiankun 是在 single-spa 的基础上做的二次开发，所以 qiankun 的用法和 single-spa 基本一样，也分为 application 模式和 parcel 模式。
 
@@ -152,99 +152,206 @@ yarn add qiankun or npm i qiankun -S
 
 2、注册微应用：
 
-- 修改 micro-main/src/index.js 注册微应用并启动：
+- 修改 [micro-react-main/src/index.tsx](https://github.com/dnhyxc/qiankun-react-main/blob/master/src/index.tsx) 注册微应用并启动：
 
 ```js
 import React from "react";
 import ReactDOM from "react-dom";
+
 import {
   registerMicroApps,
   start,
-  setDefaultMountApp,
   runAfterFirstMounted,
+  addGlobalUncaughtErrorHandler,
+  initGlobalState,
+  MicroAppStateActions,
 } from "qiankun";
+
+import "./index.css";
+import { login, notfound, failed } from "./pages/config";
 import App from "./App";
 
-function render({ loading }) {
-  const container = document.getElementById("root");
+interface IProps {
+  loading?: boolean;
+  needHeader?: boolean;
+  path?: string;
+  type?: string;
+}
+
+const render = (porps: IProps) => {
   ReactDOM.render(
     <React.StrictMode>
-      <App loading={loading} />
+      <App {...porps} />
     </React.StrictMode>,
-    container
+    document.getElementById("main-root")
   );
-}
+};
 
 render({ loading: true });
 
-// 用于子应用首次加载时的loading效果
-const loader = (loading) => render({ loading });
+const appStart = () => {
+  // 设置子应用首次加载loading效果
+  const loader = (loading: boolean) => render({ loading });
 
-const apps = [
-  {
-    name: "reactApp",
-    entry: "//localhost:8686",
-    activeRule: "/dnhyxc/react",
-    container: "#subapp-viewport",
-    loader,
-    props: {
-      routerBase: "/dnhyxc/react", // 给子应用下发的基础路由
+  interface AppParams {
+    name: string;
+    entry: string;
+    activeRule: string;
+    container: string;
+    loader: (loading: boolean) => void;
+    props: {};
+  }
+
+  const apps: AppParams[] = [
+    {
+      name: "reactApp",
+      entry: "//localhost:8989",
+      activeRule: "/dnhyxc/react",
+      container: "#sub-app-viewport",
+      loader,
+      props: {
+        info: "来了老弟",
+        routerBase: "/dnhyxc/react", // 给子应用下发的基础路由
+      },
     },
-  },
-  {
-    name: "vueApp",
-    entry: "//localhost:8989",
-    container: "#subapp-viewport",
-    activeRule: "/dnhyxc/vue",
-    loader,
-    props: {
-      routerBase: "/dnhyxc/vue", // 给子应用下发的基础路由
+    {
+      name: "vueApp",
+      entry: "//localhost:8686",
+      activeRule: "/dnhyxc/vue",
+      container: "#sub-app-viewport",
+      loader,
+      props: {
+        routerBase: "/dnhyxc/vue", // 给子应用下发的基础路由
+      },
     },
-  },
-];
-registerMicroApps(apps, {
-  beforeLoad: (app) => {
-    console.log("before load app.name=====>>>>>", app.name);
-  },
-  beforeMount: [
-    (app) => {
-      console.log("[LifeCycle] before mount %c%s", "color: green;", app.name);
+  ];
+
+  // 注册子应用
+  registerMicroApps(apps, {
+    beforeLoad: (app): any => {
+      console.log("before load app.name=====>>>>>", app.name);
     },
-  ],
-  afterMount: [
-    (app) => {
-      console.log("[LifeCycle] after mount %c%s", "color: green;", app.name);
-    },
-  ],
-  afterUnmount: [
-    (app) => {
-      console.log("[LifeCycle] after unmount %c%s", "color: green;", app.name);
-    },
-  ],
+    beforeMount: [
+      (app): any => {
+        console.log("[LifeCycle] before mount %c%s", "color: green;", app.name);
+      },
+    ],
+    afterMount: [
+      (app): any => {
+        console.log("[LifeCycle] after mount %c%s", "color: green;", app.name);
+      },
+    ],
+    afterUnmount: [
+      (app): any => {
+        console.log(
+          "[LifeCycle] after unmount %c%s",
+          "color: green;",
+          app.name
+        );
+      },
+    ],
+  });
+
+  start();
+
+  // 微前端启动进入第一个子应用后回调函数
+  runAfterFirstMounted(() => {
+    console.log("[MainApp] first app mounted");
+  });
+
+  // 添加全局异常捕获
+  addGlobalUncaughtErrorHandler((event) => {
+    console.error("异常捕获", event);
+    const { message } = event as any;
+
+    const errorApp: AppParams[] = [];
+
+    apps.forEach((i) => {
+      if (message && message.includes(i.name)) {
+        errorApp.splice(0, 1, i);
+      }
+    });
+
+    // 加载失败时提示
+    if (
+      message &&
+      message.includes("died in status LOADING_SOURCE_CODE") &&
+      errorApp.length &&
+      window.location.pathname === errorApp[0].activeRule
+    ) {
+      render(failed);
+    }
+  });
+
+  const initState = {
+    AppName: "micro-react-main",
+  };
+  initGlobalState(initState);
+};
+
+const actions: MicroAppStateActions = initGlobalState({});
+(window as any).__MAIN_GLOBALSTATE_ACTIONS__ = actions;
+actions.onGlobalStateChange((state, prev) => {
+  // state: 变更后的状态; prev 变更前的状态
+  console.log("[onGlobalStateChange - master]:", state, prev);
 });
 
-setDefaultMountApp("/dnhyxc/react");
+// 设置路由拦截
+const routeIntercept = () => {
+  if (window.location.pathname === "/dnhyxc/login") {
+    window.location.href = "/dnhyxc/react";
+  } else {
+    render(notfound);
+  }
+};
 
-start();
+// 模拟获取用户登录信息
+const getUserInfo = () => {
+  return true;
+};
 
-runAfterFirstMounted(() => {
-  console.log("[MainApp] first app mounted");
-});
+// 页面加载判断
+if (window.location.pathname === "/") {
+  window.location.href = "/dnhyxc/react";
+} else {
+  if (getUserInfo()) {
+    routeIntercept();
+    appStart();
+  } else {
+    render(login);
+  }
+}
 ```
 
 3、添加子应用容器：
 
-- 在 micro-main/src/App.js 中添加子应用容器元素：
+- 在 [micro-main/src/App.tsx](https://github.com/dnhyxc/qiankun-react-main/blob/master/src/App.tsx) 中添加子应用容器元素：
 
-```html
-<div className="App">
-  <div className="menu">
-    <a href="/dnhyxc/react">reactApp</a>
-    <a href="/dnhyxc/vue">vueApp</a>
-  </div>
-  <!-- 子应用容器，如果路径匹配到子应用，将会渲染在此处 -->
-  <div id="subapp-viewport"></div>
-</div>
+```js
+import RenderPage from "./pages";
+import Header from "./components/Header";
+import "./App.css";
+
+interface IProps {
+  loading?: boolean;
+}
+
+const App: React.FC<IProps> = ({ loading, ...props }) => {
+  return (
+    <div className="app-main">
+      <header className="app-header">
+        <Header />
+      </header>
+      <div className="app-sub">
+        <RenderPage loading={loading} {...props} />
+        {/* 子应用容器 */}
+        <div id="sub-app-viewport"></div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
 ```
 
 #### React 子应用
@@ -322,45 +429,10 @@ export async function update(props) {
 
 修改 webpack 配置方式一：
 
-- 首先使用 `npm install react-app-rewired --save-dev` 安装 react-app-rewired。
-
-- 在与 src 平级的根目录下创建 config-overrides.js 文件：
-
-```js
-const { name } = require("./package.json");
-
-module.exports = {
-  webpack: function override(config, env) {
-    // 解决主应用接入后会挂掉的问题：https://github.com/umijs/qiankun/issues/340
-    config.entry = config.entry.filter(
-      (e) => !e.includes("webpackHotDevClient")
-    );
-
-    config.output.library = `${name}-[name]`;
-    config.output.libraryTarget = "umd";
-    config.output.jsonpFunction = `webpackJsonp_${name}`;
-    return config;
-  },
-  devServer: (configFunction) => {
-    return function (proxy, allowedHost) {
-      const config = configFunction(proxy, allowedHost);
-      config.open = false;
-      config.hot = false;
-      config.headers = {
-        "Access-Control-Allow-Origin": "*",
-      };
-      return config;
-    };
-  },
-};
-```
-
-修改 webpack 配置方式二：
-
 - 安装@rescripts/cli 插件：
 
 ```
-npm i -D @rescripts/cli
+npm i @rescripts/cli -D
 ```
 
 - 在根目录新增 .rescriptsrc.js 文件：
@@ -399,6 +471,40 @@ module.exports = {
 "start": "rescripts start",
 "build": "rescripts build",
 "test": "rescripts test",
+```
+
+修改 webpack 配置方式二：
+
+- 首先使用 `npm install react-app-rewired -D` 安装 react-app-rewired。
+
+- 在与 src 平级的根目录下创建 config-overrides.js 文件：
+
+```js
+const { name } = require("./package.json");
+
+module.exports = {
+  webpack: function override(config, env) {
+    config.entry = config.entry.filter(
+      (e) => !e.includes("webpackHotDevClient")
+    );
+
+    config.output.library = `${name}-[name]`;
+    config.output.libraryTarget = "umd";
+    config.output.jsonpFunction = `webpackJsonp_${name}`;
+    return config;
+  },
+  devServer: (configFunction) => {
+    return function (proxy, allowedHost) {
+      const config = configFunction(proxy, allowedHost);
+      config.open = false;
+      config.hot = false;
+      config.headers = {
+        "Access-Control-Allow-Origin": "*",
+      };
+      return config;
+    };
+  },
+};
 ```
 
 #### Vue 子应用配置
@@ -526,7 +632,7 @@ const apps = [
 
 #### 具体配置示例
 
-1、React 主应用 [github 地址](https://github.com/dnhyxc/micro-main) | [gitee 地址](https://gitee.com/dnhyxc/micro-main)
+1、React 主应用 [github 地址](https://github.com/dnhyxc/qiankun-react-main) | [gitee 地址](https://gitee.com/dnhyxc/qiankun-react-main)
 
 2、React 子应用 [github 地址](https://github.com/dnhyxc/micro-react) | [gitee 地址](https://gitee.com/dnhyxc/micro-react)
 
