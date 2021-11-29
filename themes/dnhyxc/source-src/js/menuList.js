@@ -23,10 +23,8 @@ function hideFooter() {
     });
   if (Utils.getSystem() === "mac") {
     browserCover && browserCover.classList.add("toggleBrowserCover");
-  } else if (Utils.DPR < 1.2) {
-    browserCover && browserCover.classList.add("toggleBrowserCover-windows-h");
-  } else if (Utils.DPR > 1.2 && Utils.DPR < 1.3) {
-    browserCover && browserCover.classList.add("toggleBrowserCover-windows-l");
+  } else if (Utils.DPR < 2) {
+    browserCover && browserCover.classList.add("toggleBrowserCover-windows");
   } else {
     browserCover &&
       browserCover.classList.add("toggleBrowserCover-windows-retina");
@@ -55,12 +53,9 @@ function showFooter() {
     });
   if (Utils.getSystem() === "mac") {
     browserCover && browserCover.classList.remove("toggleBrowserCover");
-  } else if (Utils.DPR < 1.2) {
+  } else if (Utils.DPR < 2) {
     browserCover &&
-      browserCover.classList.remove("toggleBrowserCover-windows-h");
-  } else if (Utils.DPR > 1.2 && Utils.DPR < 1.3) {
-    browserCover &&
-      browserCover.classList.remove("toggleBrowserCover-windows-l");
+      browserCover.classList.remove("toggleBrowserCover-windows");
   } else {
     browserCover &&
       browserCover.classList.remove("toggleBrowserCover-windows-retina");
