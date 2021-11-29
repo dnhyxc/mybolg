@@ -140,7 +140,7 @@
   transition: all 0.3s ease;
 }
 
-@media screen and (max-width: 2048) {
+@media screen and (max-width: 2048px) {
   .toggleBrowserCover-windows-l {
     height: calc(100vh - 284px) !important;
     transition: all 0.3s ease;
