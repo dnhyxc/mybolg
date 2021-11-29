@@ -236,8 +236,15 @@ runAfterFirstMounted(() => {
 
 - 在 micro-main/src/App.js 中添加子应用容器元素：
 
-```js
-<div id="subapp-viewport"></div>
+```html
+<div className="App">
+  <div className="menu">
+    <a href="/dnhyxc/react">reactApp</a>
+    <a href="/dnhyxc/vue">vueApp</a>
+  </div>
+  <!-- 子应用容器，如果路径匹配到子应用，将会渲染在此处 -->
+  <div id="subapp-viewport"></div>
+</div>
 ```
 
 #### React 子应用
