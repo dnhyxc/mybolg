@@ -1,8 +1,6 @@
-import { isArchives, isCategories } from "./public-utils";
-
 function init() {
   const jsContent = document.querySelector("#js-content");
-  if ((isArchives || isCategories) && document.body.clientWidth > 800) {
+  if (document.body.clientWidth > 800) {
     const bodyHeight = document.body.clientHeight;
     if (jsContent && jsContent.clientHeight < bodyHeight - 148) {
       jsContent.style.marginBottom =
