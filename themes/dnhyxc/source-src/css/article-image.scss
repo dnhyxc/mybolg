@@ -1,0 +1,34 @@
+.hasImage {
+  height: calc(100vh - 158px);
+  transition: all 0.3s ease;
+
+  .hasImage-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    .article-entry-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .article-entry {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: none;
+      }
+
+      .browserCover {
+        flex: 1;
+      }
+    }
+  }
+}
+
+.hasImage-hideFooter {
+  height: calc(100vh - 89px);
+  transition: all 0.3s ease;
+}

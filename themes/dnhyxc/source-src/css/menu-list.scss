@@ -125,32 +125,11 @@
   height: calc(100vh - 80px) !important;
 }
 
-.toggleBrowserCover {
-  height: calc(100vh - 285px) !important;
-  transition: all 0.3s ease;
-}
 
 .article {
   .isArticleBrowserCover {
     height: 500px;
   }
-}
-
-.toggleBrowserCover-windows {
-  height: calc(100vh - 284px) !important;
-  transition: all 0.3s ease;
-}
-
-@media screen and (max-width: 2048px) {
-  .toggleBrowserCover-windows {
-    height: calc(100vh - 284px) !important;
-    transition: all 0.3s ease;
-  }
-}
-
-.toggleBrowserCover-windows-retina {
-  height: calc(100vh - 282px) !important;
-  transition: all 0.3s ease;
 }
 
 .togglePerceptionLife {

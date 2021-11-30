@@ -11,6 +11,7 @@ function hideFooter() {
   const perceptionLife = document.querySelector(".perception-life");
   const scrollWrap = document.querySelectorAll(".scrollWrap");
   const changeFooter = document.querySelector(".changeFooter");
+  const article = document.querySelector('.article');
 
   endFooter && endFooter.classList.add("toggleEndFooter");
   afterFooter && afterFooter.classList.add("toggleAfterFooter");
@@ -21,15 +22,10 @@ function hideFooter() {
     scrollWrap.forEach((i) => {
       i.classList.add("toggleScrollWrap");
     });
-  if (Utils.getSystem() === "mac" && (Utils.isPage || Utils.isHome)) {
-    browserCover && browserCover.classList.add("toggleBrowserCover");
-  } else if (Utils.DPR < 2 && (Utils.isPage || Utils.isHome)) {
-    browserCover && browserCover.classList.add("toggleBrowserCover-windows");
-  } else if (Utils.isPage || Utils.isHome) {
-    browserCover &&
-      browserCover.classList.add("toggleBrowserCover-windows-retina");
-  }
   changeFooter.innerHTML = "显底";
+  if (Utils.isHome || Utils.isPage) {
+    article.classList.add('hasImage-hideFooter')
+  }
 }
 
 function showFooter() {
@@ -41,6 +37,7 @@ function showFooter() {
   const perceptionLife = document.querySelector(".perception-life");
   const scrollWrap = document.querySelectorAll(".scrollWrap");
   const changeFooter = document.querySelector(".changeFooter");
+  const article = document.querySelector('.article');
 
   endFooter && endFooter.classList.remove("toggleEndFooter");
   afterFooter && afterFooter.classList.remove("toggleAfterFooter");
@@ -51,15 +48,10 @@ function showFooter() {
     scrollWrap.forEach((i) => {
       i.classList.remove("toggleScrollWrap");
     });
-  if (Utils.getSystem() === "mac" && (Utils.isPage || Utils.isHome)) {
-    browserCover && browserCover.classList.remove("toggleBrowserCover");
-  } else if (Utils.DPR < 2 && (Utils.isPage || Utils.isHome)) {
-    browserCover && browserCover.classList.remove("toggleBrowserCover-windows");
-  } else if (Utils.isPage || Utils.isHome) {
-    browserCover &&
-      browserCover.classList.remove("toggleBrowserCover-windows-retina");
-  }
   changeFooter.innerHTML = "隐底";
+  if (Utils.isPage || Utils.isHome) {
+    article.classList.remove('hasImage-hideFooter')
+  }
 }
 
 function onHideMenu() {
