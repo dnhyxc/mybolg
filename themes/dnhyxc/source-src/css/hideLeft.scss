@@ -1,6 +1,5 @@
 .main,
 .isShowShadow {
-
   .show_menu {
     display: block !important;
   }
@@ -10,7 +9,7 @@
     left: 0;
     border-top-left-radius: 5px;
     box-shadow: 0 0 5px #ccc inset;
-    z-index: 999999;
+    z-index: 999;
     cursor: pointer;
     display: none;
 

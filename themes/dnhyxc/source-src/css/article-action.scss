@@ -85,11 +85,19 @@
 }
 
 ._share-narrow {
-  // left: 21%;
-  left: 29.685%;
+  left: 21%;
 }
 
 ._share-_narrow {
-  // left: 7.6923%;
-  left: 19.0782%;
+  left: 7.6923%;
+}
+
+@media screen and (max-width: 2048px) {
+  ._share-narrow {
+    left: 25%;
+  }
+
+  ._share-_narrow {
+    left: 13.7%;
+  }
 }

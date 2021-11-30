@@ -21,11 +21,11 @@ function hideFooter() {
     scrollWrap.forEach((i) => {
       i.classList.add("toggleScrollWrap");
     });
-  if (Utils.getSystem() === "mac") {
+  if (Utils.getSystem() === "mac" && (Utils.isPage || Utils.isHome)) {
     browserCover && browserCover.classList.add("toggleBrowserCover");
-  } else if (Utils.DPR < 2) {
+  } else if (Utils.DPR < 2 && (Utils.isPage || Utils.isHome)) {
     browserCover && browserCover.classList.add("toggleBrowserCover-windows");
-  } else {
+  } else if (Utils.isPage || Utils.isHome) {
     browserCover &&
       browserCover.classList.add("toggleBrowserCover-windows-retina");
   }
@@ -51,12 +51,11 @@ function showFooter() {
     scrollWrap.forEach((i) => {
       i.classList.remove("toggleScrollWrap");
     });
-  if (Utils.getSystem() === "mac") {
+  if (Utils.getSystem() === "mac" && (Utils.isPage || Utils.isHome)) {
     browserCover && browserCover.classList.remove("toggleBrowserCover");
-  } else if (Utils.DPR < 2) {
-    browserCover &&
-      browserCover.classList.remove("toggleBrowserCover-windows");
-  } else {
+  } else if (Utils.DPR < 2 && (Utils.isPage || Utils.isHome)) {
+    browserCover && browserCover.classList.remove("toggleBrowserCover-windows");
+  } else if (Utils.isPage || Utils.isHome) {
     browserCover &&
       browserCover.classList.remove("toggleBrowserCover-windows-retina");
   }

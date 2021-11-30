@@ -133,14 +133,23 @@ document.onreadystatechange = function () {
     } else {
       atticleNarrow.removeNarrow();
     }
-    if (Utils.getSystem() !== "mac" && Utils.DPR < 1.2 && browserCover) {
-      browserCover.style.height = "calc(100vh - 353px)";
-    }
-    if (Utils.getSystem() !== "mac" && Utils.DPR > 1.2 && Utils.DPR < 1.3 && browserCover) {
-      browserCover.style.height = "calc(100vh - 353px)";
-    }
-    if (Utils.getSystem() !== "mac" && Utils.DPR >= 2 && browserCover) {
-      browserCover.style.height = "calc(100vh - 352px)";
+    if (Utils.isPage || Utils.isHome) {
+      if (Utils.getSystem() !== "mac" && Utils.DPR < 1.2 && browserCover) {
+        browserCover.style.height = "calc(100vh - 353px)";
+      }
+      if (
+        Utils.getSystem() !== "mac" &&
+        Utils.DPR > 1.2 &&
+        Utils.DPR < 1.3 &&
+        browserCover
+      ) {
+        browserCover.style.height = "calc(100vh - 353px)";
+      }
+      if (Utils.getSystem() !== "mac" && Utils.DPR >= 2 && browserCover) {
+        browserCover.style.height = "calc(100vh - 352px)";
+      }
+    } else {
+      browserCover.classList.toggle("isArticleBrowserCover");
     }
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {

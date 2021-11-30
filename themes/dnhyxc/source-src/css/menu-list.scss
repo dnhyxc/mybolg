@@ -130,6 +130,12 @@
   transition: all 0.3s ease;
 }
 
+.article {
+  .isArticleBrowserCover {
+    height: 500px;
+  }
+}
+
 .toggleBrowserCover-windows {
   height: calc(100vh - 284px) !important;
   transition: all 0.3s ease;
