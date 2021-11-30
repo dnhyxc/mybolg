@@ -1540,6 +1540,47 @@ const endTime = moment().endOf("day").valueOf();
 npx create-react-app micro-react-sub --template typescript
 ```
 
+#### react 配置 antd 按需加载
+
+1、安装 antd：
+
+```
+npm install antd --save
+```
+
+2、安装 babel-plugin-import、react-app-rewired、customize-cra：
+
+```
+npm install babel-plugin-import react-app-rewired customize-cra --save
+```
+
+3、在项目根目录下创建 `config-overrides.js` 文件，配置如下：
+
+```js
+const { override, fixBabelImports } = require("customize-cra");
+
+module.exports = override(
+  fixBabelImports("import", {
+    libraryName: "antd",
+    libraryDirectory: "es",
+    style: "css", // style: true 会加载 less 文件
+  })
+);
+```
+
+4、修改 package.json 文件中 scripts 的配置：
+
+```json
+"scripts": {
+- "start": "react-scripts start",
++ "start": "react-app-rewired start",
+- "build": "react-scripts build",
++ "build": "react-app-rewired build",
+- "test": "react-scripts test",
++ "test": "react-app-rewired test",
+}
+```
+
 #### Dva 中实现请求轮循
 
 1，利用 yield 关键字可以阻塞代码运行的特性，将异步变为同步的特性来实现轮询，通过设置一个延时函数，延时时间为 300ms，当此次的数据请求完成之后通过延时函数延时 300ms 之后再进行下一次请求执行。
