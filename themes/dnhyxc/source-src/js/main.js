@@ -42,6 +42,8 @@ import music from "./music";
 
 import tocWordsLoop from "./tocWordsLoop";
 
+import articleImage from './article-image'
+
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
@@ -66,6 +68,7 @@ addLoadEvent(function () {
   share.init();
   music.init();
   tocWordsLoop.init();
+  articleImage.init()
 });
 
 function stopTouchmove(e) {
@@ -132,24 +135,6 @@ document.onreadystatechange = function () {
       atticleNarrow.setNarrow();
     } else {
       atticleNarrow.removeNarrow();
-    }
-    if (Utils.isPage || Utils.isHome) {
-      if (Utils.getSystem() !== "mac" && Utils.DPR < 1.2 && browserCover) {
-        browserCover.style.height = "calc(100vh - 353px)";
-      }
-      if (
-        Utils.getSystem() !== "mac" &&
-        Utils.DPR > 1.2 &&
-        Utils.DPR < 1.3 &&
-        browserCover
-      ) {
-        browserCover.style.height = "calc(100vh - 353px)";
-      }
-      if (Utils.getSystem() !== "mac" && Utils.DPR >= 2 && browserCover) {
-        browserCover.style.height = "calc(100vh - 352px)";
-      }
-    } else {
-      browserCover.classList.toggle("isArticleBrowserCover");
     }
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {
