@@ -47,7 +47,6 @@ import articleImage from './article-image'
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
-const browserCover = document.querySelector(".browserCover");
 
 addLoadEvent(function () {
   // Share.init()

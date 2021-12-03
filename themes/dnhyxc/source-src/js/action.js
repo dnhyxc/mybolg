@@ -1,4 +1,5 @@
 import * as Utils from "./public-utils";
+import hideMain from "./hideMain";
 
 function init() {
   let leftCol = document.querySelector(".left-col");
@@ -159,6 +160,7 @@ function init() {
     });
   };
 
+  let beforeScrollTop = 0;
   // 滚动事件
   function scroll() {
     const countInfo = `${parseInt(
@@ -183,36 +185,12 @@ function init() {
       scrollTop.forEach((i) => {
         i.style.display = "none";
       });
-      // scroll_top.style.display = "none";
-      // scrollbottom.style.display = "none";
-      // scroll_right.style.display = "none";
-      // scroll_left.style.display = "none";
-      // artBar.forEach((i) => {
-      //   i.style.display = "none";
-      // });
-      // leftColBar.style.display = "none";
-      // headerBar.style.display = "none";
-      // footerBar.forEach((i) => {
-      //   i.style.display = "none";
-      // });
       hideElement();
     } else {
       if (wrapper.scrollTop === 0) {
         scrollTop.forEach((i) => {
           i.style.display = "none";
         });
-        // scroll_top.style.display = "none";
-        // scrollbottom.style.display = "none";
-        // scroll_right.style.display = "none";
-        // scroll_left.style.display = "none";
-        // artBar.forEach((i) => {
-        //   i.style.display = "none";
-        // });
-        // leftColBar.style.display = "none";
-        // headerBar.style.display = "none";
-        // footerBar.forEach((i) => {
-        //   i.style.display = "none";
-        // });
         hideElement();
         clearTimeout(timer);
       } else if (
@@ -222,54 +200,18 @@ function init() {
         scrollTop.forEach((i) => {
           i.style.display = "block";
         });
-        // scroll_top.style.display = "block";
-        // scrollbottom.style.display = "block";
-        // scroll_right.style.display = "block";
-        // scroll_left.style.display = "block";
-        // artBar.forEach((i) => {
-        //   i.style.display = "block";
-        // });
-        // leftColBar.style.display = "block";
-        // headerBar.style.display = "block";
-        // footerBar.forEach((i) => {
-        //   i.style.display = "block";
-        // });
         showElement();
         clearTimeout(timer);
       } else {
         scrollTop.forEach((i) => {
           i.style.display = "block";
         });
-        // scroll_top.style.display = "block";
-        // scrollbottom.style.display = "block";
-        // scroll_right.style.display = "block";
-        // scroll_left.style.display = "block";
-        // artBar.forEach((i) => {
-        //   i.style.display = "block";
-        // });
-        // leftColBar.style.display = "block";
-        // headerBar.style.display = "block";
-        // footerBar.forEach((i) => {
-        //   i.style.display = "block";
-        // });
         showElement();
         clearTimeout(timer);
         timer = setTimeout(() => {
           scrollTop.forEach((i) => {
             i.style.display = "none";
           });
-          // scroll_top.style.display = "none";
-          // scrollbottom.style.display = "none";
-          // scroll_right.style.display = "none";
-          // scroll_left.style.display = "none";
-          // artBar.forEach((i) => {
-          //   i.style.display = "none";
-          // });
-          // leftColBar.style.display = "none";
-          // headerBar.style.display = "none";
-          // footerBar.forEach((i) => {
-          //   i.style.display = "none";
-          // });
           hideElement();
         }, 2000);
       }
@@ -346,6 +288,21 @@ function init() {
       clearTimeout(scrollTimer);
       wrapper.classList.remove("onscroll");
     }
+
+    // 判断滚动方向逻辑
+    const afterScrollTop = wrapper.scrollTop;
+    const delta = afterScrollTop - beforeScrollTop;
+    console.log(delta, "delta");
+    if (delta === 0) return;
+    let isDown = false;
+    if (delta > 0) {
+      isDown = true;
+    } else {
+      isDown = false;
+    }
+    // 隐藏main逻辑
+    hideMain.init(isDown, wrapper);
+    beforeScrollTop = afterScrollTop;
   }
 
   wrapper.addEventListener("scroll", debounce(scroll, 0));
@@ -382,18 +339,6 @@ function init() {
     i.onmouseenter = function () {
       clearTimeout(timer);
       i.style.display = "block";
-      // scroll_top.style.display = "block";
-      // scrollbottom.style.display = "block";
-      // scroll_right.style.display = "block";
-      // scroll_left.style.display = "block";
-      // artBar.forEach((j) => {
-      //   j.style.display = "block";
-      // });
-      // leftColBar.style.display = "block";
-      // headerBar.style.display = "block";
-      // footerBar.forEach((i) => {
-      //   i.style.display = "block";
-      // });
       showElement();
     };
   });
@@ -406,34 +351,10 @@ function init() {
       ) {
         clearTimeout(timer);
         i.style.display = "block";
-        // scroll_top.style.display = "block";
-        // scrollbottom.style.display = "block";
-        // scroll_right.style.display = "block";
-        // scroll_left.style.display = "block";
-        // artBar.forEach((i) => {
-        //   i.style.display = "block";
-        // });
-        // leftColBar.style.display = "block";
-        // headerBar.style.display = "block";
-        // footerBar.forEach((i) => {
-        //   i.style.display = "block";
-        // });
         showElement();
       } else {
         timer = setTimeout(() => {
           i.style.display = "none";
-          // scroll_top.style.display = "none";
-          // scrollbottom.style.display = "none";
-          // scroll_right.style.display = "none";
-          // scroll_left.style.display = "none";
-          // artBar.forEach((i) => {
-          //   i.style.display = "none";
-          // });
-          // leftColBar.style.display = "none";
-          // headerBar.style.display = "none";
-          // footerBar.forEach((i) => {
-          //   i.style.display = "none";
-          // });
           hideElement();
         }, 2000);
       }
