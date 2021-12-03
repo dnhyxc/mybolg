@@ -1,16 +1,18 @@
 @media screen and (min-width: 800px) {
   .narrow {
-    margin-left: 7.6923%;
+    margin-left: 7.1%;
     width: 55%;
     padding: 22px 20px 1px 20px;
     background: rgba(225, 225, 225, 0.1);
   }
 
   ._narrow {
-    margin-left: 21%;
-    width: 49%;
+    margin-left: 22.96%;
+    width: 46.5%;
     padding: 22px 20px 1px 20px;
     background: rgba(225, 225, 225, 0.1);
+    box-shadow: 0 0 10px #ccc;
+    border-radius: 5px;
   }
 
   .artNobb {
@@ -18,7 +20,7 @@
   }
 }
 
-@media screen and (max-width: 2048px) {
+@media screen and (min-width: 2048px) {
   .narrow {
     margin-left: 13.7%;
     width: 40%;
