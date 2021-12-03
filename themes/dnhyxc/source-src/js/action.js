@@ -129,6 +129,36 @@ function init() {
     mainLoadingText = text;
   };
 
+  const hideElement = () => {
+    scroll_top.style.display = "none";
+    scrollbottom.style.display = "none";
+    scroll_right.style.display = "none";
+    scroll_left.style.display = "none";
+    artBar.forEach((i) => {
+      i.style.display = "none";
+    });
+    leftColBar.style.display = "none";
+    headerBar.style.display = "none";
+    footerBar.forEach((i) => {
+      i.style.display = "none";
+    });
+  };
+
+  const showElement = () => {
+    scroll_top.style.display = "block";
+    scrollbottom.style.display = "block";
+    scroll_right.style.display = "block";
+    scroll_left.style.display = "block";
+    artBar.forEach((i) => {
+      i.style.display = "block";
+    });
+    leftColBar.style.display = "block";
+    headerBar.style.display = "block";
+    footerBar.forEach((i) => {
+      i.style.display = "block";
+    });
+  };
+
   // 滚动事件
   function scroll() {
     const countInfo = `${parseInt(
@@ -153,35 +183,37 @@ function init() {
       scrollTop.forEach((i) => {
         i.style.display = "none";
       });
-      scroll_top.style.display = "none";
-      scrollbottom.style.display = "none";
-      scroll_right.style.display = "none";
-      scroll_left.style.display = "none";
-      artBar.forEach((i) => {
-        i.style.display = "none";
-      });
-      leftColBar.style.display = "none";
-      headerBar.style.display = "none";
-      footerBar.forEach((i) => {
-        i.style.display = "none";
-      });
+      // scroll_top.style.display = "none";
+      // scrollbottom.style.display = "none";
+      // scroll_right.style.display = "none";
+      // scroll_left.style.display = "none";
+      // artBar.forEach((i) => {
+      //   i.style.display = "none";
+      // });
+      // leftColBar.style.display = "none";
+      // headerBar.style.display = "none";
+      // footerBar.forEach((i) => {
+      //   i.style.display = "none";
+      // });
+      hideElement();
     } else {
       if (wrapper.scrollTop === 0) {
         scrollTop.forEach((i) => {
           i.style.display = "none";
         });
-        scroll_top.style.display = "none";
-        scrollbottom.style.display = "none";
-        scroll_right.style.display = "none";
-        scroll_left.style.display = "none";
-        artBar.forEach((i) => {
-          i.style.display = "none";
-        });
-        leftColBar.style.display = "none";
-        headerBar.style.display = "none";
-        footerBar.forEach((i) => {
-          i.style.display = "none";
-        });
+        // scroll_top.style.display = "none";
+        // scrollbottom.style.display = "none";
+        // scroll_right.style.display = "none";
+        // scroll_left.style.display = "none";
+        // artBar.forEach((i) => {
+        //   i.style.display = "none";
+        // });
+        // leftColBar.style.display = "none";
+        // headerBar.style.display = "none";
+        // footerBar.forEach((i) => {
+        //   i.style.display = "none";
+        // });
+        hideElement();
         clearTimeout(timer);
       } else if (
         Math.floor(wrapper.scrollHeight - wrapper.scrollTop) <=
@@ -190,59 +222,66 @@ function init() {
         scrollTop.forEach((i) => {
           i.style.display = "block";
         });
-        scroll_top.style.display = "block";
-        scrollbottom.style.display = "block";
-        scroll_right.style.display = "block";
-        scroll_left.style.display = "block";
-        artBar.forEach((i) => {
-          i.style.display = "block";
-        });
-        leftColBar.style.display = "block";
-        headerBar.style.display = "block";
-        footerBar.forEach((i) => {
-          i.style.display = "block";
-        });
+        // scroll_top.style.display = "block";
+        // scrollbottom.style.display = "block";
+        // scroll_right.style.display = "block";
+        // scroll_left.style.display = "block";
+        // artBar.forEach((i) => {
+        //   i.style.display = "block";
+        // });
+        // leftColBar.style.display = "block";
+        // headerBar.style.display = "block";
+        // footerBar.forEach((i) => {
+        //   i.style.display = "block";
+        // });
+        showElement();
         clearTimeout(timer);
       } else {
         scrollTop.forEach((i) => {
           i.style.display = "block";
         });
-        scroll_top.style.display = "block";
-        scrollbottom.style.display = "block";
-        scroll_right.style.display = "block";
-        scroll_left.style.display = "block";
-        artBar.forEach((i) => {
-          i.style.display = "block";
-        });
-        leftColBar.style.display = "block";
-        headerBar.style.display = "block";
-        footerBar.forEach((i) => {
-          i.style.display = "block";
-        });
+        // scroll_top.style.display = "block";
+        // scrollbottom.style.display = "block";
+        // scroll_right.style.display = "block";
+        // scroll_left.style.display = "block";
+        // artBar.forEach((i) => {
+        //   i.style.display = "block";
+        // });
+        // leftColBar.style.display = "block";
+        // headerBar.style.display = "block";
+        // footerBar.forEach((i) => {
+        //   i.style.display = "block";
+        // });
+        showElement();
         clearTimeout(timer);
         timer = setTimeout(() => {
           scrollTop.forEach((i) => {
             i.style.display = "none";
           });
-          scroll_top.style.display = "none";
-          scrollbottom.style.display = "none";
-          scroll_right.style.display = "none";
-          scroll_left.style.display = "none";
-          artBar.forEach((i) => {
-            i.style.display = "none";
-          });
-          leftColBar.style.display = "none";
-          headerBar.style.display = "none";
-          footerBar.forEach((i) => {
-            i.style.display = "none";
-          });
+          // scroll_top.style.display = "none";
+          // scrollbottom.style.display = "none";
+          // scroll_right.style.display = "none";
+          // scroll_left.style.display = "none";
+          // artBar.forEach((i) => {
+          //   i.style.display = "none";
+          // });
+          // leftColBar.style.display = "none";
+          // headerBar.style.display = "none";
+          // footerBar.forEach((i) => {
+          //   i.style.display = "none";
+          // });
+          hideElement();
         }, 2000);
       }
     }
 
     if (
       Utils.isInformal ||
-      (Utils.isArticle && !Utils.isArchives && !Utils.isCategories && !Utils.isPage && !Utils.isHome)
+      (Utils.isArticle &&
+        !Utils.isArchives &&
+        !Utils.isCategories &&
+        !Utils.isPage &&
+        !Utils.isHome)
     ) {
       if (wrapper.scrollTop <= 0) {
         articleToc.style.height = "calc(100vh - 225px)";
@@ -343,18 +382,19 @@ function init() {
     i.onmouseenter = function () {
       clearTimeout(timer);
       i.style.display = "block";
-      scroll_top.style.display = "block";
-      scrollbottom.style.display = "block";
-      scroll_right.style.display = "block";
-      scroll_left.style.display = "block";
-      artBar.forEach((j) => {
-        j.style.display = "block";
-      });
-      leftColBar.style.display = "block";
-      headerBar.style.display = "block";
-      footerBar.forEach((i) => {
-        i.style.display = "block";
-      });
+      // scroll_top.style.display = "block";
+      // scrollbottom.style.display = "block";
+      // scroll_right.style.display = "block";
+      // scroll_left.style.display = "block";
+      // artBar.forEach((j) => {
+      //   j.style.display = "block";
+      // });
+      // leftColBar.style.display = "block";
+      // headerBar.style.display = "block";
+      // footerBar.forEach((i) => {
+      //   i.style.display = "block";
+      // });
+      showElement();
     };
   });
 
@@ -366,33 +406,35 @@ function init() {
       ) {
         clearTimeout(timer);
         i.style.display = "block";
-        scroll_top.style.display = "block";
-        scrollbottom.style.display = "block";
-        scroll_right.style.display = "block";
-        scroll_left.style.display = "block";
-        artBar.forEach((i) => {
-          i.style.display = "block";
-        });
-        leftColBar.style.display = "block";
-        headerBar.style.display = "block";
-        footerBar.forEach((i) => {
-          i.style.display = "block";
-        });
+        // scroll_top.style.display = "block";
+        // scrollbottom.style.display = "block";
+        // scroll_right.style.display = "block";
+        // scroll_left.style.display = "block";
+        // artBar.forEach((i) => {
+        //   i.style.display = "block";
+        // });
+        // leftColBar.style.display = "block";
+        // headerBar.style.display = "block";
+        // footerBar.forEach((i) => {
+        //   i.style.display = "block";
+        // });
+        showElement();
       } else {
         timer = setTimeout(() => {
           i.style.display = "none";
-          scroll_top.style.display = "none";
-          scrollbottom.style.display = "none";
-          scroll_right.style.display = "none";
-          scroll_left.style.display = "none";
-          artBar.forEach((i) => {
-            i.style.display = "none";
-          });
-          leftColBar.style.display = "none";
-          headerBar.style.display = "none";
-          footerBar.forEach((i) => {
-            i.style.display = "none";
-          });
+          // scroll_top.style.display = "none";
+          // scrollbottom.style.display = "none";
+          // scroll_right.style.display = "none";
+          // scroll_left.style.display = "none";
+          // artBar.forEach((i) => {
+          //   i.style.display = "none";
+          // });
+          // leftColBar.style.display = "none";
+          // headerBar.style.display = "none";
+          // footerBar.forEach((i) => {
+          //   i.style.display = "none";
+          // });
+          hideElement();
         }, 2000);
       }
     };
@@ -419,8 +461,9 @@ function init() {
             decodeURIComponent(newPath).lastIndexOf("/") - 1
           ) + 1
         );
-        mainLoading.innerHTML = `${res.split("/")[0][0].toUpperCase() + res.split("/")[0].slice(1)
-          }-${res.split("/")[1]}`;
+        mainLoading.innerHTML = `${
+          res.split("/")[0][0].toUpperCase() + res.split("/")[0].slice(1)
+        }-${res.split("/")[1]}`;
       } else {
         // 设置头部main的逻辑
         const subPath = res.slice(0, res.length - 1);

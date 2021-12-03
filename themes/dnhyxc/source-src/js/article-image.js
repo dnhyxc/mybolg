@@ -10,7 +10,6 @@ function init() {
     article.classList.remove('hasImage')
     articleInner.classList.remove('hasImage-inner')
   }
-  console.log(article, 'article')
 }
 
 module.exports = {
