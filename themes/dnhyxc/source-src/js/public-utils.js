@@ -1,6 +1,8 @@
 const path = location.pathname;
 const reg = /\d/;
-const isArticle = reg.test(decodeURIComponent(path).substr("/"));
+const num = decodeURIComponent(path).substr("/").slice(1, 5);
+const isArticle = reg.test(num);
+// const isArticle = reg.test(decodeURIComponent(path).substr("/"));
 const isInformal = decodeURIComponent(path).substr("/").includes("informal");
 const isCategories = decodeURIComponent(path)
   .substr("/")
@@ -10,6 +12,10 @@ const isPerception = decodeURIComponent(path)
   .substr("/")
   .includes("perception");
 const isHome = path === "/";
+
+console.log(num, "num");
+console.log(isArticle, "isArticle");
+console.log(isInformal, "isInformal");
 
 const url = new URL(location.href);
 const isPage = url.pathname.includes("page");
@@ -157,4 +163,5 @@ module.exports = {
   getTimeState,
   setTimeInLoop,
   getPathname,
+  num,
 };

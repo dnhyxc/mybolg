@@ -164,11 +164,14 @@ function init() {
   let beforeScrollTop = 0;
   // 滚动事件
   function scroll() {
-    const countInfo = `${parseInt(
-      (Math.round(artWrap.scrollTop) /
+    let countInfo = `${parseInt(
+      (Math.ceil(artWrap.scrollTop) /
         (artWrap.scrollHeight - artWrap.offsetHeight)) *
         100
     )}%`;
+    if (artWrap.scrollTop / (artWrap.scrollHeight - artWrap.offsetHeight) > 1) {
+      countInfo = "100%";
+    }
     scrollCount.forEach((i) => {
       i.innerHTML = countInfo;
     });
@@ -292,13 +295,21 @@ function init() {
       artWrap.classList.remove("onscroll");
     }
 
-    if (!Utils.getSSG("lockHeader")) {
+    if (
+      !Utils.getSSG("lockHeader") &&
+      !(
+        Math.floor(artWrap.scrollHeight - artWrap.scrollTop) <=
+        artWrap.clientHeight
+      )
+    ) {
       // 判断滚动方向逻辑
       const afterScrollTop = artWrap.scrollTop;
-      const delta = afterScrollTop - beforeScrollTop;
-      if (delta === 0) return;
+      let delta = afterScrollTop - beforeScrollTop;
+      if (parseInt(delta) === 0) {
+        return;
+      }
       let isDown = false;
-      if (delta > 0) {
+      if (parseInt(delta) > 0) {
         isDown = true;
       } else {
         isDown = false;
