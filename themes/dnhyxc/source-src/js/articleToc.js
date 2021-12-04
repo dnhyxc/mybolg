@@ -1,5 +1,5 @@
 function init() {
-  const wrapper = document.querySelector('#wrapper');
+  const wrapper = document.querySelector('.artWrap');
   const articleToc = document.querySelector('.article-toc');
 
   if (articleToc) {

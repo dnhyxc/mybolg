@@ -22,8 +22,7 @@ function init() {
     const qrcode = document.querySelector("#qrcode");
     const qrcodeNarrow = document.querySelector("#qrcode-narrow");
     const talkNarrow = document.querySelector(".talk-narrow");
-    const domWrapper = document.querySelector("#wrapper");
-    // const talkCount = document.querySelector(".talk-count");
+    const domWrapper = document.querySelector(".artWrap");
 
     new QRcode(qrcodeNarrow, `https://dnhyxc.gitee.io${url}`);
     new QRcode(qrcode, `https://dnhyxc.gitee.io${url}`);

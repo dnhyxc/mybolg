@@ -4,7 +4,7 @@ function init() {
     const bodyHeight = document.body.clientHeight;
     if (jsContent && jsContent.clientHeight < bodyHeight - 148) {
       jsContent.style.marginBottom =
-        bodyHeight - jsContent.clientHeight - 148 + "px";
+        bodyHeight - jsContent.clientHeight - 79 + "px";
     } else {
       jsContent.style.marginBottom = 0;
     }

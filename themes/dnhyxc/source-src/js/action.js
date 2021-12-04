@@ -7,6 +7,7 @@ function init() {
   let tipsBox = document.querySelector(".tips-box");
   let tipsAs = tipsBox.querySelectorAll(".tips-a");
   let wrapper = document.querySelector("#wrapper");
+  let artWrap = document.querySelector(".artWrap");
   let changeSize = document.querySelector(".changeSize");
   let mainLoading = document.querySelector(".main-loading");
   let scrollTop = document.querySelectorAll("#scrollTop");
@@ -77,8 +78,8 @@ function init() {
   scrollTop.forEach((i) => {
     i.onclick = function () {
       const clock = setInterval(function () {
-        if (wrapper.scrollTop !== 0) {
-          wrapper.scrollTop -= Math.fround(wrapper.scrollTop / 10);
+        if (artWrap.scrollTop !== 0) {
+          artWrap.scrollTop -= Math.fround(artWrap.scrollTop / 10);
         } else {
           clearInterval(clock);
         }
@@ -164,8 +165,8 @@ function init() {
   // 滚动事件
   function scroll() {
     const countInfo = `${parseInt(
-      (Math.ceil(wrapper.scrollTop) /
-        (wrapper.scrollHeight - wrapper.offsetHeight)) *
+      (Math.round(artWrap.scrollTop) /
+        (artWrap.scrollHeight - artWrap.offsetHeight)) *
         100
     )}%`;
     scrollCount.forEach((i) => {
@@ -189,15 +190,15 @@ function init() {
       });
       hideElement();
     } else {
-      if (wrapper.scrollTop === 0) {
+      if (artWrap.scrollTop === 0) {
         scrollTop.forEach((i) => {
           i.style.display = "none";
         });
         hideElement();
         clearTimeout(timer);
       } else if (
-        Math.floor(wrapper.scrollHeight - wrapper.scrollTop) <=
-        wrapper.clientHeight
+        Math.floor(artWrap.scrollHeight - artWrap.scrollTop) <=
+        artWrap.clientHeight
       ) {
         scrollTop.forEach((i) => {
           i.style.display = "block";
@@ -227,7 +228,7 @@ function init() {
         !Utils.isPage &&
         !Utils.isHome)
     ) {
-      if (wrapper.scrollTop <= 0) {
+      if (artWrap.scrollTop <= 0) {
         articleToc.style.height = "calc(100vh - 225px)";
       } else {
         articleToc.style.height = "calc(100vh - 158px)";
@@ -235,7 +236,7 @@ function init() {
 
       // 处理目录逻辑
       h345.forEach((i) => {
-        if (wrapper.scrollTop + 20 >= i.offsetTop) {
+        if (artWrap.scrollTop + 20 >= i.offsetTop) {
           if (toTopHref.length <= 0) {
             toTopId.push(i.innerText);
             toTopHref.push(getText(i.children[0].href));
@@ -256,7 +257,7 @@ function init() {
       if (isSelect.length > 0) {
         isSelect[0].classList && isSelect[0].classList.add("select-toc");
         articleToc.scrollTop =
-          isSelect[0] && isSelect[0].offsetTop - wrapper.clientHeight / 2;
+          isSelect[0] && isSelect[0].offsetTop - artWrap.clientHeight / 2;
       }
 
       if (toTopId && toTopId[0]) {
@@ -264,7 +265,7 @@ function init() {
         mainLoading.title = toTopId[0];
       }
 
-      if (wrapper.scrollTop === 0) {
+      if (artWrap.scrollTop === 0) {
         isSelect.length &&
           isSelect[0].classList &&
           isSelect[0].classList.remove("select-toc");
@@ -282,18 +283,18 @@ function init() {
       Utils.isPerception
     ) {
       clearTimeout(scrollTimer);
-      wrapper.classList.add("onscroll");
+      artWrap.classList.add("onscroll");
       scrollTimer = setTimeout(() => {
-        wrapper.classList.remove("onscroll");
+        artWrap.classList.remove("onscroll");
       }, 500);
     } else {
       clearTimeout(scrollTimer);
-      wrapper.classList.remove("onscroll");
+      artWrap.classList.remove("onscroll");
     }
 
     if (!Utils.getSSG("lockHeader")) {
       // 判断滚动方向逻辑
-      const afterScrollTop = wrapper.scrollTop;
+      const afterScrollTop = artWrap.scrollTop;
       const delta = afterScrollTop - beforeScrollTop;
       if (delta === 0) return;
       let isDown = false;
@@ -308,7 +309,7 @@ function init() {
     }
   }
 
-  wrapper.addEventListener("scroll", debounce(scroll, 0));
+  artWrap.addEventListener("scroll", debounce(scroll, 0));
 
   function wrapperOnMouseMove(e) {
     if (
@@ -319,15 +320,15 @@ function init() {
       Utils.isPerception
     ) {
       if (
-        e.pageX - leftCol.offsetWidth + 10 > wrapper.offsetWidth &&
-        wrapper.scrollHeight > wrapper.clientHeight
+        e.pageX - leftCol.offsetWidth + 10 > artWrap.offsetWidth &&
+        artWrap.scrollHeight > artWrap.clientHeight
       ) {
         clearTimeout(scrollTimer);
-        wrapper.classList.add("onscroll");
+        artWrap.classList.add("onscroll");
       } else {
-        wrapper.classList.remove("onscroll");
+        artWrap.classList.remove("onscroll");
       }
-      if (e.pageX - leftCol.offsetWidth > wrapper.offsetWidth) {
+      if (e.pageX - leftCol.offsetWidth > artWrap.offsetWidth) {
         document.documentElement.style.cursor = "pointer";
       } else {
         document.documentElement.style.cursor = "initial";
@@ -349,8 +350,8 @@ function init() {
   scrollTop.forEach((i) => {
     i.onmouseleave = function () {
       if (
-        Math.floor(wrapper.scrollHeight - wrapper.scrollTop) <=
-        wrapper.clientHeight
+        Math.floor(artWrap.scrollHeight - artWrap.scrollTop) <=
+        artWrap.clientHeight
       ) {
         clearTimeout(timer);
         i.style.display = "block";

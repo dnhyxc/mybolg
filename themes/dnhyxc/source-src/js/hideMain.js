@@ -3,8 +3,9 @@ import menuList from "./menuList";
 
 function init(isDown, wrapper) {
   const main = document.querySelector(".main");
+  const tocLink = document.querySelector(".toc-link");
   wrapper.style.transition = "none";
-  if (isDown && !Utils.isHome && !Utils.isPage) {
+  if (isDown && (Utils.isArticle || Utils.isInformal)) {
     main.classList.add("hide");
     if (wrapper.getAttribute("class").includes("toggleWrap")) {
       wrapper.classList.add("hideMain-hideFooter");
