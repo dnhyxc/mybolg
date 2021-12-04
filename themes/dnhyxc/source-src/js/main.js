@@ -42,7 +42,7 @@ import music from "./music";
 
 import tocWordsLoop from "./tocWordsLoop";
 
-import articleImage from './article-image'
+import articleImage from "./article-image";
 
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
@@ -67,7 +67,7 @@ addLoadEvent(function () {
   share.init();
   music.init();
   tocWordsLoop.init();
-  articleImage.init()
+  articleImage.init();
 });
 
 function stopTouchmove(e) {
@@ -113,6 +113,13 @@ document.onreadystatechange = function () {
       menuList.hideFooter();
     } else {
       menuList.showFooter();
+    }
+    if (!Utils.getSSG("hideFooterSet")) {
+      Utils.removeSSG("hideFooter");
+      menuList.showFooter();
+    } else {
+      Utils.setSSG("hideFooter", true);
+      menuList.hideFooter();
     }
     if (Utils.getSSG("hideMenu")) {
       menuList.onHideMenu();

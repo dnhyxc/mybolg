@@ -1,17 +1,18 @@
 import * as Utils from "./public-utils";
 import atticleNarrow from "./atticle-narrow";
 import { showMusicControl, hideMusicControl } from "./music";
+import LockHeader from "./lockHeader";
 
-function hideFooter() {
+function hideFooter(fromHideMain) {
   const endFooter = document.querySelector(".end-footer");
   const afterFooter = document.querySelector(".after-footer");
   const bodyWrap = document.querySelector(".body-wrap");
   const articleToc = document.querySelector(".article-toc");
-  const browserCover = document.querySelector(".browserCover");
   const perceptionLife = document.querySelector(".perception-life");
   const scrollWrap = document.querySelectorAll(".scrollWrap");
   const changeFooter = document.querySelector(".changeFooter");
-  const article = document.querySelector('.article');
+  const article = document.querySelector(".article");
+  let wrapper = document.querySelector("#wrapper");
 
   endFooter && endFooter.classList.add("toggleEndFooter");
   afterFooter && afterFooter.classList.add("toggleAfterFooter");
@@ -24,8 +25,13 @@ function hideFooter() {
     });
   changeFooter.innerHTML = "显底";
   if (Utils.isHome || Utils.isPage) {
-    article.classList.add('hasImage-hideFooter')
+    article.classList.add("hasImage-hideFooter");
   }
+  if (wrapper.getAttribute("class").includes("hideMain")) {
+    wrapper.classList.remove("hideMain");
+    wrapper.classList.add("hideMain-hideFooter");
+  }
+  if (!fromHideMain) wrapper.style.transition = "height 0.3s ease";
 }
 
 function showFooter() {
@@ -33,11 +39,10 @@ function showFooter() {
   const afterFooter = document.querySelector(".after-footer");
   const bodyWrap = document.querySelector(".body-wrap");
   const articleToc = document.querySelector(".article-toc");
-  const browserCover = document.querySelector(".browserCover");
   const perceptionLife = document.querySelector(".perception-life");
   const scrollWrap = document.querySelectorAll(".scrollWrap");
   const changeFooter = document.querySelector(".changeFooter");
-  const article = document.querySelector('.article');
+  const article = document.querySelector(".article");
 
   endFooter && endFooter.classList.remove("toggleEndFooter");
   afterFooter && afterFooter.classList.remove("toggleAfterFooter");
@@ -50,8 +55,14 @@ function showFooter() {
     });
   changeFooter.innerHTML = "隐底";
   if (Utils.isPage || Utils.isHome) {
-    article.classList.remove('hasImage-hideFooter')
+    article.classList.remove("hasImage-hideFooter");
   }
+
+  if (wrapper.getAttribute("class").includes("hideMain-hideFooter")) {
+    wrapper.classList.remove("hideMain-hideFooter");
+    wrapper.classList.add("hideMain");
+  }
+  wrapper.style.transition = "height 0.3s ease";
 }
 
 function onHideMenu() {
@@ -74,7 +85,6 @@ function init() {
   const authorName = document.querySelector(".authorName");
   const menuList = document.querySelector(".menuList");
   const listWrap = menuList.querySelector(".listWrap");
-  const list = menuList.querySelector(".list");
   const changeFooter = document.querySelector(".changeFooter");
   const hideMenu = document.querySelector(".hideMenu");
   const aplayer = document.querySelector("#aplayer");
@@ -87,6 +97,11 @@ function init() {
     });
 
     changeFooter.addEventListener("click", () => {
+      if (Utils.getSSG("hideFooterSet")) {
+        Utils.removeSSG("hideFooterSet");
+      } else {
+        Utils.setSSG("hideFooterSet", true);
+      }
       if (Utils.getSSG("hideFooter")) {
         Utils.removeSSG("hideFooter");
       } else {
@@ -144,6 +159,7 @@ function init() {
       }
     });
   }
+  LockHeader.init();
 }
 
 module.exports = {

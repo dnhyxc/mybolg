@@ -35,7 +35,7 @@ function setNarrow() {
     articleInfo && articleInfo.classList.add("artNobb");
     if (articleToc) articleToc.style.display = "block";
     if (headerToc) headerToc.style.display = "none";
-    if (changeInfo) changeInfo.style.right = "75px";
+    // if (changeInfo) changeInfo.style.right = "75px";
   }
 }
 
@@ -67,7 +67,7 @@ function removeNarrow() {
     articleInfo && articleInfo.classList.remove("artNobb");
     if (articleToc) articleToc.style.display = "none";
     if (headerToc) headerToc.style.display = "block";
-    if (changeInfo) changeInfo.style.right = "123px";
+    // if (changeInfo) changeInfo.style.right = "133px";
   }
 }
 

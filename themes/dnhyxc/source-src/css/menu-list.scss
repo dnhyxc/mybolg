@@ -125,7 +125,6 @@
   height: calc(100vh - 80px) !important;
 }
 
-
 .article {
   .isArticleBrowserCover {
     height: 500px;
@@ -147,6 +146,7 @@
   right: -68px !important;
   top: initial !important;
   left: initial !important;
+  transform: translateX(-75px) !important;
 
   #scrollTop {
     &:hover {

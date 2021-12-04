@@ -164,7 +164,9 @@ function init() {
   // 滚动事件
   function scroll() {
     const countInfo = `${parseInt(
-      (wrapper.scrollTop / (wrapper.scrollHeight - wrapper.offsetHeight)) * 100
+      (Math.ceil(wrapper.scrollTop) /
+        (wrapper.scrollHeight - wrapper.offsetHeight)) *
+        100
     )}%`;
     scrollCount.forEach((i) => {
       i.innerHTML = countInfo;
@@ -289,20 +291,21 @@ function init() {
       wrapper.classList.remove("onscroll");
     }
 
-    // 判断滚动方向逻辑
-    const afterScrollTop = wrapper.scrollTop;
-    const delta = afterScrollTop - beforeScrollTop;
-    console.log(delta, "delta");
-    if (delta === 0) return;
-    let isDown = false;
-    if (delta > 0) {
-      isDown = true;
-    } else {
-      isDown = false;
+    if (!Utils.getSSG("lockHeader")) {
+      // 判断滚动方向逻辑
+      const afterScrollTop = wrapper.scrollTop;
+      const delta = afterScrollTop - beforeScrollTop;
+      if (delta === 0) return;
+      let isDown = false;
+      if (delta > 0) {
+        isDown = true;
+      } else {
+        isDown = false;
+      }
+      // 隐藏main逻辑
+      hideMain.init(isDown, wrapper);
+      beforeScrollTop = afterScrollTop;
     }
-    // 隐藏main逻辑
-    hideMain.init(isDown, wrapper);
-    beforeScrollTop = afterScrollTop;
   }
 
   wrapper.addEventListener("scroll", debounce(scroll, 0));
