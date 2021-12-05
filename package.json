@@ -6,9 +6,9 @@
     "build": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
-    "server": "hexo server",
+    "server": "hexo server -p 9211",
     "pro": "hexo deploy",
-    "cgs": "hexo clean && hexo generate && hexo server",
+    "cgs": "hexo clean && hexo generate && hexo server -p 9211",
     "cgd": "hexo clean && hexo generate && hexo deploy",
     "cg": "hexo clean && hexo generate",
     "start": "hexo server"
