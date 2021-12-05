@@ -5,9 +5,11 @@
   }
 
   .left-menu {
-    position: absolute;
-    left: 0;
+    position: fixed;
+    left: 10px;
+    top: 10px;
     border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     box-shadow: 0 0 5px #ccc inset;
     z-index: 999;
     cursor: pointer;

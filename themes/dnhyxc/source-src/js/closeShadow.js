@@ -1,7 +1,6 @@
 import * as Utils from "./public-utils";
 
 function removeShadow() {
-  const articles = document.querySelectorAll(".article");
   const archivesWrap = document.querySelectorAll(".archives-wrap");
   const menuTexts = document.querySelectorAll(".menu-text");
   const tipsText = document.querySelectorAll(".tips-text");
@@ -16,10 +15,9 @@ function removeShadow() {
   const leftColBar = document.querySelector(".leftColBar");
   const artBar = document.querySelectorAll(".artBar");
   const closeShadow = document.querySelector(".closeShadow");
+  const artWrap = document.querySelector(".artWrap");
 
-  articles.forEach((i) => {
-    i.classList.remove("isShowShadow");
-  });
+  artWrap.classList.remove("isShowShadow");
   archivesWrap.forEach((i) => {
     i.classList.remove("isShowShadow");
   });
@@ -35,24 +33,22 @@ function removeShadow() {
   artBar.forEach((i) => {
     i.classList.remove("isShowShadow-art");
   });
-  outer.forEach((i) => {
-    i.classList.remove("isShowShadow");
-  });
+  outer && outer.length && outer[1].classList.remove("isShowShadow");
   leftCol.classList.remove("isShowShadow");
   headerBar.classList.remove("isShowShadow-header");
   leftColBar.classList.remove("isShowShadow-left");
   main.classList.remove("isShowShadow");
-  // outer.classList.remove("isShowShadow");
-  toolsSections && toolsSections.length > 0 && toolsSections.forEach(i => {
-    i.classList.remove("isShowShadow");
-  })
+  toolsSections &&
+    toolsSections.length > 0 &&
+    toolsSections.forEach((i) => {
+      i.classList.remove("isShowShadow");
+    });
   dark.classList.remove("isShow-shadow");
   toggleMusic.classList.remove("isShow-shadow");
   closeShadow.innerHTML = "隐影";
 }
 
 function addShadow() {
-  const articles = document.querySelectorAll(".article");
   const archivesWrap = document.querySelectorAll(".archives-wrap");
   const menuTexts = document.querySelectorAll(".menu-text");
   const tipsText = document.querySelectorAll(".tips-text");
@@ -67,10 +63,9 @@ function addShadow() {
   const leftColBar = document.querySelector(".leftColBar");
   const artBar = document.querySelectorAll(".artBar");
   const closeShadow = document.querySelector(".closeShadow");
+  const artWrap = document.querySelector(".artWrap");
 
-  articles.forEach((i) => {
-    i.classList.add("isShowShadow");
-  });
+  artWrap.classList.add("isShowShadow");
   archivesWrap.forEach((i) => {
     i.classList.add("isShowShadow");
   });
@@ -86,14 +81,12 @@ function addShadow() {
   artBar.forEach((i) => {
     i.classList.add("isShowShadow-art");
   });
-  outer.forEach((i) => {
-    i.classList.add("isShowShadow");
-  });
+  outer && outer.length && outer[1].classList.add("isShowShadow");
   leftCol.classList.add("isShowShadow");
   main.classList.add("isShowShadow");
-  toolsSections.forEach(i => {
+  toolsSections.forEach((i) => {
     i.classList.add("isShowShadow");
-  })
+  });
   headerBar.classList.add("isShowShadow-header");
   leftColBar.classList.add("isShowShadow-left");
   dark.classList.add("isShow-shadow");
@@ -122,7 +115,6 @@ function init() {
     }
   };
   closeShadow.onclick = toggleShadow;
-  // profilepic.onclick = toggleShadow;
 }
 
 module.exports = {
