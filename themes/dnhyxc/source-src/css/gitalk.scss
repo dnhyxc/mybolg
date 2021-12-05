@@ -1,7 +1,8 @@
 #gitalk-container {
   .gt-container {
     padding: 0 8px 15px 8px;
-    box-shadow: 0 0 3px #ccc inset;
+    border-top: 1px solid rgba(225, 225, 225, 0.2);
+    // box-shadow: 0 0 3px #ccc inset;
 
     .gt-btn-preview {
       box-shadow: 0 0 5px #ccc inset;

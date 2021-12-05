@@ -61,7 +61,7 @@ module.exports = {
       vue$: "vue/dist/vue.common.js",
     },
   },
-  // devtool: '#eval-source-map',
+  devtool: '#eval-source-map',
   postcss: function () {
     return [autoprefixer];
   },

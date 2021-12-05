@@ -10,12 +10,12 @@
     // transition: height 0.3s ease;
   }
 
-  .body-wrap.onscroll {
+  .artWrap.onscroll {
     padding: 0 2px 0 10px;
   }
 }
 
-.body-wrap.onscroll::-webkit-scrollbar {
+.artWrap.onscroll::-webkit-scrollbar {
   width: 8px;
   height: 8px;
   display: block;

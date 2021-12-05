@@ -13,10 +13,6 @@ const isPerception = decodeURIComponent(path)
   .includes("perception");
 const isHome = path === "/";
 
-console.log(num, "num");
-console.log(isArticle, "isArticle");
-console.log(isInformal, "isInformal");
-
 const url = new URL(location.href);
 const isPage = url.pathname.includes("page");
 

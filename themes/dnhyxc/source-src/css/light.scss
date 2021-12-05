@@ -343,6 +343,11 @@
       }
     }
 
+    .artWrap {
+      box-shadow: none;
+      background-color: #fff;
+    }
+
     #scrollTop {
       border-color: transparent transparent #ccc;
 
@@ -358,6 +363,9 @@
     .article {
       background-color: #fff !important;
       box-shadow: initial;
+      // border-top: 1px solid #eee;
+      // border-bottom: 1px solid #eee;
+      box-shadow: 0 0 2px #ccc;
 
       .coverInfo {
         color: #333;

@@ -93,6 +93,7 @@
 
       .outer {
         @include outerStyle;
+        box-shadow: none;
 
         .scrollWrap {
           display: none;

@@ -5,7 +5,6 @@ function setNarrow() {
   const changeSize = document.querySelector(".changeSize");
   const articleToc = document.querySelector(".article-toc");
   const headerToc = document.querySelector(".wrap-side-operation");
-  const changeInfo = document.querySelector(".change-info");
   const articleAction = document.querySelector(".article-action");
   const share = document.querySelector(".share");
   const articleInfo = document.querySelector(".article-info");
@@ -35,7 +34,6 @@ function setNarrow() {
     articleInfo && articleInfo.classList.add("artNobb");
     if (articleToc) articleToc.style.display = "block";
     if (headerToc) headerToc.style.display = "none";
-    // if (changeInfo) changeInfo.style.right = "75px";
   }
 }
 
@@ -44,7 +42,6 @@ function removeNarrow() {
   const changeSize = document.querySelector(".changeSize");
   const articleToc = document.querySelector(".article-toc");
   const headerToc = document.querySelector(".wrap-side-operation");
-  const changeInfo = document.querySelector(".change-info");
   const articleAction = document.querySelector(".article-action");
   const share = document.querySelector(".share");
   const articleInfo = document.querySelector(".article-info");
@@ -67,7 +64,6 @@ function removeNarrow() {
     articleInfo && articleInfo.classList.remove("artNobb");
     if (articleToc) articleToc.style.display = "none";
     if (headerToc) headerToc.style.display = "block";
-    // if (changeInfo) changeInfo.style.right = "133px";
   }
 }
 

@@ -2,6 +2,7 @@ import * as Utils from "./public-utils";
 import atticleNarrow from "./atticle-narrow";
 import { showMusicControl, hideMusicControl } from "./music";
 import LockHeader from "./lockHeader";
+import SectionHeight from "./section-height";
 
 function hideFooter(fromHideMain) {
   const endFooter = document.querySelector(".end-footer");
@@ -12,7 +13,7 @@ function hideFooter(fromHideMain) {
   const scrollWrap = document.querySelectorAll(".scrollWrap");
   const changeFooter = document.querySelector(".changeFooter");
   const article = document.querySelector(".article");
-  let wrapper = document.querySelector("#wrapper");
+  const wrapper = document.querySelector("#wrapper");
 
   endFooter && endFooter.classList.add("toggleEndFooter");
   afterFooter && afterFooter.classList.add("toggleAfterFooter");
@@ -112,6 +113,7 @@ function init() {
       } else {
         showFooter();
       }
+      SectionHeight.init();
     });
 
     hideMenu.addEventListener("click", () => {
