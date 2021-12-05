@@ -17,9 +17,9 @@ function init() {
     article && article.classList.remove("noBorder");
   }
   if (Utils.isInformal) {
-    article && articleInfo.classList.add("noBorderB");
+    article && articleInfo && articleInfo.classList.add("noBorderB");
   } else {
-    article && articleInfo.classList.remove("noBorderB");
+    article && articleInfo && articleInfo.classList.remove("noBorderB");
   }
 }
 
