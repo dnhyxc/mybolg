@@ -70,7 +70,10 @@
   transition: box-shadow 0.3s ease;
   border-top: 1px solid rgba(225, 225, 225, 0.2);
   border-bottom: 1px solid rgba(225, 225, 225, 0.2);
-  border-top-left-radius: 0;
+
+  @media screen and (min-width: 800px) {
+    border-top-left-radius: 0;
+  }
 
   &:first-child {
     border-top: none;
@@ -135,16 +138,18 @@
     font-size: 14px;
   }
 
-  &::before {
-    content: "";
-    position: absolute;
-    left: -9px;
-    top: -1px;
-    width: 9px;
-    height: 91px;
-    background-color: #ffd900;
-    border-top-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+  @media screen and (min-width: 800px) {
+    &::before {
+      content: "";
+      position: absolute;
+      left: -10px;
+      top: -1px;
+      width: 10px;
+      height: 91px;
+      background-color: #ffd900;
+      border-top-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
   }
 }
 
