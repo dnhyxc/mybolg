@@ -277,6 +277,10 @@ function init() {
       }
     }
 
+    let t1 = 0;
+    let t2 = 0;
+    let isEndScrollTimer = null;
+
     // 处理滚动条
     if (
       (articleEntry &&
@@ -285,13 +289,16 @@ function init() {
       Utils.isCategories ||
       Utils.isPerception
     ) {
-      clearTimeout(scrollTimer);
       artWrap.classList.add("onscroll");
-      scrollTimer = setTimeout(() => {
-        artWrap.classList.remove("onscroll");
-      }, 500);
+      clearTimeout(isEndScrollTimer);
+      t1 = artWrap.scrollTop;
+      isEndScrollTimer = setTimeout(() => {
+        t2 = artWrap.scrollTop;
+        if (t1 === t2) {
+          artWrap.classList.remove("onscroll");
+        }
+      }, 1000);
     } else {
-      clearTimeout(scrollTimer);
       artWrap.classList.remove("onscroll");
     }
 
@@ -334,7 +341,6 @@ function init() {
         e.pageX - leftCol.offsetWidth + 10 > artWrap.offsetWidth &&
         artWrap.scrollHeight > artWrap.clientHeight
       ) {
-        clearTimeout(scrollTimer);
         artWrap.classList.add("onscroll");
       } else {
         artWrap.classList.remove("onscroll");
