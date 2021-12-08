@@ -342,18 +342,11 @@ function init() {
         artWrap.scrollHeight > artWrap.clientHeight
       ) {
         artWrap.classList.add("onscroll");
-      } else {
-        artWrap.classList.remove("onscroll");
-      }
-      if (e.pageX - leftCol.offsetWidth > artWrap.offsetWidth) {
-        document.documentElement.style.cursor = "pointer";
-      } else {
-        document.documentElement.style.cursor = "initial";
       }
     }
   }
 
-  document.addEventListener("mousemove", debounce(wrapperOnMouseMove, 100));
+  document.addEventListener("mouseover", debounce(wrapperOnMouseMove, 100));
 
   // 置顶逻辑
   scrollTop.forEach((i) => {

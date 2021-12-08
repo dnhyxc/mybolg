@@ -61,8 +61,7 @@ module.exports = {
       vue$: "vue/dist/vue.common.js",
     },
   },
-  devtool:
-    process.env.NODE_ENV === "development" ? "#eval-source-map" : "#source-map",
+  devtool: process.env.NODE_ENV === "development" ? "#eval-source-map" : false,
   postcss: function () {
     return [autoprefixer];
   },
@@ -85,24 +84,16 @@ module.exports = {
       template: "./source-src/css.ejs",
       filename: "../layout/_partial/css.ejs",
     }),
-  ],
+    process.env.NODE_ENV === "production"
+      ? new webpack.optimize.UglifyJsPlugin({
+          compress: {
+            warnings: false,
+          },
+        })
+      : null,
+    process.env.NODE_ENV === "production"
+      ? new webpack.optimize.OccurenceOrderPlugin()
+      : null,
+  ].filter(Boolean),
   watch: true,
 };
-
-if (process.env.NODE_ENV === "production") {
-  module.exports.devtool = "#source-map";
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: '"production"',
-      },
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-    }),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new CleanPlugin("builds"),
-  ]);
-}
