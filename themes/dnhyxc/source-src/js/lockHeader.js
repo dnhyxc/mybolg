@@ -13,6 +13,16 @@ function init() {
   });
 }
 
+function setLocktext() {
+  const lockHeader = document.querySelector(".lockHeader");
+  if (Utils.getSSG("lockHeader")) {
+    lockHeader.innerHTML = "解锁";
+  } else {
+    lockHeader.innerHTML = "锁定";
+  }
+}
+
 module.exports = {
   init,
+  setLocktext,
 };

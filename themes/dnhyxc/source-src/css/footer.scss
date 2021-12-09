@@ -107,14 +107,14 @@
   }
 
   .end-footer {
-    // position: absolute;
-    // width: 100%;
-    position: fixed;
-    width: calc(100% - 270px);
+    position: absolute;
+    width: 100%;
+    // position: fixed;
+    // width: calc(100% - 270px);
     right: 0;
     bottom: 0;
-    transition: all 0.3s ease;
-    // transition: bottom 0.3s ease;
+    // transition: all 0.3s ease;
+    transition: bottom 0.3s ease;
 
     #footer {
       font-size: 12px;
@@ -138,10 +138,10 @@
   }
 
   .toggleEndFooter {
-    // position: absolute;
-    // width: 100%;
-    position: fixed;
-    width: calc(100% - 270px);
+    position: absolute;
+    width: 100%;
+    // position: fixed;
+    // width: calc(100% - 270px);
     right: 0;
     bottom: -80px;
     transition: none 0.3s ease;

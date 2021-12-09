@@ -44,6 +44,8 @@ import tocWordsLoop from "./tocWordsLoop";
 
 import articleImage from "./article-image";
 
+import lockHeader from "./lockHeader";
+
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
@@ -142,6 +144,8 @@ document.onreadystatechange = function () {
     } else {
       atticleNarrow.removeNarrow();
     }
+
+    lockHeader.setLocktext();
   } else {
     document.body.addEventListener("touchmove", stopTouchmove, {
       passive: false,
