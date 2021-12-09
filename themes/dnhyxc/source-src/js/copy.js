@@ -17,7 +17,7 @@ function init() {
     }
 
     if (article && code) {
-      const copyToClipboard = (str, dom) => {
+      const copyToClipboard = (str, dom) => {s
         const el = document.createElement("textarea");
         el.value = str;
         // 防止唤起虚拟键盘

@@ -4,11 +4,11 @@
  * (c) 2016 Daniel Yang
  * Released under the MIT License.
  */
- 
+
 /**
  * Just support modern browser
  */
- 
+
 (function webpackUniversalModuleDefinition(root, factory) {
     if(typeof exports === 'object' && typeof module === 'object')
         module.exports = factory();
@@ -22,41 +22,41 @@
 return /******/ (function(modules) { // webpackBootstrap
 /******/    // The module cache
 /******/    var installedModules = {};
- 
+
 /******/    // The require function
 /******/    function __webpack_require__(moduleId) {
- 
+
 /******/        // Check if module is in cache
 /******/        if(installedModules[moduleId])
 /******/            return installedModules[moduleId].exports;
- 
+
 /******/        // Create a new module (and put it into the cache)
 /******/        var module = installedModules[moduleId] = {
 /******/            exports: {},
 /******/            id: moduleId,
 /******/            loaded: false
 /******/        };
- 
+
 /******/        // Execute the module function
 /******/        modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
- 
+
 /******/        // Flag the module as loaded
 /******/        module.loaded = true;
- 
+
 /******/        // Return the exports of the module
 /******/        return module.exports;
 /******/    }
- 
- 
+
+
 /******/    // expose the modules object (__webpack_modules__)
 /******/    __webpack_require__.m = modules;
- 
+
 /******/    // expose the module cache
 /******/    __webpack_require__.c = installedModules;
- 
+
 /******/    // __webpack_public_path__
 /******/    __webpack_require__.p = "";
- 
+
 /******/    // Load entry module and return exports
 /******/    return __webpack_require__(0);
 /******/ })
@@ -64,19 +64,19 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ([
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
- 
+
     var utils = __webpack_require__(1),
         _ = __webpack_require__(3),
         factory = __webpack_require__(4)
- 
+
     _.extend(utils, _);
     module.exports = factory(utils);
- 
- 
+
+
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
- 
+
     var noop = function () {},
         defer = window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
@@ -103,12 +103,12 @@ return /******/ (function(modules) { // webpackBootstrap
                 };
             }
         }();
- 
+
     _alpaca && (_alpaca = _alpaca.getAttribute('alpaca'));
- 
+
     function _loopPriority(el, res, setting) {
         var attr, tmp;
- 
+
         // TODO need optimization
         for (var j = 0, l = priorities.length; j < l; j++) {
             attr = 'q-' + priorities[j];
@@ -117,14 +117,14 @@ return /******/ (function(modules) { // webpackBootstrap
                     name: attr,
                     value: tmp
                 });
- 
+
                 el.removeAttribute(attr);
                 // has priority directive
                 return true;
             }
         }
     }
- 
+
     function walk($el, cb, setting) {
         setting = setting || {};
         var i, j, l, el, atts, res, qtid;
@@ -132,7 +132,7 @@ return /******/ (function(modules) { // webpackBootstrap
             if (el.nodeType === 1) {
                 atts = el.attributes;
                 res = [];
- 
+
                 // loop the priority directive
                 if (!_loopPriority(el, res, setting)) {
                     // loop other directive
@@ -152,7 +152,7 @@ return /******/ (function(modules) { // webpackBootstrap
             setting.stop = false;
         }
     }
- 
+
     module.exports = {
         slice: slice,
         noop: noop,
@@ -226,28 +226,28 @@ return /******/ (function(modules) { // webpackBootstrap
          */
         alpaca: !!_alpaca
     };
- 
- 
+
+
 /***/ },
 /* 2 */
 /***/ function(module, exports) {
- 
+
     /**
      * just a copy of: https://github.com/yyx990803/vue/blob/master/src/cache.js
      *
      * @param {Number} limit
      * @constructor
      */
- 
+
     function Cache (limit) {
         this.size = 0;
         this.limit = limit;
         this.head = this.tail = undefined;
         this._keymap = {};
     }
- 
+
     var p = Cache.prototype;
- 
+
     /**
      * Put <value> into the cache associated with <key>.
      * Returns the entry which was removed to make room for
@@ -258,7 +258,7 @@ return /******/ (function(modules) { // webpackBootstrap
      * @param {*} value
      * @return {Entry|undefined}
      */
- 
+
     p.put = function (key, value) {
         var entry = {
             key:key,
@@ -278,13 +278,13 @@ return /******/ (function(modules) { // webpackBootstrap
             this.size++;
         }
     };
- 
+
     /**
      * Purge the least recently used (oldest) entry from the
      * cache. Returns the removed entry or undefined if the
      * cache was empty.
      */
- 
+
     p.shift = function () {
         var entry = this.head;
         if (entry) {
@@ -295,7 +295,7 @@ return /******/ (function(modules) { // webpackBootstrap
         }
         return entry;
     };
- 
+
     /**
      * Get and register recent use of <key>. Returns the value
      * associated with <key> or undefined if not in cache.
@@ -304,7 +304,7 @@ return /******/ (function(modules) { // webpackBootstrap
      * @param {Boolean} returnEntry
      * @return {Entry|*}
      */
- 
+
     p.get = function (key, returnEntry) {
         var entry = this._keymap[key];
         if (entry === undefined) return;
@@ -336,14 +336,14 @@ return /******/ (function(modules) { // webpackBootstrap
             entry :
             entry.value;
     }
- 
+
     module.exports = Cache;
- 
- 
+
+
 /***/ },
 /* 3 */
 /***/ function(module, exports) {
- 
+
     var DELEGATOR_CALLBACKS_KEY = '__cbs__',
         NO_DELEGATOR = {
             // prevent mouseover trigger more than one time
@@ -366,11 +366,11 @@ return /******/ (function(modules) { // webpackBootstrap
         _expando = 'QDataUid',
         _uid = 0,
         _map = {};
- 
+
     function contains(a, b) {
         return a !== b && a.contains(b);
     }
- 
+
     function data(el, key, value) {
         var uid = el[_expando] = el[_expando] || ++_uid,
             data = _map[uid] = _map[uid] || {};
@@ -378,13 +378,13 @@ return /******/ (function(modules) { // webpackBootstrap
         if (value === undefined) return data[key];
         return (data[key] = value);
     }
- 
+
     function add(el, evt, fn) {
         evt.split(' ').forEach(function (e) {
             el.addEventListener(e, fn, false);
         });
     }
- 
+
     module.exports = {
         find: function (selector) {
             return this.slice.call(document.querySelectorAll(selector), 0);
@@ -438,27 +438,27 @@ return /******/ (function(modules) { // webpackBootstrap
             return _extend.apply(this, arguments);
         }
     };
- 
- 
+
+
 /***/ },
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
- 
+
     module.exports = function (_) {
- 
+
         var Seed = __webpack_require__(5),
             events = __webpack_require__(6),
             MARK = /\{\{(.+?)\}\}/,
             mergeOptions = __webpack_require__(7).mergeOptions,
             clas = __webpack_require__(8),
             _doc = document;
- 
+
         function _inDoc(ele) {
             return _.contains(_doc.documentElement, ele);
         }
- 
+
         // lifecycle: created -> compiled
- 
+
         /**
          * Q
          * @class
@@ -521,12 +521,12 @@ return /******/ (function(modules) { // webpackBootstrap
                 // events bookkeeping
                 this._events = {};
                 this._watchers = {};
- 
+
                 // components
                 this._children = [];
                 // components references
                 this.$ = {};
- 
+
                 Seed.call(this, options);
                 // this._data = options.data;
                 // initialize data and scope inheritance.
@@ -568,7 +568,7 @@ return /******/ (function(modules) { // webpackBootstrap
                 this.$on(event, on);
                 return this;
             },
- 
+
             /**
              * Remove the given callback for `event` or all
              * registered callbacks.
@@ -576,7 +576,7 @@ return /******/ (function(modules) { // webpackBootstrap
              * @param {String} event
              * @param {Function} fn
              */
- 
+
             $off: function (event, fn) {
                 var cbs, cb, i;
                 // all event
@@ -652,7 +652,7 @@ return /******/ (function(modules) { // webpackBootstrap
             _initScope: function () {
                 this._initMethods();
             },
- 
+
             /**
              * Setup instance methods. Methods must be bound to the
              * instance since they might be called by children
@@ -666,7 +666,7 @@ return /******/ (function(modules) { // webpackBootstrap
                     }
                 }
             },
- 
+
             /**
              * Set instance target element and kick off the compilation
              * process. The passed in `el` can be a template string, an
@@ -694,7 +694,7 @@ return /******/ (function(modules) { // webpackBootstrap
                     this.$once('hook:attached', this._ready);
                 }
             },
- 
+
             /**
              * ready
              */
@@ -732,12 +732,12 @@ return /******/ (function(modules) { // webpackBootstrap
                 // just bind template
                 this._templateBind(el, options);
             },
- 
+
             /**
              * bind rendered template
              */
             _templateBind: __webpack_require__(11),
- 
+
             /**
              * Trigger all handlers for a hook
              *
@@ -752,7 +752,7 @@ return /******/ (function(modules) { // webpackBootstrap
                 }
                 this.$emit('hook:' + hook);
             },
- 
+
             _makeReadFilters: function (names, $this) {
                 if (!names.length) return [];
                 var filters = this.$options.filters,
@@ -776,7 +776,7 @@ return /******/ (function(modules) { // webpackBootstrap
                     };
                 });
             },
- 
+
             /**
              * Apply filters to a value
              *
@@ -795,19 +795,19 @@ return /******/ (function(modules) { // webpackBootstrap
                 return value;
             }
         });
- 
+
         _.extend(Q.prototype, Seed.prototype);
- 
+
         return Q;
     };
- 
- 
+
+
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
- 
+
     var _ = __webpack_require__(1);
- 
+
     /**
      * prefix data
      * @param {Data || DataArray} up
@@ -827,12 +827,12 @@ return /******/ (function(modules) { // webpackBootstrap
             },
             // old value
             oldVal = top.data ? top.data(up.$namespace(key)) : undefined;
- 
+
         if (typeof value === 'object' && value !== null) {
             up[key] =   isArray ?
                 new DataArray(options) :
                     new Data(options);
- 
+
             // trigger data change
             trigger && up.$change(up.$namespace(key), up[key], oldVal);
         } else if (oldVal !== value) {
@@ -842,17 +842,17 @@ return /******/ (function(modules) { // webpackBootstrap
         }
         if (!(~up._keys.indexOf(key))) up._keys.push(key);
     }
- 
+
     function _isArray(obj) {
         return Array.isArray(obj) || obj instanceof DataArray;
     }
- 
+
     function _getLength(keys) {
         return keys.filter(function (key) {
             return typeof key === 'number';
         }).length;
     }
- 
+
     /**
      * Data
      * @class
@@ -866,9 +866,9 @@ return /******/ (function(modules) { // webpackBootstrap
                     return +num + '' === num ? +num : num;
                 }),
             self = this;
- 
+
         _.extend(this, data);
- 
+
         // all key need to traverse
         this._keys = keys;
         // parent data container
@@ -970,7 +970,7 @@ return /******/ (function(modules) { // webpackBootstrap
             }
         }
     });
- 
+
     /**
      * DataArray
      * Something just like Array
@@ -999,7 +999,7 @@ return /******/ (function(modules) { // webpackBootstrap
                 res: res,
                 args: values
             }, 1);
- 
+
             return this;
         },
         /**
@@ -1105,7 +1105,7 @@ return /******/ (function(modules) { // webpackBootstrap
             return res;
         }
     });
- 
+
     /**
      * Seed
      * @param {Object} options
@@ -1159,17 +1159,17 @@ return /******/ (function(modules) { // webpackBootstrap
             return data[key];
         }
     });
- 
+
     module.exports = Seed;
- 
- 
+
+
 /***/ },
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
- 
+
     var Data = __webpack_require__(5),
         _ = __webpack_require__(1);
- 
+
     function emit(key, args, target) {
         // set the trigger target is pass in or this
         target = target || this;
@@ -1189,7 +1189,7 @@ return /******/ (function(modules) { // webpackBootstrap
             emit.call(this.$parent, key, args, target);
         }
     }
- 
+
     function callChange(key, args) {
         var self = {
             _events: this._watchers
@@ -1197,12 +1197,12 @@ return /******/ (function(modules) { // webpackBootstrap
         emit.call(self, key, args);
         emit.call(self, key + '**deep**', args);
     }
- 
+
     function callDeep(key, args) {
         var props, nArgs,
             keys = key.split('.'),
             self = { _events: this._watchers };
- 
+
         for (keys.pop(); keys.length > 0; keys.pop()) {
             key = keys.join('.');
             props = key + '**deep**';
@@ -1212,20 +1212,20 @@ return /******/ (function(modules) { // webpackBootstrap
         // emit vm is change
         emit.call(self, '**deep**', [this]);
     }
- 
+
     module.exports = {
         emit: emit,
         callChange: callChange,
         callDeep: callDeep
     };
- 
- 
+
+
 /***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
- 
+
     var _ = __webpack_require__(1);
- 
+
     var strats = {};
     strats.created =
     strats.ready =
@@ -1251,13 +1251,13 @@ return /******/ (function(modules) { // webpackBootstrap
       if (!parentVal) return childVal;
       return _.extend({}, parentVal, childVal);
     };
- 
+
     var defaultStrat = function (parentVal, childVal) {
         return childVal === undefined ?
             parentVal :
             childVal;
     };
- 
+
     /**
      * Option overwriting strategies are functions that handle
      * how to merge a parent option value and a child option
@@ -1285,38 +1285,38 @@ return /******/ (function(modules) { // webpackBootstrap
         }
         return options;
     }
- 
+
     module.exports = {
         strats: strats,
         mergeOptions: mergeOptions
     }
- 
- 
+
+
 /***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
- 
+
     // Modules map
     var modules = {},
         mergeOptions = __webpack_require__(7).mergeOptions,
         listeners = {};
- 
+
     function _define(name, options) {
         if (modules[name]) return false;
         var module = modules[name] = this.extend(options || {});
         return module;
     }
- 
+
     function _require(name, callback) {
         return modules[name] || this;
     }
- 
+
     function _create(o) {
         function F() {}
         F.prototype = o;
         return new F();
     }
- 
+
     function _extend(extendOptions) {
         extendOptions = extendOptions || {};
         var Super = this,
@@ -1333,14 +1333,14 @@ return /******/ (function(modules) { // webpackBootstrap
         })
         return Sub;
     }
- 
+
     function createClass (name) {
         return new Function(
             'return function ' + name +
             ' (options) { this._init(options) }'
         )();
     }
- 
+
     module.exports = {
         /**
          * define
@@ -1366,23 +1366,23 @@ return /******/ (function(modules) { // webpackBootstrap
          */
         extend: _extend
     };
- 
- 
+
+
 /***/ },
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
- 
+
     var _ = __webpack_require__(1),
         strats = __webpack_require__(7);
- 
+
     var PROP_REG = /^(.*)\.([\w\-]+)$/
- 
+
     module.exports = {
         cloak: {
             bind: function () {
                 var vm = this.vm,
                     el = this.el;
- 
+
                 // after ready
                 vm.$once('hook:ready', function () {
                     // if data change
@@ -1456,7 +1456,7 @@ return /******/ (function(modules) { // webpackBootstrap
         },
         text: function (value) {
             var text;
- 
+
             value !== undefined &&
                 (text = (typeof this.el.textContent === 'string') ?
                     'textContent' : 'innerText') &&
@@ -1493,7 +1493,7 @@ return /******/ (function(modules) { // webpackBootstrap
                             else args.push(self.data(arg));
                         }) :
                         args.push(e);
- 
+
                     handler.apply(vm, args);
                 });
             }
@@ -1528,7 +1528,7 @@ return /******/ (function(modules) { // webpackBootstrap
             bind: function () {
                 // stop walk
                 this.setting.stop = true;
- 
+
                 // which component
                 var name = this.target,
                     vm = this.vm,
@@ -1539,15 +1539,15 @@ return /******/ (function(modules) { // webpackBootstrap
                     data = Child.options.data,
                     options,
                     childVm;
- 
+
                 options = {
                     el: el,
                     data: data,
                     _parent: vm
                 };
- 
+
                 childVm = new Child(options);
- 
+
                 vm._children.push(childVm);
                 ref && !function () {
                     var refs = vm.$[ref];
@@ -1563,7 +1563,7 @@ return /******/ (function(modules) { // webpackBootstrap
             bind: function () {
                 // return if el is a template
                 if (!this.el.parentNode) return;
- 
+
                 var tpl = this.el,
                     parentNode = tpl.parentNode,
                     ref = document.createComment('q-if'),
@@ -1575,9 +1575,9 @@ return /******/ (function(modules) { // webpackBootstrap
                     readFilters = this.filters,
                     data = this.data(),
                     vm = this.vm;
- 
+
                 this.setting.stop = true;
- 
+
                 function _init(value) {
                     // no exist no bind
                     if (hasInit || !exist || !value) return;
@@ -1588,10 +1588,10 @@ return /******/ (function(modules) { // webpackBootstrap
                         immediate: true
                     });
                 }
- 
+
                 vm.$watch(target, function (value, oldVal) {
                     value = vm.applyFilters(value, readFilters, oldVal);
- 
+
                     _init(value);
                     // need to init
                     if (value === exist) return;
@@ -1604,7 +1604,7 @@ return /******/ (function(modules) { // webpackBootstrap
                         parentNode.replaceChild(ref, tpl);
                         exist = value;
                     }
- 
+
                     _init(value);
                 }, typeof this.data(key) === 'object', true);
             }
@@ -1616,12 +1616,12 @@ return /******/ (function(modules) { // webpackBootstrap
         },
         repeat: __webpack_require__(10)
     };
- 
- 
+
+
 /***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
- 
+
     var _ = __webpack_require__(1);
         var methods = {
             'default': {
@@ -1671,8 +1671,8 @@ return /******/ (function(modules) { // webpackBootstrap
                 }
             }
         };
- 
- 
+
+
     function splice(watchers, target, i, l) {
         var length = target.length,
             subKey,
@@ -1696,7 +1696,7 @@ return /******/ (function(modules) { // webpackBootstrap
             }
         });
     }
- 
+
     exports.bind = function () {
         var tpl = this.el,
             setting = this.setting,
@@ -1704,10 +1704,10 @@ return /******/ (function(modules) { // webpackBootstrap
             key, namespace, target, readFilters, repeats, ref, vm;
         // return
         if (!parentNode || setting.stop) return;
- 
+
         // stop binding
         setting.stop = true;
- 
+
         key = this.target;
         namespace = this.namespace;
         target = _.get(namespace, key);
@@ -1715,9 +1715,9 @@ return /******/ (function(modules) { // webpackBootstrap
         repeats = [];
         ref = document.createComment('q-repeat');
         vm = this.vm;
- 
+
         parentNode.replaceChild(ref, tpl);
- 
+
         vm.$watch(target, function (value, oldVal, patch) {
             value = vm.applyFilters(value, readFilters);
             // if value is undefined or null just return
@@ -1726,17 +1726,17 @@ return /******/ (function(modules) { // webpackBootstrap
                 dp = (methods[method] || {}).dp,
                 clean = (methods[method] || {}).clean,
                 insert = (methods[method] || {}).insert;
- 
+
             // if dp exists, proceess data
             dp && (value = dp(value, patch));
- 
+
             if (clean && clean(parentNode, repeats, value, vm._watchers, target) === true) {
                 return;
             }
- 
+
             var fragment = document.createDocumentFragment(),
                 itemNode;
- 
+
             value.forEach(function (obj, i) {
                 itemNode = _.clone(tpl);
                 vm._templateBind(itemNode, {
@@ -1748,29 +1748,29 @@ return /******/ (function(modules) { // webpackBootstrap
                 repeats.push(itemNode);
                 fragment.appendChild(itemNode);
             });
- 
+
             insert && insert(parentNode, fragment, ref);
             vm.$emit('repeat-render');
         }, false, true);
     }
- 
- 
+
+
 /***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
- 
+
     var parse = __webpack_require__(12),
         _ = __webpack_require__(1);
- 
+
     module.exports = function (el, options) {
         options = options || {};
- 
+
         var self = this,
             directives = self.$options.directives,
             index = options.index,
             data = options.data || self,
             namespace = options.namespace;
- 
+
         _.walk([el], function (node, res, setting) {
             res.forEach(function (obj) {
                 var name = obj.name.substring(2),
@@ -1794,7 +1794,7 @@ return /******/ (function(modules) { // webpackBootstrap
                                 filters: readFilters
                             }),
                             tmp = that.data(key);
- 
+
                         update && self.$watch(target, function (value, oldValue) {
                             value = self.applyFilters(value, readFilters, oldValue);
                             update.call(that, value, oldValue);
@@ -1804,12 +1804,12 @@ return /******/ (function(modules) { // webpackBootstrap
             });
         });
     };
- 
- 
+
+
 /***/ },
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
- 
+
     var cache = new (__webpack_require__(2))(1000),
         tokens = [
             // space
@@ -1868,7 +1868,7 @@ return /******/ (function(modules) { // webpackBootstrap
         var name = str,
             hit = cache.get(name);
         if (hit) return hit;
- 
+
         var res = [],
             captures,
             i,
@@ -1884,7 +1884,7 @@ return /******/ (function(modules) { // webpackBootstrap
                     filters: []
                 }
             };
- 
+
         while (str.length) {
             for (i = 0; i < l; i++) {
                 if (captures = tokens[i][0].exec(str)) {
@@ -1907,12 +1907,12 @@ return /******/ (function(modules) { // webpackBootstrap
                 throw new Error('Syntax error at: ' + str);
             }
         }
- 
+
         res.push(status.token);
         cache.put(name, res);
         return res;
     }
- 
+
     function parseFilter(str, token) {
         var i, l = filterTokens.length,
             has = false;
@@ -1934,10 +1934,10 @@ return /******/ (function(modules) { // webpackBootstrap
             }
         }
     }
- 
+
     module.exports = parse;
- 
- 
+
+
 /***/ }
 /******/ ])
 });

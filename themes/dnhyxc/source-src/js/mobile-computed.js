@@ -4,7 +4,7 @@ function init() {
   const offsetHeight = wrapper.offsetHeight;
   const bodyHeight = document.body.offsetHeight;
   const height = offsetHeight + offsetTop;
-  if (bodyHeight > height + 75) {
+  if (bodyHeight > height + 75 && document.body.clientWidth <= 800) {
     wrapper.style.marginBottom = bodyHeight - height - 75 + "px";
   }
 }
