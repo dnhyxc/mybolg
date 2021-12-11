@@ -305,6 +305,7 @@ document.body.appendChild(myImage);
 const span = document.createElement("span");
 span.classList.add("icon");
 span.innerHTML = "&#xe668;";
+document.body.appendChild(span);
 ```
 
 #### asset/inline
