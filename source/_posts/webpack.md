@@ -2,6 +2,8 @@
 title: webpack5
 date: 2020-12-09 09:02:09
 tags: webpack
+categories:
+  - 构建工具
 ---
 
 ### webpack5
@@ -22,6 +24,8 @@ npm init -y
 npm i webpack webpack-cli webpack-dev-server -D
 ```
 
+<!-- more -->
+
 #### entry 配置
 
 1、entry 用于配置打包时的入口，其属性及配置如下：
@@ -38,7 +42,7 @@ module.exports = {
 
 - clean：用于清除上次打包生成的 dist 或 build 文件夹。
 
-- filename：用于配置打包输出的文件名称。
+- filename：用于配置打包输出的文件名称，我们可以通过 filename 中的**substitutions** 设置来定义输出文件的名称。webpack 提供了一种使用称为substitutions（）
 
 - path：用于配置打包输出的文件夹路径。
 
@@ -100,8 +104,6 @@ plugins: [
   }),
 ];
 ```
-
-<!-- more -->
 
 ### 资源文件
 
@@ -246,6 +248,162 @@ module.exports = {
 
 > 注意：要使压缩 css 生效，必须将 mode 设置为生产模式。
 
+#### 加载数据
+
+1、类似于 NodeJS，webpack 加载 JSON 文件实际上是内置的，也就是说 `import Data from './data.json'`，但要导入 CSV、TSV、XML 这些资源就需要使用 **csv-loader 和 xml-loader**。
+
+```
+npm i csv-loader xml-loader -D
+```
+
+2、具体配置如下：
+
+```js
+module: {
+  rules: [
+    {
+      test: /\.(csv|tsv)$/,
+      use: ["csv-loader"],
+    },
+    {
+      test: /\.xml$/,
+      use: ["xml-loader"],
+    },
+  ];
+}
+```
+
+3、使用如上配置，就可以直接在 js 文件中导入 csv、xml 等资源了：
+
+```js
+import Data from "./assets/data.xml";
+import Notes from "./assets/data.csv";
+
+console.log(Data);
+console.log(Notes);
+```
+
+#### 自定义 JSON 模块 parser
+
+1、通过自定义 parser 代替特定的 webpack loader，可以将任何 toml、yaml 或 json5 文件作为 JSON 模块导入。但要完成这个需求需要安装如下插件：
+
+```
+npm i toml yaml json5 -D
+```
+
+2、在 webpack.config.js 文件中设置如下配置：
+
+```js
+// ...
+const toml = require("toml");
+const yaml = require("yaml");
+const json5 = require("json5");
+
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      {
+        test: /\.toml$/,
+        type: "json",
+        parser: {
+          parse: toml.parse,
+        },
+      },
+      {
+        test: /\.yaml$/,
+        type: "json",
+        parser: {
+          parse: yaml.parse,
+        },
+      },
+      {
+        test: /\.json5$/,
+        type: "json",
+        parser: {
+          parse: json5.parse,
+        },
+      },
+    ],
+  },
+};
+```
+
+3、设置了如上配置之后，就可以在 js 中导入使用上述资源了：
+
+```js
+import toml from "./assets/data.toml";
+import yaml from "./assets/data.yaml";
+import json5 from "./assets/data.json5";
+
+console.log(toml);
+console.log(yaml);
+console.log(json5);
+```
+
+#### babel-loader
+
+1、babel-loader 可以将 es6 的 js 代码编译成 es5 的代码，如下 es6 中的 async await 的写法就可通过 babel-loader 编译成低版本浏览器可识别的 es5 的写法：
+
+- 在入口 js 文件中写入如下代码：
+
+```js
+function getString() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("Hello world");
+    }, 2000);
+  });
+}
+
+async function helloWorld() {
+  const string = await getString();
+  console.log(string);
+}
+```
+
+> 如果在低版本的浏览器中运行上述代码，如果没有被 babel-loader 转义，在页面将不能正常显示。
+
+2、要使用 babel-loader，需要安装如下几个 loader：
+
+```
+npm i babel-loader @babel/core @babel/preset-env -D
+```
+
+- babel-loader：在 webpack 里用于解析 ES6 的桥梁。
+
+- @babel/core：babel 核心模块。
+
+- @babel/preset-env：babel 预设，一组 babel 插件的集合。
+
+3、为了兼容 async/await 语法，webpack 会用到 regeneratorRuntime 插件。此时就需要安装 **@babel/runtime、@babel/plugin-transform-runtime** 这两个插件。否则在解析 async/await 语法的时候就会报错。
+
+- @babel/plugin-transform-runtime：会在需要使用到 regeneratorRuntime 的地方自动 require 导包。
+
+```
+npm i @babel/runtime @babel/plugin-transform-runtime -D
+```
+
+4、具体配置如下：
+
+```js
+module: {
+  rules: [
+    {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: {
+        loader: "babel-loader",
+        options: {
+          presets: ["@babel/preset-env"],
+          plugins: [["@babel/plugin-transform-runtime"]],
+        },
+      },
+    },
+  ];
+}
+```
+
 ### 资源模块
 
 #### asset/resource
@@ -381,3 +539,235 @@ module: {
   ]
 }
 ```
+
+### 代码分离
+
+#### 常用的代码分离方法
+
+1、在入口起点中使用 entry 配置多入口手动分离代码。
+
+2、使用 Entry dependencies 或者 SplitChunksPlugin 去重和分离代码。
+
+3、使用动态导入，通过模块的内联函数调用来分离代码。
+
+#### 入口起点的方式
+
+1、使用多入口的方式，可以将多个入口的 js 文件单独打包到不同的文件中，从而实现代码的分离。
+
+2、这种方式需要更改 output 配置中的 filename 属性，即使用 webpack 内置的写法，自动获取输出文件的文件名称，使分离的文件不会使用同一个出口，防止报错。
+
+```js
+// ...
+module.exports = {
+  entry: {
+    index: "./src/index.js",
+    another: "./src/another-module.js",
+  },
+
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "./dist"),
+    clean: true,
+  },
+};
+```
+
+> 上述配置会将 index.js 及 another-module.js 分别输出到 dist 文件中，及将会在 dist 文件中同时生成 index.bundle.js 及 another.bundle.js 文件。而在输出的 index.html 文件中也会同时引入这两个 js 文件。
+
+3、使用 entry 配置多入口分离代码会存在一个致命的缺点，就是如果在入口的 chunk 之间，包含一些重复的代码，这些重复的代码就会被引入到各自的 bundle 中。
+
+- 如果在 index.js 中以及 another-module.js 中同时使用 lodash 的话，将会将 lodash 分别打包进入这两个 js 文件中，导致 lodash 重复打包。
+
+#### 防止重复打包
+
+1、需要在入口依赖中配置 dependOn option 选项，这样可以在多个 chunk 之间共享模块：
+
+```js
+module.exports = {
+  entry: {
+    index: {
+      import: "./src/index.js",
+      dependOn: "shared",
+    },
+
+    another: {
+      import: "./src/another-module.js",
+      dependOn: "shared",
+    },
+
+    shared: "lodash",
+  },
+
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "./dist"),
+    clean: true,
+  },
+};
+```
+
+> 上述配置就实现了将 lodash 单独打包到 shared.bundle.js 文件中，而在 打包输出的文件中，会同时引入 index.bundle.js、another.bundle.js 及 shared.bundle.js。这样就让 index.js 及 another-module.js 能够共享 lodash。而不需要将 lodash 打包到自己的文件中。
+
+2、除了上述方法之外，还可以使用 webpack 内置的插件 **split-chunks-Plugin** 来实现防止代码的重复打包：
+
+```js
+module.exports = {
+  entry: {
+    index: "./src/index.js",
+    another: "./src/another-module.js",
+  },
+
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "./dist"),
+    clean: true,
+  },
+
+  optimization: {
+    minimizer: [
+      // ...
+    ],
+    splitChunks: {
+      chunks: "all",
+    },
+  },
+};
+```
+
+#### 动态导入
+
+1、当涉及到动态代码拆分时，webpack 提供了两个类似的技术，第一种，也是推荐选择的方式是使用符合 ECMAScript 提案的 **import()** 语法来实现动态导入。第二种，则是 webpack 的遗留功能，使用 webpack 特定的 require.ensure。
+
+2、webpack.config.js 具体配置如下：
+
+```js
+module.exports = {
+  entry: {
+    index: "./src/index.js",
+  },
+
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "./dist"),
+    clean: true,
+  },
+};
+```
+
+3、在 src 中创建一个使用第三方模块 lodash 的 async-module.js 文件，其内容如下：
+
+```js
+function getComponent() {
+  return import("lodash").then(({ default: _ }) => {
+    const element = document.createElement("div");
+    element.innerHtml = _.join(["hello", "webpack"], " ");
+    return element;
+  });
+}
+
+getComponent().then((element) => {
+  document.body.appendChild(element);
+});
+```
+
+> 上述 js 文件最终需要在入口 js 文件中引入使用。
+
+4、入口 index.js 文件内容：
+
+```js
+import "async-module.js";
+```
+
+5、如果在入口 index.js 文件中即引入了使用 import() 动态导入的 lodash，同时也使用了静态导入的 lodash 时，为了使这两种方式都生效，就需要在 webpack.config.js 中开启 splitChunks 的配置。
+
+```js
+module.exports = {
+  entry: {
+    index: "./src/index.js",
+    another: "./src/another-module.js",
+  },
+
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "./dist"),
+    clean: true,
+  },
+
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+    },
+  },
+};
+```
+
+- 入口 index.js 文件内容如下：
+
+```js
+import _ from "lodash";
+import "async-module.js";
+
+console.log(_.join(["hello", "world", "-index"], " "));
+```
+
+> 使用上述配置，即可将 import() 动态导入的 lodash 和 index.js 中静态导入的 lodash 及 another.module.js 中导入的 lodash 共同打包到同一个 bundle 文件中。实现 lodash 的多方共享，同时也避免了重复打包。
+
+#### 使用动态导入实现懒加载
+
+1、懒加载或者按需加载，是一种很好的优化网页或应用的方式，这种方式实际上是先把你的代码在一些逻辑断点处分离开，然后在一些代码块中完成某些操作后，立即引用或即将引用另外一些新的代码块。这样加快了应用的初始加载速度，减轻了它的总体体积，因为某些代码，如果你不触发，可能永远不会被加载。
+
+2、创建一个 math.js 文件，在主页中通过点击按钮调用其中的函数：
+
+```js
+export const add = () => {
+  return x + y;
+};
+
+export const minus = () => {
+  return x - y;
+};
+```
+
+3、编辑 index.js 文件：
+
+```js
+const button = document.createElement("button");
+button.textContent = "点击进行加法运算";
+button.addEventListener("click", () => {
+  import(/* webpackChunkName: 'math' */ "./math.js").then(({ add }) => {
+    console.log(add(2, 9));
+  });
+});
+document.body.appendChild(button);
+```
+
+> 上述代码中的注释 `/* webpackChunkName: math */` 称之为 webpack 魔法注释，用来告诉 webpack 打包生成的文件名为 math，即该文件会单独打包到一个 bundle 中。文件名称为 math。该文件如果没有触发按钮，将永远不会被加载，可以从浏览器的 network 中进行验证。
+
+#### 动态导入实现预加载/预获取模块
+
+1、webpack v4.6.0+ 增加了对与获取和预加载的支持。在声明 import 时，使用下面这些内置指令就可以让 webpack 输出 "resource hint（资源提示）"，来告诉浏览器什么时候去加载该资源：
+
+- prefetch（预获取）：将来某些导航下可能需要的资源。
+
+- preload（预加载）：当前导航下可能需要的资源。
+
+2、prefetch 的简单使用方式如下，编辑 index.js 文件：
+
+```js
+const button = document.createElement("button");
+button.textContent = "点击进行加法运算";
+button.addEventListener("click", () => {
+  import(
+    /* webpackChunkName: 'math', webpackPrefetch: true */ "./math.js"
+  ).then(({ add }) => {
+    console.log(add(2, 9));
+  });
+});
+document.body.appendChild(button);
+```
+
+> 添加 `webpackPrefetch: true` 这句魔法注释用于告诉 webpack 执行预加载，这回生成 `<link rel="prefetch" href="math.js">` 并追加到页面头部，指示着浏览器在闲置的时候获取 math.js 文件。
+> `webpackPreload: true` 功能效果类似于懒加载。
+
+### 缓存
+
