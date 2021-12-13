@@ -78,6 +78,30 @@ module.exports = {
 
 > contenthash：表示根据文件的内容来生成一个 hash 字符串，ext 则表示文件的扩展名，这些都是 webpack 内置的写法。
 
+#### 环境变量
+
+1、想要消除 webpack.config.js 在**开发环境**和**生产环境**之间的差异，就需要环境变量。
+
+2、webpack 命令行环境变量的 **--env** 参数，可以允许传入任意数量的环境变量。而在 webpack.config.js 中可以访问到这些环境变量。例如：`--env production` 或 `--env goal=local`
+
+```
+npx webpack --env production --goal=local --progress
+```
+
+3、注意：要使用 env 变量，必须将 module.exports 转换成函数的形式：
+
+```js
+module.exports = (env) => {
+  const isDev = env.production ? false : true;
+
+  return {
+    // ...
+    mode: isDev ? "production" : "development",\
+    // ...
+  };
+};
+```
+
 #### webpack-dev-server
 
 1、webpack-dev-server 可以提供一个基本的 web server，并且具有 live reloading（实时重新加载）功能。
@@ -846,4 +870,101 @@ optimization: {
     }
   }
 },
+```
+
+### 项目基本打包配置
+
+#### webpack.config.dev.js
+
+```js
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const toml = require("toml");
+const yaml = require("yaml");
+const json5 = require("json5");
+
+module.exports = {
+  entry: {
+    index: "./src/index.js",
+  },
+
+  output: {
+    filename: "scripts/[name].[ext]",
+    path: path.resolve(__dirname, "../dist"),
+    clean: true,
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.(css|less)$/,
+        use: ["style-loader", "css-loader", "less-loader"],
+      },
+      {
+        test: /\.(png|jpg|jpeg)$/,
+        type: "asset/resource",
+        generator: {
+          filename: "images/[contenthash][ext]",
+        },
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        type: "asset/resource",
+      },
+      {
+        test: /\.(csv|tsv)$/,
+        type: "csv-loader",
+      },
+      {
+        test: /\.xml$/,
+        type: "xml-loader",
+      },
+      {
+        test: /\.toml$/,
+        type: "json",
+        parser: {
+          parse: toml.parse,
+        },
+      },
+      {
+        test: /\.svg$/,
+        type: "asset/inline",
+      },
+      {
+        test: /\.txt$/,
+        type: "asset/source",
+      },
+      {
+        test: /\.jpg$/,
+        type: "asset",
+        parser: {
+          dataUrlCondition: {
+            maxSize: 4 * 1204 * 1024,
+          },
+        },
+      },
+    ],
+  },
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./index.html",
+      filename: "index.html",
+    }),
+
+    new MiniCssExtractPlugin({
+      filename: "styles[contenthash].css",
+    }),
+  ],
+
+  devServer: {
+    static: "./dist",
+  },
+
+  devtool: "inline-source-map",
+
+  mode: "development",
+};
 ```
