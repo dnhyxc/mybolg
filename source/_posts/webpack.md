@@ -42,21 +42,37 @@ module.exports = {
 
 - clean：用于清除上次打包生成的 dist 或 build 文件夹。
 
-- filename：用于配置打包输出的文件名称，我们可以通过 filename 中的**substitutions** 设置来定义输出文件的名称。webpack 提供了一种使用称为substitutions（）
+- filename：用于配置打包输出的文件名称，我们可以通过 filename 中的 **substitutions** 设置来定义输出文件的名称。webpack 提供了一种使用称为 substitutions（可替换模板字符串）的方式，通过带括号字符串来模板化文件名。其中 **[contenthash]** substitutions 将根据资源内容创建出唯一 hash。当资源内容发生变化时，contenthash 也会发生变化。
 
 - path：用于配置打包输出的文件夹路径。
 
 - assetModuleFilename：用于设置打包输出的资源模块（图片等）的文件名及路径。如：`assetModuleFilename: "images/test.png"` 就是将打包的资源模块输出到 dist 文件夹中的 images 文件夹下，名字为 test.png。
 
+- publicPath：该属性用于配置公共路径。这个配置在各种场景中都非常有用，我们可以通过它来指定应用程序中所有资源的基础路径。
+
+  - 基于环境变量设置：在开发环境中，我们通常有一个 asset/ 文件夹，它与索引页面位于同一级别，这没太大问题，但是如果我们将所有的静态资源托管到 CDN 上，然后想在生产环境中使用该怎么解决呢？想要解决这个问题，可以直接使用环境变量，假设有一个环境变量 ASSET_PATH：
+
 ```js
+import webpack from "webpack";
+
+const ASSET_PATH = process.env.ASSET_PATH || "/";
+
 module.exports = {
   // ...
   output: {
-    filename: "bundle.js",
+    filename: "[name].[contenthash].[ext]",
     path: path.reslove(__dirname, "./dist"),
     clean: true,
     assetModuleFilename: "images/[contenthash][ext]",
+    publicPath: "ASSET_PATH",
   },
+
+  plugins: [
+    // 该配置可以帮助我们在代码中安全的使用环境变量
+    new webpack.DefinePlugin({
+      "process.env.ASSET_PATH": JSON.stringify(ASSET_PATH),
+    }),
+  ],
 };
 ```
 
@@ -246,6 +262,35 @@ module.exports = {
 };
 ```
 
+#### 压缩 js
+
+1、压缩 js 本是 webpack 开箱即用的功能，但是如果在 optimization.minimizer 中配置了压缩 css 的功能之后，这个开箱即用的功能就失效了，需要单独配置，此时需要单独配置 **terser-webpack-plugin** 来实现：
+
+```
+npm i terser-webpack-plugin -D
+```
+
+2、具体配置如下：
+
+```js
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+
+module.exports = {
+  // ...
+  optimization: {
+    minimizer: [
+      // 压缩css
+      new CssMinimizerPlugin();
+      // 压缩js
+      new TerserPlugin();
+    ]
+  },
+
+  mode: 'production',
+};
+```
+
 > 注意：要使压缩 css 生效，必须将 mode 设置为生产模式。
 
 #### 加载数据
@@ -404,7 +449,7 @@ module: {
 }
 ```
 
-### 资源模块
+### [资源模块](https://webpack.docschina.org/guides/asset-modules/)
 
 #### asset/resource
 
@@ -542,6 +587,12 @@ module: {
 
 ### 代码分离
 
+#### 为什么要进行代码分离
+
+1、当没有进行代码分离时：假设 a.html 引用了 a.js，b.html 引用了 b.js，而 a.js 和 b.js 都引用了一个 24kb 的 lodash，这时假设用户先访问了 a.html，再访问 b.html，那么用户访问 a.html 的时候下载 a.js 有 24kb+，之后 a.js 被浏览器缓存，用户访问 b.html 的时候下载 b.js 有 24kb+，然后 b.js 被浏览器缓存，这样用户一共下载了 48kb+ 的内容，显然 lodash 被下载了两次。而且 lodash 没有被浏览器缓存（缓存的是 a.js 和 b.js）。
+
+2、代码分离之后：这时候将 lodash 单独打包放到 vendor.js 中，当用户访问 a.html 的时候会下载 a.js 和 vendor.js，同时 a.js 和 vendor.js 会被浏览器缓存，用户再访问 b.html 的时候，只会下载 b.js，而不会再去下载 vendor.js，因为会直接使用缓存中的 vendor.js。这样就只下载了一次 lodash，省下了 24kb+ 的带宽，同时还提升了访问速度。
+
 #### 常用的代码分离方法
 
 1、在入口起点中使用 entry 配置多入口手动分离代码。
@@ -608,7 +659,13 @@ module.exports = {
 
 > 上述配置就实现了将 lodash 单独打包到 shared.bundle.js 文件中，而在 打包输出的文件中，会同时引入 index.bundle.js、another.bundle.js 及 shared.bundle.js。这样就让 index.js 及 another-module.js 能够共享 lodash。而不需要将 lodash 打包到自己的文件中。
 
-2、除了上述方法之外，还可以使用 webpack 内置的插件 **split-chunks-Plugin** 来实现防止代码的重复打包：
+2、除了上述方法之外，还可以使用 webpack 内置的插件 **[split-chunks-plugin](https://webpack.docschina.org/plugins/split-chunks-plugin/)** 来实现防止代码的重复打包：
+
+- splitChunks.minSize：生成 chunk 的最小体积（以 bytes 为单位），默认是 20000。
+
+- splitChunks.chunks：表明那些模块需要单独打包。`all` 表示将所有大于 20000 的模块都进行单独打包，`async` 表示只将异步加载的模块进行打包，`initial` 表示只将 entry 入口中引入的模块进行单独打包。
+
+- splitChunks.name：打包输出的文件名称。
 
 ```js
 module.exports = {
@@ -628,7 +685,9 @@ module.exports = {
       // ...
     ],
     splitChunks: {
+      minSize: 20000,
       chunks: "all",
+      name: "vendor",
     },
   },
 };
@@ -670,9 +729,7 @@ getComponent().then((element) => {
 });
 ```
 
-> 上述 js 文件最终需要在入口 js 文件中引入使用。
-
-4、入口 index.js 文件内容：
+4、在入口 index.js 文件中引用 async-module.js：
 
 ```js
 import "async-module.js";
@@ -771,3 +828,22 @@ document.body.appendChild(button);
 
 ### 缓存
 
+#### 缓存第三方库
+
+1、将第三方库（如 lodash）提取到单独的 vendor chunk 文件中是比较推荐的做法，这是因为它们很少像本地的源代码那样频繁修改。因此通过实现以上步骤，利用 client 的长效缓存机制，命中缓存来消除请求，并减少向 server 获取资源，同时还能保证 client 代码和 server 代码版本一致。
+
+2、要缓存第三方库，我们需要在 optimization.splitChunks 添加如下 cacheGroups 参数：
+
+```js
+optimization: {
+  splitChunks: {
+    cacheGroups: {
+      vendor: {
+        test: /[\\/]node_modules[\\/]/,
+        name: "vendor",
+        chunks: 'all',
+      }
+    }
+  }
+},
+```
