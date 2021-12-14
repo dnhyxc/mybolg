@@ -5,8 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack",
-    "build": "rimraf source/main.js source/main.css source/mobile.js source/slider.js && cross-env NODE_ENV=development webpack --mode=development",
-    "build:prod": "rimraf source/main.js source/main.css source/mobile.js source/slider.js && webpack -p"
+    "build": "rimraf source/main.js source/fonts source/main.css source/mobile.js source/slider.js && cross-env NODE_ENV=development webpack --mode=development",
+    "build:prod": "rimraf source/main.js source/fonts source/main.css source/mobile.js source/slider.js && webpack -p"
   },
   "repository": {
     "type": "git"
