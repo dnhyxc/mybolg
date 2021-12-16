@@ -1247,3 +1247,112 @@ module.exports = (env) => {
 - 通过 bundle 和 sourcemap 文件，可以反编译出源码，也就是说，线上产物有 sourcemap 文件的话，就意味着有着暴露远嘛的风险。
 
 - sourcemap 文件的体积相对比较巨大，这跟我们生产环境的追求不同（更小更轻量的 bundle）。
+
+### esLint
+
+#### 配置 eslint
+
+1、首先需要安装 eslint：
+
+```
+npm i eslint -D
+```
+
+2、在根目录下添加一个 `.eslintrc` 文件（或者 .eslintrc.json, .js 等）。或者使用 eslint 工具自动生成该文件：
+
+```
+npx eslint --init
+```
+
+3、eslint 配置文件里的配置项含义说明：
+
+- env：指定脚本的运行环境。每种环境都有一组特定的的预定义全局变量。此处使用的 browser 预定义了浏览器环境中的全局变量，es6 启用除了 modules 以外的所有 ECMAScript 6 特性（该选项会自动设置 ecmaVersion 解析器选项为 6）。
+
+- globals：脚本在执行期间访问的额外的全局变量。也就是 env 中未预定义，但我们又需要使用的全局变量。
+
+- extends：检测中使用的预定义的规则集合。
+
+- rules：启用的规则及其各自的语法级别，会合并 extends 中的同名规则，定义冲突时优先级更高。
+
+- parserOptions ESlint：允许你指定想要支持的 JS 语言选项，ecmaFeatures 是个对象，表示你想要使用的额外的语言特性，这里 jsx 代表启用 JSX。ecmaVersion 用来指定支持的 ECMAScript 版本。默认为 5，即仅支持 es5，你可以使用 6、7、8、9 或 10 来指定想要使用的 ECMAScript 版本。也可以使用年份命名的版本号指定为 2016（同 6），2016（同 7），2017（同 8），2018（同 9），2010（同 10）。上面的 env 中启用了 es6，自动设置了 ecmaVersion 解析器选项为 6，plugins 是一个 npm 包，通常输出 eslint 内部为定义的规则实现，rules 和 extends 中定义的规则，并不都在 eslint 内部中有实现，比如 extends 中的 `plugin: react/recommended`，其中定义了规则开关和等级，但是这些规则如何生效的逻辑实在其对应的插件 react/recommended 中实现的。
+
+```json
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["airbnb-base"],
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": 0
+  },
+  "globals": {}
+}
+```
+
+#### 结合 webpack 使用
+
+1、结合 webpack 使用，首先需要安装如下 loader：
+
+```
+npm i eslint-loader -D
+```
+
+2、基本配置如下：
+
+```js
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: ["babel-loader", "eslint-loader"],
+      },
+    ],
+  },
+
+  devServer: {
+    // 关闭浏览器上出现的页面报错覆盖层
+    client: {
+      overlay: false,
+    },
+  },
+};
+```
+
+#### husky
+
+1、使用 husky 可以在提交代码前进行 eslint 检查。
+
+```
+npm i husky -D
+```
+
+2、husky 的使用方式：安装好 husky 之后，需要执行如下命令：
+
+```
+npx husky install
+```
+
+3、配置 package 脚本：
+
+```json
+{
+  "scripts": {
+    "prepare": "husky install"
+  }
+}
+```
+
+4、在 生成的 .husky 文件中创建一个 pre-commit 文件，注意：不是放在 _ 下，而是与 _ 同级，pre-commit 具体内容如下：
+
+```
+npx eslint ./src
+```
+
+5、进行完以上步骤之后，husky 就已经配置完成了，此时可以执行 git commit 进行测试了。
