@@ -79,6 +79,30 @@ module.exports = {
 
 > contenthash：表示根据文件的内容来生成一个 hash 字符串，ext 则表示文件的扩展名，这些都是 webpack 内置的写法。
 
+#### plugins
+
+##### html-webpack-plugin
+
+1、该插件可以让 webpack 在打包时自动生成 index.html，并自定将打包生成的 js 文件引入生成的 index.html 中。
+
+2、属性及配置方式如下：
+
+- template：该属性用于配置 webpack 打包生成 index.html 的模板。
+
+- filename：配置生成 html 的文件名。
+
+- inject：配置引入 script 标签的位置，默认是放在 header 中，属性值如果配置为 body，将会引入到 body 中。
+
+```js
+plugins: [
+  new HtmlWebpackPlugin({
+    template: "./index.html",
+    filename: "index.html",
+    inject: "body",
+  }),
+];
+```
+
 #### 环境变量
 
 1、想要消除 webpack.config.js 在**开发环境**和**生产环境**之间的差异，就需要环境变量。
@@ -107,43 +131,147 @@ module.exports = (env) => {
 
 1、webpack-dev-server 可以提供一个基本的 web server，并且具有 live reloading（实时重新加载）功能。
 
-2、具体属性及配置如下：
+2、webpack-dev-server 在编译之后不会输出任何文件，而是将 bundle 文件保存到内存中，然后将它们 serve 到 server 中，就好像它们是挂载在 server 根路径上的真实文件一样。
 
-- static 该属性用于告知 webpack-dev-server 从什么位置查找文件，`static: "./dist"` 将告知其从 dist 目录下的文件作为 web 服务的根目录。
+##### 常用属性属性及配置
+
+1、static：该属性用于告知 webpack-dev-server 从什么位置查找文件，`static: "./dist"` 将告知其从 dist 目录下的文件作为 web 服务的根目录。
+
+2、compress：该属性可以设置是否开启 gzip 压缩，及是不是在服务器端进行代码压缩。其中值为 `true` 则表示开启，否则反之。我们可以通过浏览器中 network 中的 Respons Headers 中的 **Content-Encoding: gzip** 属性查看是否开启了 gzip 压缩。
+
+3、prot：用于配置浏览器访问的端口号。
+
+4、proxy：该属性可以用来配置代理。
 
 ```js
 module.exports = {
   // ...
   devServer: {
-    static: "./dist",
+    static: path.resolve(__dirname, "./dist"),
+    compress: true,
+    port：3000,
+    proxy: {
+      "/api": "http://localhost: 4001",
+      pathRewrite: {
+        "^/api": " "
+      }
+    },
+  },
+}
+```
+
+##### 高级属性及配置
+
+1、headers：可以将一个头部信息传递到请求头中。
+
+```js
+module.exports = {
+  devServer: {
+    headers: {
+      "X-Access-Token": "abcxxx",
+    },
   },
 };
 ```
 
-> webpack-dev-server 在编译之后不会输出任何文件，而是将 bundle 文件保存到内存中，然后将它们 serve 到 server 中，就好像它们是挂载在 server 根路径上的真实文件一样。
-
-### webpack 插件
-
-#### html-webpack-plugin
-
-1、该插件可以让 webpack 在打包时自动生成 index.html，并自定将打包生成的 js 文件引入生成的 index.html 中。
-
-2、该插件属性及配置方式如下：
-
-- template：该属性用于配置 webpack 打包生成 index.html 的模板。
-
-- filename：配置生成 html 的文件名。
-
-- inject：配置引入 script 标签的位置，默认是放在 header 中，属性值如果配置为 body，将会引入到 body 中。
+2、https：是否将 http 服务变成 https 的服务。其中值为 true 为开启 https 服务。
 
 ```js
-plugins: [
-  new HtmlWebpackPlugin({
-    template: "./index.html",
-    filename: "index.html",
-    inject: "body",
-  }),
-];
+module.exports = {
+  devServer: {
+    https: true,
+  },
+};
+```
+
+3、http2：是否使用 http2 的服务。其中值为 true，则表示开启 http2 的服务。
+
+```js
+module.exports = {
+  devServer: {
+    http2: true,
+  },
+};
+```
+
+4、historyApiFallback：用于解决 SPA 单页应用配置 history 模式路由出现的 404 的问题。
+
+- 在一个 SPA 应用中，当在路由后面加上 `/article` 时，会发现此时刷新页面后，控制台会报错：`GRT http://localhost: 3000/article 404 (Not Found)`。这是因为浏览器把这个路由当作静态资源地址去请求了，然而我们并没有打包出 `/article` 这样的资源，所以就会出现 404 的情况。这时，就可以通过 **historyApiFallback** 属性来解决问题了。
+
+```js
+module.exports = {
+  devServer: {
+    historyApiFallback: true,
+  },
+};
+```
+
+> 配置如上设置之后，重新刷新页面，就会发现请求变成了 `index.html`。
+
+- 在多数应用场景下，我们需要根据不同的访问路径定制替代的页面，此时可以使用 **rewrites** 这个配置项，具体配置如下：
+
+```js
+module.exports = {
+  devServer: {
+    historyApiFallback: {
+      rewrites: [
+        {from: /^\/$/, to: "/views/loading.html"}
+        {from: /^\/subpage$/, to: "/views/subpage.html"}
+        {from: /./, to: "/views/404.html"}
+      ],
+    },
+  },
+};
+```
+
+5、host: 用于设置开发服务器主机，如果在开发环境中起了一个 devServer 服务，并期望在同一局域网下的他人也能访问到它，就可以使用如下配置解决：
+
+```js
+module.exports = {
+  devServer: {
+    host: "0.0.0.0",
+  },
+};
+```
+
+6、hot：用于开启模块热替换。
+
+- 模块热替换（HMR-hot module replacement）功能会在应用程序运行过程中，替换、添加或删除模块，而无需重新加载整个页面。
+
+```js
+module.exports = {
+  devServer: {
+    hot: true,
+  },
+};
+```
+
+- 当配置了 style-loader 时，也就相当于开启了样式文件的热替换功能。
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
+    ],
+  },
+};
+```
+
+7、liveReload：用于开启热加载功能。
+
+- 当开启了热加载时，当文件更新时，会自动刷新服务和页面。新版的 webpack-dev-server 默认已经开启了热加载功能。它对应的参数是 ddevServer.liveReload，默认为 true。注意：如果想要关掉它，需要将 liveReload 设置为 false 的同时将 hot 设置为 false。
+
+```js
+module.exports = {
+  devServer: {
+    liveReload: false,
+    hot: false,
+  },
+};
 ```
 
 ### 资源文件
@@ -875,7 +1003,9 @@ optimization: {
 
 ### 项目基本打包配置
 
-#### webpack.config.dev.js
+#### webpack.config.common.js
+
+1、ebpack.config.common.js 为公共配置：
 
 ```js
 const path = require("path");
@@ -892,13 +1022,24 @@ module.exports = {
   },
 
   output: {
-    filename: "scripts/[name].[ext]",
     path: path.resolve(__dirname, "../dist"),
     clean: true,
+    assetModuleFilename: "images/[contenthash][ext]",
   },
 
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_module/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env"],
+            plugins: [["@babel/plugin-transform-runtime"]],
+          },
+        },
+      },
       {
         test: /\.(css|less)$/,
         use: ["style-loader", "css-loader", "less-loader"],
@@ -927,6 +1068,20 @@ module.exports = {
         type: "json",
         parser: {
           parse: toml.parse,
+        },
+      },
+      {
+        test: /\.yaml$/,
+        type: "json",
+        parser: {
+          parse: yaml.parse,
+        },
+      },
+      {
+        test: /\.json5$/,
+        type: "json",
+        parser: {
+          parse: json5.parse,
         },
       },
       {
@@ -960,6 +1115,30 @@ module.exports = {
     }),
   ],
 
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendor",
+          chunks: "all",
+        },
+      },
+    },
+  },
+};
+```
+
+#### webpack.config.dev.js
+
+1、webpack.config.dev.js 为开发环境配置：
+
+```js
+module.exports = {
+  output: {
+    filename: "scripts/[name].[ext]",
+  },
+
   devServer: {
     static: "./dist",
   },
@@ -969,3 +1148,102 @@ module.exports = {
   mode: "development",
 };
 ```
+
+#### webpack.config.prod.js
+
+1、webpack.config.prod.js 为 生产环境配置：
+
+```js
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+
+module.exports = {
+  output: {
+    filename: "scripts/[name].[contenthash].[ext]",
+    publicPath: "/",
+  },
+
+  optimization: {
+    minimizer: [new CssMinimizerPlugin(), new TerserPlugin()],
+  },
+
+  mode: "production",
+
+  // 告诉 webpack 在发现提示时关闭抛出错误或警告。
+  performance: {
+    hints: false,
+  },
+};
+```
+
+#### webpack.config.js
+
+1、配置文件拆分好后，需要安装 **webpack-merge** 这个插件将公共配置与生产及开发环境配置都合并到 webpack.config.js 中：
+
+```
+npm i webpack-merge -D
+```
+
+2、具体配置如下：
+
+```js
+const { merge } = require("webpack-merge");
+
+const commomConfig = require("./webpcak.config.commom");
+const productionConfig = require("./webpcak.config.prod");
+const developmentConfig = require("./webpcak.config.dev");
+
+module.exports = (env) => {
+  switch (true) {
+    case env.development:
+      return merge(commomConfig, developmentConfig);
+
+    case env.production:
+      return merge(commomConfig, productionConfig);
+
+    default:
+      return new Error("No matching configuration was found");
+  }
+};
+```
+
+#### package 脚本配置
+
+```
+{
+  "scripts": {
+    "start": "webpack serve -c ./config/webpack.config.js --env development"
+    "build": "webpack -c ./config/webpack.config.js --env production"
+  }
+}
+```
+
+### 高级应用
+
+#### source-map
+
+1、source-map 用于将报错信息（bundle 错误的语句几其所在行列）映射到源码上，方便调试。
+
+2、webpack 中的 devtool 一共提供了如下七种 SourceMap 模式：
+
+- eval：每个 module 会封装到 eval 里包裹起来执行，并且会在末尾追加注释 `//@sourceURL`。
+
+- source-map：生成一个 SourceMap 文件。
+
+- hidden-source-map：和 source-map 一样，但不会在 bundle 末尾追加注释。
+
+- inline-source-map：生成一个 DataUrl 形式的 SourceMap 文件。
+
+- eval-source-map：每个 module 会通过 eval() 来执行，并且生成一个 DataUrl 形式的 SourceMap。
+
+- cheap-source-map：生成一个没有列信息（column-mappings）的 SourceMap 文件，不包含 loader 的 sourcemap（比如：babel 的 sourcemap）。
+
+- cheap-module-source-map：生成一个没有列信息（column-mappings）的 SourceMap 文件，同时 loader 的 sourcemap 也被简化为只包含对应行的。
+
+> 在开发环境中推荐使用 `cheap-module-source-map`，因为它既能单独的生成一个 map 文件，而且不会记录列数，从而减小的 map 的体积。
+
+3、在生产环境一般不会开启 sourcemap 功能，主要有两点原因：
+
+- 通过 bundle 和 sourcemap 文件，可以反编译出源码，也就是说，线上产物有 sourcemap 文件的话，就意味着有着暴露远嘛的风险。
+
+- sourcemap 文件的体积相对比较巨大，这跟我们生产环境的追求不同（更小更轻量的 bundle）。
