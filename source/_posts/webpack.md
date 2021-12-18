@@ -79,6 +79,30 @@ module.exports = {
 
 > contenthash：表示根据文件的内容来生成一个 hash 字符串，ext 则表示文件的扩展名，这些都是 webpack 内置的写法。
 
+#### 环境变量
+
+1、想要消除 webpack.config.js 在开发环境和生产环境之间的差异，就需要环境变量。
+
+2、webpack 命令行环境变量的 **--env** 参数，可以允许传入任意数量的环境变量。而在 webpack.config.js 中可以访问到这些环境变量。例如：`--env production` 或 `--env goal=local`
+
+```
+npx webpack --env production --goal=local --progress
+```
+
+3、注意：要使用 env 变量，必须将 module.exports 转换成函数的形式：
+
+```js
+module.exports = (env) => {
+  const isDev = env.production ? false : true;
+
+  return {
+    // ...
+    mode: isDev ? "production" : "development",
+    // ...
+  };
+};
+```
+
 #### plugins
 
 ##### html-webpack-plugin
@@ -103,27 +127,26 @@ plugins: [
 ];
 ```
 
-#### 环境变量
+##### webpack-bundle-analyzer
 
-1、想要消除 webpack.config.js 在**开发环境**和**生产环境**之间的差异，就需要环境变量。
+1、该插件是一个 plugin 和 CLI 工具，可以用来配置打包时生成依赖图。它将 bundle 内容展示为一个便捷的、交互式、可缩放的树状图形式。即打包完成之后，会在浏览器中打开一个页面展示一个可视化的打包产物依赖图。
 
-2、webpack 命令行环境变量的 **--env** 参数，可以允许传入任意数量的环境变量。而在 webpack.config.js 中可以访问到这些环境变量。例如：`--env production` 或 `--env goal=local`
+2、具体配置方式如下：
+
+- 首先需要安装 webpack-bundle-analyzer 这个插件：
 
 ```
-npx webpack --env production --goal=local --progress
+npm i webpack-bundle-analyzer -D
 ```
 
-3、注意：要使用 env 变量，必须将 module.exports 转换成函数的形式：
+- 之后在 plugins 中配置该插件：
 
 ```js
-module.exports = (env) => {
-  const isDev = env.production ? false : true;
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
-  return {
-    // ...
-    mode: isDev ? "production" : "development",\
-    // ...
-  };
+module.exports = {
+  // ...
+  plugins: [new BundleAnalyzerPlugin()],
 };
 ```
 
@@ -321,6 +344,147 @@ module.exports = {
 ```
 
 > 由于 loader 的加载顺序是从右到左，从下到上的，所以 style-loader 要放在 css-loader 之前，即先使用 css-loader 进行解析，之后再使用 style-loader 渲染到页面上。
+
+#### PostCSS
+
+1、PostCSS 是一个用 JS 工具和插件转换 CSS 代码的工具，比如可以使用 Autoprefixer 插件获取浏览器额流行度和能够支持的属性，并根据这些数据帮我们自动的为 CSS 规则添加前缀，将最新的 CSS 语法转换为大多数浏览器都能识别的语法。
+
+2、使用 PostCSS 时，需要安装 style-loader、css-loader、postcss-loader 这三个 loader：
+
+```
+npm i style-loader css-loader postcss-loader -D
+```
+
+3、PostCSS 具体配置如下：
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        exclude: /module/,
+        use: ["style-loader", "css-loader", "postcss-loader"],
+      },
+    ],
+  },
+};
+```
+
+4、在项目录下创建 postcss.config.js 文件，内容如下：
+
+- 首先需要安装 **autoprefixer** 这个插件，该插件的作用是可以为样式加上前缀，用于做浏览器的兼容性设置：
+
+```
+npm i autoprefixer -D
+```
+
+- 之后在 postcss.config.js 中使用该插件：
+
+```js
+module.exports = {
+  plugins: [require("autoprefixer")],
+};
+```
+
+- 最后需要在 package.json 中配置 **browserslist** 属性：
+
+```json
+"devDependencies": {
+  // ...
+},
+
+"browserslist": {
+  "> 1%",
+  "last 2 versions"
+}
+```
+
+- 设置好以上配置之后，在 css 中设置 `body: { display: flex; }`，最终在浏览器中设置的样式为：
+
+```css
+body: {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+```
+
+#### CSS 模块化设置
+
+1、CSS 模块则能让你永远不用担心命名太大众化而造成冲突，只要用最有意义的名字就行了。
+
+2、配置 css 模块化，只需要在 css-loader 中的设置 `options.module: true` 即可。
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        exclude: /module/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+              localIdentName: "[hash:base64:6]", // 样式名设置
+            },
+          },
+          "postcss-loader",
+        ],
+      },
+    ],
+  },
+};
+```
+
+3、除了将所有的 css 都设置为模块化之外，也可以部分开启 css 模块化形式，比如全局样式可以冠以 `.global` 前缀，如：`*.global.css 表示普通模式`，`*.css 表示 css 模块化模式`。
+
+- 模块化模式配置如下：
+
+```js
+{
+  test: new RegExp(`^(?!.*\\.global).*\\.css`);
+  use: [
+    {
+      loader: "style-loader",
+    },
+    {
+      loader: "css-loader",
+      options: {
+        modules: true,
+        localIdentName: "[hash:base64:6]",
+      },
+    },
+    {
+      loader: "postcss-loader",
+    },
+  ];
+  exclude: [path.resolve(__dirname, "..", "node_modules")];
+}
+```
+
+- 普通模式配置如下：
+
+```js
+{
+  test: new RegExp(`^(.*\\.global).*\\.css`);
+  use: [
+    {
+      loader: "style-loader",
+    },
+    {
+      loader: "css-loader",
+    },
+    {
+      loader: "postcss-loader",
+    },
+  ];
+  exclude: [path.resolve(__dirname, "..", "node_modules")];
+}
+```
 
 #### 解析 less 资源
 
@@ -999,6 +1163,70 @@ optimization: {
     }
   }
 },
+```
+
+#### 外部扩展
+
+1、有时候为了减小 bundle 的体积，我们会把一些不变的第三方库使用 cdn 的方式引入，比如：jQuery，这个时候就可以使用 **externals** 属性实现。
+
+2、externals 具体使用方式如下：
+
+- 首先我们需要在入口 html 文件中使用 scripts 标签引入 jQuery。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用外部扩展</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+  </head>
+  <body></body>
+</html>
+```
+
+- 之后在 webpack 中配置 externals 属性：
+
+```js
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: "app.js",
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "index.html",
+    }),
+  ],
+
+  externals: {
+    jquery: "jQuery", // 或者配置成 jquery: "$",
+  },
+};
+```
+
+- 如果不想在入口 index.html 中使用 scripts 引入 jQuery 时，也可以在 externals 中引入，这时就需要将 externals 配置改为如下形式了：
+
+```js
+module.exports = {
+  // ...
+  externalsType: "script",
+  externals: {
+    jquery: ["https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js", "$"],
+  },
+};
+```
+
+> 在 externals 中引入第三方库时必须配置 **externalsType** 属性，用于告诉 webpack 引入的链接以 script 标签的形式放置到页面中。
+
+- 最后就可以在 js 文件中快乐的使用 jQuery 了：
+
+```js
+import $ from "jquery";
+
+console.log($);
 ```
 
 ### 项目基本打包配置
