@@ -1738,6 +1738,206 @@ if ("serviceWorker" in navigator) {
 
 > 设置完以上配置之后，即使终止本地服务，照样能访问当前页面。现在你就可以愉快的进行离线访问了。这其实是在浏览器中缓存了当前页面，可以通过：`chrome://serviceworker-internals` 查看。当清除浏览器缓存时，就无法再访问了。
 
+#### Shimming 预置依赖
+
+1、Shimming 预置依赖就是在没有手动安装如 lodash 时，也可以在页面中使用 lodash。
+
+2、要实现预置全局变量，需要使用 **ProvidePlugin** 插件（该插件不需要安装），使用 ProvidePlugin 后，能够在 webpack 编译的每个模块中，通过访问一个变量来获取一个 package。如果 webpack 看到模块中用到这个变量，它将在最终 bundle 中引入给定的 package。具体使用如下：
+
+- src/index.js：
+
+```js
+console.log(_.join("hello", "word"), " ");
+```
+
+- webpack.config.js：
+
+```js
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    filename: "[name].js",
+    clean: true,
+  },
+  plugins: [
+    new HtmlWebpackPlugin(),
+    new webpack.ProvidePlugin({
+      _: "lodash",
+    }),
+  ],
+  mode: "development",
+};
+```
+
+> 以上配置从本质上来说，就是告诉 webpack，如果遇到了至少一处用到 `_` 变量的模块实例，那就将 lodash package 引入进来，并将其提供给需要用到它的模块。这其实就是 webpack 自动将 lodash 引入，并打包到 main.js 中了。
+
+#### 细粒度 Shimming
+
+1、在一些遗留模块依赖中，this 指向的是 window 对象，我们可以调整 index.js 文件内容进行测试：
+
+```js
+this.alert("hello webpack");
+```
+
+> 如果不进行任何配置，使用 npx webpack serve 运行该模块时，将会报错。
+
+2、之所以上述 index.js 模块运行报错，是因为它运行在 CommonJS 上下文中时，此时的 this 指向的是 module.exports。因此运行代码时，就会出现 `this.alert is not a function` 的报错。在这种情况下，我们可以通过 **imports-loader** 覆盖 this 指向，注意：需要安装 imports-loader 这个插件：
+
+```
+npm i imports-loader -D
+```
+
+- webpack.config.js 配置如下：
+
+```js
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: "./src/index.js",
+  module: {
+    rules: [
+      {
+        test: require.resolve("./src/index.js"),
+        use: "imports-loader?wrapper=window",
+      },
+    ],
+  },
+
+  plugins: [new HtmlWebpackPlugin()],
+  mode: "production",
+};
+```
+
+> 通过上述配置之后就可以正常的访问 index.js 文件内容了。
+
+#### 全局 Exports
+
+1、假设某个 library 创建出一个全局变量，期望 consumer（使用者）使用这个变量。为此通过如下小模块来演示说明：
+
+- src/global.js：
+
+```js
+const file = "example.txt";
+
+const helpers = {
+  test: function () {
+    console.log("test something");
+  },
+  parse: function () {
+    console.log("parse something");
+  },
+};
+```
+
+- webpack.config.js：
+
+```js
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: "./src/index.js",
+  module: {
+    rules: [
+      {
+        test: require.resolve("./src/index.js"),
+        use: "imports-loader?wrapper=window",
+      },
+      {
+        test: require.resolve("./src/global.js"),
+        use: "exports-loader?type=commonjs&exports=file,multiple|helpers.parse|parse,multiple|helpers.test|test",
+      },
+    ],
+  },
+  plugins: [
+    new HtmlWebpackPlugin(),
+    new webpack.ProvidePlugin({
+      _: "lodash",
+    }),
+  ],
+  mode: "development",
+};
+```
+
+#### 加载 Polyfills
+
+1、要加载 polfill，例如可以直接引入 **@babel/polyfill**，但是首先需要安装 @babel/polyfill：
+
+```
+npm i @babel/polyfill -D
+```
+
+- @babel/polyfill 是一个垫片，说白了就是可以通过这个插件将代码转换为低版本浏览器可以识别的代码。
+
+2、@babel/polyfill 基本使用方式如下：
+
+```js
+import "@babel/polyfill";
+console.log(Array.from([1, 2, 3], (x) => x + x));
+```
+
+- 说明：这种方式优先考虑正确性，而不考虑 bundle 体积大小。为了安全和可靠，polyfill/shim 必须运行在所有其它代码之前，而且需要同步加载，或者说，需要在所有 polyfill/shim 加载之后，再去加载所有应用程序代码，社区中存在许多误解，即现代浏览器"不需要"polyfill，或者 polyfill/shim 仅用于添加缺失功能。实际上，它们通常用于**修复损坏实现**（repair broken implementation），即使是在现代浏览器中，也会出现这种情况。因此，最佳的实践仍然是：不加选择地和同步加载所有 polyfill/shim，尽管这会导致额外的 bundle 体积成本。
+
+#### 优化 Polyfills
+
+1、正常是不建议使用 `import @babel/polyfill` 导入的。因为这样做会在全局引入整个 polyfill 包，比如 Array.from 会全局引入，不但包的体积大，而且还会污染全局环境。
+
+2、**babel-preset-env** 插件通过 `browserslist` 来转译那些浏览器中不支持的特性。这个 preset 使用 **useBuiltIns** 选项，默认值是 false，这种方式可以将全局 babel-polyfill 导入，改进为更细颗粒度的 import 格式：
+
+```js
+import "core-js/modules/es7.string.pad-start";
+import "core-js/modules/es7.string.pad-end";
+import "core-js/modules/web.timers";
+import "core-js/modules/web.immediate";
+import "core-js/modules/web.dom.iterable";
+```
+
+- 安装 @babel/preset-env 及相关的包：
+
+```
+npm i babel-loader @babel/core @babel/preset-env core-js@3 -D
+```
+
+- webpack.config.js 相关配置如下：
+
+```js
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: "./src/index.js",
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  targets: ["last 1 version", "> 1%"],
+                  useBuiltIns: "usage",
+                  corejs: 3,
+                },
+              ],
+            ],
+          },
+        },
+      },
+    ],
+  },
+
+  plugins: [new HtmlWebpackPlugin()],
+  mode: "development",
+};
+```
+
 ### esLint
 
 #### 配置 eslint
