@@ -1736,6 +1736,8 @@ if ("serviceWorker" in navigator) {
 }
 ```
 
+> 设置完以上配置之后，即使终止本地服务，照样能访问当前页面。现在你就可以愉快的进行离线访问了。这其实是在浏览器中缓存了当前页面，可以通过：`chrome://serviceworker-internals` 查看。当清除浏览器缓存时，就无法再访问了。
+
 ### esLint
 
 #### 配置 eslint
