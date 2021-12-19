@@ -6,4 +6,4 @@ node_modules/
 public/
 .deploy*/
 .vscode/
-test/CKEditor/
+test/webpack/node_modules/

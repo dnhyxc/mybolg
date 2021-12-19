@@ -766,6 +766,66 @@ module: {
 }
 ```
 
+#### 解析 TypeScript
+
+1、结合 webpack 使用 TS，首先需要安装 typescript 及 ts-loader：
+
+```
+npm i typescript ts-loader -D
+```
+
+2、在项目根目录下添加一个 ts 配置文件 `tsconfig.json`，或者直接使用 ts 自带的工具来自动化生成该文件：
+
+```
+npx tsc --init
+```
+
+- tsconfig.js 文件局部配置如下：
+
+```json
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "module": "es6",
+    "target": "es5",
+    "jsx": "react",
+    "allowJs": "true",
+    "moduleResolution": "node"
+  }
+}
+```
+
+3、webpack 编译 ts 具体配置如下：
+
+```js
+const path = reauire("path");
+const HtmlWebpackPlugin = require();
+
+module.exports = {
+  entry: "./src/app.ts",
+  output: {
+    filename: "bundle.js",
+  },
+  devtool: "inline-source-map",
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  plugins: [new HtmlWebpackPlugin()],
+  resolve: {
+    extensions: [".ts", ".js"],
+  },
+  mode: "development",
+};
+```
+
 ### [资源模块](https://webpack.docschina.org/guides/asset-modules/)
 
 #### asset/resource
@@ -1475,6 +1535,206 @@ module.exports = (env) => {
 - 通过 bundle 和 sourcemap 文件，可以反编译出源码，也就是说，线上产物有 sourcemap 文件的话，就意味着有着暴露远嘛的风险。
 
 - sourcemap 文件的体积相对比较巨大，这跟我们生产环境的追求不同（更小更轻量的 bundle）。
+
+#### 在 webpack5 中使用 Web Works
+
+1、Web Works 简介：
+
+- Web Worker 为 Web 内容在后台线程中运行脚本提供了一种简单的方法。线程可以执行任务而不干扰用户界面。此外，他们可以使用 XMLHttpRequest 执行 I/O (尽管 responseXML 和 channel 属性总是为空)。一旦创建， 一个 worker 可以将消息发送到创建它的 JavaScript 代码， 通过将消息发布到该代码指定的事件处理程序（反之亦然）。
+
+2、创建 worker 的方式：
+
+```js
+new Worker(new URL('work.js', import.mata.url));
+```
+
+> 注意：第二个参数 `import.mata.url` 不能在 commonJs 中使用。
+
+3、结合 webpack5 使用 Web Worker 的方式：
+
+- 在 src 下创建 work.js 文件，内容如下：
+
+```js
+self.onmessage = (message) => {
+  self.postMessage({
+    answer: "dnhyxc",
+  });
+};
+```
+
+- 在入口 app.js 中引入 work.js 文件，具体如下：
+
+```js
+const worker = new Worker(new URL("./work.js", import.meta.url));
+
+worker.postMessage({
+  name: "What's your name?",
+});
+
+worker.onmessage = (message) => {
+  console.log(message.data.answer);
+};
+```
+
+- 在 webpack.config.js 中不需要设置任何编译 Web Worker 的设置，因为 webpack5 默认就支持了 Web Worker。
+
+```js
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: "./src/app.js",
+  output: {
+    filename: "[name].[ext]",
+    clean: true,
+  },
+  plugins: [new HtmlWebpackPlugin()],
+  mode: "development",
+};
+```
+
+- 只需要在 webpack.config.js 中配置如上设置之后，使用 webpack 进行编译就会在 dist 文件夹中出现一个 `src_work_js.js` 文件，这就说明了 webpack 已经默认帮我们做了一个额外的打包。
+
+#### 打包多页面应用
+
+1、打包多页面应用基本配置如下：
+
+```js
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: {
+    main: {
+      import: ["./src/app.js", "./src/app2.js"],
+      dependOn: "lodash",
+      filename: "page1/[name].js",
+    },
+    main2: {
+      import: ["./src/app3.js"],
+      dependOn: "lodash",
+      filename: "page2/[name].js",
+    },
+    lodash: {
+      import: "lodash",
+      filename: "commom/[name].js",
+    },
+  },
+
+  output: {
+    filename: "[name].js",
+    path: path.resolve(__dirname, "dist"),
+    clean: true,
+  },
+
+  devtool: "inline-source-map",
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: "多页面打包",
+      template: "./index.html",
+      filename: "page1/index.html",
+      chunks: ["main", "lodash"],
+    }),
+
+    new HtmlWebpackPlugin({
+      title: "多页面打包",
+      template: "./index2.html",
+      filename: "page2/index2.html",
+      chunks: ["main2", "lodash"],
+    }),
+  ],
+
+  mode: "development",
+};
+```
+
+#### pwa
+
+1、我们可以通过搭建一个拥有更多基础特性的 server 来测试下离线体验，这里我们通过使用 **http-server** 这个第三方库来实现。
+
+- 首先需要安装 http-server：
+
+```
+npm i http-server -D
+```
+
+- 之后修改 package.json 的 scripts 脚本，修改如下：
+
+```json
+{
+  //...
+  "scripts": "http-server dist"
+}
+```
+
+2、注意：默认情况下，webpack devServer 会写入到内存中，我们需要启用 devserverdevmiddleware.writeToDisk 配置项，来让 http-server 处理 `./dist` 目录中的文件。
+
+```js
+devServer: {
+  devMiddleware: {
+    index: true;
+    writeToDisk: true;
+  }
+}
+```
+
+> 如果之前没有操作过，首先需要运行命令 `npm run build` 来构建你的项目，然后运行命令 `npm start`。
+
+3、添加 Workbox：
+
+- 首先需要安装 workbox-webpack-plugin：
+
+```
+npm i workbox-webpack-plugin -D
+```
+
+- 之后修改 webpack.config.js 文件：
+
+```js
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const WorkboxPlugin = require("workbox-webpack-plugin");
+
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    filename: "[name].js",
+    path: path.resolve(__dirname, "dist"),
+    clean: true,
+  },
+  devtool: "inline-source-map",
+  plugins: [
+    new HtmlWebpackPlugin(),
+    new WorkboxPlugin.GenerateSW({
+      // 这些选项帮助快速启用 ServiceWorkers
+      clientsClaim: true,
+      // 不允许遗留任何旧的 ServiceWorkers
+      skipWaiting: true,
+    }),
+  ],
+  mode: "development",
+};
+```
+
+4、注册 Service Worker：
+
+- 在 index.js 文件中通过如下代码进行注册 Service Worker：
+
+```js
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/service-worker.js")
+      .then((registration) => {
+        console.log("SW registered:", registration);
+      })
+      .catch((registrationError) => {
+        console.log("SW registered failed:", registrationError);
+      });
+  });
+}
+```
 
 ### esLint
 
