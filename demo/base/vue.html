@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>监听属性</title>
+  </head>
+  <body>
+    <div id="root">
+      <h3>今天好{{info}}</h3>
+      <h3>今天好{{sadInfo}}</h3>
+      <!-- 写法一 -->
+      <button @click="changeInfo">改变心情happy{{x}}</button>
+      <!-- 写法二：绑定事件(@xxx="yyy" yyy可以是一些简单的逻辑语句 -->
+      <button @click="isSad = !isSad;x++">切换心情sad{{x}}</button>
+      <hr />
+      <h3>a的值是：{{num.a}}</h3>
+      <button @click="num.a++">a++</button>
+      <h3>b的值是：{{num.b}}</h3>
+      <button @click="num = {a:666,b:999}">彻底替换num</button>
+    </div>
+  </body>
+  <script type="text/javascript">
+    Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示警告
+    const vm = new Vue({
+      el: "#root",
+      data() {
+        return {
+          isHappy: true,
+          isSad: true,
+          x: 0,
+          num: {
+            a: 0,
+            b: 0,
+          },
+        };
+      },
+      methods: {
+        changeInfo() {
+          this.isHappy = !this.isHappy;
+          this.x++;
+        },
+      },
+      computed: {
+        info() {
+          return this.isHappy ? "开心呢" : "伤心啊";
+        },
+        sadInfo() {
+          return this.isSad ? "伤心啊" : "开心呢";
+        },
+      },
+      // 监测属性写法一
+      watch: {
+        // 监测计算属性
+        info: {
+          handler(pre, cur) {
+            console.log("info改变了", pre, cur);
+          },
+        },
+        // 检测普通属性
+        isHappy: {
+          // immediate默认值为false，当为true时，会在初始化时让handler被调用一次。
+          immediate: true,
+          // 当isHappy发生改变时，isHappyHandler会被调用
+          handler(pre, cur) {
+            console.log("isHappy改变了", pre, cur);
+          },
+        },
+        num: {
+          // deep为true时，可以监视多级结构中所有属性的变化
+          deep: true,
+          handler(pre, cur) {
+            console.log("num中的a改变了", pre, cur);
+          },
+        },
+
+        // 简写形式（不需要使用deep、immediate配置项时可以使用简写）
+        isSad(pre, cur) {
+          console.log("watch中isSad改变了", pre, cur);
+        },
+      },
+    });
+    // 监测属性写法二（完整写法）
+    vm.$watch("isSad", {
+      immediate: true,
+      deep: true,
+      handler(pre, cur) {
+        console.log("完整写法isSad改变了", pre, cur);
+      },
+    });
+
+    // 简写写法
+    vm.$watch("isSad", function (pre, cur) {
+      console.log("简写写法isSad改变了", pre, cur);
+    });
+  </script>
+</html>

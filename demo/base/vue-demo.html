@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>自定义指令</title>
+  </head>
+  <body>
+    <div id="root">
+      <h2>放大10倍后n的值是：<span v-big="n"></span></h2>
+      <button @click="n++">现身吧input</button>
+      <input type="text" v-fbind:value="n" />
+      <input type="text" v-fbind-global:value="n" />
+    </div>
+  </body>
+  <script>
+    // 全局指令
+    Vue.directive("fbind-global", {
+      // 在指令与元素成功绑定时会被调用
+      bind(element, binding) {
+        console.log("bind");
+        element.value = binding.value;
+        console.log(this); // window
+      },
+      // 指令所在元素被插入页面时被动用
+      inserted(element, binding) {
+        console.log("inserted");
+        element.focus();
+      },
+      // 指令所在的模版被重新解析时被调用
+      update(element, binding) {
+        console.log("update");
+        element.value = binding.value;
+      },
+    });
+
+    new Vue({
+      el: "#root",
+      data: {
+        n: 1,
+      },
+      // 注意：指令中的this都是指向window
+      directives: {
+        // v-big会在指令与元素成功绑定时会被调用一次（初始化）以及指令所在的模版重新被解析时也会调用
+        big(element, binding) {
+          console.log(element, binding.value);
+          console.log(this); // window
+          element.innerText = binding.value * 10;
+        },
+        // 局部指令
+        fbind: {
+          // 在指令与元素成功绑定时会被调用
+          bind(element, binding) {
+            console.log("bind");
+            element.value = binding.value;
+            console.log(this); // window
+          },
+          // 指令所在元素被插入页面时被动用
+          inserted(element, binding) {
+            console.log("inserted");
+            element.focus();
+            console.log(this); // window
+          },
+          // 指令所在的模版被重新解析时被调用
+          update(element, binding) {
+            console.log("update");
+            element.value = binding.value;
+            console.log(this); // window
+          },
+        },
+      },
+    });
+  </script>
+</html>
