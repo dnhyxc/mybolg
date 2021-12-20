@@ -1,25 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const Sub = ({ className, name, ...props }) => {
+  return <div className={className}>hello {name}</div>;
+};
 
-export default App;
+const child = React.createElement(Sub, { name: "sub", className: "child" });
+
+const parent = React.createElement(
+  "div",
+  { className: "parent" },
+  "parent",
+  child
+);
+
+export { parent };
