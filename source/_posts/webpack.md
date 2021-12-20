@@ -1938,6 +1938,8 @@ module.exports = {
 };
 ```
 
+#### library
+
 ### esLint
 
 #### 配置 eslint
