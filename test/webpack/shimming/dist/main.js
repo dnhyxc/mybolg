@@ -1,1 +1,0 @@
-(function(){this.alert("hello webpack")}).call(window);
