@@ -6,6 +6,6 @@ node_modules/
 public/
 .deploy*/
 .vscode/
-test/webpack/node_modules/
-test/webpack/dist/
-test/webpack/build/
+example/webpack/node_modules/
+exampletest/webpack/dist/
+example/webpack/build/
