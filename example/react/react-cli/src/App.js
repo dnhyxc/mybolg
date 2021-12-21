@@ -5,6 +5,15 @@ const Sub = ({ className, name, ...props }) => {
   return <div className={className}>hello {name}</div>;
 };
 
+Sub.Create = (props) => {
+  return (
+    <div>
+      <h1>{props.name}</h1>
+      <div>{props.content}</div>
+    </div>
+  );
+};
+
 const child = React.createElement(Sub, { name: "sub", className: "child" });
 
 const parent = React.createElement(
@@ -14,4 +23,4 @@ const parent = React.createElement(
   child
 );
 
-export { parent };
+export { parent, Sub };
