@@ -1,5 +1,5 @@
 // 使用 node 运行
 
-const { mylib } = require("../dist/mylib");
+const { add } = require("../dist/mylib");
 
-console.log(mylib.add(9, 2));
+console.log(add(9, 2));
