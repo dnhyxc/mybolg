@@ -1940,6 +1940,93 @@ module.exports = {
 
 #### library
 
+1、library 可以用于打包一个 JavaScript 库（如 lodash 就是一个函数库）。打包好的库可以发布到 npm 上作为一个通用的库。
+
+2、打包 library 基本配置如下：
+
+```js
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "mylib.js",
+    // library可以防止生产模式下，模块未使用而被tree shaking删除
+    library: "mylib",
+  },
+  plugins: [new HtmlWebpackPlugin()],
+  mode: "production",
+};
+```
+
+- 上述配置打包出来的 mylib 只能在 html 中以 script 引入使用：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library</title>
+  </head>
+  <body>
+    <script src="../dist/mylib.js"></script>
+    <script>
+      console.log(mylib.add(9, 2));
+    </script>
+  </body>
+</html>
+```
+
+3、如果希望打包出来的库能兼容不同的环境，即用户能够通过以下方式使用打包后的库：
+
+- CommonJS module require：
+
+```js
+const webpackNumbers = require("webpack-numbers");
+// ...
+webpackNumbers.wordToNum("Two");
+```
+
+- AMD module require：
+
+```js
+require(["webpackNumbers"], function (webpackNumbers) {
+  // ...
+  webpackNumbers.wordToNum("Two");
+});
+```
+
+- script tag：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library</title>
+  </head>
+  <body>
+    <script src="https://example.org/webpack-number.js"></script>
+    <script>
+      // ...
+      // 全局变量
+      webpackNumbers.wordToNum("Five");
+      // window 对象中的属性
+      window.webpackNumbers.wordToNum("Five");
+      // ...
+    </script>
+  </body>
+</html>
+```
+
+3、要实现上述要求，需要更改 library 配置项，将其中的 **type** 属性行设置为：**umd**。
+
 ### esLint
 
 #### 配置 eslint
