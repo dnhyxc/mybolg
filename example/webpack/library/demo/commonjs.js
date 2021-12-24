@@ -1,5 +1,13 @@
 // 使用 node 运行
 
-const { add } = require("../dist/mylib");
+// library: commonjs
+const { mylib } = require("../dist/mylib");
+if (mylib) {
+  console.log(mylib.add(9, 2), "commonjs");
+}
 
-console.log(add(9, 2));
+// library: umd
+const { add } = require("../dist/mylib");
+if (add) {
+  console.log(add(9, 2), "umd");
+}

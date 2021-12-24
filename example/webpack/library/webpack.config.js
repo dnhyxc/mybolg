@@ -12,9 +12,9 @@ module.exports = {
     filename: "mylib.js",
     // library可以防止生产模式下，模块未使用而被tree shaking删除
     library: {
-      name: "mylib", // 当配置了experiments时，不能设置name属性，否则会报错 
+      name: "mylib", // 当配置了experiments时，不能设置name属性，否则会报错
       // umd 模式下：可以支持commomjs、script标签导入
-      type: "umd", // type 的值还可以是：window、commonjs、module
+      type: "umd", // type 的值还可以是：var、window（等于var）、commonjs、module
     },
     // 处理commonjs中self未定义而报错的情况
     globalObject: "globalThis",

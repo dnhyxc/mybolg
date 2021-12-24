@@ -1816,7 +1816,11 @@ module.exports = {
 
 #### 全局 Exports
 
-1、假设某个 library 创建出一个全局变量，期望 consumer（使用者）使用这个变量。为此通过如下小模块来演示说明：
+1、假设某个 library 创建出一个全局变量，期望 consumer（使用者）使用这个变量。要实现这一需求，就需要借助 `exports-loader` 这个 loader 来实现：
+
+```
+npm i exports-loader -D
+```
 
 - src/global.js：
 
@@ -1844,21 +1848,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: require.resolve("./src/index.js"),
-        use: "imports-loader?wrapper=window",
-      },
-      {
         test: require.resolve("./src/global.js"),
         use: "exports-loader?type=commonjs&exports=file,multiple|helpers.parse|parse,multiple|helpers.test|test",
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin(),
-    new webpack.ProvidePlugin({
-      _: "lodash",
-    }),
-  ],
+  plugins: [new HtmlWebpackPlugin()],
   mode: "development",
 };
 ```
@@ -1940,9 +1935,17 @@ module.exports = {
 
 #### library
 
-1、library 可以用于打包一个 JavaScript 库（如 lodash 就是一个函数库）。打包好的库可以发布到 npm 上作为一个通用的库。
+1、library 可以用于打包一个 JavaScript 库（如 lodash 就是一个函数库）。打包好的库可以发布到 npm 上作为一个通用的库，具体配置如下：
 
-2、打包 library 基本配置如下：
+- src/index.js 内容如下：
+
+```js
+export const add = (x, y) => {
+  return x + y;
+};
+```
+
+- webpack.config.js 配置如下：
 
 ```js
 const path = require("path");
@@ -1986,17 +1989,18 @@ module.exports = {
 - CommonJS module require：
 
 ```js
-const webpackNumbers = require("webpack-numbers");
-// ...
-webpackNumbers.wordToNum("Two");
+const { mylib } = require("../dist/mylib");
+
+if (mylib) {
+  console.log(mylib.add(9, 2), "commonjs");
+}
 ```
 
 - AMD module require：
 
 ```js
-require(["webpackNumbers"], function (webpackNumbers) {
-  // ...
-  webpackNumbers.wordToNum("Two");
+require(["mylib"], function (webpackNumbers) {
+  mylib.add(9, 2);
 });
 ```
 
@@ -2012,20 +2016,151 @@ require(["webpackNumbers"], function (webpackNumbers) {
     <title>Library</title>
   </head>
   <body>
-    <script src="https://example.org/webpack-number.js"></script>
+    <script src="../dist/mylib.js"></script>
     <script>
-      // ...
-      // 全局变量
-      webpackNumbers.wordToNum("Five");
-      // window 对象中的属性
-      window.webpackNumbers.wordToNum("Five");
-      // ...
+      console.log(mylib.add(9, 2));
     </script>
   </body>
 </html>
 ```
 
 3、要实现上述要求，需要更改 library 配置项，将其中的 **type** 属性行设置为：**umd**。
+
+- var/window：仅支持 script 标签引入使用。
+
+- commonjs：支持 commonjs 导入使用。
+
+- amd：支持 AMD 导入使用。
+
+- module：支持 ES6 import 导入使用。注意：webpack 5 中如果配置了 library.type 为 module 时，需要配置 `experiments.outputModule: true`，并且将 library.name 配置去除，否则将会报错。
+
+- umd：支持所有方式的导入使用。
+
+```js
+const path = require("path");
+
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "mylib.js",
+    // library可以防止生产模式下，模块未使用而被tree shaking删除
+    library: {
+      // 当配置了experiments时，不能设置name属性，否则会报错
+      name: "mylib",
+      // type 的值还可以是：var、window（等于var）、commonjs、module
+      type: "umd",
+    },
+    // 处理commonjs中self未定义而报错的情况
+    globalObject: "globalThis",
+  },
+  // 当library.type为module时需要配置如下属性，注意experiments属性现在为试运行阶段，慎用
+  // experiments: {
+  //   outputModule: true,
+  // },
+  mode: "production",
+};
+```
+
+4、将打出来的 library 包发布到 npm：
+
+- 首选需要检查当前的 npm 是否是 npm 官方的源地址，如果是淘宝源的话是无法发布到 npm 上的。
+
+```json
+// 检查当前npm源
+npm get registry
+
+// 切换为默认的官方源
+npm config set registry https://registry.npmjs.org
+```
+
+- 如果没有 npm 账号的话，需要到 [npm 官网](https://www.npmjs.com/signup) 进行注册。
+
+- 如果已有账号，直接运行如下命令发布即可：
+
+```json
+npm login // 输入 username => password => email => 邮箱收到的验证码
+
+npm publish // 登录成功后即可运行publish进行发布了
+```
+
+5、将发布的包下载到本地使用：
+
+- src/commonjs.js：
+
+```js
+// 在webpack中配置了全局变量，所以不需要导入包即可使用
+console.log(mylib.add(222, 999), "使用全局变量引入");
+```
+
+- src/index.js：
+
+```js
+import { add } from "mylib_math_test";
+import "./commonjs";
+
+console.log(add(9, 2));
+```
+
+- webpack.config.js：
+
+```js
+const path = require("path");
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].js",
+    clean: true,
+  },
+  plugins: [
+    new HtmlWebpackPlugin(),
+    // 设置全局变量，在全局可以不导入mylib_math_test包的情况下，直接使用mylib访问到这个mylib_math_test包的内容
+    new webpack.ProvidePlugin({
+      mylib: "mylib_math_test",
+    }),
+  ],
+  mode: "production",
+  optimization: {
+    splitChunks: {
+      // minSize 默认值是20000，如果要分离的目标小于20000，则不会被分割，当前设置也就不生效了，因此需要指定minSize。
+      minSize: 50,
+      chunks: "all",
+      name: "vendor",
+    },
+  },
+};
+```
+
+- package.json：
+
+```json
+{
+  "name": "mylib_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack serve",
+    "build": "rimraf dist && webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "html-webpack-plugin": "^5.5.0",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
+  },
+  "dependencies": {
+    "mylib_math_test": "^1.0.0"
+  }
+}
+```
 
 ### esLint
 
