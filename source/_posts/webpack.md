@@ -2453,3 +2453,64 @@ npx eslint ./src
 ```
 
 5、进行完以上步骤之后，husky 就已经配置完成了，此时可以执行 git commit 进行测试了。
+
+### webpack 性能优化
+
+#### 通用环境优化
+
+1、将 loader 应用与最少数量的必要模块，即在不需要用到的地方尽量不去使用，如下代码就限制了 loader 的作用范围，只解析 src 下的 js 文件，这就提升了效率：
+
+```js
+const path = require("path");
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        include: path.resolve(__dirname, "src"),
+        loader: "babel-loader",
+      },
+    ],
+  },
+};
+```
+
+2、引导（bootstrap）：每个额外的 loader/plugin 都有其启动时间，尽量少的使用工具。
+
+3、解析：通过以下步骤可以提高解析速度：
+
+- 减少 `resolve.modules`、`resolve.extensions`、`resolve.mainFiles`、`resolve.descriptionFiles` 中条数数量，因为它们会增加文件体统的调用次数。
+
+- 如果不需要使用 symlinks（例如 npm link 或 yarn link），可以设置 `resolve.symlinks: false`。
+
+- 如果使用自定义 resolve plugin 规则（正则），但不需要指定 context 上下文，可以设置 `resolve.cacheWithContext: false`。
+
+4、减小编译结果的整体大小，以提高构建性能。尽量保持 chunk 体积为最小状态，为实现这一目的，可以通过如下方法实现：
+
+- 使用数量更少/体积更小的 library。
+
+- 在多页面应用程序中使用 SplitChunksPlugin。
+
+- 在多页面用用程序中使用 SplitChunksPlugin，并开启 async 模式。
+
+- 移除未引用代码。
+
+- 只编译当前正在开发的那些代码。
+
+5、持久化缓存：
+
+- 在 webpack 配置中使用 cache 选项，使用 package.json 中的 **postinstall** 清除缓存目录。
+
+- 将 cache 类型设置为内存或者文件系统。memory 选项很简单，它告诉 webpack 在内存中存储缓存，不允许额外的配置：
+
+```js
+module.exports = {
+  // ...
+  cache: {
+    type: "memory",
+  },
+};
+```
+
+6、使用 dll 为更改不频繁的代码生成单独的编译结果。这可以提高应用程序的编译速度，尽管它增加了构建过程的复杂度。
