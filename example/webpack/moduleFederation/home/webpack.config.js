@@ -9,7 +9,7 @@ module.exports = {
       name: "home",
       filename: "remoteEntry.js",
       remotes: {
-        nav: "nav@http://localhost:8080/remoteEntry.js",
+        nav: "nav@http://localhost:9001/remoteEntry.js",
       },
       exposes: {
         "./HomeList": "./src/HomeList.js",
@@ -17,5 +17,8 @@ module.exports = {
       shared: {},
     }),
   ],
+  devServer: {
+    port: 9000,
+  },
   mode: "production",
 };

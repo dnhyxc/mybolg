@@ -9,12 +9,15 @@ module.exports = {
       name: "search",
       filename: "remoteEntry.js",
       remotes: {
-        nav: "nav@http://localhost:8080/remoteEntry.js",
-        home: "home@http://localhost:8081/remoteEntry.js",
+        nav: "nav@http://localhost:9001/remoteEntry.js",
+        home: "home@http://localhost:9000/remoteEntry.js",
       },
       exposes: {},
       shared: {},
     }),
   ],
+  devServer: {
+    port: 9002,
+  },
   mode: "production",
 };

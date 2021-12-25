@@ -3,6 +3,7 @@ const { ModuleFederationPlugin } = require("webpack").container;
 
 module.exports = {
   entry: "./src/index.js",
+
   plugins: [
     new HtmlWebpackPlugin(),
     new ModuleFederationPlugin({
@@ -12,8 +13,11 @@ module.exports = {
       exposes: {
         "./Header": "./src/Header.js",
       },
-      shared: {},
+      shared: {}, // shared: ["react", "react-dom"],
     }),
   ],
+  devServer: {
+    port: 9001,
+  },
   mode: "production",
 };

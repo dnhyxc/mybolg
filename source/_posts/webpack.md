@@ -2162,6 +2162,189 @@ module.exports = {
 }
 ```
 
+### 模块联邦
+
+#### 模块联邦概念
+
+1、Webpack 5 增加了一个新的功能 "模块联邦"，它允许多个 webpack 构建一起工作。从运行时的角度来看，多个构建的模块将表现得像一个巨大的连接模块图。从开发者的角度来看，模块可以从指定的远程构建中导入，并以最小的限制来使用。即模块联邦可以将一个应用的包应用于另一个应用，同时具备整体应用一起打包的公共依赖抽取能力。
+
+2、多个独立的构建可以组成一个应用程序，这些独立的构建之间不应该存在依赖关系，因此可以单独开发和部署它们。这通常被称作微前端，但并不仅限于此。
+
+3、Webpack5 模块联邦让 Webpack 达到了线上 Runtime 的效果，让代码直接在项目间利用 CDN 直接共享，不再需要本地安装 Npm 包、构建再发布了。我们知道 Webpack 可以通过 DLL 或者 Externals 做代码共享时 Common Chunk，但不同应用和项目间这个任务就变得困难了，我们几乎无法在项目之间做到按需热插拔。
+
+4、webpack 5 引入联邦模式是为了更好的共享代码。在此之前，我们共享代码一般用 npm 发包来解决。npm 发包需要经历构建，发布，引用三阶段，而联邦模块可以直接引用其他应用代码，实现热插拔效果。对比 npm 的方式更加简洁、快速、方便。
+
+#### 模块联邦 API 说明
+
+1、ModuleFederationPlugin：该插件是 webpack 自带的插件，可以从 `webpack.container` 中获取到。
+
+2、ModuleFederationPlugin 插件属性：
+
+- name：必传，且唯一，不可冲突。作为被依赖的 key 标志，依赖方使用方式 ${name}/${expose}。
+
+- filename：构建后被依赖部分的入口文件名称。
+
+- remotes：声明需要引用的远程应用。
+
+- exposes：对外暴露 modules 模块，即当前应用对外暴露出的模块名。
+
+- shared：声明共享的第三方依赖，当配置了这个属性时，webpack 在加载的时候会先判断本地应用是否存在对应的包，如果不存在，则加载远程应用的依赖包。例如：app1，它是一个远程应用，配置了 `["react", "react-dom"]` ，而它被 app2 所消费，所以 webpack 会先查找 app2 是否存在这两个包，如果不存在就使用 app1 中的自带包。如果 app2 里面同样申明了这两个参数时，由于 app2 是本地应用，所以会直接用 app2 的依赖。
+
+#### 模块联邦的使用方式
+
+1、nav 应用：
+
+- nav/src/Header.js：
+
+```js
+const Header = () => {
+  const header = document.createElement("h1");
+  header.textContent = "Header";
+  return header;
+};
+
+export default Header;
+```
+
+- nav/src/index.js：
+
+```js
+import Header from "./Header";
+
+const div = document.createElement("div");
+div.appendChild(Header());
+document.body.appendChild(div);
+```
+
+- nav/webpack.config.js：
+
+```js
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { ModuleFederationPlugin } = require("webpack").container;
+
+module.exports = {
+  entry: "./src/index.js",
+
+  plugins: [
+    new HtmlWebpackPlugin(),
+    new ModuleFederationPlugin({
+      name: "nav",
+      filename: "remoteEntry.js",
+      remotes: {},
+      exposes: {
+        "./Header": "./src/Header.js",
+      },
+      shared: {}, // shared: ["react", "react-dom"],
+    }),
+  ],
+  devServer: {
+    port: 9001,
+  },
+  mode: "production",
+};
+```
+
+2、home 应用：
+
+- home/src/HomeList.js：
+
+```js
+const HomeList = (num) => {
+  let str = "<ul>";
+  for (let i = 0; i < num; i++) {
+    str += `<li>item${i}</li>`;
+  }
+  str += "</ul>";
+
+  return str;
+};
+
+export default HomeList;
+```
+
+- home/index.js：
+
+```js
+import HomeList from "./HomeList";
+
+import("nav/Header").then((Header) => {
+  const div = document.createElement("div");
+  div.appendChild(Header.default());
+  document.body.appendChild(div);
+  document.body.innerHTML += HomeList(5);
+});
+```
+
+- home/webpack.config.js：
+
+```js
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { ModuleFederationPlugin } = require("webpack").container;
+
+module.exports = {
+  entry: "./src/index.js",
+  plugins: [
+    new HtmlWebpackPlugin(),
+    new ModuleFederationPlugin({
+      name: "home",
+      filename: "remoteEntry.js",
+      remotes: {
+        nav: "nav@http://localhost:9001/remoteEntry.js",
+      },
+      exposes: {
+        "./HomeList": "./src/HomeList.js",
+      },
+      shared: {},
+    }),
+  ],
+  devServer: {
+    port: 9000,
+  },
+  mode: "production",
+};
+```
+
+3、search 应用：
+
+- search/src/index.js：
+
+```js
+Promise.all([import("nav/Header"), import("home/HomeList")]).then(
+  ([{ default: Header }, { default: HomeList }]) => {
+    document.body.appendChild(Header());
+    document.body.innerHTML += HomeList(3);
+  }
+);
+```
+
+- search/webpack.config.js：
+
+```js
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { ModuleFederationPlugin } = require("webpack").container;
+
+module.exports = {
+  entry: "./src/index.js",
+  plugins: [
+    new HtmlWebpackPlugin(),
+    new ModuleFederationPlugin({
+      name: "search",
+      filename: "remoteEntry.js",
+      remotes: {
+        nav: "nav@http://localhost:9001/remoteEntry.js",
+        home: "home@http://localhost:9000/remoteEntry.js",
+      },
+      exposes: {},
+      shared: {},
+    }),
+  ],
+  devServer: {
+    port: 9002,
+  },
+  mode: "production",
+};
+```
+
 ### esLint
 
 #### 配置 eslint

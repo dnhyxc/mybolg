@@ -1,7 +1,3 @@
-import("nav/Header").then((Header) => {
-  document.body.appendChild(Header());
-});
-
 Promise.all([import("nav/Header"), import("home/HomeList")]).then(
   ([{ default: Header }, { default: HomeList }]) => {
     document.body.appendChild(Header());
