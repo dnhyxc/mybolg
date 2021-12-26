@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack serve",
     "build": "rimraf dist && webpack",
-    "dll": "webpack -c ./webpack.dll.js"
+    "dll": "rimraf dll && webpack -c ./webpack.dll.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
     "webpack-dev-server": "^4.7.1"
   },
   "dependencies": {
-    "jquery": "^3.6.0"
+    "jquery": "^3.6.0",
+    "lodash": "^4.17.21"
   }
 }

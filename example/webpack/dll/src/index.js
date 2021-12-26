@@ -1,3 +1,5 @@
 import $ from "jquery";
+import _ from "lodash";
 
-console.log($);
+console.log($, "jquery");
+console.log(_, "lodash");

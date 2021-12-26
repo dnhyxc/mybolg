@@ -2162,6 +2162,172 @@ module.exports = {
 }
 ```
 
+### dll
+
+#### dll 概述
+
+1、dll 可以将不经常更改的第三方库（如：react、vue、jquery 等）单独进行打包，而且只会在项目第一次构建的时候打包一次，以后如果这些第三方库内容没有变更将不会再重新打包，从而提高了打包效率。
+
+#### DllPlugin
+
+1、DllPlugin 插件概述：
+
+- 该插件能把第三方库代码分离开，并且每次文件更改的时候，它只会打包该项目自身的代码，所以打包速度会更快。
+
+2、DllPlugin 插件参数说明：
+
+- name：公开的 dll 函数的名称，和 output.library 保持一致。
+
+- path：manifest.json 生成文件的位置和文件名称。
+
+- context(可选)：manifest 文件中请求的上下文，默认为该 webpack 文件上下文。
+
+3、该插件的具体使用方式如下：
+
+- webpack.dll.config.js：
+
+```js
+const path = require("path");
+const webpack = require("webpack");
+
+module.exports = {
+  mode: "production",
+  entry: ["jquery", "lodash"],
+  output: {
+    filename: "[name].js",
+    path: path.resolve(__dirname, "dll"),
+    library: "[name]_[hash]",
+  },
+  plugins: [
+    new webpack.DllPlugin({
+      name: "[name]_[hash]",
+      path: path.resolve(__dirname, "dll/manifest.json"),
+    }),
+  ],
+};
+```
+
+#### DllReferencePlugin
+
+1、DllReferencePlugin 插件概述：
+
+- 该插件的作用是把 dll 打包生成的文件引用到 webpack.config.js 打包出的 mian.js 中。
+
+> DllReferencePlugin 补充说明：在 webpack.dll.config.js 中打包后，会生成 main.js 文件和 manifest.json 文件，mian.js 文件包含所有的第三方库文件，manifest.json 文件会包含所有库代码的一个索引，当在使用 webpack.config.js 文件中使用 DllReferencePlugin 插件的时候，会使用该 DllReferencePlugin 插件读取 manifest.json 文件，看看是否有该第三方库。manifest.json 文件其实就是有一个第三方库的一个映射而已。
+
+2、DllReferencePlugin 参数说明：
+
+- manifest: 编译时的一个用于加载的 JSON 的 manifest 的绝对路径。
+
+- name: dll 暴露的地方的名称（默认值为 manifest.name）。
+
+- scope: dll 中内容的前缀。
+
+- sourceType: dll 是如何暴露的 libraryTarget。
+
+- context: manifest 文件中请求的上下文。
+
+3、DllReferencePlugin 具体使用说明：
+
+- webpack.config.js：
+
+```js
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require("path");
+const webpack = require("webpack");
+const AddAssetHtmlPlugin = require("add-asset-html-webpack-plugin");
+
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    filename: "[name][contenthash].js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  plugins: [
+    new HtmlWebpackPlugin(),
+    new webpack.DllReferencePlugin({
+      manifest: path.resolve(__dirname, "./dll/manifest.json"),
+    }),
+    new AddAssetHtmlPlugin({
+      filepath: path.resolve(__dirname, "./dll/main.js"),
+      publicPath: "./",
+    }),
+  ],
+  devServer: {
+    port: 9000,
+  },
+  mode: "production",
+};
+```
+
+#### AddAssetHtmlPlugin
+
+1、AddAssetHtmlPlugin 插件概述：
+
+- 该插件可以将 dll 打包出的动态链接库自动的存放到 dist 文件夹，同时自动在打包出的 index.html 文件中引入 dll 打包出的动态链接库脚本。
+
+2、要使用 AddAssetHtmlPlugin 需要安装 `add-asset-html-webpack-plugin`：
+
+```
+npm i add-asset-html-webpack-plugin -D
+```
+
+#### dll 完成配置
+
+1、webpack.dll.config.js：
+
+```js
+const path = require("path");
+const webpack = require("webpack");
+
+module.exports = {
+  mode: "production",
+  entry: ["jquery", "lodash"],
+  output: {
+    filename: "[name].js",
+    path: path.resolve(__dirname, "dll"),
+    library: "[name]_[hash]",
+  },
+  plugins: [
+    new webpack.DllPlugin({
+      name: "[name]_[hash]",
+      path: path.resolve(__dirname, "dll/manifest.json"),
+    }),
+  ],
+};
+```
+
+2、webpack.config.js：
+
+```js
+const path = require("path");
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const AddAssetHtmlPlugin = require("add-asset-html-webpack-plugin");
+
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    filename: "[name][contenthash].js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  plugins: [
+    new HtmlWebpackPlugin(),
+    new webpack.DllReferencePlugin({
+      manifest: path.resolve(__dirname, "./dll/manifest.json"),
+    }),
+    new AddAssetHtmlPlugin({
+      filepath: path.resolve(__dirname, "./dll/main.js"),
+      publicPath: "./",
+    }),
+  ],
+  devServer: {
+    port: 9000,
+  },
+  mode: "production",
+};
+```
+
 ### 模块联邦
 
 #### 模块联邦概念
@@ -2514,3 +2680,159 @@ module.exports = {
 ```
 
 6、使用 dll 为更改不频繁的代码生成单独的编译结果。这可以提高应用程序的编译速度，尽管它增加了构建过程的复杂度。
+
+7、使用 worker 池（worker pool 多线程打包）。而要开启多线程打包，需要使用 `thread-loader`，该 loader 可以将非常消耗资源的 loader 分流给一个 worker pool，具体配置如下：
+
+- 为 babel-loader 开启多线程：
+
+```js
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_module/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env"],
+            },
+          },
+          {
+            loader: "thread-loader",
+            options: {
+              workers: 2,
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
+```
+
+> 注意：不要使用过多的 worker，因为 Node.js 的 runtime 和 loader 都有启动开销，最小化 worker 和 main process（主进程）之间的模块传输。进程间通讯（IPC，inter process communication）是非常消耗资源的。因此只有当某个 loader 运算量很大，并且非常耗时的情况下，才去使用该 loader。
+
+#### 开发环境优化
+
+1、[增量编译](https://www.webpackjs.com/configuration/watch/)：
+
+- 使用 webpack 的 watch mode（监听模式）。而不是使用其它工具来 watch 文件和调用 webpack。内置的 watch mode 会记录时间戳并将此信息传递给 compilation 以使缓存失效。
+
+- 在某些配置环境中，watch mode 会回退到 poll mode（轮询模式）。监听许多文件会导致 CPU 大量负载。在这些情况下，可以使用 watchOptions.poll 来增加轮询的间隔时间。
+
+2、在内存中编译：下面几个工具通过在内存中（而不是写入磁盘）编译和 serve 资源来提高性能：
+
+- webpack-dev-server。
+
+- webpack-hot-middleware。
+
+- webpack-dev-middleware。
+
+3、stats.toJson 加速：
+
+- webpack 4 默认使用 stats.toJson() 输出大量数据，除非在增量步骤中做必要的统计，否则请避免获取 stats 对象的部分内容。
+
+- webpack-dev-server 在 v3.1.3 以后的版本，包含一个重要的性能修复，即最小化每个增量构建步骤中，从 stats 对象获取的数据量。
+
+4、devtool：需要注意的是，不同的 devtool 设置，会导致性能差异。
+
+- evel：具有最好的性能，但是不能帮助你转义代码。
+
+- 如果能接受稍差一些的 map 质量，可以使用 cheap-source-map 变体配置来提高性能。
+
+- 使用 eval-source-map 变体配置进行增量编译。
+
+- 在大多数情况下，最佳选择是 eval-cheap-module-source-map。
+
+5、避免使用在生产环境中才用到的工具。某些 utility，plugin 和 loader 都只用于生产环境。例如在开发环境下使用 TerserPlugin 来压缩和代码是没有意义的。通常在开发环境下，应该排除以下这些工具：
+
+- TerserPlugin。
+
+- fullhash/chunkhash/contenthash。
+
+- AggressiveSplittingPlugin。
+
+- AggressiveMergingPlugin。
+
+- ModuleConcatenationPlugin。
+
+6、最小化 entry chunk：
+
+- webpack 只会在文件系统中输出已经更新的 chunk，某些配置选项（HMR，output.chunkFilename 的 name/chunkhash/contenthash，fullhash）来说，除了对已经更新的 chunk 无效之外，对于 entry chunk 也不会失效。
+
+- 确保在生成 extry chunk 时，尽量减少某体积以提高性能。下面的配置运行代码创建了一个额外的 chunk，所以它的生成代价较低：
+
+```js
+module.exports = {
+  // ...
+  optimization: {
+    runtimeChunk: true,
+  },
+};
+```
+
+7、避免额外的优化步骤：
+
+- webpack 通过执行额外的算法任务，来优化输出结果的体积和加载性能。这些优化适用于小型代码库，但是在大型代码库中且非常耗费性能：
+
+```js
+module.exports = {
+  // ...
+  optimization: {
+    removeAvailableModules: false,
+    removeEmptyChunks: false,
+    splitChunk: false,
+  },
+};
+```
+
+8、输出结果不携带路径信息：
+
+- webpack 会在输出的 bundle 中生成路径信息。然而，在打包数千个模块的项目中，这回导致造成垃圾回收性能压力。在 option.output.pathinfo 设置中关闭：
+
+```js
+module.exports = {
+  // ...
+  output: {
+    pathinfo: false,
+  },
+};
+```
+
+9、node.js 版本 8.9.10-9.11.1：
+
+- node.js 版本 8.9.10-9.11.1 中 ES2015 Map 和 Set 实现，存在性能回退。而 webpack 大量地使用这些数据结构，因此这次回退也会影响编译时间。
+
+- 说明：在 8.9.10-9.11.1 之前和之后的 node.js 版本不受影响。
+
+9、typescript loader：
+
+- 可以为 loader 传入 transpileOnly 选项，以缩短使用 ts-loader 时的构建时间。使用此选项，会关闭类型检查。如果要再次开启类型检查，就需要使用 ForkTsCheckerWebpackPlugin。使用此插件将检查过程移至单独的进程，可以加快 TS 的类型检查和 ESLint 插入的速度：
+
+```js
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      {
+        test: /\.tsx$/,
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
+```
+
+#### 生产环境优化
+
+1、不启用 SourceMap：source map 相当消耗资源，开发环境模式下不要设置 source map。

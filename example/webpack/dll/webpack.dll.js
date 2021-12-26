@@ -3,9 +3,10 @@ const webpack = require("webpack");
 
 module.exports = {
   mode: "production",
-  entry: {
-    jquery: ["jquery"],
-  },
+  entry: [
+    "jquery",
+    "lodash",
+  ],
   output: {
     filename: "[name].js",
     path: path.resolve(__dirname, "dll"),

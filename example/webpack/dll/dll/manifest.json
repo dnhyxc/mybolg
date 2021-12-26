@@ -1,1 +1,7 @@
-{"name":"jquery_c1b819415f33e00c7ea5","content":{"./node_modules/jquery/dist/jquery.js":{"id":755,"buildMeta":{}}}}
+{
+  "name": "main_78c7374b725e752eb8c4",
+  "content": {
+    "./node_modules/lodash/lodash.js": { "id": 486, "buildMeta": {} },
+    "./node_modules/jquery/dist/jquery.js": { "id": 755, "buildMeta": {} }
+  }
+}
