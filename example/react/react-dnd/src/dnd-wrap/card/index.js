@@ -8,7 +8,6 @@ const Card = ({ index, name, id, moveCard }) => {
   const cardRef = useRef();
 
   const [{ opacity }, drag] = useDrag(() => {
-    console.log(id, "id");
     return {
       type: TYPE,
       item: () => ({ id, index }),
@@ -20,7 +19,7 @@ const Card = ({ index, name, id, moveCard }) => {
 
   drag(cardRef);
 
-  const [_, drap] = useDrop(
+  const [, drap] = useDrop(
     () => ({
       accept: TYPE,
       collect: () => ({}),
