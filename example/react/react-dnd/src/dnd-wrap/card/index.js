@@ -38,7 +38,6 @@ const Card = ({ index, name, id, moveCard }) => {
           (dragIndex > hoverIndex && hoverClientY < halfOfHoverHeight)
         ) {
           moveCard(dragIndex, hoverIndex);
-          console.log(item);
           item.index = hoverIndex;
         }
       },
