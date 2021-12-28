@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import "./index.css";
 
-const TYPE = "addCard";
+const TYPE = "moveCard";
 
 const CardList = ({ name, index, id, wrapRef, cards, addCard }) => {
   const ref = useRef();
@@ -21,17 +21,21 @@ const CardList = ({ name, index, id, wrapRef, cards, addCard }) => {
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
     }),
+    end: (item, monitor) => {
+      // 判断拖动的元素是否拖入到了容器中
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      if (monitor.didDrop()) {
+        addCard(item, dragIndex, hoverIndex);
+      }
+    },
   });
 
   const [, drap] = useDrop({
     accept: TYPE,
     item: () => ({}),
     collect: () => ({}),
-    hover(item, monitor) {
-      if (!cards.map((i) => i.id).includes(item.id)) {
-        addCard(item);
-      }
-    },
+    hover(item, monitor) {},
   });
 
   return (

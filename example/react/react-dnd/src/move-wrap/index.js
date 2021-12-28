@@ -10,7 +10,7 @@ const MoveWrap = forwardRef(({ cards, moveCard }, wrapRef) => {
           cards.map((i, index) => {
             return (
               <MoveCard
-                key={i.id}
+                key={index}
                 id={i.id}
                 name={i.name}
                 index={index}

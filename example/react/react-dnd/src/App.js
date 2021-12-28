@@ -34,12 +34,10 @@ function App() {
 
   const ref = useRef();
 
-  const addCard = (item) => {
+  const addCard = (item, dragIndex, hoverIndex) => {
     const cloneCards = [...cards];
-    if (!cloneCards.map((i) => i.id).includes(item.id)) {
-      cloneCards.push(item);
-      setCards(cloneCards);
-    }
+    cloneCards.push(item);
+    setCards(cloneCards);
   };
 
   const moveCard = (dragIndex, hoverIndex) => {
@@ -63,7 +61,7 @@ function App() {
               {cardList.map((i, index) => (
                 <CardList
                   wrapRef={ref}
-                  key={i.id}
+                  key={index}
                   index={index}
                   id={i.id}
                   name={i.name}
