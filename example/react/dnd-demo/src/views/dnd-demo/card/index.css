@@ -1,0 +1,9 @@
+.cardItem {
+  width: 100%;
+  height: 50px;
+  background-color: #ddd;
+  margin-bottom: 10px;
+  cursor: move;
+  text-align: center;
+  line-height: 50px;
+}
