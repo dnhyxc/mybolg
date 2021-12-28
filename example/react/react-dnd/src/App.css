@@ -1,11 +1,37 @@
 .container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   padding: 20px;
   height: 100%;
   box-sizing: border-box;
 }
 
-.container :first-child {
+.moveCardList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 50px;
+  height: 100%;
+}
+
+.title {
+  height: 30px;
+  line-height: 30px;
+  text-align: right;
+  margin-right: 116px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.card_list {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
   margin-right: 50px;
 }

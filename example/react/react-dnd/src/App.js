@@ -53,20 +53,28 @@ function App() {
     <DndProvider backend={HTML5Backend}>
       <div className="container">
         <div>
+          <div className="title">交换位置</div>
           <DndWrap />
-          {cardList.map((i, index) => (
-            <CardList
-              wrapRef={ref}
-              key={i.id}
-              index={index}
-              id={i.id}
-              name={i.name}
-              addCard={addCard}
-              cards={cards}
-            />
-          ))}
         </div>
-        <MoveWrap ref={ref} cards={cards} moveCard={moveCard} />
+        <div className="moveCardList">
+          <div className="title">添加card并交换位置</div>
+          <div className="card_list">
+            <div className="content">
+              {cardList.map((i, index) => (
+                <CardList
+                  wrapRef={ref}
+                  key={i.id}
+                  index={index}
+                  id={i.id}
+                  name={i.name}
+                  addCard={addCard}
+                  cards={cards}
+                />
+              ))}
+            </div>
+            <MoveWrap ref={ref} cards={cards} moveCard={moveCard} />
+          </div>
+        </div>
       </div>
     </DndProvider>
   );
