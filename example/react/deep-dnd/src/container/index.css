@@ -1,0 +1,21 @@
+.container {
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.cards {
+  height: 100%;
+  margin-right: 100px;
+}
+
+.cardList {
+  box-sizing: border-box;
+  height: 100%;
+  width: 300px;
+  border: 1px dotted #ccc;
+}

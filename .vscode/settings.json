@@ -27,5 +27,6 @@
     "LastEditTime": "Do not edit", // 最后一次修改的时间
     "LastEditors": "dnh", // 修改人员
     "FilePath": "no item name"
-  }
+  },
+  "editor.tabSize": 2
 }
