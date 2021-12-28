@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.container :first-child {
+  margin-right: 50px;
+}
