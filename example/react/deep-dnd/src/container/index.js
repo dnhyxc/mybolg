@@ -2,7 +2,7 @@
  * @Description: dnd 容器
  * @Author: dnh
  * @Date: 2021-12-28 18:00:51
- * @LastEditTime: 2021-12-28 20:30:37
+ * @LastEditTime: 2021-12-29 21:02:05
  * @LastEditors: dnh
  * @FilePath: \example\react\deep-dnd\src\container\index.js
  */
@@ -40,7 +40,7 @@ const Container = () => {
   const [cardList, setCardList] = useState([]);
 
   const changeCards = (item) => {
-    setCardList([...item]);
+    setCardList(item);
   };
 
   return (
