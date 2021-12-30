@@ -87,7 +87,8 @@
 
 .article-tag-list {
   .article-tag-list-item {
-    float: left;
+    // float: left;
+    display: inline-block;
   }
 }
 .article-pop-out {

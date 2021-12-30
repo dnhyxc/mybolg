@@ -51,16 +51,14 @@
               <div class="search-li-title">
                 <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span
                   q-text="title"></span></a>
-              <p class="search-time">
-                <i class="icon-calendar icon"></i>
-                <span q-text="date|dateformat"></span>
-              </p>
+                <p class="search-time">
+                  <i class="icon-calendar icon"></i>
+                  <span q-text="date|dateformat"></span>
+                </p>
               </div>
               <p class="search-tag">
                 <i class="icon-price-tags icon"></i>
-                <div>
-                  <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
-                </div>
+                <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
               </p>
             </li>
           </ul>
