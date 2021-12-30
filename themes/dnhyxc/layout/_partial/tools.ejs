@@ -48,15 +48,19 @@
           </div>
           <ul class="search-ul">
             <li class="search-li" q-repeat="items" q-show="isShow">
-              <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span
+              <div class="search-li-title">
+                <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span
                   q-text="title"></span></a>
               <p class="search-time">
                 <i class="icon-calendar icon"></i>
                 <span q-text="date|dateformat"></span>
               </p>
+              </div>
               <p class="search-tag">
                 <i class="icon-price-tags icon"></i>
-                <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+                <div>
+                  <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+                </div>
               </p>
             </li>
           </ul>
