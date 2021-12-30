@@ -10,7 +10,7 @@ import { useDrag } from "react-dnd";
 import { TYPE } from "../utils";
 import "./index.css";
 
-const Cards = ({ name, index, id, cardList, changeCards }) => {
+const Cards = ({ name, index, currentIndex, id, cardList, changeCards }) => {
   const [{ opacity }, drag] = useDrag({
     type: TYPE,
     item: () => ({ id, index, name }),
@@ -20,7 +20,11 @@ const Cards = ({ name, index, id, cardList, changeCards }) => {
     end: (item, monitor) => {
       // 判断拖动的元素是否拖入到了容器中
       if (monitor.didDrop()) {
-        changeCards([...cardList, item]);
+        const cloneCards = [...cardList];
+        console.log(index, "index");
+        console.log(currentIndex, "currentIndex");
+        cloneCards.splice(currentIndex, 0, item);
+        changeCards([...cloneCards]);
       }
     },
   });

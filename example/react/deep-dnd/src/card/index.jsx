@@ -11,7 +11,7 @@ import { useDrag, useDrop } from "react-dnd";
 import { TYPE } from "../utils";
 import "./index.css";
 
-const Card = ({ name, id, index, moveCard }) => {
+const Card = ({ name, id, index, moveCard, getCurrentItemIndex }) => {
   const ref = useRef();
   const [{ opacity }, drag, dragPreview] = useDrag({
     type: TYPE,
@@ -37,6 +37,9 @@ const Card = ({ name, id, index, moveCard }) => {
     drop: (item) => {
       moveCard(item.index, index);
     },
+    hover(item, monitor) {
+      getCurrentItemIndex(item, index);
+    },
     // hover(item, monitor) {
     //   const dragIndex = item.index;
     //   const hoverIndex = index;
@@ -57,7 +60,7 @@ const Card = ({ name, id, index, moveCard }) => {
     // },
   });
 
-  dragPreview(drop(ref));
+  drag(drop(ref));
 
   return (
     <div ref={ref} className="card" style={{ opacity }}>

@@ -38,9 +38,14 @@ const cards = [
 
 const Container = () => {
   const [cardList, setCardList] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(null);
 
   const changeCards = (item) => {
     setCardList(item);
+  };
+
+  const getCurrentItemIndex = (item, hoverIndex) => {
+    setCurrentIndex(hoverIndex);
   };
 
   return (
@@ -52,13 +57,18 @@ const Container = () => {
               {...i}
               key={i.id}
               index={index}
+              currentIndex={currentIndex}
               cardList={cardList}
               changeCards={changeCards}
             />
           ))}
         </div>
         <div className="cardList">
-          <CardList cardList={cardList} changeCards={changeCards} />
+          <CardList
+            cardList={cardList}
+            changeCards={changeCards}
+            getCurrentItemIndex={getCurrentItemIndex}
+          />
         </div>
       </div>
     </DndProvider>

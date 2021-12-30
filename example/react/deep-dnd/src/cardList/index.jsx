@@ -12,32 +12,38 @@ import { TYPE } from "../utils";
 import Card from "../card";
 import "./index.css";
 
-const CardList = ({ cardList, changeCards }) => {
+const CardList = ({ cardList, changeCards, getCurrentItemIndex }) => {
   const [, drop] = useDrop({
     accept: TYPE,
   });
 
   const moveCard = (dragIndex, hoverIndex) => {
-    // const dragCard = cardList[dragIndex];
-    // cardList.splice(dragIndex, 1);
-    // dragCard && cardList.splice(hoverIndex, 0, dragCard);
-    // changeCards([...cardList]);
-    const dragRow = cardList[dragIndex];
-    changeCards(
-      update(cardList, {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, dragRow],
-        ],
-      })
-    );
+    const dragCard = cardList[dragIndex];
+    dragCard && cardList.splice(dragIndex, 1);
+    dragCard && cardList.splice(hoverIndex, 0, dragCard);
+    changeCards([...cardList]);
+    // const dragRow = cardList[dragIndex];
+    // changeCards(
+    //   update(cardList, {
+    //     $splice: [
+    //       [dragIndex, 1],
+    //       [hoverIndex, 0, dragRow],
+    //     ],
+    //   })
+    // );
   };
 
   return (
     <div ref={drop} className="cardList">
       {cardList.length > 0 ? (
         cardList.map((i, index) => (
-          <Card {...i} index={index} key={index} moveCard={moveCard} />
+          <Card
+            {...i}
+            index={index}
+            key={index}
+            moveCard={moveCard}
+            getCurrentItemIndex={getCurrentItemIndex}
+          />
         ))
       ) : (
         <div>请从左边拖入卡片</div>
