@@ -2588,6 +2588,8 @@ module.exports = {
 };
 ```
 
+> 注意：上述文件配置好之后，需要配置好下面的husky才能正常运行。
+
 #### husky
 
 1、使用 husky 可以在提交代码前进行 eslint 检查。
