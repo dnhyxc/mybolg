@@ -106,7 +106,6 @@
             .homeIcon {
               width: 45px;
               height: 45px;
-              // background: url(../css/img/home.png) no-repeat;
               background: url(../css/img/home_light.svg) no-repeat;
               background-size: 45px 45px;
               cursor: pointer;
@@ -115,23 +114,10 @@
 
           .tips-box {
             .tips-text {
-              // background-image: linear-gradient(
-              //   -20deg,
-              //   #fff1eb 0%,
-              //   #ace0f9 100%
-              // );
               border-left: none !important;
               border-right: none !important;
               box-shadow: 0 0 5px #ccc;
               margin-top: 0px !important;
-
-              // &:last-child {
-              //   margin-top: 0px;
-              // }
-
-              // &:nth-child(2) {
-              //   margin-top: 0px;
-              // }
 
               .tips-a {
                 color: #333;
@@ -162,21 +148,12 @@
 
         .header-menu {
           .menu-text {
-            // background-image: linear-gradient(-20deg, #fff1eb 0%, #ace0f9 100%);
             opacity: 1;
             box-shadow: 0 0 6px #c9d9d9 !important;
 
             a {
               color: #333 !important;
             }
-
-            // &:hover {
-            //   background-image: linear-gradient(
-            //     to right,
-            //     #fff1eb 0%,
-            //     #ace0f9 100%
-            //   );
-            // }
           }
         }
       }
@@ -694,5 +671,9 @@
   .header-menu.tools-nav ul a.active {
     background: #dedede;
     color: #333;
+  }
+
+  .article-tag-list {
+    background: #e6e6e6 !important;
   }
 }
