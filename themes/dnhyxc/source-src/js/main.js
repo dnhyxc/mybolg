@@ -125,21 +125,25 @@ document.onreadystatechange = function () {
     }
     if (Utils.getSSG("hideMenu")) {
       menuList.onHideMenu();
-      if (Utils.getSSG("narrow") && Utils.isArticle) {
+      if (Utils.getSSG("narrow") && (Utils.isArticle || Utils.isInformal)) {
         atticleNarrow.setNarrow();
       } else {
         atticleNarrow.removeNarrow();
       }
     } else {
       hideLeft.onShowMenu();
-      if (Utils.getSSG("narrow") && Utils.isArticle) {
+      if (Utils.getSSG("narrow") && (Utils.isArticle || Utils.isInformal)) {
         atticleNarrow.setNarrow();
       } else {
         atticleNarrow.removeNarrow();
       }
     }
 
-    if (Utils.getSSG("narrow") && !Utils.isHome && Utils.isArticle) {
+    if (
+      Utils.getSSG("narrow") &&
+      !Utils.isHome &&
+      (Utils.isArticle || Utils.isInformal)
+    ) {
       atticleNarrow.setNarrow();
     } else {
       atticleNarrow.removeNarrow();

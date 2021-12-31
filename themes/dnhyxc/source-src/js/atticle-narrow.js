@@ -47,9 +47,9 @@ function removeNarrow() {
   const articleInfo = document.querySelector(".article-info");
 
   if (
-    document.body.clientWidth > 800 &&
-    changeSize &&
-    !Utils.isHome &&
+    document.body.clientWidth < 800 ||
+    changeSize ||
+    !Utils.isHome ||
     !Utils.isPage
   ) {
     article && article.classList.remove("narrow");
@@ -60,7 +60,7 @@ function removeNarrow() {
     if (articleAction) articleAction.style.display = "none";
   }
 
-  if (!Utils.isHome && !Utils.isPage) {
+  if (!Utils.isHome && !Utils.isPage || document.body.clientWidth < 800) {
     articleInfo && articleInfo.classList.remove("artNobb");
     if (articleToc) articleToc.style.display = "none";
     if (headerToc) headerToc.style.display = "block";

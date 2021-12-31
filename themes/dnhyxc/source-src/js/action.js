@@ -1,5 +1,6 @@
 import * as Utils from "./public-utils";
 import hideMain from "./hideMain";
+import articleNarrow from "./atticle-narrow";
 
 function init() {
   let leftCol = document.querySelector(".left-col");
@@ -92,6 +93,8 @@ function init() {
       scrollTop.forEach((i) => {
         i.style.display = "none";
       });
+      articleNarrow.removeNarrow();
+      Utils.removeSSG("narrow");
     }
   };
 
@@ -123,7 +126,6 @@ function init() {
   const toTopId = [];
   const toTopHref = [];
   let mainLoadingText;
-  let scrollTimer = null;
 
   const setHeaderText = (text) => {
     changeSize.style.display = "block";
