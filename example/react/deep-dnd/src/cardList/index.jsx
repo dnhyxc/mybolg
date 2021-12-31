@@ -2,12 +2,12 @@
  * @Description: 卡片列表，作为移入card的容器
  * @Author: dnh
  * @Date: 2021-12-28 18:14:57
- * @LastEditTime: 2021-12-30 10:44:56
+ * @LastEditTime: 2021-12-31 11:46:29
  * @LastEditors: dnh
  * @FilePath: \example\react\deep-dnd\src\cardList\index.jsx
  */
 import { useDrop } from "react-dnd";
-import update from "immutability-helper";
+// import update from "immutability-helper";
 import { TYPE } from "../utils";
 import Card from "../card";
 import "./index.css";

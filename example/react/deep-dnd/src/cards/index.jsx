@@ -2,7 +2,7 @@
  * @Description: 用于拖入容器的卡片组容器
  * @Author: dnh
  * @Date: 2021-12-28 18:18:52
- * @LastEditTime: 2021-12-29 21:18:58
+ * @LastEditTime: 2021-12-31 12:09:19
  * @LastEditors: dnh
  * @FilePath: \example\react\deep-dnd\src\cards\index.jsx
  */
@@ -21,9 +21,11 @@ const Cards = ({ name, index, currentIndex, id, cardList, changeCards }) => {
       // 判断拖动的元素是否拖入到了容器中
       if (monitor.didDrop()) {
         const cloneCards = [...cardList];
-        console.log(index, "index");
-        console.log(currentIndex, "currentIndex");
-        cloneCards.splice(currentIndex, 0, item);
+        if (currentIndex !== null) {
+          cloneCards.splice(currentIndex + 1, 0, item);
+        } else {
+          cloneCards.splice(cardList.length, 0, item);
+        }
         changeCards([...cloneCards]);
       }
     },

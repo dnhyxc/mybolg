@@ -2,7 +2,7 @@
  * @Description: dnd 容器
  * @Author: dnh
  * @Date: 2021-12-28 18:00:51
- * @LastEditTime: 2021-12-29 21:02:05
+ * @LastEditTime: 2021-12-31 11:49:07
  * @LastEditors: dnh
  * @FilePath: \example\react\deep-dnd\src\container\index.js
  */
@@ -16,22 +16,27 @@ import { useState } from "react";
 const cards = [
   {
     id: "card1",
+    key: "1",
     name: "card1",
   },
   {
     id: "card2",
+    key: "2",
     name: "card2",
   },
   {
     id: "card3",
+    key: "3",
     name: "card3",
   },
   {
     id: "card4",
+    key: "4",
     name: "card4",
   },
   {
     id: "card5",
+    key: "5",
     name: "card5",
   },
 ];
