@@ -225,8 +225,9 @@
   justify-content: space-between;
   position: relative;
   padding-top: 11px;
-  margin: 0px $articlePadding 24px $articlePadding;
+  margin: 0px $articlePadding 18px $articlePadding;
   border-top: 1px solid #999;
+  height: 50px;
 }
 
 .article-info-index.article-info.noBorderB {
