@@ -169,7 +169,7 @@ function init() {
     let countInfo = `${parseInt(
       (Math.ceil(artWrap.scrollTop) /
         (artWrap.scrollHeight - artWrap.offsetHeight)) *
-        100
+      100
     )}%`;
     if (artWrap.scrollTop / (artWrap.scrollHeight - artWrap.offsetHeight) > 1) {
       countInfo = "100%";
@@ -345,6 +345,8 @@ function init() {
       ) {
         artWrap.classList.add("onscroll");
       }
+    } else {
+      artWrap.classList.remove("onscroll");
     }
   }
 
@@ -398,9 +400,8 @@ function init() {
             decodeURIComponent(newPath).lastIndexOf("/") - 1
           ) + 1
         );
-        mainLoading.innerHTML = `${
-          res.split("/")[0][0].toUpperCase() + res.split("/")[0].slice(1)
-        }-${res.split("/")[1]}`;
+        mainLoading.innerHTML = `${res.split("/")[0][0].toUpperCase() + res.split("/")[0].slice(1)
+          }-${res.split("/")[1]}`;
       } else {
         // 设置头部main的逻辑
         const subPath = res.slice(0, res.length - 1);
