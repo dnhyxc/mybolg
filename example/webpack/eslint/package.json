@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack serve",
     "build": "webpack",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "npx eslint ./src"
   },
   "keywords": [],
   "author": "",
