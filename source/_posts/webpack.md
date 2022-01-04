@@ -2588,8 +2588,6 @@ module.exports = {
 };
 ```
 
-> 注意：上述文件配置好之后，需要配置好下面的husky才能正常运行。
-
 #### husky
 
 1、使用 husky 可以在提交代码前进行 eslint 检查。
@@ -2601,26 +2599,28 @@ npm i husky -D
 2、husky 的使用方式：安装好 husky 之后，需要执行如下命令：
 
 ```
-npx husky install
+npm set-script prepare "husky install"
+
+npm run prepare
+
+npx husky add .husky/pre-commit "npm test"
 ```
+
+> 注意：执行 `npm set-script prepare "husky install"` 之前，必须要先使用 `git init` 创建 `.git` 文件，否则将会执行失败。
 
 3、配置 package 脚本：
 
 ```json
 {
   "scripts": {
-    "prepare": "husky install"
+    // ...
++   "prepare": "husky install",
++   "test": "npx eslint ./src"
   }
 }
 ```
 
-4、在 生成的 .husky 文件中创建一个 pre-commit 文件，注意：不是放在 _ 下，而是与 _ 同级，pre-commit 具体内容如下：
-
-```
-npx eslint ./src
-```
-
-5、进行完以上步骤之后，husky 就已经配置完成了，此时可以执行 git commit 进行测试了。
+4、进行完以上步骤之后，husky 就已经配置完成了，此时可以执行 git commit 进行测试了。
 
 ### webpack 性能优化
 
