@@ -1,3 +1,3 @@
 const myName = 'dnhyxc';
 
-console.log(myName);
+console.log(myName)
