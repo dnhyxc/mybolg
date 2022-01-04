@@ -2272,7 +2272,7 @@ module.exports = {
 npm i add-asset-html-webpack-plugin -D
 ```
 
-#### dll 完成配置
+#### dll 完整配置
 
 1、webpack.dll.config.js：
 
