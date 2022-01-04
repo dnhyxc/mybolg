@@ -1772,7 +1772,7 @@ module.exports = {
 };
 ```
 
-> 以上配置从本质上来说，就是告诉 webpack，如果遇到了至少一处用到 `_` 变量的模块实例，那就将 lodash package 引入进来，并将其提供给需要用到它的模块。这其实就是 webpack 自动将 lodash 引入，并打包到 main.js 中了。
+> 以上配置从本质上来说，就是告诉 webpack，如果遇到了至少一处用到 `_` 变量的模块实例，那就自动将 lodash package 引入进来（无需开发者手动 npm install lodash），并将其提供给需要用到它的模块。这其实就是 webpack 自动将 lodash 引入，并打包到 main.js 中了。
 
 #### 细粒度 Shimming
 
@@ -2588,7 +2588,7 @@ module.exports = {
 };
 ```
 
-> 注意：上述文件配置好之后，需要配置好下面的husky才能正常运行。
+> 注意：上述文件配置好之后，需要配置好下面的 husky 才能正常运行。
 
 #### husky
 
