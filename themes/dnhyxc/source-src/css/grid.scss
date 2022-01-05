@@ -88,17 +88,14 @@ body,
   background: none;
   left: 270px;
   width: auto;
-  // overflow-y: auto;
   @extend %trans;
 
   &.show {
     background: none;
-    opacity: 0.9;
     @extend %anmLeftIn;
 
     .article {
       @extend %trans;
-      // background: rgba(255, 255, 255, 0.3);
     }
     width: calc(100% - 603px);
   }
