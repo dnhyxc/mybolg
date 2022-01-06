@@ -32,3 +32,9 @@
   height: calc(100vh - 88px);
   transition: all 0.3s ease;
 }
+
+.hasImage-hideHeader {
+  height: calc(100vh - 20px);
+  transition: all 0.3s ease;
+  border-bottom: none !important;
+}

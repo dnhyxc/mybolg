@@ -27,6 +27,7 @@ function hideFooter(fromHideMain) {
   changeFooter.innerHTML = "显底";
   if (Utils.isHome || Utils.isPage) {
     article.classList.add("hasImage-hideFooter");
+    // article.classList.remove("hasImage-hideHeader");
   }
   if (wrapper.getAttribute("class").includes("hideMain")) {
     wrapper.classList.remove("hideMain");
