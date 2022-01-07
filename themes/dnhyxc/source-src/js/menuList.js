@@ -25,9 +25,8 @@ function hideFooter(fromHideMain) {
       i.classList.add("toggleScrollWrap");
     });
   changeFooter.innerHTML = "显底";
-  if (Utils.isHome || Utils.isPage) {
+  if (Utils.isHome) {
     article.classList.add("hasImage-hideFooter");
-    // article.classList.remove("hasImage-hideHeader");
   }
   if (wrapper.getAttribute("class").includes("hideMain")) {
     wrapper.classList.remove("hideMain");
@@ -56,7 +55,7 @@ function showFooter() {
       i.classList.remove("toggleScrollWrap");
     });
   changeFooter.innerHTML = "隐底";
-  if (Utils.isPage || Utils.isHome) {
+  if (Utils.isHome) {
     article.classList.remove("hasImage-hideFooter");
   }
 
