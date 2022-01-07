@@ -1762,7 +1762,6 @@
           };
 
           /* harmony default export */ __webpack_exports__["default"] = index;
-          //# sourceMappingURL=preact-compat.es.js.map
 
           /* WEBPACK VAR INJECTION */
         }.call(__webpack_exports__, __webpack_require__(18)));
@@ -15184,7 +15183,6 @@ object-assign
           if (true) module.exports = preact;
           else self.preact = preact;
         })();
-        //# sourceMappingURL=preact.js.map
 
         /***/
       },
@@ -16428,7 +16426,6 @@ object-assign
             return Promise$2;
           });
 
-          //# sourceMappingURL=es6-promise.map
 
           /* WEBPACK VAR INJECTION */
         }.call(exports, __webpack_require__(18), __webpack_require__(205)));
@@ -80486,4 +80483,3 @@ object-assign
     ]
   );
 });
-//# sourceMappingURL=gitalk.js.map
