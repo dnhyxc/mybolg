@@ -15,7 +15,7 @@ function init(isDown, wrapper) {
 
   if (isDown) {
     main.classList.add("hide");
-    if (Utils.isHome || Utils.isPage) {
+    if (Utils.isHome) {
       article.classList.add("hasImage-hideHeader");
     }
 
@@ -29,7 +29,7 @@ function init(isDown, wrapper) {
     wrapper.style.transition = "none";
   } else {
     main.classList.remove("hide");
-    if (Utils.isHome || Utils.isPage) {
+    if (Utils.isHome) {
       article.classList.remove("hasImage-hideHeader");
     }
 
