@@ -97,7 +97,9 @@ body,
     .article {
       @extend %trans;
     }
-    width: calc(100% - 603px);
+    @media screen and (min-width: 800px) {
+      width: calc(100% - 603px);
+    }
   }
 
   &.hide {

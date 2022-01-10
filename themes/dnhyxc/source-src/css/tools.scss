@@ -132,12 +132,6 @@
         cursor: pointer;
       }
 
-      @media screen and (max-width: 800px) {
-        .search-switch input:after {
-          top: 15px;
-        }
-      }
-
       .article-tag-list {
         @extend %trans;
         display: none;
