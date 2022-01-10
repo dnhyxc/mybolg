@@ -1,3 +1,5 @@
+import * as Utils from "./public-utils";
+
 function init() {
   const tocArticle = document.querySelector(".toc-article");
   const btnctnname = document.querySelector(".btnctn-name");
@@ -133,7 +135,7 @@ function init() {
       if (
         tocArticle &&
         tocArticle.scrollHeight - 1 - tocArticle.scrollTop <=
-          tocArticle.clientHeight &&
+        tocArticle.clientHeight &&
         clientY < 0 &&
         event.cancelable
       ) {
@@ -147,7 +149,7 @@ function init() {
   if (decodeURIComponent(path)) {
     const reg = /\d/;
     const isArticle = reg.test(decodeURIComponent(path).substr("/"));
-    if (path !== "/" && document.body.clientWidth <= 800) {
+    if (path !== "/" && !Utils.isPage && document.body.clientWidth <= 800) {
       const res = decodeURIComponent(path).substr(
         decodeURIComponent(path).lastIndexOf(
           "/",
