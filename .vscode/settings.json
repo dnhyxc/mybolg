@@ -28,5 +28,6 @@
     "LastEditors": "dnh", // 修改人员
     "FilePath": "no item name"
   },
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "explorer.compactFolders": false
 }
