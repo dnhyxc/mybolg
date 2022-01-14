@@ -9,7 +9,8 @@
     "server": "hexo server -p 9211",
     "pro": "hexo deploy",
     "start": "hexo clean && hexo generate && hexo server -p 9211",
-    "publish": "hexo clean && hexo generate && hexo deploy"
+    "publish": "hexo clean && hexo generate && hexo deploy",
+    "draft": "hexo s --draft -p 9002"
   },
   "hexo": {
     "version": "5.3.0"
