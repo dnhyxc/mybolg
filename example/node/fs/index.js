@@ -52,8 +52,52 @@ fs.writeFile(
 // console.log(fsPromises, "同步读取操作");
 console.log(readFile, "readFile");
 
-const onAccess = (file) => {
-  
+// 检测文件或文件夹权限
+const onAccess = async (file, type) => {
+  switch (type) {
+    // 检查当前目录中是否存在指定文件或文件夹
+    case "F_OK":
+      try {
+        await access(file, fs.constants.F_OK);
+        console.log(`${file} 存在`);
+      } catch {
+        console.log(`${file} 不存在`);
+      }
+      break;
+    // 检查当前文件是否可读
+    case "R_OK":
+      try {
+        await access(file, fs.constants.R_OK);
+        console.log(`${file} 可读`);
+      } catch {
+        console.log(`${file} 不可读`);
+      }
+      break;
+    // 检查当前文件是否可写
+    case "W_OK":
+      try {
+        await access(file, fs.constants.W_OK);
+        console.log(`${file} 可写`);
+      } catch {
+        console.log(`${file} 不可写`);
+      }
+      break;
+    // 检查当前文件是否可读可写
+    case "FRW_OK":
+      try {
+        await access(
+          file,
+          fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
+        );
+        console.log(`${file} 存在并可读可写`);
+      } catch {
+        console.log(`${file} 不存在或不可读或不可写`);
+      }
+      break;
+
+    default:
+      break;
+  }
 };
 
 // 异步的将test.txt文件内容复制到test文件夹下的copyTest.txt中
@@ -63,3 +107,12 @@ const onCopyFile = async () => {
 };
 
 onCopyFile();
+
+onAccess("test.txt", "FRW_OK");
+
+const onAccessSync = (file) => {
+  fs.accessSync("test", fs.constants.F_OK);
+  console.log(`${file}`, "存在~~~");
+};
+
+onAccessSync("test.txt", fs.constants.F_OK);

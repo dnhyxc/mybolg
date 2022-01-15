@@ -24,6 +24,162 @@ categories:
 const fs = require("fs");
 ```
 
+#### access
+
+1、fs.access() 方法可以用来检查当前目录中是否存在指定文件或文件夹、检查指定文件是否可读、可写。
+
+##### fs.access() 语法
+
+1、fs.access() 采用回调形式的语法：
+
+```js
+fs.access(path[, mode], callback)
+```
+
+- path：文件路径，可以是 string | Buffer | URL。
+
+- mode：检测的模式，默认值为：`fs.constants.F_OK`。
+
+  - `fs.constants.F_OK`：表示检测当前目录是否存在指定的文件或文件夹。
+
+  - `fs.constants.R_OK`：表示检测当前指定文件或者文件夹是否可读。
+
+  - `fs.constants.W_OK`：表示检测当前指定文件或者文件夹是否可写。
+
+- callback：检测完成的回调。
+
+2、参数 Promise 写法时的语法：
+
+```js
+const fsPromises = require('fs/promises')
+
+fsPromises.access(path[, mode])
+```
+
+##### access 基本使用示例
+
+1、回调函数写法：
+
+```js
+const fs = require("fs");
+
+const onAccessOfCallback = async (file, type) => {
+  switch (type) {
+    // 检查当前目录中是否存在指定文件或文件夹
+    case "F_OK":
+      fs.access(file, fs.constants.F_OK, (err) => {
+        if (err) {
+          console.log(`${file} 不存在`);
+        } else {
+          console.log(`${file} 存在`);
+        }
+      });
+      break;
+    // 检查当前文件是否可读
+    case "R_OK":
+      fs.access(file, fs.constants.R_OK, (err) => {
+        if (err) {
+          console.log(`${file} 不可读`);
+        } else {
+          console.log(`${file} 可读`);
+        }
+      });
+      break;
+    // 检查当前文件是否可写
+    case "W_OK":
+      fs.access(file, fs.constants.W_OK, (err) => {
+        if (err) {
+          console.log(`${file} 不可写`);
+        } else {
+          console.log(`${file} 可写`);
+        }
+      });
+      break;
+    // 检查当前文件是否可读可写
+    case "FRW_OK":
+      fs.access(
+        file,
+        fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK,
+        (err) => {
+          if (err) {
+            console.log(`${file} 不存在或不可读或不可写`);
+          } else {
+            console.log(`${file} 存在并可读可写`);
+          }
+        }
+      );
+      break;
+
+    default:
+      break;
+  }
+};
+```
+
+2、promise 写法：
+
+```js
+const { access } = require("fs/promises");
+
+// 检测文件或文件夹权限
+const onAccessOfPromise = async (file, type) => {
+  switch (type) {
+    // 检查当前目录中是否存在指定文件或文件夹
+    case "F_OK":
+      try {
+        await access(file, fs.constants.F_OK);
+        console.log(`${file} 存在`);
+      } catch {
+        console.log(`${file} 不存在`);
+      }
+      break;
+    // 检查当前文件是否可读
+    case "R_OK":
+      try {
+        await access(file, fs.constants.R_OK);
+        console.log(`${file} 可读`);
+      } catch {
+        console.log(`${file} 不可读`);
+      }
+      break;
+    // 检查当前文件是否可写
+    case "W_OK":
+      try {
+        await access(file, fs.constants.W_OK);
+        console.log(`${file} 可写`);
+      } catch {
+        console.log(`${file} 不可写`);
+      }
+      break;
+    // 检查当前文件是否可读可写
+    case "FRW_OK":
+      try {
+        await access(
+          file,
+          fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
+        );
+        console.log(`${file} 存在并可读可写`);
+      } catch {
+        console.log(`${file} 不存在或不可读或不可写`);
+      }
+      break;
+
+    default:
+      break;
+  }
+};
+
+onAccess("test.txt", "F_OK");
+```
+
+3、同步写法示例：
+
+```js
+const fs = require("fs");
+
+fs.accessSync("test.txt", fs.constants.F_OK);
+```
+
 #### fs.readFile()
 
 1、fs.readFile() 方法可以读取指定文件中内容，具体语法如下：
@@ -66,4 +222,4 @@ fs.writeFile(file, data[, options], callback)
 
 - options：可选参数，表示以什么格式写入文件内容，默认值是 utf8。
 
-- callback：必选参数，文件写入完成之后会触发此回调。 
+- callback：必选参数，文件写入完成之后会触发此回调。
