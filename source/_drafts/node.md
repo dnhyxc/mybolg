@@ -8,9 +8,9 @@ categories:
     - node
 ---
 
-### fs 文件系统模块
+### fs 文件系统
 
-#### fs 文件系统模块概述
+#### fs 文件系统概述
 
 1、fs 模块是 node.js 官方提供的用来操作文件的模块，它提供了一系列方法和属性，用来满足用户对文件的操作需求。例如：
 
@@ -52,7 +52,7 @@ fs.readFile(path.join(__dirname, "test.txt"), "utf-8", (err, data) => {
 
 > 如果读取成功，err 为 null，data 为读取到的文件内容，否则 err 为错误对象。data 为 undefined。
 
-#### fs.writeFile
+#### fs.writeFile()
 
 1、fs.writeFile 可以向指定文件中写入内容，语法格式如下：
 
