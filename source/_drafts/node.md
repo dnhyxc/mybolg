@@ -24,9 +24,9 @@ categories:
 const fs = require("fs");
 ```
 
-#### access
+#### access 方法
 
-1、fs.access() 方法可以用来检查当前目录中是否存在指定文件或文件夹、检查指定文件是否可读、可写。
+1、fs.access() 异步方法，可以用来异步的检查当前目录中是否存在指定文件或文件夹、检查指定文件是否可读、可写。
 
 ##### fs.access() 语法
 
@@ -48,7 +48,7 @@ fs.access(path[, mode], callback)
 
 - callback：检测完成的回调。
 
-2、参数 Promise 写法时的语法：
+2、采用 Promise 写法时的语法：
 
 ```js
 const fsPromises = require('fs/promises')
@@ -172,17 +172,42 @@ const onAccessOfPromise = async (file, type) => {
 onAccess("test.txt", "F_OK");
 ```
 
-3、同步写法示例：
+#### accessSync 方法
+
+1、fs.accessSync() 同步方法，作用与 access 相同。但是同步的 API 会同步地执行所有操作，会阻塞事件循环，直到操作完成或失败。
+
+2、fs.accessSync() 语法：
+
+```js
+fs.accessSync(path[, mode])
+```
+
+- path：文件路径，可以是 string | Buffer | URL。
+
+- mode：检测的模式，默认值为：`fs.constants.F_OK`。
+
+3、fs.accessSync 基本使用示例：
 
 ```js
 const fs = require("fs");
 
-fs.accessSync("test.txt", fs.constants.F_OK);
+const onAccessSync = () => {
+  try {
+    accessSync("test.txt", constants.R_OK | constants.W_OK);
+    console.log(`${file} 可读可写`);
+  } catch (err) {
+    console.log(`${file} 不可读不可写`);
+  }
+};
 ```
 
-#### fs.readFile()
+#### readFile 方法
 
-1、fs.readFile() 方法可以读取指定文件中内容，具体语法如下：
+1、fs.readFile() 方法可以用来异步的读取指定文件中内容。
+
+##### fs.readFile 语法
+
+1、采用 callback 回调写法语法如下：
 
 ```js
 fs.readFile(path [,options], callback)
@@ -194,19 +219,54 @@ fs.readFile(path [,options], callback)
 
 - callback：必选参数，文件读取完成以后会触发这个回调，可用来获取读取的结果。
 
-2、具体使用方式如下：
+2、采用 Promise 写法语法如下：
+
+```js
+const fsPromises = require("fs/promises");
+
+fsPromises.readFile(path[, options])
+```
+
+##### fs.readFile() 基本使用方式
+
+1、采用 callback 回调基本使用方式：
 
 ```js
 const fs = require("fs");
-const path = require("path");
 
-// 读写文件时尽量都是用 path.join 方法进行路径的拼接
-fs.readFile(path.join(__dirname, "test.txt"), "utf-8", (err, data) => {
-  console.log(data);
+fs.readFile("./test.txt", "utf-8", (err, data) => {
+  console.log(data, "读取成功了");
+});
+
+// 如果不传 options 规定编码方式还可以使用 toString将读取到的内容进行转发
+fs.readFile("./test.txt", (err, data) => {
+  console.log(data.toString(), "读取成功了");
 });
 ```
 
 > 如果读取成功，err 为 null，data 为读取到的文件内容，否则 err 为错误对象。data 为 undefined。
+
+2、采用 Promise 写法基本使用如下：
+
+```js
+const { readFile } = require("fs/promises");
+
+const onReadFile = async (fileName) => {
+  try {
+    await readFile(fileName, "utf-8");
+    console.log(`${file} 读取成功`);
+  } catch (err) {
+    // 当请求中止时 - err 是 AbortError
+    console.error(err);
+  }
+};
+
+onReadFile("test.txt");
+```
+
+#### readFileSync 方法
+
+1、fs.readFileSync() 方法会同步的读取指定的文件。
 
 #### fs.writeFile()
 
