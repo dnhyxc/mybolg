@@ -207,7 +207,7 @@ const onAccessSync = () => {
 
 ##### fs.readFile 语法
 
-1、采用 callback 回调写法语法如下：
+1、callback 回调写法：
 
 ```js
 fs.readFile(path [,options], callback)
@@ -219,7 +219,7 @@ fs.readFile(path [,options], callback)
 
 - callback：必选参数，文件读取完成以后会触发这个回调，可用来获取读取的结果。
 
-2、采用 Promise 写法语法如下：
+2、Promise 写法：
 
 ```js
 const fsPromises = require("fs/promises");
@@ -229,7 +229,7 @@ fsPromises.readFile(path[, options])
 
 ##### fs.readFile() 基本使用方式
 
-1、采用 callback 回调基本使用方式：
+1、callback 回调写法：
 
 ```js
 const fs = require("fs");
@@ -246,7 +246,7 @@ fs.readFile("./test.txt", (err, data) => {
 
 > 如果读取成功，err 为 null，data 为读取到的文件内容，否则 err 为错误对象。data 为 undefined。
 
-2、采用 Promise 写法基本使用如下：
+2、Promise 写法：
 
 ```js
 const { readFile } = require("fs/promises");
