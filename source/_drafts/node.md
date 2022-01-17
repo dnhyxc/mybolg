@@ -268,6 +268,24 @@ onReadFile("test.txt");
 
 1、fs.readFileSync() 方法会同步的读取指定的文件。
 
+2、fs.readFileSync() 语法：
+
+```js
+fs.readFileSync(path[, options])
+```
+
+- path：必选参数，是一个字符串，用来指定要读取文件的路径。
+
+- options：可选参数，表示以什么编码格式来读取文件。
+
+3、基本使用示例：
+
+```js
+const content = fs.readFileSync("./test.txt", "utf-8");
+
+console.log(content, "content"); // 文件读写测试 content
+```
+
 #### fs.writeFile()
 
 1、fs.writeFile 可以向指定文件中写入内容，语法格式如下：

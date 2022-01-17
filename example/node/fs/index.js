@@ -116,3 +116,6 @@ const onAccessSync = (file) => {
 };
 
 onAccessSync("test.txt", fs.constants.F_OK);
+
+const content = fs.readFileSync("./test.txt", "utf-8");
+console.log(content, "content"); // 文件读写测试 content
