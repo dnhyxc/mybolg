@@ -266,7 +266,7 @@ onReadFile("test.txt");
 
 #### readFileSync 方法
 
-1、fs.readFileSync() 方法会同步的读取指定的文件。
+1、fs.readFileSync() 方法会同步的读取指定的文件，会阻塞事件循环，直到操作完成或失败。
 
 2、fs.readFileSync() 语法：
 
@@ -288,7 +288,11 @@ console.log(content, "content"); // 文件读写测试 content
 
 #### fs.writeFile()
 
-1、fs.writeFile 可以向指定文件中写入内容，语法格式如下：
+1、fs.writeFile 可以向指定文件中写入内容。
+
+##### fs.writeFile 语法
+
+1、callback 回调写法：
 
 ```js
 fs.writeFile(file, data[, options], callback)
@@ -301,3 +305,21 @@ fs.writeFile(file, data[, options], callback)
 - options：可选参数，表示以什么格式写入文件内容，默认值是 utf8。
 
 - callback：必选参数，文件写入完成之后会触发此回调。
+
+2、Promise 写法：
+
+```js
+const fsPromises = require('fs/promises');
+
+fsPromises.writeFile(file, data[, options])
+```
+
+- file：必选参数，用与指定文件的存放路径，是一个表示文件路径的字符串。
+
+- data：必选参数，表示要写入的文件内容。
+
+- options：可选参数，表示以什么格式写入文件内容，默认值是 utf8。
+
+##### fs.writeFile 基本使用
+
+1、
