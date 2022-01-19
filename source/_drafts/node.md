@@ -24,6 +24,8 @@ categories:
 const fs = require("fs");
 ```
 
+<!-- more -->
+
 #### access 方法
 
 1、fs.access() 异步方法，可以用来异步的检查当前目录中是否存在指定文件或文件夹、检查指定文件是否可读、可写。
@@ -286,7 +288,7 @@ const content = fs.readFileSync("./test.txt", "utf-8");
 console.log(content, "content"); // 文件读写测试 content
 ```
 
-#### fs.writeFile()
+#### writeFile 方法
 
 1、fs.writeFile 可以向指定文件中写入内容。
 
@@ -322,4 +324,63 @@ fsPromises.writeFile(file, data[, options])
 
 ##### fs.writeFile 基本使用
 
-1、
+1、callback 写法：
+
+```js
+const fs = require("fs");
+const path = require("path");
+
+fs.writeFile(
+  path.join(__dirname, "./write.txt"),
+  "使用path路径拼接向文件中写入内容",
+  (err, data) => {
+    console.log(err, "写入失败");
+    console.log(data, "写入成功");
+  }
+);
+```
+
+2、promise 写法：
+
+```js
+const fsPromise = require("fs/promises");
+
+const onWriteFile = async (path, data) => {
+  const content = await fsPromise.writeFile(path, data);
+  console.log(content, "写入成功~~~");
+};
+
+onWriteFile("./write.txt", "使用path路径拼接向文件中写入内容~~~~~");
+```
+
+#### writeFileSync 方法
+
+1、fs.writeFileSync() 可以同步的向文件中写入内容。
+
+2、fs.writeFileSync() 语法：
+
+```js
+fs.writeFileSync(file, data[, options])
+```
+
+- file：必选参数，用与指定文件的存放路径，是一个表示文件路径的字符串。
+
+- data：必选参数，表示要写入的文件内容。
+
+- options：可选参数，表示以什么格式写入文件内容，默认值是 utf8。
+
+3、基本使用方式如下：
+
+```js
+const fs = require("fs");
+
+const res = fs.writeFileSync("./write.txt", "同步写入内容");
+
+if (res) {
+  console.log("写入失败！");
+} else {
+  console.log("写入成功！");
+}
+```
+
+> 更多 fs API 请查看 [nodejs 官网](http://nodejs.cn/api/fs.html)

@@ -119,3 +119,20 @@ onAccessSync("test.txt", fs.constants.F_OK);
 
 const content = fs.readFileSync("./test.txt", "utf-8");
 console.log(content, "content"); // 文件读写测试 content
+
+const fsPromise = require("fs/promises");
+
+const onWriteFile = async (path, data) => {
+  const content = await fsPromise.writeFile(path, data);
+  console.log(content, "写入成功~~~");
+};
+
+onWriteFile("./write.txt", "使用path路径拼接向文件中写入内容~~~~~");
+
+const res = fs.writeFileSync("./writeSync.txt", "同步写入内容");
+
+if (res) {
+  console.log("写入失败！");
+} else {
+  console.log("写入成功！");
+}
