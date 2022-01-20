@@ -136,3 +136,6 @@ if (res) {
 } else {
   console.log("写入成功！");
 }
+
+console.log(__dirname, "__dirname"); // E:\mybolg\example\node\fs => 当前模块所在的目录路径，不包含当前文件模块
+console.log(__filename, "__filename"); // E:\mybolg\example\node\fs\index.js => 当前模块所在的完整路径，包含当前文件模块
