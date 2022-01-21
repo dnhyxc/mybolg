@@ -384,3 +384,23 @@ if (res) {
 ```
 
 > 更多 fs API 请查看 [nodejs 官网](http://nodejs.cn/api/fs.html)
+
+### path 模块
+
+#### path
+
+1、path 模块提供了用于处理文件和目录的路径的实用工具，可以使用如下方式导入 path 模块：
+
+```js
+const path = require("path");
+```
+
+#### path.join() 方法
+
+1、path.join() 方法可以进行路径的拼接，它将使用特定于平台的分隔符作为定界符将所有给定的 path 片段连接在一起，然后规范化生成的路径。
+
+```js
+path.join("/foo", "bar", "baz/asdf", "quux", ".."); // '/foo/bar/baz/asdf'
+```
+
+> 由于后面是 `..` 因此会在 `/foo/bar/baz/asdf/quux` 基础上向上翻一级，即将 quux 这层目录抵消了。
