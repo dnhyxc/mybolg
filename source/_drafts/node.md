@@ -404,3 +404,13 @@ path.join("/foo", "bar", "baz/asdf", "quux", ".."); // '/foo/bar/baz/asdf'
 ```
 
 > 由于后面是 `..` 因此会在 `/foo/bar/baz/asdf/quux` 基础上向上翻一级，即将 quux 这层目录抵消了。
+
+2、**\_\_dirname**：表示当前模块所在的目录路径，不包含当前文件模块本身。如：E:\mybolg\example\node\path。结合 join 方法使用可以得到指定文件的完整路径。
+
+```js
+const fullPath = path.join(__dirname, "../fs/test.txt");
+
+console.log(fullPath); // '/Users/dnhyxc/Documents/code/mybolg/example/node/fs/test.txt'
+```
+
+3、**\_\_filename**：表示当前模块所在的完整路径，包含当前文件模块本身。如：E:\mybolg\example\node\path\index.js

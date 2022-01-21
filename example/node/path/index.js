@@ -13,3 +13,11 @@ console.log(name); // index
 // 获取文件的扩展名
 const fext = path.extname(fpath);
 console.log(fext); // .html
+
+const dirPath = path.join(__dirname, '../fs/test.txt')
+
+console.log(dirPath) // '/Users/dnhyxc/Documents/code/mybolg/example/node/fs/test.txt'
+
+const filePath = path.join(__filename)
+
+console.log(filePath) // '/Users/dnhyxc/Documents/code/mybolg/example/node/path/index.js'
