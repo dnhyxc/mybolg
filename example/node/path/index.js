@@ -21,3 +21,12 @@ console.log(dirPath) // '/Users/dnhyxc/Documents/code/mybolg/example/node/fs/tes
 const filePath = path.join(__filename)
 
 console.log(filePath) // '/Users/dnhyxc/Documents/code/mybolg/example/node/path/index.js'
+
+const res = path.resolve(__dirname, '../fs/test.txt')
+
+console.log(res, 'resolve') // '/Users/dnhyxc/Documents/code/mybolg/example/node/fs/test.txt'
+
+
+console.log(path.parse('../fs/test.txt')) // { root: '', dir: '../fs', base: 'test.txt', ext: '.txt', name: 'test' }
+
+console.log(path.parse('/home/user/dir/file.txt')) // { root: '', dir: '../fs', base: 'test.txt', ext: '.txt', name: 'test' }
