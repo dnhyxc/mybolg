@@ -556,3 +556,5 @@ path.parse("../fs/test.txt"); // { root: '', dir: '../fs', base: 'test.txt', ext
 ```
 
 > 更多 path API 请查看 [nodejs 官网](http://nodejs.cn/api/path.html)
+
+#### http
