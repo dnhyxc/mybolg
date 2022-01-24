@@ -560,3 +560,9 @@ path.parse("../fs/test.txt"); // { root: '', dir: '../fs', base: 'test.txt', ext
 #### url
 
 #### http
+
+1、node 浏览器端调试方法：在终端中运行如下脚本：
+
+```json
+node --inspect --inspect-brk xxx.js
+```
