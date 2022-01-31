@@ -71,7 +71,7 @@ elementIsInFocus(anyElement);
 
 #### js 实现复制功能
 
-1、可以使用**document.execCommand("copy")**实现，具体如下：
+1、可以使用 `document.execCommand("copy")` 实现，具体如下：
 
 ```js
 const copyToClipboard = (str) => {
