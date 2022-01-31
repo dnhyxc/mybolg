@@ -4,7 +4,11 @@ const server = http.createServer();
 
 server.on("request", (req, res) => {
   console.log(req.url);
-  res.end( "hello world");
+  res.writeHead(200, {
+    'content-type': 'text/html'
+  })
+  res.write('<div>hello world</div>')
+  res.end();
 });
 
 server.listen(80, () => {
