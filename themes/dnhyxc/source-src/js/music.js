@@ -48,6 +48,20 @@ function init() {
     fixed: true, //吸底模式（fixed:true），迷你模式（mini:true），普通模式（注释此行或者设置fixed:false）
     audio: [
       {
+        name: "On a Slow Boat to China",
+        artist: "Luke Thompson",
+        lrc: "/downloads/musicLrc/boatToChina.lrc",
+        url: "/downloads/musicUrl/boatToChina.mp3",
+        cover: "/downloads/musicCover/boatToChina.jpg",
+      },
+      {
+        name: "New Boy",
+        artist: "房东的猫",
+        lrc: "/downloads/musicLrc/newBoy.lrc",
+        url: "/downloads/musicUrl/newBoy.mp3",
+        cover: "/downloads/musicCover/newBoy.jpg",
+      },
+      {
         name: "春三月",
         artist: "司南",
         lrc: "/downloads/musicLrc/chunsanyue.lrc",
