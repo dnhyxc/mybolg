@@ -283,10 +283,48 @@
   }
 
   figure {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background-color: orangered;
+      top: 7px;
+      left: 6px;
+      border-radius: 12px;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background-color: rgb(255, 197, 5);
+      top: 7px;
+      left: 26px;
+      border-radius: 12px;
+    }
+
     table {
+      position: relative;
       border: none;
       width: auto;
       margin: 0;
+
+      &::before {
+        content: "";
+        position: absolute;
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        background-color: #00b76b;
+        top: -33px;
+        left: 36px;
+        border-radius: 12px;
+      }
 
       tbody {
         tr:hover {
