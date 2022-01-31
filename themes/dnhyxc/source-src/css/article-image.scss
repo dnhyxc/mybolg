@@ -1,6 +1,6 @@
 .hasImage {
   height: calc(100vh - 157px);
-  transition: all 0.3s ease;
+  // transition: all 0.3s ease;
 
   .hasImage-inner {
     display: flex;
@@ -30,11 +30,11 @@
 
 .hasImage-hideFooter {
   height: calc(100vh - 88px);
-  transition: all 0.3s ease;
+  // transition: all 0.3s ease;
 }
 
 .hasImage-hideHeader {
   height: calc(100vh - 20px);
-  transition: all 0.3s ease;
+  // transition: all 0.3s ease;
   border-bottom: none !important;
 }
