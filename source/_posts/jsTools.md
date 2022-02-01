@@ -143,7 +143,7 @@ console.log(numFormat(b)); // "673,439.4542"
 
 ##### 实现方式二
 
-1、使用 JS 自带的 API **toLocaleString()**，该方法返回这个数字在特定语言环境下的表示字符串。
+1、使用 JS 自带的 API `toLocaleString()`，该方法返回这个数字在特定语言环境下的表示字符串。
 
 ```js
 numObj.toLocaleString(locales, options);
