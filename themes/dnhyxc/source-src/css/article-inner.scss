@@ -38,8 +38,8 @@
 .article-inner h4,
 .article-inner h5,
 .article-inner h6 {
-  // font-size: 16px;
-  font-size: 1rem;
+  font-size: 14px;
+  // font-size: 1rem;
   line-height: 1.3125;
   margin-top: 3.5em;
   margin-bottom: 0.75em;
@@ -131,6 +131,8 @@
 
   em {
     font-style: italic;
+    font-weight: 700;
+    color: #00b7ff;
   }
 
   ul {
@@ -205,6 +207,10 @@
 
   h5 {
     color: #dbff6e;
+  }
+
+  h6 {
+    color: #00b7ff;
   }
 
   video {
