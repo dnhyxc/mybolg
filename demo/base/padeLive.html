@@ -31,7 +31,7 @@
     </script>
 
     <img id="img" src="https://dnhyxc.gitee.io/img/sea.jpg" alt="" />
-    
+
     <!-- 
     <script>
       window.onload = function () {
@@ -43,5 +43,12 @@
     </script>
 
     <img id="img" src="https://dnhyxc.gitee.io/img/sea.jpg" alt="" /> -->
+
+    <script>
+      window.onbeforeunload = function () {
+        console.log("There are unsaved changes. Leave now?");
+        return "There are unsaved changes. Leave now?";
+      };
+    </script>
   </body>
 </html>

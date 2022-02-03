@@ -137,6 +137,8 @@ document.addEventListener("DOMContentLoaded", ready);
 
 Firefox，Chrome 和 Opera 都会在 DOMContentLoaded 中自动填充表单。例如，如果页面有一个带有登录名和密码的表单，并且浏览器记住了这些值，那么在 DOMContentLoaded 上，浏览器会尝试自动填充它们（如果得到了用户允许）。因此，如果 DOMContentLoaded 被需要加载很长时间的脚本延迟触发，那么自动填充也会等待。你可能在某些网站上看到过（如果你使用浏览器自动填充）—— 登录名/密码字段不会立即自动填充，而是在页面被完全加载前会延迟填充。这实际上是 DOMContentLoaded 事件之前的延迟。
 
+**说明**：诸如 `<script>...</script>` 或 `<script src="..."></script>` 之类的脚本会**阻塞** DOMContentLoaded，浏览器将等待它们执行结束。而图片和其他资源仍然可以继续被加载。
+
 _window.onload_
 
 当整个页面，包括样式、图片和其他资源被加载完成时，会触发 window 对象上的 load 事件。可以通过 onload 属性获取此事件。下面的这个示例正确显示了图片大小，因为 window.onload 会等待所有图片加载完毕：
@@ -159,7 +161,7 @@ _window.onunload_
 
 当访问者离开页面时，window 对象上的 unload 事件就会被触发。我们可以在那里做一些不涉及延迟的操作，例如关闭相关的弹出窗口。
 
-注意：在发送分析数据的时候，假设我们收集有关页面使用情况的数据：鼠标点击，滚动，被查看的页面区域等，自然地，当用户要离开的时候，我们希望通过 unload 事件将数据保存到我们的服务器上。有一个特殊的 navigator.sendBeacon(url, data) 方法可以满足这种需求，[详见规范](https://w3c.github.io/beacon/)。它在后台发送数据，转换到另外一个页面不会有延迟：浏览器离开页面，但仍然在执行 sendBeacon。使用方式如下：
+注意：在发送分析数据的时候，假设我们收集有关页面使用情况的数据：鼠标点击，滚动，被查看的页面区域等，自然地，当用户要离开的时候，我们希望通过 unload 事件将数据保存到我们的服务器上。有一个特殊的 navigator.sendBeacon(url, data) 方法可以满足这种需求，[详见规范](https://w3c.github.io/beacon/)或[MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Navigator/sendBeacon)。它在后台发送数据，转换到另外一个页面不会有延迟：浏览器离开页面，但仍然在执行 sendBeacon。使用方式如下：
 
 ```js
 // 带有收集的数据的对象
@@ -182,6 +184,81 @@ window.addEventListener("unload", function () {
   navigator.sendBeacon("/log", JSON.stringify(analyticsData));
 });
 ```
+
+- navigator.sendBeacon() 以 POST 方式发送请求。
+
+- sendBeacon() 不仅能发送字符串，还能发送表单以及其它格式的数据，但通常它是一个字符串化的对象。
+
+- sendBeacon() 发送的数据大小限制在 64kb。
+
+当 sendBeacon() 请求完成时，浏览器可能已经离开了文档，所以就无法获取服务器响应（对于分析数据来说通常为空）。
+
+还有一个 **keep-live** 标志，该标志用于在 fetch 方法中为通用的网络请求执行此类「离开页面后」的请求。如果想了解更多相关信息请查看 [Fetch API](https://zh.javascript.info/fetch-api)。
+
+如果我们要取消跳转到另一页面的操作，在这里是做不到的，但是我们可以使用另一个事件：**onbeforeunload** 实现。
+
+_window.onbeforeunload_
+
+如果访问者触发了离开页面的导航（navigation）或试图关闭窗口，beforeunload 处理程序将要求进行更多确认。
+
+如果我们要取消事件，浏览器会询问用户是否确定。
+
+可以通过运行下面这段代码，然后重新加载页面来进行尝试：
+
+```js
+window.onbeforeunload = function () {
+  return false;
+};
+```
+
+由于历史原因，返回非空字符串也被视为取消事件。在以前，浏览器曾经将其显示为消息，但是根据现代规范 所述，它们不应该这样，如下示例所示：
+
+```js
+window.onbeforeunload = function () {
+  return "There are unsaved changes. Leave now?";
+};
+```
+
+> 上述示例中，它的行为已经改变了，因为有些站长通过显示误导性和恶意信息滥用了此事件处理程序。所以，目前一些旧的浏览器可能仍将其显示为消息，但除此之外，无法自定义显示给用户的消息。
+
+_readState_
+
+如果我们在文档加载完成之后设置 DOMContentLoaded 事件处理程序，会发生什么？很显然，它永远不会运行。
+
+在某些情况下，我们不确定文档是否已经准备就绪。但是我们希望函数在 DOM 加载完成时执行，无论现在还是以后。而 **document.readyState** 属性就可以为我们提供当前加载状态的信息。它有 3 个可能值：
+
+- **loading**：文档正在被加载。
+
+- **interactive**：文档被全部读取。
+
+- **complete**：文档被全部读取，并且所有资源（例如图片等）都已加载完成。
+
+所以，我们可以检查 document.readyState 并设置一个处理程序，或在代码准备就绪时立即执行它。如下：
+
+```js
+if (document.readyState === "loading") {
+  // 仍在加载，等待事件
+  document.addEventListener("DOMContentLoaded", () => {
+    // do something...
+  });
+} else {
+  // DOM 已就绪！do something...
+}
+```
+
+还有一个 **readystatechange** 事件，会在状态发生改变时触发，因此我们可以打印所有这些状态，就像这样：
+
+```js
+// 当前状态
+console.log(document.readyState);
+
+// 状态改变时打印它
+document.addEventListener("readystatechange", () =>
+  console.log(document.readyState)
+);
+```
+
+readystatechange 事件是跟踪文档加载状态的另一种机制，它很早就存在了。现在则很少被使用。
 
 ##### 常⽤的 meta 标签有哪些
 
