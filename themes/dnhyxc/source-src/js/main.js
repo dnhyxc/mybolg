@@ -18,7 +18,7 @@ import articleToc from "./articleToc";
 
 import changeTheme from "./changeTheme";
 
-import e, { addLoadEvent } from "./util";
+import e, { addLoadEvent, onDOMContentLoaded } from "./util";
 
 import * as Utils from "./public-utils";
 
@@ -50,7 +50,7 @@ const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
 
-addLoadEvent(function () {
+onDOMContentLoaded(function () {
   // Share.init()
   // Viewer.init();
   Aside.init();
