@@ -262,21 +262,440 @@ readystatechange 事件是跟踪文档加载状态的另一种机制，它很早
 
 ##### 常⽤的 meta 标签有哪些
 
+meta 标签由 **name** 和 **content** 属性定义，**用来描述网页文档的属性**，比如网页的作者，网页的描述，关键字等。除了 HTTP 标准固定了一些 name 作为大家使用的共识，开发者还可以自定义 name。
+
+常用的 meta 标签：
+
+1、chartset：用来描述 HTML 文档的编码类型。
+
+```html
+<meta charset="UTF-8" />
+```
+
+2、keywords：页面关键词。
+
+```html
+<meta name="keywords" content="关键词" />
+```
+
+3、description：页面描述。
+
+```html
+<meta name="description" content="页面描述内容" />
+```
+
+4、refresh：页面重定向和刷新。
+
+```html
+<meta http-equiv="refresh" content="0;url=" />
+```
+
+5、viewport：适配移动端，可以控制视口的大小和比例：
+
+```html
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1 minimum-scale=1 user-scalable=no"
+/>
+```
+
+content 参数有以下几种：
+
+- width viewport：宽度（数值/device-width）。
+
+- height viewport：宽度（数值/device-height）。
+
+- initial-scale：初始缩放比例。
+
+- maximum-scale：最大缩放比例。
+
+- minimum-scale：最小缩放比例。
+
+- user-scalable：是否允许用户缩放（yes/no）。
+
+6、搜索引擎索引方式：
+
+```html
+<meta name="robots" content="index,follow" />
+```
+
+其中，content 参数有以下几种：
+
+- all：文件将被检索，且页面上的链接可以被查询。
+
+- none：文件将不被检索，且页面上的链接不可以被查询。
+
+- index：文件将被检索。
+
+- follow：页面上的链接可以被查询。
+
+- noindex：文件将不被检索。
+
+- nofollow：页面上的链接不可以被查询。
+
 ##### img 的 srcset 属性的作⽤
+
+响应式页面中经常用到根据屏幕密度设置不同的图片。这时就用到了 img 标签的 srcset 属性。srcset 属性用于设置不同的屏幕密度下，img 会自动加载不同的图片。用法如下：
+
+```html
+<img src="image-128.png" srcset="image-256.png 2x" />
+```
+
+使用上面的代码，就能实现在屏幕为 1x 的情况下加载 image-128.png，屏幕密度为 2x 时加载 image-256.png。
+
+但是按照上面的额实现，不同的屏幕密度都要设置图片地址，目前的屏幕密度有 1x、2x、3x、4x 四种，如果每一个图片都设置 4 张图片，加载就会很慢，所以就有了新的 srcset 标准，如下：
+
+```html
+<img
+  src="image-128.png"
+  srcset="image-128.png 128w, image-256.png 256w, image-512.png 512w"
+  sizes="(max-width: 360px) 340px, 128px"
+/>
+```
+
+> sizes 就是指默认显示 128px，如果视区宽度大于 360px，则显示 340px。
+
+其中 srcset 指定图片的地址和对应的图片质量。sizes 用来设置图片的尺寸零界点。对于 srcset 中的 w 单位，可以理解为图片质量。如果可视区域小于这个质量的值，就可以使用。sizes 语法如下：
+
+```js
+sizes = "[media query] [length], [media query] [length] ... ";
+```
 
 ##### 行内元素、块级元素、空(void)元素有哪些
 
+行内元素有：a、b、span、img、input、select、strong 等。
+
+块级元素有：div、ul、ol、li、dl、dt、dd、h1 ～ h6、p 等。
+
+空元素，即没有内容的 HTML 元素。空元素是在开始标签中关闭的，也就是空元素没有闭合标签：
+
+- 常见的有：br、hr、img、input、link、meta 等。
+
+- 不常见的有：area、base、col、colgroup、command、embed、keygen、param、source、track、wbr 等。
+
 ##### HTML5 的离线储存怎么使用，它的工作原理是什么
+
+离线存储指的是：在用户没有与因特网连接时，可以正常访问站点或应用，在用户与因特网连接时，更新用户机器上的缓存文件。
+
+**原理**：HTML5 的离线存储是基于一个新建的 **.appcache** 文件的缓存机制（不是存储技术），通过这个文件上的解析清单离线存储资源，这些资源就会像 cookie 一样被存储了下来。之后当网络在处于离线状态下时，浏览器会通过被离线存储的数据进行页面展示。
+
+**具体使用方法如下**：
+
+1、创建一个和 html 同名的 manifest 文件，然后在页面头部加入 manifest 属性：
+
+```html
+<html lang="en" manifest="index.manifest"></html>
+```
+
+2、在 **cache.manifest** 文件中编写需要离线存储的资源：
+
+```text
+CACHE MANIFEST
+  #v0.11
+  CACHE:
+  js/app.js
+  css/style.css
+  NETWORK:
+  resourse/logo.png
+  FALLBACK:
+  / /offline.html
+```
+
+- CACHE：表示需要离线存储的资源列表，由于包含 manifest 文件的页面将被自动离线存储，所以不需要把页面自身也列出来。
+
+- NETWORK：表示在它下面列出来的资源只有在在线的情况下才能访问，它们不会被离线存储，所以在离线情况下无法使用这些资源。不过，如果在 CACHE 和 NETWORK 中有一个相同的资源，那么这个资源还是会被离线存储，也就是说 CACHE 的优先级更高。
+
+- FALLBACK：表示如果访问第一个资源失败，那么就使用第二个资源来替换它，比如上面这个文件表示的就是如果访问根目录下任何一个资源失败了，那么就去访问 offline.html。
+
+3、在离线状态时，操作 window.applicationCache 进行离线缓存的操作。
+
+**如何更新缓存**：
+
+1、更新 manifest 文件：
+
+- 给 manifest 添加或删除文件。
+
+- 如果 manifest 没有添加或删除文件，只是修改了文件，可以通过更改版本号等更新 manifest 文件。
+
+2、通过 javascript 操作：
+
+- html5 中引入了 js 操作离线缓存的方法：window.applicationCache.update()，可以手动更新缓存。
+
+3、清除浏览器缓存：
+
+- 如果用户清除了浏览器缓存（手动或用其他一些工具），都会重新下载文件。
+
+**注意事项**：
+
+1、浏览器对缓存数据的容量限制可能不太一样（某些浏览器设置的限制是每个站点 5MB）。
+
+2、如果 manifest 文件，或者内部列举的某一个文件不能正常下载，整个更新过程都将失败，浏览器将会继续使用老的缓存。
+
+3、引用 manifest 的 html 必须与 manifest 文件同源，在同一域下。
+
+4、FALLBACK 中的资源必须和 manifest 文件同源。
+
+5、当一个资源被缓存后，该浏览器直接请求这个绝对路径也会访问缓存中的资源。
+
+6、站点中的其它页面即使没有设置 manifest 属性，请求的资源如果在缓存中也从缓存中访问。
+
+7、当 manifest 文件发生改变时，资源请求本身也会触发更新。
+
+**离线缓存有什么优缺点**：
+
+1、优点：
+
+- 离线浏览：用户可在应用离线时使用它们。
+
+- 速度：已缓存资源加载得更快。
+
+- 减少服务器负载：浏览器只从服务器下载更新过或更改过的资源。
+
+2、缺点：
+
+- 更新的资源需要二次刷新才会被页面采用。
+
+- 不支持增量更新，只要 manifest 发生变化，所有资源全部重新下载一次。
+
+- 缺乏足够容错机制，当清单中任意资源文件出现加载异常，都会导致整个 manifest 策略运行异常。
 
 ##### 浏览器如何对 HTML5 的离线储存资源进行管理和加载
 
+在线的情况下：浏览器发现 html 头部有 manifest 属性，它会请求 manifest 文件，如果是第一次访问页面，那么浏览器就会根据 manifest 文件的内容下载相应的资源并且进行离线存储，如果已经访问过页面并且资源已经进行离线存储了，那么浏览器就会使用离线的资源加载页面，然后浏览器会对比新的 manifest 文件与旧的 manifest 文件，如果文件没有发生改变，就不做任何操作，如果文件改变了，就会重新下载文件中的资源并进行离线存储。
+
+离线的情况下：浏览器会直接使用离线存储的资源。
+
 ##### iframe 有那些优点和缺点
+
+iframe 元素会创建包含另一个文档的内联框架（即行内框架）。
+
+优点：
+
+- 可以用来加载速度较慢的内容（如广告）。
+
+- 可以使脚本实现并行下载。
+
+- 可以实现跨子域通信。
+
+缺点：
+
+- iframe 会阻塞主页面的 onload 事件。
+
+- 无法被一些搜索引擎检索识别。
+
+- 会产生很多页面，不容易管理。
+
+##### label 标签的作用及如何使用
+
+label 标签可以用来定义表单控件的关系，当用户选择 label 标签时，浏览器会自动将焦点转到和 label 标签相关的表单控件上。
+
+使用方法一：
+
+```html
+<label for="mobile">Number:</label> <input type="text" id="mobile" />
+```
+
+使用方法二：
+
+```html
+<label>Date:<input type="text" /></label>
+```
 
 ##### head 标签有什么作用，其中什么标签必不可少
 
-#####
+head 标签用于定义文档的头部，它是所有头部元素的容器。其中的元素可以引用脚本、指示浏览器在哪里找到样式表、提供元信息等。
+
+文档的头部描述了文档的各种属性和信息，包括文档的标题、在 Web 中的位置以及和其他文档的关系等。绝大多数文档头部包含的数据都不会真正作为内容显示给读者。
+
+下面这些标签可用在 head 部分：`<base>、<link>、<meta>、<script>、<style>、<title>`。其中 title 定义文档的标题，它是 head 部分中唯一必须的元素。
+
+##### 浏览器产生乱码的原因，如何解决
+
+产生乱码的原因：
+
+- 网页源代码是 gbk 的编码，而内容中的中文字是 utf-8 编码的，这样浏览器打开即会出现 html 乱码，反之也会出现乱码。
+
+- html 网页编码是 gkb，而程序从数据库中调出呈现是 utf-8 编码的内容也会造成编码乱码。
+
+- 浏览器不能自动检测网页编码，这就造成了网页乱码。
+
+解决办法：
+
+- 使用软件编辑 HTML 网页内容。
+
+- 如果网页设置编码是 gbk，而数据库存储数据编码格式是 utf-8，此时需要程序查询数据库数据显示数据前进程转码。
+
+- 如果浏览器浏览时出现网页乱码，在浏览器中找到转换编码的菜单进行转换。
+
+##### HTML5 drag API
+
+dragstart：事件主体是被拖放元素，在开始拖放元素时触发。
+
+drag：事件主体是被拖放元素，在被拖放元素正在被拖动时触发。
+
+dragend：事件主体是被拖放元素，在整个拖放操作结束时触发。
+
+dragenter：事件主体是目标元素，在被拖放元素进入目标元素时触发。
+
+dragover：事件主体是目标元素，在被拖放元素在目标元素内移动时触发。
+
+dragleave：事件主体是目标元素，在被拖放元素移出目标元素时触发。
+
+drop：事件主体是目标元素，在目标元素完全接受被拖放元素时触发。
 
 #### CSS
+
+##### CSS 选择器及其优先级
+
+选择器的优先级：
+
+- 标签选择器、伪元素选择器权重为 1。
+
+- 类选择器、伪类选择器、属性选择器权重为 10。
+
+- id 选择器权重为 100。
+
+- 内联样式权重为 1000。
+
+注意事项：
+
+- !important 声明的样式优先级最高。
+
+- 如果优先级相同，则最后出现的样式生效。
+
+- 继承得到的样式优先级最低。
+
+- 通用选择器「\*」、子元素选择器「>」、相邻同胞选择器「+」并不在这四个等级中，所以它们的权重都为 0。
+
+- 样式表的来源不同时，优先级顺序为：内联样式 > 内部样式 > 外部样式 > 浏览器用户自定义样式 > 浏览器默认样式。
+
+##### CSS 中可继承与不可继承属性有哪些
+
+_不可继承的属性_
+
+1、display：设置元素显示与隐藏。
+
+2、文本属性：
+
+- vertical-align：垂直文本对齐。
+
+- text-decoration：设置添加到文本的装饰。
+
+- text-shadow：设置文本阴影效果。
+
+- white-space：设置文本是否换行。
+
+- unicode-bidi：设置文本的方向。
+
+3、盒子模型的属性：width、height、margin、border、padding。
+
+4、背景属性：background、background-color、background-image、background-repeat、background-position、background-attachment。
+
+5、定位属性：float、clear、position、top、right、bottom、left、min-width、min-height、max-width、max-height、overflow、clip、z-index。
+
+6、生成内容属性：content、counter-reset、counter-incerment。
+
+7、轮廓样式属性：outline-style、outline-width、outline-color、outline。
+
+8、页面样式属性：size、page-break-before、page-break-after。
+
+9、声音样式属性：pause-before、pause-after、pause、cue-before、cue-after、cue、play-during。
+
+_可继承的属性_
+
+1、字体系列属性：
+
+- font-family：字体类型。
+
+- font-weight：字体粗细。
+
+- font-size：字体大小。
+
+- font-style：字体风格。
+
+2、文本系列属性：
+
+- text-indent：文本缩进。
+
+- text-align：文本水平对齐。
+
+- line-height：行高。
+
+- word-spacing：单词之间的间距。
+
+- letter-spacing：中文或者字母之间的间距。
+
+- text-transform：控制文本大小写（就是 uppercase、lowercase、capitalize 这三个）。
+
+- color：文本颜色。
+
+3、元素可见性：
+
+- visibility：控制元素显示隐藏。
+
+4、列表布局属性：
+
+- list-style：列表风格，包括 list-style-type、list-style-image 等。
+
+5、光标属性：
+
+- cursor：光标显示为何种形态。
+
+##### 行内元素与块级元素的区别
+
+行内元素：
+
+- 设置宽高无效。
+
+- 可以设置水平方向的 margin 和 padding 属性，不能设置垂直方向的 padding 和 margin。
+
+- 不会自动换行。
+
+块级元素：
+
+- 可以设置宽高。
+
+- 设置 margin 和 padding 都有效。
+
+- 可以自动换行。
+
+- 多个块级元素默认是从上到下排列。
+
+##### 隐藏元素的方法有哪些
+
+`display: none`：渲染树不会包含该渲染对象，因此该元素不会在页面中占据位置，也不会响应绑定的监听事件。
+
+`visibility: hidden`：元素在页面中仍占据空间，但是不会响应绑定的监听事件。
+
+`opacity: 0`：将元素的透明度设置为 0，以此来实现元素的隐藏。元素在页面中仍然占据空间，并且能够响应元素绑定的监听事件。
+
+`position: absolute`：通过使用绝对定位将元素移除可视区域内，以此来实现元素的隐藏。
+
+`z-index: 负值`：来使其他元素遮盖住该元素，以此来实现隐藏。
+
+`clip/clip-path`：使用元素裁剪的方法来实现元素的隐藏，这种方法下，元素仍在页面中占据位置，但是不会响应绑定的监听事件。
+
+`transform: scale(0, 0)`：将元素缩放为 0，来实现元素的隐藏。这种方法下，元素仍在页面中占据位置，但是不会响应绑定的监听事件。
+
+##### link 和 @import 的区别
+
+两者都是外部引用 CSS 的方式，它们的区别如下：
+
+- link 是 XHTML 标签，除了加载 CSS 外，还可以定义 RSS 等其它事务。而 @import 属于 CSS 范畴，只能加载 CSS。
+
+- link 引用 CSS 时，在页面载入时同时加载，@import 需要网页完全载入以后才加载。
+
+- link 是 XHTML 标签，无兼容性问题，@import 是在 CSS2.1 提出的，低版本的浏览器不支持。
+
+- link 支持使用 JS 控制 DOM 去改变样式，而 @import 不支持。
+
+##### 对 requestAnimationframe 的理解
+
+实现动画效果的方法比较多，js 中可以通过定时器 setTimeout 来实现，CSS3 中可以使用 transition 和 animation 来实现，HTML5 中的 canvas 也可以实现。除此之外，HTML5 提供了一个专门用于请求动画的 API，那就是 requestAnimationFrame，即请求动画帧。
+
+语法：`window.requestAnimationFrame(callback)`，其中，callback 是**下一次重绘之前更新动画帧所调用的函数**（即上面所说的回调函数）。该回调函数会被传入 DOMHighResTimeStamp 参数。它表示 requestAnimationframe()开始去执行回调函数的。该方法属于**宏任务**，所以会在执行完微任务之后再去执行。
+
+取消动画：使用 cancelAnimationFrame(id) 来取消执行动画，该方法接收一个参数 requestAnimationFrame 默认返回的 id，只需要传入这个 id 就可以取消动画了。
 
 ##### BFC
 
