@@ -697,11 +697,100 @@ _可继承的属性_
 
 取消动画：使用 cancelAnimationFrame(id) 来取消执行动画，该方法接收一个参数 requestAnimationFrame 默认返回的 id，只需要传入这个 id 就可以取消动画了。
 
+**requestAnimationFrame() 实现动画的优势**：
+
+- CPU 节能：使用 setInterval 实现的动画，当页面被隐藏或最小化时，setInterval 仍然在后台执行动画任务，由于此时页面处于不可见或不可用状态，刷新动画是没有意义的，完全就是浪费资源。而 requestAnimationFrame 则完全不同，当页面处理未激活的状态下，该页面的屏幕刷新任务也会被系统暂停，因此跟着系统走的 requestAnimationFrame 也会被停止渲染，当页面激活时，动画就从上一次停留的地方继续执行，有效节省了 cpu 开销。
+
+- 函数节流：在高频事件（resize、scroll）中，为了防止在一个刷新间隔内发生多次函数执行，requestAnimationFrame 可保证每个刷新间隔内，函数只被执行一次，这样既能保证流畅性，也能更好的节省函数执行的开销，一个刷新间隔内函数执行多次是没有意义的，因为多数显示器每 16.7ms 刷新一次，多次绘制并不会在屏幕中体现出来。
+
+- 减少 DOM 操作：requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟着浏览器的刷新频率，一般来说这个频率为每秒 60 帧。
+
+**setTimeout 执行动画的缺点**：它通过设定间隔时间来不断改变图像位置，达到动画效果。这容易出现卡顿、抖动的现象，原因是：
+
+- setTimeout 任务被放入异步队列，只有当主线程任务执行完成后才会执行队列中的任务，因此时机执行时间总是比设定时间要晚。
+
+- setTimeout 的固定时间间隔不一定与屏幕刷新间隔时间相同，会引起丢帧。
+
 ##### BFC
+
+BFC 是一个独立的布局环境，可以理解为一个容器，在这个容器中按照一定的规则进行物品摆放，并且不会影响其它环境中的物品。如果一个元素符合触发 BFC 的条件，则 BFC 中的元素布局不受外部影响。
+
+触发 BFC 的条件：
+
+- 根元素：body。
+
+- 元素设置浮动：float 除了 none 以外的值。
+
+- 元素设置绝对定位：position（absolute、fixed）。
+
+- display 值为：inline-block、table-cell、table-caption、flex 等。
+
+- overflow 值为：hidden、auto、scroll。
+
+BFC 的特点：
+
+- 垂直方向上，自上而下排列，和文档流的排列方式一致。
+
+- 在 BFC 中上下相邻的两个容器的 margin 会重叠。
+
+- 计算 BFC 的高度时，需要计算浮动元素的高度。
+
+- BFC 区域不会与浮动的容器发生重叠。
+
+- BFC 是独立的容器，容器内部元素不会影响外部元素。
+
+- 每个元素的左 margin 值和容器的左 border 相接触。
 
 ##### 盒子模型
 
+css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小是包括 border 和 padding 的，而标准盒模型则不包括。可以通过 box-sizing 设置标准盒模型为 IE 盒模型。
+
 ##### 定位浮动
+
+##### 如果判断元素是否达到可视区域
+
+以图片为例：
+
+- window.innerHeight 是浏览器可视区的高度。
+
+- document.body.scrollTop || document.documentElement.scrollTop 是浏览器滚动过的距离。
+
+- imgs.offsetTop 是元素顶部距离文档顶部的高度（包括滚动条的距离）。
+
+- 内容达到显示区域的判断条件是：`img.offsetTop < window.innerHeight + document.body.scrollTop`。
+
+![元素是否达到可视区域](view.png)
+
+##### 对媒体查询的理解
+
+使用 @media 媒体查询，可以针对不同的媒体类型定义不同的样式。@media 还可以针对不同的屏幕尺寸设置不同的样式，特别是需要设置响应式的页面，@media 是非常有用的。当重置浏览器大小的过程中，页面也会根据浏览器的宽度和高度重新渲染页面。
+
+```html
+<!-- link元素中的CSS媒体查询 -->
+<link rel="stylesheet" media="(max-width: 800px)" href="example.css" />
+<!-- 样式表中的CSS媒体查询 -->
+<style>
+  @media (max-width: 600px) {
+    .facet_sidebar {
+      display: none;
+    }
+  }
+</style>
+```
+
+##### z-index 属性在什么情况下会失效
+
+通常 z-index 的使用是在有两个重叠的标签，在一定的情况下控制其中一个在另一个的上方或者下方出现。z-index 值越大就越是在上层。z-index 元素的 position 属性需要是 relative、absolute 或者 fixed。
+
+z-index 属性在下列情况下会失效：
+
+- 元素没有设置 position 属性为非 static 属性，即没有设置定位。解决方式：设置该元素的 position 属性为 relative、absolute 或者 fixed 中的其中一种即可。
+
+- 父元素 position 为 relative 时，子元素的 z-index 会失效。解决方式：父元素 position 改为 absolute 或 static。
+
+- 元素在设置 z-index 的同时还设置了 float 浮动。解决方式：去除 float，改为 display：inline-block。
+
+##### 物理像素、逻辑像素、像素密度
 
 ### JavaScript
 

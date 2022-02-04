@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BFC</title>
+    <style>
+      .box1 {
+        position: relative;
+        border: 5px solid red;
+        margin: 10px;
+      }
+      .box2 {
+        position: relative;
+        border: 5px solid gold;
+        margin: 10px;
+      }
+
+      .child1 {
+        position: relative;
+        border: 5px solid greenyellow;
+        margin: 10px;
+      }
+      .child2 {
+        position: relative;
+        border: 5px solid greenyellow;
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box1">
+      <div class="child1">child1</div>
+      <div class="child2">child2</div>
+    </div>
+    <div class="box2">BFC2</div>
+  </body>
+</html>
