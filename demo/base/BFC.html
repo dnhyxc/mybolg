@@ -6,34 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BFC</title>
     <style>
+      html {
+        font-size: 12px;
+      }
       .box1 {
-        position: relative;
         border: 5px solid red;
         margin: 10px;
+        overflow: hidden;
+        font-size: 14px;
       }
       .box2 {
-        position: relative;
         border: 5px solid gold;
         margin: 10px;
+        width: 15rem;
       }
-
       .child1 {
-        position: relative;
+        float: left;
         border: 5px solid greenyellow;
         margin: 10px;
+        height: 50px;
+        width: calc(100% - 30px);
+        width: 20em;
       }
       .child2 {
-        position: relative;
-        border: 5px solid greenyellow;
+        float: left;
+        border: 5px solid skyblue;
         margin: 10px;
+        height: 50px;
+        width: calc(100% - 30px);
+        font-size: 12px;
+        width: 20em;
       }
     </style>
   </head>
   <body>
     <div class="box1">
-      <div class="child1">child1</div>
-      <div class="child2">child2</div>
+      <div class="child1">child1 使用浮动开启BFC解决margin重叠</div>
+      <div class="child2">child2 使用浮动开启BFC解决margin重叠</div>
     </div>
-    <div class="box2">BFC2</div>
+    <div class="box2">BFC2 垂直方向margin重叠了</div>
   </body>
 </html>
