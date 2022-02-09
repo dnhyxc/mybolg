@@ -1192,6 +1192,287 @@ html {
 
 - 样式与内容分离：将 css 代码定义到外部 css 中。
 
+#### 对 Flex 布局的理解及其使用场景
+
+Flex 是 FlexibleBox 的缩写，意为 "弹性布局"，用来为盒状模型提供最大的灵活性。任何一个容器都可以指定为 Flex 布局。行内元素也可以使用 Flex 布局。注意，**设为 Flex 布局以后，子元素的 float、clear 和 vertical-align 属性将失效**。采用 Flex 布局的元素，称为 Flex 容器（flex container），简称"容器"。它的所有子元素自动成为容器成员，称为 Flex 项目（flex item），简称 "项目"。容器默认存在两根轴：水平的主轴（main axis）和垂直的交叉轴（cross axis），项目默认沿水平主轴排列。
+
+设置在容器上（父元素）的 6 个属性：
+
+- flex-direction 属性决定主轴的方向（即项目的排列方向）。
+
+- flex-wrap 属性定义，如果一条轴线排不下，如何换行。
+
+- flex-flow 属性是 flex-direction 属性和 flex-wrap 属性的简写形式，默认值为 row nowrap。
+
+- justify-content 属性定义了项目在主轴上的对齐方式。
+
+- align-items 属性定义项目在交叉轴上如何对齐。
+
+- align-content 属性定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用。
+
+设置在项目上（子元素）的 6 个属性：
+
+- order 属性定义项目的排列顺序。数值越小，排列越靠前，默认为 0。
+
+- flex-grow 属性定义项目的放大比例，默认为 0，即如果存在剩余空间，也不放大。
+
+- flex-shrink 属性定义了项目的缩小比例，默认为 1，即如果空间不足，该项目将缩小。
+
+- flex-basis 属性定义了在分配多余空间之前，项目占据的主轴空间。浏览器根据这个属性，计算主轴是否有多余空间。它的默认值为 auto，即项目的本来大小。
+
+- flex 属性是 flex-grow，flex-shrink 和 flex-basis 的简写，默认值为 0 1 auto。
+
+- align-self 属性允许单个项目有与其他项目不一样的对齐方式，可覆盖 align-items 属性。默认值为 auto，表示继承父元素的 align-items 属性，如果没有父元素，则等同于 stretch。
+
+> 简单说明：flex 布局是 CSS3 新增的一种布局方式，可以通过将一个元素的 display 属性值设置为 flex 从而使它成为一个 flex 容器，它的所有子元素都会成为它的项目。一个容器默认有两条轴：一个是水平的主轴，一个是与主轴垂直的交叉轴。可以使用 flex-direction 来指定主轴的方向。可以使用 justify-content 来指定元素在主轴上的排列方式，使用 align-items 来指定元素在交叉轴上的排列方式。还可以使用 flex-wrap 来规定当一行排列不下时的换行方式。对于容器中的项目，可以使用 order 属性来指定项目的排列顺序，还可以使用 flex-grow 来指定当排列空间有剩余的时候，项目的放大比例，还可以使用 flex-shrink 来指定当排列空间不足时，项目的缩小比例。
+
+#### 响应式设计的概念及基本原理
+
+响应式网站设计（Responsive Web design）是一个网站能够兼容多个终端，而不是为每一个终端做一个特定的版本。
+
+基本原理：通过媒体查询 `@media` 查询检测不同的设备屏幕尺寸做处理。
+
+关于兼容：页面头部必须有 mate 声明的 viewport。
+
+```html
+<meta
+  name="’viewport’"
+  content="”width=device-width,"
+  initial-scale="1."
+  maximum-scale="1,user-scalable=no”"
+/>
+```
+
+#### 水平垂直居中的实现
+
+1、利用绝对定位，先将元素的左上角通过 top:50% 和 left:50% 定位到页面的中心，然后再通过 translate 来调整元素的中心点到页面的中心。该方法需要考虑浏览器兼容问题。
+
+```css
+.parent {
+  position: relative;
+}
+.child {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+```
+
+2、利用绝对定位，设置四个方向的值都为 0，并将 margin 设置为 auto，由于宽高固定，因此对应方向实现平分，可以实现水平和垂直方向上的居中：
+
+```css
+.parent {
+  position: relative;
+}
+
+.child {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+```
+
+- 注意：该方法只适用于**盒子有宽高**的情况。
+
+3、利用绝对定位，先将元素的左上角通过 top:50% 和 left:50% 定位到页面的中心，然后再通过 margin 负值来调整元素的中心点到页面的中心：
+
+```css
+.parent {
+  position: relative;
+}
+
+.child {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px; /* 自身 height 的一半 */
+  margin-left: -50px; /* 自身 width 的一半 */
+}
+```
+
+- 注意：该方法只适用于**盒子有宽高**的情况。
+
+4、使用 flex 布局，通过 align-items:center 和 justify-content:center 设置容器的垂直和水平方向上为居中对齐，然后它的子元素也可以实现垂直和水平的居中。该方法要考虑兼容的问题，该方法在移动端用的较多：
+
+```css
+.parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+#### 两栏布局的实现
+
+一般两栏布局指的是左边一栏宽度固定，右边一栏宽度自适应，两栏布局的具体实现：
+
+- 利用浮动，将左边元素宽度设置为 200px，并且设置向左浮动。将右边元素的 margin-left 设置为 200px，宽度设置为 auto（默认为 auto，撑满整个父元素）：
+
+```css
+.parent {
+  height: 100px;
+}
+.left {
+  float: left;
+  width: 200px;
+  background: pink;
+}
+.right {
+  margin-left: 200px;
+  width: auto;
+  background: yellow;
+}
+```
+
+- 利用浮动，左侧元素设置固定大小，并左浮动，右侧元素设置 overflow: hidden; 这样右边就触发了 BFC，BFC 的区域不会与浮动元素发生重叠，所以两侧就不会发生重叠：
+
+```css
+.left {
+  width: 100px;
+  height: 200px;
+  background: red;
+  float: left;
+}
+.right {
+  height: 300px;
+  background: blue;
+  overflow: hidden;
+}
+```
+
+- 利用 flex 布局，将左边元素设置为固定宽度 200px，将右边的元素设置为 flex:1：
+
+```css
+.parent {
+  display: flex;
+  height: 100px;
+}
+.left {
+  width: 200px;
+  background: pink;
+}
+.right {
+  flex: 1;
+  background: yellow;
+}
+```
+
+- 利用绝对定位，将父级元素设置为相对定位。左边元素设置为 absolute 定位，并且宽度设置为 200px。将右边元素的 margin-left 的值设置为 200px：
+
+```css
+.parent {
+  position: relative;
+  height: 100px;
+}
+.left {
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  background: pink;
+}
+.right {
+  margin-left: 200px;
+  background: yellow;
+}
+```
+
+- 利用绝对定位，将父级元素设置为相对定位。左边元素宽度设置为 200px，右边元素设置为绝对定位，左边定位为 200px，其余方向定位为 0：
+
+```css
+.parent {
+  position: relative;
+  height: 100px;
+}
+.left {
+  width: 200px;
+  background: pink;
+}
+.right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 200px;
+  background: yellow;
+}
+```
+
+#### 三栏布局的实现
+
+三栏布局一般指的是页面中一共有三栏，左右两栏宽度固定，中间自适应的布局，三栏布局的具体实现：
+
+- 利用绝对定位，左右两栏设置为绝对定位，中间设置对应方向大小的 margin 的值。
+
+```css
+.outer {
+  position: relative;
+  height: 100px;
+}
+
+.left {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: tomato;
+}
+
+.right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100px;
+  background: gold;
+}
+
+.center {
+  margin-left: 100px;
+  margin-right: 200px;
+  height: 100px;
+  background: lightgreen;
+}
+```
+
+- 利用 flex 布局，左右两栏设置固定大小，中间一栏设置为 flex:1：
+
+```css
+.outer {
+  display: flex;
+  height: 100px;
+}
+
+.left {
+  width: 100px;
+  background: tomato;
+}
+
+.right {
+  width: 100px;
+  background: gold;
+}
+
+.center {
+  flex: 1;
+  background: lightgreen;
+}
+```
+
+#### 如何实现一个三角形
+
+#### 如何实现一个扇形
+
+#### 如何实现一个宽高自适应的正方形
+
+#### 如何画一条 0.5px 的线
+
+#### 设置小于 12px 的字体
+
+#### 如何解决 1px 问题
+
 ### JavaScript
 
 #### 函数
