@@ -1461,17 +1461,340 @@ Flex 是 FlexibleBox 的缩写，意为 "弹性布局"，用来为盒状模型�
 }
 ```
 
+- 利用浮动，左右两栏设置固定大小，并设置对应方向的浮动。中间一栏设置左右两个方向的 margin 值，注意这种方式 **中间一栏必须放到最后**：
+
+```css
+.outer {
+  height: 100px;
+}
+
+.left {
+  float: left;
+  width: 100px;
+  height: 100px;
+  background: tomato;
+}
+
+.right {
+  float: right;
+  width: 200px;
+  height: 100px;
+  background: gold;
+}
+
+.center {
+  height: 100px;
+  margin-left: 100px;
+  margin-right: 200px;
+  background: lightgreen;
+}
+```
+
+- 圣杯布局，利用浮动和负边距来实现。父级元素设置左右的 padding，三列均设置向左浮动，中间一列放在最前面，宽度设置为父级元素的宽度，因此后面两列都被挤到了下一行，通过设置 margin 负值将其移动到上一行，再利用相对定位，定位到两边：
+
+```css
+.outer {
+  height: 100px;
+  padding-left: 100px;
+  padding-right: 200px;
+}
+
+.left {
+  position: relative;
+  left: -100px;
+
+  float: left;
+  margin-left: -100%;
+
+  width: 100px;
+  height: 100px;
+  background: tomato;
+}
+
+.right {
+  position: relative;
+  left: 200px;
+
+  float: right;
+  margin-left: -200px;
+
+  width: 200px;
+  height: 100px;
+  background: gold;
+}
+
+.center {
+  float: left;
+
+  width: 100%;
+  height: 100px;
+  background: lightgreen;
+}
+```
+
+- 双飞翼布局，双飞翼布局相对于圣杯布局来说，左右位置的保留是通过中间列的 margin 值来实现的，而不是通过父元素的 padding 来实现的。本质上来说，也是通过浮动和外边距负值来实现的：
+
+```css
+.outer {
+  height: 100px;
+}
+
+.left {
+  float: left;
+  margin-left: -100%;
+
+  width: 100px;
+  height: 100px;
+  background: tomato;
+}
+
+.right {
+  float: left;
+  margin-left: -200px;
+
+  width: 200px;
+  height: 100px;
+  background: gold;
+}
+
+.wrapper {
+  float: left;
+
+  width: 100%;
+  height: 100px;
+  background: lightgreen;
+}
+
+.center {
+  margin-left: 100px;
+  margin-right: 200px;
+  height: 100px;
+}
+```
+
 #### 如何实现一个三角形
+
+CSS 绘制三角形主要用到的是 border 属性，也就是边框。
+
+- 实现方向指向下方的三角：
+
+```css
+div {
+  width: 0;
+  height: 0;
+  border-top: 50px solid red;
+  border-right: 50px solid transparent;
+  border-left: 50px solid transparent;
+}
+```
+
+- 实现方向指向上方的三角：
+
+```css
+div {
+  width: 0;
+  height: 0;
+  border-bottom: 50px solid red;
+  border-right: 50px solid transparent;
+  border-left: 50px solid transparent;
+}
+```
+
+- 实现方向指向右方的三角：
+
+```css
+div {
+  width: 0;
+  height: 0;
+  border-left: 50px solid red;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+}
+```
+
+- 实现方向指向左方的三角：
+
+```css
+div {
+  width: 0;
+  height: 0;
+  border-right: 50px solid red;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+}
+```
+
+- 实现方向指向左上方的三角：
+
+```css
+div {
+  width: 0;
+  height: 0;
+  border-top: 100px solid red;
+  border-right: 100px solid transparent;
+}
+```
+
+> css 实现三角形总体的原则就是通过上下左右边框来控制三角形的方向，用边框的宽度比来控制三角形的角度。
 
 #### 如何实现一个扇形
 
+用 CSS 实现扇形的思路和三角形基本一致，就是多了一个圆角的样式，实现一个 90° 的扇形：
+
+```css
+div {
+  border: 100px solid transparent;
+  width: 0;
+  heigt: 0;
+  border-radius: 100px;
+  border-top-color: red;
+}
+```
+
 #### 如何实现一个宽高自适应的正方形
+
+利用 vw 来实现：
+
+```css
+.square {
+  width: 10%;
+  height: 10vw;
+  background: tomato;
+}
+```
+
+利用元素的 margin/padding 百分比是相对父元素 width 的性质来实现：
+
+```css
+.square {
+  width: 20%;
+  height: 0;
+  padding-top: 20%;
+  background: orange;
+}
+```
+
+利用子元素的 margin-top 的值来实现：
+
+```css
+.square {
+  width: 30%;
+  overflow: hidden;
+  background: yellow;
+}
+.square::after {
+  content: "";
+  display: block;
+  margin-top: 100%;
+}
+```
 
 #### 如何画一条 0.5px 的线
 
+采用 transform: scale() 的方式，该方法用来定义元素的 2D 缩放转换：
+
+```css
+transform: scale(0.5, 0.5);
+```
+
+采用 meta viewport 的方式：
+
+```html
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=0.5, minimum-scale=0.5, maximum-scale=0.5"
+/>
+```
+
+> 这种方式如果是 1px 那么就会变成 0.5px。但是 viewport 只针对于移动端，所以只在移动端上才能看到效果
+
 #### 设置小于 12px 的字体
 
+在谷歌下 css 设置字体大小为 12px 及以下时，显示都是一样大小，都是默认 12px。解决方式如下：
+
+- 使用 Webkit 的内核的 `-webkit-text-size-adjust` 的私有 CSS 属性来解决，只要加了`-webkit-text-size-adjust:none;` 字体大小就不受限制了。但是 chrome 更新到 27 版本之后就不可以用了。所以**高版本 chrome 谷歌浏览器已经不再支持 -webkit-text-size-adjust 样式**，所以要使用时候慎用。
+
+- 使用 css3 的 transform 缩放属性 `-webkit-transform:scale(0.5)`，注意-webkit-transform:scale(0.75) 收缩的是整个元素的大小，这时候，如果是内联元素，必须要将内联元素转换成块元素，可以使用 display：block ｜ inline-block。
+
+- 使用图片：如果是内容固定不变情况下，使用将小于 12px 文字内容切出做图片，这样不影响兼容也不影响美观。
+
 #### 如何解决 1px 问题
+
+1px 问题指的是：在一些 Retina 屏幕 的机型上，移动端页面的 1px 会变得很粗，呈现出不止 1px 的效果。原因很简单，就是 CSS 中的 1px 并不能和移动设备上的 1px 划等号。它们之间的比例关系有一个专门的属性来描述：
+
+```
+window.devicePixelRatio = 设备的物理像素 / CSS像素。
+```
+
+打开 Chrome 浏览器，启动移动端调试模式，在控制台去输出这个 devicePixelRatio 的值。这里选中 iPhone6/7/8 这系列的机型，输出的结果就是 2。这就意味着设置的 1px CSS 像素，在这个设备上实际会用 2 个物理像素单元来进行渲染，所以实际看到的一定会比 1px 粗一些。
+
+解决 1px 问题的三种思路：
+
+1、**直接写 0.5px**：
+
+可以先在 JS 中拿到 window.devicePixelRatio 的值，然后把这个值通过 JSX 或者模板语法给到 CSS 的 data 里，达到这样的效果（这里用 JSX 语法做示范）：
+
+```js
+<div id="container" data-device="{{window.devicePixelRatio}}"></div>
+```
+
+然后就可以在 CSS 中用属性选择器来命中 devicePixelRatio 为某一值的情况，比如说这里尝试命中 devicePixelRatio 为 2 的情况：
+
+```css
+#container[data-device="2"] {
+  border: 0.5px solid #333;
+}
+```
+
+> 直接把 1px 改成 1/devicePixelRatio 后的值，这是目前为止最简单的一种方法。这种方法的缺陷在于兼容性不行，IOS 系统需要 8 及以上的版本，安卓系统则直接不兼容。
+
+2、**伪元素先放大后缩小**：
+
+这个方法的可行性会更高，兼容性也更好。唯一的缺点是代码会变多。
+
+思路是先放大、后缩小：在目标元素的后面追加一个 ::after 伪元素，让这个元素布局为 absolute 之后、整个伸展开铺在目标元素上，然后把它的宽和高都设置为目标元素的两倍，border 值设为 1px。接着借助 CSS 动画特效中的放缩能力，把整个伪元素缩小为原来的 50%。此时，伪元素的宽高刚好可以和原有的目标元素对齐，而 border 也缩小为了 1px 的二分之一，间接地实现了 0.5px 的效果。
+
+```css
+#container[data-device="2"] {
+  position: relative;
+}
+#container[data-device="2"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  transform: scale(0.5);
+  transform-origin: left top;
+  box-sizing: border-box;
+  border: 1px solid #333;
+}
+```
+
+3、**使用 viewport 缩放解决**：
+
+这个思路就是对 meta 标签里几个关键属性下手：
+
+```html
+<meta
+  name="viewport"
+  content="initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no"
+/>
+```
+
+这里针对像素比为 2 的页面，把整个页面缩放为了原来的 1/2 大小。这样，本来占用 2 个物理像素的 1px 样式，现在占用的就是标准的一个物理像素。根据像素比的不同，这个缩放比例可以被计算为不同的值，用 js 代码实现如下：
+
+```js
+const scale = 1 / window.devicePixelRatio;
+// 这里 metaEl 指的是 meta 标签对应的 Dom
+metaEl.setAttribute(
+  "content",
+  `width=device-width,user-scalable=no,initial-scale=${scale},maximum-scale=${scale},minimum-scale=${scale}`
+);
+```
+
+> 这种方式副作用比较大，整个页面被缩放了。这时 1px 已经被处理成物理像素大小，这样的大小在手机上显示边框很合适。但是，一些原本不需要被缩小的内容，比如文字、图片等，也被无差别缩小掉了。
 
 ### JavaScript
 
