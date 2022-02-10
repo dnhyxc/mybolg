@@ -1,47 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>js类型判断函数封装</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>js类型判断函数封装</title>
-</head>
+  <body>
+    <script>
+      const arr = [];
+      const obj = {};
+      const str = "dnhyxc";
+      const num = 0902;
+      const nul = null;
+      const undif = undefined;
+      const nan = NaN;
+      const boo = true;
+      const fun = function () {
+        console.log("hello world");
+      };
 
-<body>
-  <script>
-    const arr = [];
-    const obj = {};
-    const str = 'dnhyxc';
-    const num = 0902;
-    const nul = null;
-    const undif = undefined;
-    const nan = NaN;
-    const boo = true;
-    const fun = function () {
-      console.log('hello world');
-    }
+      const getType = function (obj) {
+        let type = typeof obj;
+        if (type !== "object") {
+          return type;
+        }
+        return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
+        // 或如下方式
+        // return Object.prototype.toString.call(obj).replace(/^\[object (\S+)\]$/, '$1').toLowerCase();
+      };
 
-    const getType = function (obj) {
-      let type = typeof obj;
-      if (type !== "object") {
-        return type;
-      }
-      return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
-      // 或如下方式
-      // return Object.prototype.toString.call(obj).replace(/^\[object (\S+)\]$/, '$1').toLowerCase();
-    };
+      console.log(getType(arr)); // array
+      console.log(getType(obj)); // object
+      console.log(getType(str)); // string
+      console.log(getType(num)); // number
+      console.log(getType(nul)); // null
+      console.log(getType(undif)); // undefined
+      console.log(getType(nan)); // number
+      console.log(getType(boo)); // boolean
+      console.log(getType(fun)); // function
 
-    console.log(getType(arr)); // array
-    console.log(getType(obj)); // object
-    console.log(getType(str)); // string
-    console.log(getType(num)); // number
-    console.log(getType(nul)); // null
-    console.log(getType(undif)); // undefined
-    console.log(getType(nan)); // number
-    console.log(getType(boo)); // boolean
-    console.log(getType(fun)); // function
-  </script>
-</body>
+      const isnan = [1, 2];
+      const botNan = "111";
+      console.log(isNaN(isnan)); // true
+      console.log(isNaN(botNan)); // false
+      console.log(isNaN(NaN)); // true
 
+      console.log(Number.isNaN(isnan)); // falase
+      console.log(Number.isNaN(NaN)); // true
+    </script>
+  </body>
 </html>

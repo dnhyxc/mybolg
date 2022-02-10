@@ -1906,6 +1906,79 @@ console.log(a.call(undefined)); // [object Undefined]
 console.log(a.call(null)); // [object Null]
 ```
 
+同样是检测对象 obj 调用 toString 方法，obj.toString() 的结果和 Object.prototype.toString.call(obj)的结果不一样，这是为什么？
+
+- 这是因为 toString 是 Object 的原型方法，而 Array、function 等类型作为 Object 的实例，都重写了 toString 方法。不同的对象类型调用 toString 方法时，根据原型链的知识，调用的是对应的重写之后的 toString 方法（function 类型返回内容为函数体的字符串，Array 类型返回元素组成的字符串…），而不会去调用 Object 上原型 toString 方法（返回对象的具体类型），所以采用 obj.toString()不能得到其对象类型，只能将 obj 转换为字符串类型；因此，在想要得到对象的具体类型时，应该调用 Object 原型上的 toString 方法。
+
+#### 判断数组的方法
+
+通过 Object.prototype.toString.call() 判断：
+
+```js
+Object.prototype.toString.call(obj).slice(8, -1) === "Array";
+```
+
+通过原型链做判断：
+
+```js
+obj.__proto__ === Array.prototype;
+```
+
+通过 ES6 的 Array.isArray()做判断：
+
+```js
+Array.isArrray(obj);
+```
+
+通过 instanceof 做判断：
+
+```js
+obj instanceof Array;
+```
+
+通过 Array.prototype.isPrototypeOf：
+
+```js
+Array.prototype.isPrototypeOf(obj);
+```
+
+#### intanceof 操作符的实现原理及实现
+
+instanceof 运算符用于判断构造函数的 prototype 属性是否出现在对象的原型链中的任何位置：
+
+```js
+function myInstanceof(left, right) {
+  // 获取对象的原型
+  let proto = Object.getPrototypeOf(left);
+  // 获取构造函数的 prototype 对象
+  let prototype = right.prototype;
+
+  // 判断构造函数的 prototype 对象是否在对象的原型链上
+  while (true) {
+    if (!proto) return false;
+    if (proto === prototype) return true;
+    // 如果没有找到，就继续从其原型上找，Object.getPrototypeOf方法用来获取指定对象的原型
+    proto = Object.getPrototypeOf(proto);
+  }
+}
+```
+
+#### typeof NaN 的结果是什么
+
+NaN 指 "不是一个数字"（not a number），NaN 是一个 "警戒值"（sentinel value，有特殊用途的常规值），用于指出数字类型中的错误情况，即 "执行数学运算没有成功，这是失败后返回的结果"：
+
+```js
+typeof NaN; // "number"
+```
+
+> NaN 是一个特殊值，它和自身不相等，是唯一一个非自反（自反，reflexive，即 x === x 不成立）的值。而 NaN !== NaN 为 true。
+
+#### isNaN 和 Number.isNaN 函数的区别
+
+函数 isNaN 接收参数后，会尝试将这个参数转换为数值，**任何不能被转换为数值的的值都会返回 true**，因此非数字值传入也会返回 true ，会影响 NaN 的判断。
+
+函数 Number.isNaN 会首先判断传入参数是否为数字，如果是数字再继续判断是否为 NaN ，**不会进行数据类型的转换**，这种方法对于 NaN 的判断更为准确。
+
 #### 函数
 
 #### this
@@ -1931,3 +2004,5 @@ console.log(a.call(null)); // [object Null]
 大纲 https://juejin.cn/post/6996841019094335519#heading-10
 
 css 篇 https://juejin.cn/post/6905539198107942919
+
+js 篇 https://juejin.cn/post/6940945178899251230
