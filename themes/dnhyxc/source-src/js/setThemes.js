@@ -1,8 +1,12 @@
+import * as Utils from "./public-utils";
 const container = document.querySelector('#container');
+const dark = document.querySelector('.dark');
+const toggleMusic = document.querySelector('.toggleMusic');
 const mobileDark = document.querySelector('.mobileDark');
 const toTopDark = document.querySelector('.toTopDark');
 const btnctn = document.querySelector('.btnctn');
-import * as Utils from "./public-utils";
+const menuText = document.querySelectorAll('.menu-text');
+const tips_a = document.querySelectorAll('.tips-a');
 
 const themeColors = {
   xin: 'rgb(43, 88, 118) 0%, rgb(78, 67, 118) 100%',
@@ -47,7 +51,29 @@ function getColor(direction, color1, color2) {
   return `linear-gradient(${direction}, ${color1} 0%, ${color2} 100%)`;
 }
 
+const textColor = {
+  0: '#ddd',
+  1: '#fff',
+  2: '#000',
+  3: '#000',
+  4: '#000',
+  5: '#fff',
+  6: '#ddd',
+  7: '#ddd',
+  8: '#c9c9c9',
+  9: '#c9c9c9',
+}
+
 function setBgcThemes(index, name) {
+  menuText.forEach(i => {
+    i.firstElementChild.classList.add('restColor')
+  })
+  tips_a.forEach(i => {
+    i.classList.add('restColor')
+  })
+  dark.classList.add('restColor')
+  toggleMusic.classList.add('restColor')
+  container.style.color = textColor[index];
   container.style.backgroundImage = themes[index];
   mobileDark.style.backgroundImage = getColor('to bottom', colors[name].color1, colors[name].color2);
   toTopDark.style.backgroundImage = getColor('to bottom', colors[name].color1, colors[name].color2);

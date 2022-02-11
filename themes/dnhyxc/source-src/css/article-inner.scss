@@ -129,10 +129,15 @@
     }
   }
 
+  .em-parent {
+    font-weight: 700;
+    color: #a862ea;
+  }
+
   em {
     font-style: italic;
     font-weight: 700;
-    color: #00b7ff;
+    color: #ffec8b;
   }
 
   ul {
@@ -140,9 +145,9 @@
       content: "";
       width: 4px;
       height: 4px;
-      border: 1px solid #ccc;
+      border: 1px solid #ffec8b;
       border-radius: 10px;
-      background: #ccc;
+      background: #ffec8b;
       display: inline-block;
       margin-right: 8px;
       float: left;
@@ -157,7 +162,10 @@
     li:before {
       counter-increment: item;
       content: counter(item) ".";
-      margin-right: 10px;
+      margin-right: 6px;
+      float: left;
+      color: #ffec8b;
+      padding-left: 10px;
     }
   }
 

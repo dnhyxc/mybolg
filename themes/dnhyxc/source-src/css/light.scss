@@ -7,6 +7,7 @@
     /* chrome, firefox */ url("./fonts/iconfont.ttf") format("truetype"),
     url("./fonts/iconfont.svg#iconfont") format("svg");
   /* iOS 4.1- */
+  font-display: block;
 }
 
 [class^="icon-"],
@@ -419,14 +420,24 @@
           }
         }
 
+        em {
+          color: #a862ea;
+        }
+
         ul {
           li {
             color: #333;
 
             &::before {
-              border: 1px solid #666;
-              background: #666;
+              border: 1px solid #a862ea;
+              background: #a862ea;
             }
+          }
+        }
+
+        ol {
+          li:before {
+            color: #a862ea;
           }
         }
 

@@ -264,31 +264,31 @@ meta 标签由 **name** 和 **content** 属性定义，**用来描述网页文�
 
 常用的 meta 标签：
 
-1、chartset：用来描述 HTML 文档的编码类型。
+*1、*chartset：用来描述 HTML 文档的编码类型。
 
 ```html
 <meta charset="UTF-8" />
 ```
 
-2、keywords：页面关键词。
+*2、*keywords：页面关键词。
 
 ```html
 <meta name="keywords" content="关键词" />
 ```
 
-3、description：页面描述。
+*3、*description：页面描述。
 
 ```html
 <meta name="description" content="页面描述内容" />
 ```
 
-4、refresh：页面重定向和刷新。
+*4、*refresh：页面重定向和刷新。
 
 ```html
 <meta http-equiv="refresh" content="0;url=" />
 ```
 
-5、viewport：适配移动端，可以控制视口的大小和比例：
+*5、*viewport：适配移动端，可以控制视口的大小和比例：
 
 ```html
 <meta
@@ -311,7 +311,7 @@ content 参数有以下几种：
 
 - user-scalable：是否允许用户缩放（yes/no）。
 
-6、搜索引擎索引方式：
+*6、*搜索引擎索引方式：
 
 ```html
 <meta name="robots" content="index,follow" />
@@ -379,13 +379,13 @@ sizes = "[media query] [length], [media query] [length] ... ";
 
 **具体使用方法如下**：
 
-1、创建一个和 html 同名的 manifest 文件，然后在页面头部加入 manifest 属性：
+*1、*创建一个和 html 同名的 manifest 文件，然后在页面头部加入 manifest 属性：
 
 ```html
 <html lang="en" manifest="index.manifest"></html>
 ```
 
-2、在 **cache.manifest** 文件中编写需要离线存储的资源：
+*2、*在 **cache.manifest** 文件中编写需要离线存储的资源：
 
 ```text
 CACHE MANIFEST
@@ -405,43 +405,43 @@ CACHE MANIFEST
 
 - FALLBACK：表示如果访问第一个资源失败，那么就使用第二个资源来替换它，比如上面这个文件表示的就是如果访问根目录下任何一个资源失败了，那么就去访问 offline.html。
 
-3、在离线状态时，操作 window.applicationCache 进行离线缓存的操作。
+*3、*在离线状态时，操作 window.applicationCache 进行离线缓存的操作。
 
 **如何更新缓存**：
 
-1、更新 manifest 文件：
+*1、*更新 manifest 文件：
 
 - 给 manifest 添加或删除文件。
 
 - 如果 manifest 没有添加或删除文件，只是修改了文件，可以通过更改版本号等更新 manifest 文件。
 
-2、通过 javascript 操作：
+*2、*通过 javascript 操作：
 
 - html5 中引入了 js 操作离线缓存的方法：window.applicationCache.update()，可以手动更新缓存。
 
-3、清除浏览器缓存：
+*3、*清除浏览器缓存：
 
 - 如果用户清除了浏览器缓存（手动或用其他一些工具），都会重新下载文件。
 
 **注意事项**：
 
-1、浏览器对缓存数据的容量限制可能不太一样（某些浏览器设置的限制是每个站点 5MB）。
+*1、*浏览器对缓存数据的容量限制可能不太一样（某些浏览器设置的限制是每个站点 5MB）。
 
-2、如果 manifest 文件，或者内部列举的某一个文件不能正常下载，整个更新过程都将失败，浏览器将会继续使用老的缓存。
+*2、*如果 manifest 文件，或者内部列举的某一个文件不能正常下载，整个更新过程都将失败，浏览器将会继续使用老的缓存。
 
-3、引用 manifest 的 html 必须与 manifest 文件同源，在同一域下。
+*3、*引用 manifest 的 html 必须与 manifest 文件同源，在同一域下。
 
-4、FALLBACK 中的资源必须和 manifest 文件同源。
+*4、*FALLBACK 中的资源必须和 manifest 文件同源。
 
-5、当一个资源被缓存后，该浏览器直接请求这个绝对路径也会访问缓存中的资源。
+*5、*当一个资源被缓存后，该浏览器直接请求这个绝对路径也会访问缓存中的资源。
 
-6、站点中的其它页面即使没有设置 manifest 属性，请求的资源如果在缓存中也从缓存中访问。
+*6、*站点中的其它页面即使没有设置 manifest 属性，请求的资源如果在缓存中也从缓存中访问。
 
-7、当 manifest 文件发生改变时，资源请求本身也会触发更新。
+*7、*当 manifest 文件发生改变时，资源请求本身也会触发更新。
 
 **离线缓存有什么优缺点**：
 
-1、优点：
+*1、*优点：
 
 - 离线浏览：用户可在应用离线时使用它们。
 
@@ -449,7 +449,7 @@ CACHE MANIFEST
 
 - 减少服务器负载：浏览器只从服务器下载更新过或更改过的资源。
 
-2、缺点：
+*2、*缺点：
 
 - 更新的资源需要二次刷新才会被页面采用。
 
@@ -575,9 +575,9 @@ css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小
 
 ##### 不可继承的属性
 
-1、display：设置元素显示与隐藏。
+*1、*display：设置元素显示与隐藏。
 
-2、文本属性：
+*2、*文本属性：
 
 - vertical-align：垂直文本对齐。
 
@@ -589,23 +589,23 @@ css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小
 
 - unicode-bidi：设置文本的方向。
 
-3、盒子模型的属性：width、height、margin、border、padding。
+*3、*盒子模型的属性：width、height、margin、border、padding。
 
-4、背景属性：background、background-color、background-image、background-repeat、background-position、background-attachment。
+*4、*背景属性：background、background-color、background-image、background-repeat、background-position、background-attachment。
 
-5、定位属性：float、clear、position、top、right、bottom、left、min-width、min-height、max-width、max-height、overflow、clip、z-index。
+*5、*定位属性：float、clear、position、top、right、bottom、left、min-width、min-height、max-width、max-height、overflow、clip、z-index。
 
-6、生成内容属性：content、counter-reset、counter-incerment。
+*6、*生成内容属性：content、counter-reset、counter-incerment。
 
-7、轮廓样式属性：outline-style、outline-width、outline-color、outline。
+*7、*轮廓样式属性：outline-style、outline-width、outline-color、outline。
 
-8、页面样式属性：size、page-break-before、page-break-after。
+*8、*页面样式属性：size、page-break-before、page-break-after。
 
-9、声音样式属性：pause-before、pause-after、pause、cue-before、cue-after、cue、play-during。
+*9、*声音样式属性：pause-before、pause-after、pause、cue-before、cue-after、cue、play-during。
 
 ##### 可继承的属性
 
-1、字体系列属性：
+*1、*字体系列属性：
 
 - font-family：字体类型。
 
@@ -615,7 +615,7 @@ css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小
 
 - font-style：字体风格。
 
-2、文本系列属性：
+*2、*文本系列属性：
 
 - text-indent：文本缩进。
 
@@ -631,15 +631,15 @@ css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小
 
 - color：文本颜色。
 
-3、元素可见性：
+*3、*元素可见性：
 
 - visibility：控制元素显示隐藏。
 
-4、列表布局属性：
+*4、*列表布局属性：
 
 - list-style：列表风格，包括 list-style-type、list-style-image 等。
 
-5、光标属性：
+*5、*光标属性：
 
 - cursor：光标显示为何种形态。
 
@@ -856,7 +856,7 @@ BFC 是一个独立的布局环境，可以理解为一个容器，在这个容�
 
 解决办法：对于折叠的情况，主要有两种：兄弟之间重叠和父子之间重叠。
 
-1、父子之间重叠，为底部盒子开启 BFC 即可，如下：
+*1、*父子之间重叠，为底部盒子开启 BFC 即可，如下：
 
 - 底部元素变为行内块元素：`display：inline-block`。
 
@@ -864,7 +864,7 @@ BFC 是一个独立的布局环境，可以理解为一个容器，在这个容�
 
 - 底部元素的 position 的值为：`absolute/fixed`。
 
-2、父子之间重叠：
+*2、*父子之间重叠：
 
 - 父元素加入：`overflow: hidden`。
 
@@ -921,15 +921,15 @@ z-index 属性在下列情况下会失效：
 
 常用的布局单位包括像素（px）、百分比（%）、em、rem、vw/vh。
 
-1、像素（px）是页面布局的基础，一个像素表示终端（电脑、手机、平板等）屏幕所能显示的最小区域，像素分为两种类型：CSS 像素和物理像素。
+*1、*像素（px）是页面布局的基础，一个像素表示终端（电脑、手机、平板等）屏幕所能显示的最小区域，像素分为两种类型：CSS 像素和物理像素。
 
 - CSS 像素：为 Web 开发这提供，在 CSS 中使用的一个抽象单位。
 
 - 物理像素：只与设备的硬件（屏幕）密度有关，任何设备的物理像素都是固定的。
 
-2、百分比（%）：当浏览器的宽度或者高度发生变化时，通过百分比单位可以使得浏览器中的组件的宽和高随着浏览器的变化而变化，从而实现响应式的效果。一般认为子元素的百分比相对于直接父元素。
+*2、*百分比（%）：当浏览器的宽度或者高度发生变化时，通过百分比单位可以使得浏览器中的组件的宽和高随着浏览器的变化而变化，从而实现响应式的效果。一般认为子元素的百分比相对于直接父元素。
 
-3、em 和 rem 相对于 px 更具灵活性，它们都是相对长度单位，它们之间的区别：**em 相对于父元素，rem 相对于根元素**。
+*3、*em 和 rem 相对于 px 更具灵活性，它们都是相对长度单位，它们之间的区别：**em 相对于父元素，rem 相对于根元素**。
 
 - em：文本相对长度单位。相对于当前对象内文本的字体尺寸。即如果自身没有设置字体大小则相对于父元素的字体大小倍数，一层一层往上寻找，如果都没有人为设置行内文本的字体尺寸，则相对于浏览器的默认字体尺寸（默认 16px）。
 
@@ -1072,7 +1072,7 @@ html {
 }
 ```
 
-4、vw/vh 是与视图窗口有关的单位，vw 表示相对于视图窗口的宽度，vh 表示相对于视图窗口高度，除了 vw 和 vh 外，还有 vmin 和 vmax 两个相关的单位。
+*4、*vw/vh 是与视图窗口有关的单位，vw 表示相对于视图窗口的宽度，vh 表示相对于视图窗口高度，除了 vw 和 vh 外，还有 vmin 和 vmax 两个相关的单位。
 
 - vw：相对于视窗的宽度，视窗宽度是 100vw。
 
@@ -1082,7 +1082,7 @@ html {
 
 - vmax：vw 和 vh 中的较大值。
 
-5、vw/vh 于百分比的区别：
+*5、*vw/vh 于百分比的区别：
 
 - 百分比（%）：大部分相对于祖先元素，也有相对于自身的情况比如（border-radius、translate 等）。
 
@@ -1245,7 +1245,7 @@ Flex 是 FlexibleBox 的缩写，意为 "弹性布局"，用来为盒状模型�
 
 #### 水平垂直居中的实现
 
-1、利用绝对定位，先将元素的左上角通过 top:50% 和 left:50% 定位到页面的中心，然后再通过 translate 来调整元素的中心点到页面的中心。该方法需要考虑浏览器兼容问题。
+*1、*利用绝对定位，先将元素的左上角通过 top:50% 和 left:50% 定位到页面的中心，然后再通过 translate 来调整元素的中心点到页面的中心。该方法需要考虑浏览器兼容问题。
 
 ```css
 .parent {
@@ -1259,7 +1259,7 @@ Flex 是 FlexibleBox 的缩写，意为 "弹性布局"，用来为盒状模型�
 }
 ```
 
-2、利用绝对定位，设置四个方向的值都为 0，并将 margin 设置为 auto，由于宽高固定，因此对应方向实现平分，可以实现水平和垂直方向上的居中：
+*2、*利用绝对定位，设置四个方向的值都为 0，并将 margin 设置为 auto，由于宽高固定，因此对应方向实现平分，可以实现水平和垂直方向上的居中：
 
 ```css
 .parent {
@@ -1278,7 +1278,7 @@ Flex 是 FlexibleBox 的缩写，意为 "弹性布局"，用来为盒状模型�
 
 - 注意：该方法只适用于**盒子有宽高**的情况。
 
-3、利用绝对定位，先将元素的左上角通过 top:50% 和 left:50% 定位到页面的中心，然后再通过 margin 负值来调整元素的中心点到页面的中心：
+*3、*利用绝对定位，先将元素的左上角通过 top:50% 和 left:50% 定位到页面的中心，然后再通过 margin 负值来调整元素的中心点到页面的中心：
 
 ```css
 .parent {
@@ -1296,7 +1296,7 @@ Flex 是 FlexibleBox 的缩写，意为 "弹性布局"，用来为盒状模型�
 
 - 注意：该方法只适用于**盒子有宽高**的情况。
 
-4、使用 flex 布局，通过 align-items:center 和 justify-content:center 设置容器的垂直和水平方向上为居中对齐，然后它的子元素也可以实现垂直和水平的居中。该方法要考虑兼容的问题，该方法在移动端用的较多：
+*4、*使用 flex 布局，通过 align-items:center 和 justify-content:center 设置容器的垂直和水平方向上为居中对齐，然后它的子元素也可以实现垂直和水平的居中。该方法要考虑兼容的问题，该方法在移动端用的较多：
 
 ```css
 .parent {
@@ -1730,7 +1730,7 @@ window.devicePixelRatio = 设备的物理像素 / CSS像素。
 
 解决 1px 问题的三种思路：
 
-1、**直接写 0.5px**：
+*1、*直接写 0.5px：
 
 可以先在 JS 中拿到 window.devicePixelRatio 的值，然后把这个值通过 JSX 或者模板语法给到 CSS 的 data 里，达到这样的效果（这里用 JSX 语法做示范）：
 
@@ -1748,7 +1748,7 @@ window.devicePixelRatio = 设备的物理像素 / CSS像素。
 
 > 直接把 1px 改成 1/devicePixelRatio 后的值，这是目前为止最简单的一种方法。这种方法的缺陷在于兼容性不行，IOS 系统需要 8 及以上的版本，安卓系统则直接不兼容。
 
-2、**伪元素先放大后缩小**：
+*2、*伪元素先放大后缩小：
 
 这个方法的可行性会更高，兼容性也更好。唯一的缺点是代码会变多。
 
@@ -1772,7 +1772,7 @@ window.devicePixelRatio = 设备的物理像素 / CSS像素。
 }
 ```
 
-3、**使用 viewport 缩放解决**：
+*3、*使用 viewport 缩放解决：
 
 这个思路就是对 meta 标签里几个关键属性下手：
 
@@ -1834,7 +1834,7 @@ js 共有八种数据类型，分别是 undefined、null、string、number、boo
 
 #### 数据类型检测的额方式有哪些
 
-1、**typeof**:
+*1、***typeof**:
 
 ```js
 console.log(typeof 2); // number
@@ -1849,7 +1849,7 @@ console.log(typeof null); // object
 
 > 使用 typeof 的判断方式除了数组、对象、null 会判断为 object 之外，其它都能准确判断，其中包含 Function。
 
-2、**instanceof**：
+*2、***instanceof**：
 
 instanceof 可以准确判断对象的类型，其内部运行机制是判断在其原型链中能否找到该类型的原型。
 
@@ -1865,7 +1865,7 @@ console.log({} instanceof Object); // true
 
 > 可以看到，**instanceof 只能准确判断引用数据类型**，而不能判断基本数据类型。instanceof 运算符可以用来测试一个对象在其原型链中是否存在一个构造函数的 prototype 属性。
 
-3、**constructor**：
+*3、***constructor**：
 
 ```js
 console.log((2).constructor === Number); // true
@@ -1889,7 +1889,7 @@ console.log(f.constructor === Fn); // false
 console.log(f.constructor === Array); // true
 ```
 
-4、**Object.prototype.toString.call()**：
+*4、***Object.prototype.toString.call()**：
 
 Object.prototype.toString.call() 使用 Object 对象的原型方法 toString 来判断数据类型：
 
@@ -1978,6 +1978,58 @@ typeof NaN; // "number"
 函数 isNaN 接收参数后，会尝试将这个参数转换为数值，**任何不能被转换为数值的的值都会返回 true**，因此非数字值传入也会返回 true ，会影响 NaN 的判断。
 
 函数 Number.isNaN 会首先判断传入参数是否为数字，如果是数字再继续判断是否为 NaN ，**不会进行数据类型的转换**，这种方法对于 NaN 的判断更为准确。
+
+#### 其他值到字符串的转换规则
+
+null 和 undefined 类型，null 转换为 "null"，undefined 转换为 "undefined"。
+
+boolean 类型，true 转换为 "true"，false 转换为 "false"。
+
+number 类型的值直接转换，不过那些极小和极大的数字会使用指数形式。
+
+Symbol 类型的值直接转换，但是只允许显式强制类型转换，使用隐式强制类型转换会产生错误。
+
+对普通对象来说，除非自行定义 toString() 方法，否则会调用 Object.prototype.toString(）来返回内部属性 [[Class]] 的值，如"[object Object]"。如果对象有自己的 toString() 方法，字符串化时就会调用该方法并使用其返回值。
+
+#### 其他值到数字值的转换规则
+
+undefined 类型的值转换为 NaN。
+
+null 类型的值转换为 0。
+
+boolean 类型的值，true 转换为 1，false 转换为 0。
+
+string 类型的值转换如同使用 Number() 函数进行转换，**如果包含非数字值则转换为 NaN，空字符串为 0**。
+
+对象（包括数组）会首先被转换为相应的基本类型值，如果返回的是非数字的基本类型值，则再遵循以上规则将其强制转换为数字。
+
+> - 为了将值转换为相应的基本类型值，抽象操作 ToPrimitive 会首先（通过内部操作 DefaultValue）检查该值是否有 valueOf()方法。如果有并且返回基本类型值，就使用该值进行强制类型转换。如果没有就使用 toString() 的返回值（如果存在）来进行强制类型转换。
+>
+> - 如果 valueOf() 和 toString() 均不返回基本类型值，会产生 TypeError 错误。
+
+#### 其他值到布尔类型的值的转换规则
+
+以下这些是假值：undefined、null、false、+0、-0、NaN、""。
+
+假值的布尔强制类型转换结果为 false。从逻辑上说，假值列表以外的都应该是真值。
+
+#### == 操作符的强制类型转换规则
+
+对于 == 来说，如果对比双方的类型不一样，就会进行类型转换。假如对比 x 和 y 是否相同，就会进行如下判断流程：
+
+1. 首先会判断两者类型是否相同，相同的话就比较两者的大小。
+
+2. 类型不相同的话，就会进行类型转换。
+
+3. 会先判断是否在对比 null 和 undefined，是的话就会返回 true。
+
+4. 判断两者类型是否为 string 和 number，是的话就会将字符串转换为 number
+
+**3、**阿斯顿撒的撒
+
+**4、**大叔大叔大叔的
+
+**5、**大大叔大叔大叔 大叔的啊s
 
 #### 函数
 
