@@ -62,6 +62,7 @@ function init() {
     setThemes.setBgcThemes(0, 'xin');
     setColor(setThemes.themeColors.xin)
     setTocBgc()
+    setThemes.removeSaveEyeColor()
   }
 
   dao.onclick = function (e) {
@@ -74,6 +75,7 @@ function init() {
     setThemes.setBgcThemes(1, 'dao');
     setColor(setThemes.themeColors.dao)
     setTocBgc()
+    setThemes.removeSaveEyeColor()
   }
 
   shui.onclick = function (e) {
@@ -86,6 +88,7 @@ function init() {
     setThemes.setBgcThemes(2, 'shui');
     setColor(setThemes.themeColors.shui)
     setTocBgc()
+    setThemes.removeSaveEyeColor()
   }
 
   qiong.onclick = function (e) {
@@ -98,6 +101,7 @@ function init() {
     setThemes.setBgcThemes(3, 'qiong');
     setColor(setThemes.themeColors.qiong)
     setTocBgc()
+    setThemes.removeSaveEyeColor()
   }
 
   chu.onclick = function (e) {
@@ -110,6 +114,7 @@ function init() {
     setThemes.setBgcThemes(4, 'chu');
     setColor(setThemes.themeColors.chu)
     setTocBgc()
+    setThemes.removeSaveEyeColor()
   }
 
   zuo.onclick = function (e) {
@@ -122,6 +127,7 @@ function init() {
     setThemes.setBgcThemes(5, 'zuo');
     setColor(setThemes.themeColors.zuo)
     setTocBgc()
+    setThemes.removeSaveEyeColor()
   }
 
   kan.onclick = function (e) {
@@ -134,6 +140,7 @@ function init() {
     setThemes.setBgcThemes(6, 'kan');
     setColor(setThemes.themeColors.kan)
     setTocBgc()
+    setThemes.removeSaveEyeColor()
   }
 
   yun.onclick = function (e) {
@@ -146,6 +153,7 @@ function init() {
     setThemes.setBgcThemes(7, 'yun');
     setColor(setThemes.themeColors.yun)
     setTocBgc()
+    setThemes.setSaveEyeColor()
   }
 
   qi.onclick = function (e) {
@@ -158,6 +166,7 @@ function init() {
     setThemes.setBgcThemes(8, 'qi');
     setColor(setThemes.themeColors.qi)
     setTocBgc()
+    setThemes.removeSaveEyeColor()
   }
 
   shi.onclick = function (e) {
@@ -170,9 +179,10 @@ function init() {
     setThemes.setBgcThemes(9, 'shi');
     setColor(setThemes.themeColors.shi)
     setTocBgc()
+    setThemes.removeSaveEyeColor()
   }
 }
 
 module.exports = {
-  init: init
+  init
 }

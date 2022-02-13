@@ -86,8 +86,8 @@
 }
 
 .noBorder {
-  border-top: none;
-  border-bottom: none;
+  border-top: none !important;
+  border-bottom: none !important;
 }
 
 @media screen and (max-width: 800px) {

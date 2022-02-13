@@ -1,0 +1,477 @@
+#container {
+  .restColor {
+    box-shadow: inset 0 0 10px #fff;
+    color: #111;
+
+    .intrude-less {
+      #header {
+        // 主页等按钮样式
+        .header-menu {
+          .menu-text {
+            box-shadow: inset 0 0 5px #fff !important;
+            a {
+              color: #111;
+            }
+          }
+        }
+
+        // 鸟笼样式
+        .switch-btn {
+          .home {
+            .homeIcon {
+              width: 45px;
+              height: 45px;
+              background: url(../css/img/home_green.svg) no-repeat;
+              background-size: 45px 45px;
+              cursor: pointer;
+            }
+          }
+          .tip-show::before {
+            border-color: transparent transparent #d7f2d7;
+          }
+
+          .tips-box {
+            .tips-text {
+              box-shadow: inset 0 0 5px #fff;
+
+              .tips-a {
+                color: #111;
+              }
+              &:hover {
+                background-color: #e0e0e099;
+              }
+            }
+            &::before {
+              border-color: transparent transparent #d7f2d7;
+            }
+          }
+        }
+      }
+    }
+
+    // 音乐、白天按钮
+    .dark,
+    .toggleMusic {
+      box-shadow: inset 0 0 8px #fff !important;
+      color: #111 !important;
+
+      &:hover {
+        color: #9501df !important;
+      }
+    }
+
+    // 座右铭
+    .motto {
+      .qiong,
+      .kan {
+        color: #bc92e9;
+      }
+      .xin,
+      .chu {
+        color: #faff00;
+      }
+    }
+
+    .music {
+      .aplayer.aplayer-fixed {
+        // 音乐歌词
+        .aplayer-lrc {
+          p {
+            background-image: linear-gradient(-225deg, #666, #5f2cf8, #fcd72d);
+          }
+        }
+        // 音乐名称
+        .aplayer-body {
+          .aplayer-info {
+            .aplayer-music {
+              color: #fff;
+            }
+          }
+        }
+        // 音乐时间
+        .aplayer-body
+          .aplayer-info
+          .aplayer-controller
+          .aplayer-time
+          .aplayer-time-inner {
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  // 所有文章、友链
+  .tools-wrap.restColor {
+    box-shadow: none;
+
+    .tools-section {
+      box-shadow: inset 0 0 10px #fff;
+      color: #666;
+
+      .search-ul {
+        .search-time,
+        .search-tag {
+          color: #333;
+
+          .icon-price-tags:before {
+            color: #333;
+          }
+        }
+        .search-title {
+          color: #333;
+
+          .icon {
+            color: #333;
+          }
+        }
+      }
+    }
+
+    // 文章搜索框
+    .search-wrap {
+      .search-ipt {
+        color: #111;
+      }
+      .icon {
+        color: #666;
+      }
+      ::-webkit-input-placeholder {
+        color: #666;
+      }
+    }
+  }
+
+  .mid-col {
+    // main
+    .restColor {
+      box-shadow: inset 0 1px 8px #fff;
+
+      // 显示隐藏菜单栏按钮
+      .left-menu {
+        box-shadow: 0 0 5px #fff inset;
+      }
+
+      // main 标题字体颜色
+      .main-loading {
+        color: #9501df;
+      }
+
+      // 文章 article
+      .article {
+        border-top: 1px solid #fffefe85;
+        border-bottom: 1px solid #fffefe85;
+
+        // 文章标题
+        .article-inner {
+          h1.article-title,
+          .article-title {
+            color: #9501df;
+          }
+        }
+      }
+
+      // 文章字数阅读时长
+      .article-header {
+        .article-count {
+          color: #666;
+        }
+      }
+
+      // 切换为阅读模式的目录样式
+      .article-entry-wrap {
+        .article-toc {
+          .select-toc {
+            color: #9501df !important;
+          }
+          a {
+            color: #333;
+
+            &:hover {
+              color: rgb(51, 165, 223) !important;
+            }
+          }
+        }
+      }
+
+      // 文章评论分享按钮
+      .article-action {
+        .talk-narrow,
+        .share-narrow {
+          background-color: rgba(0, 0, 0, 0.3);
+        }
+      }
+
+      // 目录按钮
+      .toc-container.tooltip-left {
+        box-shadow: 0 0 5px #fff;
+
+        // 目录列表
+        .tooltip-east {
+          .tooltip-content {
+            .toc-article {
+              li {
+                a {
+                  color: #111;
+
+                  &:hover {
+                    color: #9501df;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        // 目录icon鼠标悬浮
+        &:hover {
+          color: #9501df;
+          box-shadow: 0 0 12px #fff inset;
+          .icon-font {
+            color: #111;
+          }
+        }
+        .icon-font {
+          color: #9501df;
+
+          &:hover {
+            color: #9501df;
+          }
+        }
+      }
+
+      // 切换模式按钮
+      .changeSize {
+        box-shadow: 0 0 5px #fff;
+        color: #9501df;
+
+        &:hover {
+          color: #111;
+          box-shadow: 0 0 12px #fff inset;
+        }
+      }
+
+      // 切换模式提示语
+      .change-info {
+        color: #111;
+      }
+
+      // 文章内容
+      .article-entry {
+        blockquote {
+          background: hsla(0, 0%, 88%, 0.6);
+        }
+        h3,
+        h4,
+        h5,
+        h6 {
+          color: #111;
+        }
+
+        ul {
+          li:before {
+            border: 1px solid #9501df;
+            background: #9501df;
+          }
+        }
+
+        ol {
+          li:before {
+            color: #9501df;
+          }
+        }
+
+        em {
+          color: #9501df;
+        }
+
+        .copyInfo {
+          color: #9501df;
+        }
+      }
+
+      // 评论使用github登陆按钮
+      #gitalk-container {
+        .gt-container {
+          .gt-btn {
+            color: #111;
+          }
+          .gt-btn-login,
+          .gt-btn-preview,
+          .gt-btn-public {
+            box-shadow: inset 0 0 5px #fff !important;
+          }
+          .gt-header-textarea {
+            background: hsla(0, 0%, 88%, 0.35);
+          }
+        }
+      }
+
+      // 标签icon
+      .icon-price-tags:before {
+        color: #666;
+      }
+
+      // 标签icon
+      .icon-book:before {
+        color: #666;
+      }
+
+      // 标签icon
+      .icon-tuding:before {
+        color: #666;
+      }
+
+      // 文章日期
+      .archive-article-date {
+        color: #666;
+      }
+
+      // 展开文章按钮
+      .article-more-link {
+        a {
+          box-shadow: inset 0 0 3px #fff;
+          color: #666;
+        }
+      }
+
+      // 文章使用 `` 标记的内容
+      .article-entry li code,
+      .article-entry p code {
+        background: gold;
+        color: #555;
+      }
+
+      // 文章加粗
+      .article-entry strong {
+        color: #9501df;
+      }
+
+      // 上下页切换按钮
+      #page-nav {
+        .disabled {
+          color: #888 !important;
+        }
+
+        .current {
+          color: #888 !important;
+          box-shadow: inset 0 0 5px #fff;
+        }
+
+        .page-number {
+          color: #00b5ff;
+          box-shadow: inset 0 0 3px #fff;
+        }
+
+        .extend {
+          color: #00b5ff;
+        }
+      }
+
+      // 归档页面
+      .archives-wrap {
+        // 左侧年份阴影
+        .archive-year-wrap {
+          box-shadow: 0 0 2px #fff inset;
+          // 归档年份
+          .archive-year {
+            color: #9501df;
+
+            &:hover {
+              color: #faff00;
+            }
+          }
+        }
+
+        .archives {
+          // 归档没篇文章阴影
+          .archive-article-inner {
+            .archive-article-header {
+              box-shadow: 0 0 2px #fff inset;
+            }
+          }
+          // 归档文章title
+          .archive-article-title {
+            color: #9501df;
+
+            &:hover {
+              color: #faff00;
+            }
+          }
+
+          // 右侧日期
+          .article-meta {
+            time {
+              color: #666;
+            }
+          }
+        }
+      }
+
+      // 分类页面标签云
+      .category-list {
+        // 每个标签外阴影
+        li.category-list-item {
+          box-shadow: 0 0 5px #fff;
+
+          &:hover {
+            box-shadow: 0 0 5px #fff inset;
+          }
+
+          a {
+            color: #0097bb;
+
+            &:hover {
+              // 标签选中文字
+              color: #9501df;
+            }
+          }
+        }
+      }
+
+      // 标签云字体颜色
+      .tag-cloud {
+        a {
+          color: #0097bb;
+          // 标签选中字体底部边框颜色
+          &::before {
+            background: #9501df;
+          }
+        }
+      }
+    }
+
+    // artWrap
+    .wrapper {
+      .restColor {
+        box-shadow: inset 0 0 10px #fff;
+      }
+    }
+
+    // footer
+    .end-footer {
+      .restColor {
+        box-shadow: inset 0 -1px 8px #fff !important;
+
+        #scrollTop {
+          border-color: transparent transparent #fff !important;
+
+          .scroll-count {
+            color: #fff;
+          }
+
+          &:hover {
+            border-color: transparent transparent #fff;
+
+            .scroll-count {
+              color: #666;
+            }
+
+            &::after {
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+}
