@@ -157,10 +157,14 @@ function init() {
     if (Utils.getSSG("container")) {
       changeInfo.style.display = "none";
       closeShadow.removeShadow();
+      container.classList.remove("saveEyesContainer");
     } else {
       lightChangeInfo.style.opacity = "0";
       if (Utils.getSSG("hideShadow")) {
         closeShadow.addShadow();
+      }
+      if (Utils.getSSG('yun')) {
+        container.classList.add("saveEyesContainer");
       }
     }
   };

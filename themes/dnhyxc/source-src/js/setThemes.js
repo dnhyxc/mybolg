@@ -72,6 +72,7 @@ const textColor = {
 
 function setSaveEyeColor() {
   const toolsWrap = document.querySelector('.tools-wrap');
+  container.classList.add('saveEyesContainer')
   // 阴影
   main.classList.add('restColor')
   artWrap.classList.add('restColor')
@@ -83,6 +84,7 @@ function setSaveEyeColor() {
 
 function removeSaveEyeColor() {
   const toolsWrap = document.querySelector('.tools-wrap');
+  container.classList.remove('saveEyesContainer')
   // 阴影
   main.classList.remove('restColor')
   artWrap.classList.remove('restColor')
