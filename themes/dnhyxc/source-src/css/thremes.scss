@@ -1,3 +1,7 @@
+$titleColor: #005312;
+$purpleColor: #9501df;
+$greenColor: green;
+
 .saveEyesContainer {
   .restColor {
     box-shadow: inset 0 0 10px #fff;
@@ -56,7 +60,7 @@
       color: #111 !important;
 
       &:hover {
-        color: #9501df !important;
+        color: $greenColor !important;
       }
     }
 
@@ -153,7 +157,7 @@
 
       // main 标题字体颜色
       .main-loading {
-        color: #9501df;
+        color: $greenColor;
       }
 
       // 文章 article
@@ -165,7 +169,7 @@
         .article-inner {
           h1.article-title,
           .article-title {
-            color: #9501df;
+            color: $greenColor;
           }
         }
       }
@@ -179,15 +183,20 @@
 
       // 切换为阅读模式的目录样式
       .article-entry-wrap {
+        @media screen and (min-width: 800px) {
+          .narrow {
+            background: rgba(255, 255, 255, 0.21);
+          }
+        }
         .article-toc {
           .select-toc {
-            color: #9501df !important;
+            color: $purpleColor !important;
           }
           a {
             color: #333;
 
             &:hover {
-              color: rgb(51, 165, 223) !important;
+              color: $purpleColor !important;
             }
           }
         }
@@ -214,7 +223,7 @@
                   color: #111;
 
                   &:hover {
-                    color: #9501df;
+                    color: $purpleColor;
                   }
                 }
               }
@@ -224,17 +233,17 @@
 
         // 目录icon鼠标悬浮
         &:hover {
-          color: #9501df;
+          color: $greenColor;
           box-shadow: 0 0 12px #fff inset;
           .icon-font {
-            color: #111;
+            color: $purpleColor;
           }
         }
         .icon-font {
-          color: #9501df;
+          color: $titleColor;
 
           &:hover {
-            color: #9501df;
+            color: $greenColor;
           }
         }
       }
@@ -242,17 +251,17 @@
       // 切换模式按钮
       .changeSize {
         box-shadow: 0 0 5px #fff;
-        color: #9501df;
+        color: $titleColor;
 
         &:hover {
-          color: #111;
+          color: $purpleColor;
           box-shadow: 0 0 12px #fff inset;
         }
       }
 
       // 切换模式提示语
       .change-info {
-        color: #111;
+        color: $purpleColor;
       }
 
       // 文章内容
@@ -264,28 +273,36 @@
         h4,
         h5,
         h6 {
-          color: #111;
+          color: $greenColor;
         }
 
         ul {
           li:before {
-            border: 1px solid #9501df;
-            background: #9501df;
+            border: 1px solid $greenColor;
+            background: $greenColor;
           }
         }
 
         ol {
           li:before {
-            color: #9501df;
+            color: $greenColor;
           }
         }
 
         em {
-          color: #9501df;
+          color: $greenColor;
         }
 
         .copyInfo {
-          color: #9501df;
+          color: $greenColor;
+        }
+      }
+
+      #article-nav {
+        .article-nav-link-wrap {
+          &:hover {
+            color: $purpleColor !important;
+          }
         }
       }
 
@@ -348,7 +365,7 @@
 
       // 文章加粗
       .article-entry strong {
-        color: #9501df;
+        color: $greenColor;
       }
 
       // 上下页切换按钮
@@ -379,7 +396,7 @@
           box-shadow: 0 0 2px #fff inset;
           // 归档年份
           .archive-year {
-            color: #9501df;
+            color: $greenColor;
 
             &:hover {
               color: #faff00;
@@ -396,7 +413,7 @@
           }
           // 归档文章title
           .archive-article-title {
-            color: #9501df;
+            color: $greenColor;
 
             &:hover {
               color: #faff00;
@@ -427,7 +444,7 @@
 
             &:hover {
               // 标签选中文字
-              color: #9501df;
+              color: $greenColor;
             }
           }
         }
@@ -439,7 +456,7 @@
           color: #0097bb;
           // 标签选中字体底部边框颜色
           &::before {
-            background: #9501df;
+            background: $greenColor;
           }
         }
       }
@@ -461,18 +478,18 @@
           border-color: transparent transparent #fff !important;
 
           .scroll-count {
-            color: #fff;
+            color: #fff !important;
           }
 
           &:hover {
-            border-color: transparent transparent #fff;
+            border-color: transparent transparent $greenColor !important;
 
             .scroll-count {
-              color: #666;
+              color: #fff !important;
             }
 
             &::after {
-              color: #fff;
+              color: $greenColor !important;
             }
           }
         }

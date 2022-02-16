@@ -575,9 +575,9 @@ css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小
 
 ##### 不可继承的属性
 
-*1、*display：设置元素显示与隐藏。
+display：设置元素显示与隐藏。
 
-*2、*文本属性：
+文本属性：
 
 - vertical-align：垂直文本对齐。
 
@@ -589,23 +589,23 @@ css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小
 
 - unicode-bidi：设置文本的方向。
 
-*3、*盒子模型的属性：width、height、margin、border、padding。
+盒子模型的属性：width、height、margin、border、padding。
 
-*4、*背景属性：background、background-color、background-image、background-repeat、background-position、background-attachment。
+背景属性：background、background-color、background-image、background-repeat、background-position、background-attachment。
 
-*5、*定位属性：float、clear、position、top、right、bottom、left、min-width、min-height、max-width、max-height、overflow、clip、z-index。
+定位属性：float、clear、position、top、right、bottom、left、min-width、min-height、max-width、max-height、overflow、clip、z-index。
 
-*6、*生成内容属性：content、counter-reset、counter-incerment。
+生成内容属性：content、counter-reset、counter-incerment。
 
-*7、*轮廓样式属性：outline-style、outline-width、outline-color、outline。
+轮廓样式属性：outline-style、outline-width、outline-color、outline。
 
-*8、*页面样式属性：size、page-break-before、page-break-after。
+页面样式属性：size、page-break-before、page-break-after。
 
-*9、*声音样式属性：pause-before、pause-after、pause、cue-before、cue-after、cue、play-during。
+声音样式属性：pause-before、pause-after、pause、cue-before、cue-after、cue、play-during。
 
 ##### 可继承的属性
 
-*1、*字体系列属性：
+字体系列属性：
 
 - font-family：字体类型。
 
@@ -615,7 +615,7 @@ css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小
 
 - font-style：字体风格。
 
-*2、*文本系列属性：
+文本系列属性：
 
 - text-indent：文本缩进。
 
@@ -631,15 +631,15 @@ css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小
 
 - color：文本颜色。
 
-*3、*元素可见性：
+元素可见性：
 
 - visibility：控制元素显示隐藏。
 
-*4、*列表布局属性：
+列表布局属性：
 
 - list-style：列表风格，包括 list-style-type、list-style-image 等。
 
-*5、*光标属性：
+光标属性：
 
 - cursor：光标显示为何种形态。
 
@@ -715,9 +715,11 @@ css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小
 
 #### 清除浮动原理及方式
 
-**浮动的定义**：非 IE 浏览器下，容器不设高度且子元素浮动时，容器高度不能被内部撑开。此时，内容会溢出到浏览器外面而影响布局。这种现象就称为浮动。
+*1、*浮动的定义：
 
-**浮动的工作原理**：
+- 非 IE 浏览器下，容器不设高度且子元素浮动时，容器高度不能被内部撑开。此时，内容会溢出到浏览器外面而影响布局。这种现象就称为浮动。
+
+*2、*浮动的工作原理：
 
 - 浮动元素脱离文档流，不占据空间（引起 "高度塌陷" 现象）。
 
@@ -725,7 +727,7 @@ css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小
 
 > 浮动元素可以左右移动，直到遇到另一个浮动元素或者遇到它外边缘的包含框。浮动框不属于文档流中的普通流，当元素浮动之后，不会影响块级元素的布局，只会影响内联元素布局。此时文档流中的普通流就会表现得该浮动框不存在一样的布局模式。当包含框的高度小于浮动框的时候，此时就会出现 "高度塌陷"。
 
-**浮动元素引起的问题**：
+*3、*浮动元素引起的问题：
 
 - 父元素的高度无法被撑开，影响与父元素同级的元素。
 
@@ -733,7 +735,7 @@ css 盒模型分为 IE 盒模型和标准盒模型，IE 盒模型的内容大小
 
 - 若浮动元素不是第一个元素，则该元素之前的额元素也要浮动，否则会影响页面的显示结构。
 
-**清除浮动的方式**：
+*4、*清除浮动的方式：
 
 - 给父级 div 定义 height 属性。
 
@@ -785,7 +787,7 @@ clear 属性只有块级元素才有效的，而::after 等伪元素默认都是
 
 BFC 是一个独立的布局环境，可以理解为一个容器，在这个容器中按照一定的规则进行物品摆放，并且不会影响其它环境中的物品。如果一个元素符合触发 BFC 的条件，则 BFC 中的元素布局不受外部影响。
 
-**触发 BFC 的条件**：
+*1、*触发 BFC 的条件：
 
 - 根元素：body。
 
@@ -797,7 +799,7 @@ BFC 是一个独立的布局环境，可以理解为一个容器，在这个容�
 
 - overflow 值为：hidden、auto、scroll。
 
-**BFC 的特点**：
+*2、*BFC 的特点：
 
 - 垂直方向上，自上而下排列，和文档流的排列方式一致。
 
@@ -811,7 +813,7 @@ BFC 是一个独立的布局环境，可以理解为一个容器，在这个容�
 
 - 每个元素的左 margin 值和容器的左 border 相接触。
 
-**BFC 的作用**：
+*3、*BFC 的作用：
 
 - 解决 margin 的重叠问题：由于 BFC 是一个独立的区域，内部的元素和外部的元素互不影响，将两个元素变为两个 BFC，就解决了 margin 重叠的问题。
 
@@ -1132,7 +1134,7 @@ html {
 
 - 图像的像素、打印分辨率和打印尺寸的关系为：`图像的横向（竖向）像素数 = 打印横向（竖向）分辨率 × 打印的横向（竖向）尺寸`。例如：要打印照片的尺寸是 4 \* 3inch，而打印分辨率横向和竖向都是 300dpi，则需要照相机采集的像素数至少为：`(300 * 4) * (300 * 3) = 1080000` 像素，约一百万像素。采集的像素数过低（采集图像机器的 PPI 决定）会降低图像的打印质量，过高也不能提升打印质量。
 
-**物理像素**：物理像素也叫设备像素，简称 `DP`，是指设备屏幕实际拥有的像素点，屏幕的基本单元，物理像素在屏幕出厂时就已经确定了，不会再改变。比如 MAC Pro 13.3 英寸（2560 x 1600）、iPhone XS 5.8 英寸（2436 x 1125），这里的数字 2560 x 1600 指的就是物理像素。
+**物理像素**：物理像素也叫设备像素，简称 `DP`，是指设备屏幕实际 拥有的像素点，屏幕的基本单元，物理像素在屏幕出厂时就已经确定了，不会再改变。比如 MAC Pro 13.3 英寸（2560 x 1600）、iPhone XS 5.8 英寸（2436 x 1125）k，这里的数字 2560 x 1600 指的就是物理像素。
 
 **逻辑像素**：逻辑像素也称为设备独立像素（CSS 像素），简称 `DIPS`，可以认为是计算机坐标系统中的一个点，这个点代表一个可以由程序使用的虚拟像素。在 CSS 中经常写的 px 就是逻辑像素，它和物理像素并不一定是一一对应的，物理像素和逻辑像素之间的对应关系会由 DPR 决定。
 
@@ -1832,9 +1834,13 @@ js 共有八种数据类型，分别是 undefined、null、string、number、boo
 
 - 堆区内存一般由开发者分配释放，若开发之不释放，程序结束时可能有垃圾回收机制回收。
 
+#### 为什么会有 bigint
+
+js 中 Number.MAX_SAFF_INTEGER 表示最大安全数字，计算结果是 9007199254740991，即在这个数范围内不会出现精度丢失（小数除外）。但是一旦超过这个范围，js 就会出现计算不准确的情况，这在大数计算的时候不得不依靠一些第三方库进行解决，因此官方提出了 bigint 来解决此问题。
+
 #### 数据类型检测的额方式有哪些
 
-*1、***typeof**:
+*1、*typeof:
 
 ```js
 console.log(typeof 2); // number
@@ -1849,7 +1855,7 @@ console.log(typeof null); // object
 
 > 使用 typeof 的判断方式除了数组、对象、null 会判断为 object 之外，其它都能准确判断，其中包含 Function。
 
-*2、***instanceof**：
+*2、*instanceof：
 
 instanceof 可以准确判断对象的类型，其内部运行机制是判断在其原型链中能否找到该类型的原型。
 
@@ -1865,7 +1871,7 @@ console.log({} instanceof Object); // true
 
 > 可以看到，**instanceof 只能准确判断引用数据类型**，而不能判断基本数据类型。instanceof 运算符可以用来测试一个对象在其原型链中是否存在一个构造函数的 prototype 属性。
 
-*3、***constructor**：
+*3、*constructor：
 
 ```js
 console.log((2).constructor === Number); // true
@@ -1889,7 +1895,7 @@ console.log(f.constructor === Fn); // false
 console.log(f.constructor === Array); // true
 ```
 
-*4、***Object.prototype.toString.call()**：
+*4、*Object.prototype.toString.call()：
 
 Object.prototype.toString.call() 使用 Object 对象的原型方法 toString 来判断数据类型：
 
@@ -2023,13 +2029,277 @@ string 类型的值转换如同使用 Number() 函数进行转换，**如果包�
 
 3. 会先判断是否在对比 null 和 undefined，是的话就会返回 true。
 
-4. 判断两者类型是否为 string 和 number，是的话就会将字符串转换为 number
+4. 判断两者类型是否为 string 和 number，是的话就会将字符串转换为 number。
 
-**3、**阿斯顿撒的撒
+```js
+1 == '1' => 1 == 1
+```
 
-**4、**大叔大叔大叔的
+5. 判断其中一方是否为 boolean，是的话就会把 boolean 转为 number 在进行判断。
 
-**5、**大大叔大叔大叔 大叔的啊s
+```js
+'1' == true => '1' == 1 => 1 == 1
+```
+
+6. 判断其中一方是否为 object，且另一方为 string、number 或者 symbel，是的话就会把 object 转为原始类型再进行判断。
+
+```js
+'1' == {name: 'dnhyxc'} => '1' == '[object Object]'
+```
+
+#### Object.is() 与 ‘===’、'==' 的区别
+
+使用 '==' 进行相等判断时，如果两边的类型不一致，则会进行强制类型转换后再进行比较。
+
+使用 '===' 进行相等比较时，如果两边的类型不一致时，不会做强制类型转换，直接返回 false。
+
+使用 Object.is() 来进行相等判断时，一般情况下和三等运算符的判断相同，它处理了一些特殊情况，比如 '-0' 和 '+0' 是不相等的，两个 NaN 是相等的。
+
+```js
+Object.is("foo", "foo"); // true
+Object.is(window, window); // true
+
+Object.is("foo", "bar"); // false
+Object.is([], []); // false
+
+const foo = { a: 1 };
+const bar = { a: 1 };
+Object.is(foo, foo); // true
+Object.is(foo, bar); // false
+
+Object.is(null, null); // true
+
+// 特例
+Object.is(0, -0); // false
+Object.is(0, +0); // true
+Object.is(-0, -0); // true
+Object.is(NaN, 0 / 0); // true
+Object.is(NaN, NaN); // true
+```
+
+#### || 和 && 操作符的返回值
+
+|| 和 && 首先会对第一个操作数执行条件判断，如果其不是布尔值就先强制转换为布尔类型，然后再执行条件判断。
+
+- 对于 || 来说，如果条件判断结果为 true 就返回第一个操作数的值，如果为 false 就返回第二个操作数的值。
+
+- && 则相反，如果条件判断结果为 true 就返回第二个操作数的值，如果为 false 就返回第一个操作数的值。
+
+|| 和 && 返回它们其中一个操作数的值，而非条件判断的结果。
+
+#### 什么是 JS 中的包装类型
+
+在 js 中，基本类型是没有属性和方法的，但是为了便于操作基本类型的值，在调用基本类型的属性或方法时 JS 会在后台隐式地将基本类型的值转换为对象，如下：
+
+```js
+const a = "abc";
+console.log(a.length); // 3
+console.log(a.toUpperCase()); // 'ABC'
+```
+
+在访问 `'abc'.length` 时，js 将 'abc' 在后台转换成 `String('abc')`，然后再访问其 length 属性。
+
+js 也可以使用 Object 函数显示的将基本类型转化为包装类型：
+
+```js
+const a = "abc";
+console.log(Object(a)); // String {'abc'}
+```
+
+js 还可以使用 **valueOf** 方法将包装类型倒转成基本类型：
+
+```js
+const a = "abc";
+const b = Object(a);
+const c = b.valueOf();
+console.log(c); // 'abc'
+```
+
+使用 `new Boolean(false)` 包装 boolean 类型如：false，但是 false 被包裹成包装类型后就成为了对象，所以将其转为布尔值为 true，因此其非值为 false。如下：
+
+```js
+const a = new Boolean(false);
+if (!a) {
+  console.log(a);
+}
+```
+
+#### object.assign 与扩展运算符
+
+扩展运算符：
+
+```js
+const outObj = {
+  inObj: { a: 1, b: 2 },
+};
+let newObj = { ...outObj };
+newObj.inObj.a = 2;
+console.log(outObj); // {inObj: {a: 2, b: 2}}
+```
+
+Object.assign()：
+
+```js
+let outObj = {
+  inObj: { a: 1, b: 2 },
+};
+let newObj = Object.assign({}, outObj);
+newObj.inObj.a = 2;
+console.log(outObj); // {inObj: {a: 2, b: 2}}
+```
+
+由上述示例可以看出，两者都是浅拷贝：
+
+- 扩展运算符：在使用扩展运算符时，数组会对象中的每一个值都会被拷贝到一个新的数组或对象中。它不复制继承的属性或类的属性，但是它会复制 ES6 的 symbol 属性。
+
+- Object.assign()：该方法接收的第一个参数作为目标对象，后面的所有参数作为源对象。然后把所有的源对象合并到目标对象中。它会修改对象，因此会触发 ES6 的 setter。
+
+#### 扩展运算符的使用场景
+
+*1、*对象扩展运算符：
+
+对象扩展运算符用于取出对象中的所有可遍历属性，拷贝到当前对象中：
+
+```js
+let bar = { a: 1, b: 2 };
+let baz = { ...bar }; // { a: 1, b: 2 }
+```
+
+上述方法实际等价于：
+
+```js
+let bar = { a: 1, b: 2 };
+let baz = Object.assign({}, bar); // { a: 1, b: 2 }
+```
+
+Object.assign 方法用于对象的合并，将源对象的所有可枚举属性，复制到目标对象中。Object.assign 方法的第一个参数是目标对象，后面的参数都是源对象（**如果目标对象与源对象具有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性**）。同样，如果用户自定义的属性，放在扩展运算符后面，则扩展运算符内部的同名属性也会被覆盖掉。
+
+```js
+let bar = { a: 1, b: 2 };
+let baz = { ...bar, ...{ a: 2, b: 4 } }; // {a: 2, b: 4}
+```
+
+利用上述特性就可以很方便的修改对象的部分属性。在 redux 中 reducer 函数规定必须是一个纯函数，reducer 中的 state 对象要求不能直接修改，可以通过扩展运算符把修改路径的对象都复制一遍，然后产生一个新的对象返回。
+
+需要注意：**扩展运算符对对象实例的拷贝属于浅拷贝**。
+
+#### let、const、var 的区别
+
+**块级作用域**：块级作用域由 `{}` 包括，let 和 const 具有块级作用域，var 不存在块级作用域。块级作用域解决了 ES5 中的两个问题：
+
+- 内层变量可能覆盖外层变量的问题。
+
+- 用来计数的循环变量泄露为全局变量。
+
+**变量提升**：var 存在变量提升，let 和 const 不存在变量提升，即在变量只能在声明之后使用，否则会报错。
+
+**给全局添加属性**：浏览器的全局对象是 window，Node 的全局对象是 global。var 声明的变量为全局变量，并且会将该变量添加为全局对象（window）的属性，但是 let 和 const 不会。
+
+**重复声明**：var 声明的变量可以进行重复声明，后声明的同名变量会覆盖之前声明的变量。而 const 和 let 不允许重复声明变量。
+
+**暂时性死区**：使用 let、const 命令声明某个变量时，在该变量声明之前，其都是不可用的。这在语法上，称为 “暂时性死区”。使用 var 声明的变量不存在暂时性死区。
+
+```js
+console.log(a, "before"); // 此时该变量不可用，有暂时性死区，将报错
+let a = 209; // 或 const a = 209
+console.log(a, "after"); // 209
+
+console.log(b, "before"); // undefined
+var b = 902;
+console.log(b, "after"); // 902
+```
+
+**初始值设置**：在变量声明时，var 和 let 可以不用设置初始值。而 const 声明变量必须设置初始值。
+
+**指针指向**：let 和 const 都是 ES6 新增的用于创建变量的语法。let 创建的变量是可以更改指针指向的，即可以重复赋值。但 const 声明的变量是不允许更改指针指向的，即不能重新赋值。
+
+- const 保证的并不是变量的值不能改动，而是变量指向的那个内存地址不能改动。对于基本类型的数据，其值就保存在变量指向的那个内存地址中，因此等同于常量。
+
+- 对于引用数据类型（Object，Array）来说，变量指向的内存地址，保存的只是一个指针，const 只能保证这个指针是固定不变的，至于它指向的数据结构是不是可变的，就完全不能控制了。
+
+#### 箭头函数与普通函数的区别
+
+*1、*箭头函数比普通函数更加简洁：
+
+- 如果没有参数，就直接写一个空括号即可。
+
+- 如果只有一个参数，即可以省略参数的括号。
+
+- 如果有多个参数，用逗号分隔，参数括号不能省略。
+
+- 如果函数体的返回值只有一句，可以省略大括号。
+
+- 如果函数体不需要返回值，且只有一句话，可以给这个语句前面加一个 void 关键字。最常见的就是调用一个函数：
+
+```js
+const fn = () => void doesNotReturn();
+```
+
+*2、*箭头函数没有自己的 this：
+
+- 箭头函数不会创建自己的 this，所以它没有自己的 this，它只会在自己作用域上一层继承 this。所以箭头函数中 this 的指向在它定义时已经确定了，之后不会改变。
+
+*3、*箭头函数继承来的 this 永远不会改变：
+
+```js
+var id = "GLOBAL";
+var obj = {
+  id: "OBJ",
+  a: function () {
+    console.log(this.id);
+  },
+  b: () => {
+    console.log(this.id);
+  },
+};
+obj.a(); // 'OBJ'
+obj.b(); // 'GLOBAL'
+new obj.a(); // undefined
+new obj.b(); // Uncaught TypeError: obj.b is not a constructor
+```
+
+> 对象 obj 的方法 b 是一个箭头函数，这个函数中的 this 就永远指向它定义时所在的全局执行环境中的 this（window），即便这个函数是作为对象 obj 的方法调用，但是 this 依旧指向 window 对象。需要注意的是：定义对象的大括号 `{}` **是无法形成一个单独的执行环境的**，它依旧是处于全局执行环境中。
+
+*4、*call()、apply()、bind() 不能改变箭头函数中 this 的指向：
+
+```js
+var id = "Global";
+let fun1 = () => {
+  console.log(this.id);
+};
+fun1(); // 'Global'
+fun1.call({ id: "Obj" }); // 'Global'
+fun1.apply({ id: "Obj" }); // 'Global'
+fun1.bind({ id: "Obj" })(); // 'Global'
+```
+
+*5、*箭头函数没有自己的 arguments：
+
+- 在箭头函数中访问 arguments 实际上获得的是它外层函数的 arguments 值。
+
+*6、*箭头函数没有 prototype 属性。
+
+*7、*箭头函数不能作为构造函数使用：
+
+- 由于箭头函数没有自己的 prototype 属性及 this 属性，所以无法执行 new。
+
+*8、*箭头函数不能用作 Generator 函数，不能使用 yeild 关键字。
+
+#### 如果 new 箭头函数会怎样
+
+箭头函数它没有自己 prototype 属性，也没有自己的 this 指向，更不可以使用 arguments 参数，所以不能所以不能 new 箭头函数。
+
+new 操作符的实现步骤如下：
+
+1. 创建一个对象。
+
+2. 将构造函数的作用域赋给新对象（也就是将对象的 \_\_proto\_\_ 属性指向构造函数的 prototype 属性）。
+
+3. 改变 this 的指向（使构造函数中的 this 指向新创建的实例对象），执行构造函数、传递参数，fn.apply() 或者 fn.call()。
+
+4. 返回新的对象。
+
+> 由于构造函数没有 prototype 属性及自己的 this 属性，所以上述 3、4 步骤箭头函数都无法执行。
 
 #### 函数
 

@@ -78,7 +78,6 @@ function setSaveEyeColor() {
   artWrap.classList.add('restColor')
   outer.classList.add('restColor')
   leftCol.classList.add('restColor')
-  console.log(toolsWrap, 'toolsWrap')
   toolsWrap && toolsWrap.classList.add('restColor')
 }
 
@@ -90,7 +89,6 @@ function removeSaveEyeColor() {
   artWrap.classList.remove('restColor')
   outer.classList.remove('restColor')
   leftCol.classList.remove('restColor')
-  console.log(toolsWrap, 'toolsWrap')
   toolsWrap && toolsWrap.classList.remove('restColor')
 }
 
