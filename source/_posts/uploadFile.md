@@ -1,5 +1,5 @@
 ---
-title: UploadFile
+title: 文件上传
 date: 2020-06-13 10:32:18
 toc: true
 tags:
@@ -197,12 +197,12 @@ upload_inp.addEventListener("change", async function () {
       "/upload_single_base64",
       {
         file: encodeURIComponent(BASE64),
-        filename: file.name,
+        filename: file.name
       },
       {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
       }
     );
 
@@ -274,7 +274,7 @@ const changeBuffer = (file) => {
         buffer,
         HASH,
         suffix,
-        filename: `${HASH}.${suffix}`,
+        filename: `${HASH}.${suffix}`
       });
     };
   });
@@ -416,7 +416,7 @@ upload_inp.addEventListener("change", async function () {
         let { loaded, total } = ev;
         upload_progress.style.display = "block";
         upload_progress_value.style.width = `${(loaded / total) * 100}%`;
-      },
+      }
     });
     if (data.code === 0) {
       upload_progress_value.width = "100%";
@@ -502,7 +502,7 @@ upload_inp.addEventListener("change", async function () {
     return {
       file,
       filename: file.name,
-      key: createRandom(),
+      key: createRandom()
     };
   });
   let str = ``;
@@ -547,7 +547,7 @@ upload_button_upload.addEventListener("click", async function () {
           if (curSpan) {
             curSpan.innerHTML = `${((ev.loaded / ev.total) * 100).toFixed(2)}%`;
           }
-        },
+        }
       })
       .then((data) => {
         if (data.code === 0) {
@@ -644,7 +644,7 @@ upload_submit.addEventListener("click", function () {
 });
 ```
 
-#### 大文件上传(切片上传)
+#### 切片上传方式一
 
 ```js
 const upload = document.querySelector("#upload7");
@@ -677,7 +677,7 @@ const changeBuffer = (file) => {
         buffer,
         HASH,
         suffix,
-        filename: `${HASH}.${suffix}`,
+        filename: `${HASH}.${suffix}`
       });
     };
   });
@@ -714,8 +714,8 @@ upload_inp.addEventListener("change", async function () {
   try {
     const data = await instance.get("/upload_already", {
       params: {
-        HASH,
-      },
+        HASH
+      }
     });
     if (data.code === 0) {
       already = data.fileList;
@@ -736,7 +736,7 @@ upload_inp.addEventListener("change", async function () {
   while (index < count) {
     chunks.push({
       file: file.slice(index * max, (index + 1) * max),
-      filename: `${HASH}_${index + 1}.${suffix}`,
+      filename: `${HASH}_${index + 1}.${suffix}`
     });
     index++;
   }
@@ -761,12 +761,12 @@ upload_inp.addEventListener("change", async function () {
         "/upload_merge",
         {
           HASH,
-          count,
+          count
         },
         {
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
         }
       );
 
@@ -811,6 +811,400 @@ upload_button_select.addEventListener("click", function () {
   if (checkDisable(this)) return;
   upload_inp.click();
 });
+```
+
+#### 切片上传方式二
+
+- ajax.js：
+
+```js
+// url请求与xhr对象的映射表 {promise:'', xhr: ''}
+let urlMapXhr = [];
+
+// 暂停方法
+export const abortXhr = (_url) => {
+  const _urlMapXhr = urlMapXhr.filter((item) => {
+    const { url, xhr } = item;
+    if (_url === url) {
+      if (typeof xhr.abort === "function") {
+        xhr.abort();
+      }
+      return false;
+    }
+    return true;
+  });
+  urlMapXhr = _urlMapXhr;
+};
+
+export const ajax = (options = {}) => {
+  const { type = "POST", url = "", data, onProgress } = options;
+  const xhr = new XMLHttpRequest();
+  const promise = new Promise((resolve, reject) => {
+    xhr.open(type, url);
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        const { response, responseText } = xhr;
+        try {
+          resolve(JSON.parse(response || responseText));
+        } catch (e) {
+          resolve(response || responseText);
+        }
+      }
+      reject(new Error("请求失败"));
+    };
+    if (xhr.upload && onProgress) {
+      xhr.upload.addEventListener(
+        "progress",
+        (e) => {
+          onProgress(e);
+        },
+        false
+      );
+    }
+    xhr.onreadystatechange = () => {
+      if (xhr.status !== 200) {
+        reject(new Error("请求失败"));
+      }
+    };
+    if (!data) {
+      xhr.send(null);
+    } else if (data instanceof FormData) {
+      xhr.send(data);
+    } else {
+      xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+      const _data = typeof data === "object" ? JSON.stringify(data) : data;
+      xhr.send(_data);
+    }
+  });
+  urlMapXhr.push({ url, xhr });
+  return promise;
+};
+```
+
+- uploader.js：
+
+```jsx
+import React, { useCallback, useState, useEffect } from "react";
+import { Upload, Progress, message, Icon } from "antd";
+import { ajax, abortXhr } from "@/service/ajax";
+import STYLES from "./index.scss";
+
+const Uploader = (props) => {
+  const [progress, setProgress] = useState(0);
+  const [result, setResult] = useState(0);
+  const [fileItem, setFileItem] = useState({});
+  const [currentUploadUrl, setCurrentUploadUrl] = useState("");
+  const [isStop, setIsStop] = useState(false);
+  // ...
+
+  useEffect(() => {
+    // 当isStop为true时，暂停上传
+    if (isStop) {
+      abortXhr(currentUploadUrl);
+    }
+  }, [currentUploadUrl, isStop]);
+
+  // 取消上传事件
+  const onCancelUpload = useCallback(() => {
+    setIsStop(true);
+  }, []);
+
+  // 将为文件转为Buffer
+  const changeBuffer = (file) => {
+    return new Promise((resolve) => {
+      const fileReader = new FileReader();
+      fileReader.readAsArrayBuffer(file);
+      fileReader.onload = (ev) => {
+        const buffer = ev.target.result;
+        const spark = new SparkMD5.ArrayBuffer();
+        spark.append(buffer);
+        const HASH = spark.end();
+        const suffix = /\.([\dA-Za-z]+)$/.exec(file.name)[1];
+        resolve({
+          buffer,
+          HASH,
+          suffix,
+          filename: `${HASH}.${suffix}`
+        });
+      };
+    });
+  };
+
+  // antd beforeUpload 事件
+  const beforeUpload = useCallback(
+    (file) => {
+      let [suffix = ""] = file.name.match(/\.[a-z]*$/i) || [];
+      suffix = suffix.toLocaleLowerCase();
+      if (!inAccept(file.type, suffix)) {
+        message.error("请上传规定格式文件");
+        return false;
+      }
+      if (file.size > MAX_SIZE) {
+        message.error("上传文件不能超过 50M");
+        return;
+      }
+      // type为3时，表示是大文件，需要走切片上传
+      if (type !== 3) {
+        handleUpload(file); // 普通文件上传
+      } else {
+        readUpload(file); // 切片上传
+      }
+      return false;
+    },
+    [MAX_SIZE, handleUpload, inAccept, readUpload, type]
+  );
+
+  // 开始上传，获取上传地址
+  const readUpload = useCallback(
+    async (file) => {
+      const { HASH } = await changeBuffer(file);
+      const fileItem = {};
+      fileItem.name = formatFileName(file.name);
+      fileItem.fileSize = file.size;
+      fileItem.mimeType = file.type;
+      fileItem.hashval = HASH;
+
+      setFileItem(fileItem); // 缓存选择的需要上传的文件，用于页面显示文件信息
+
+      setProgress(0); // 改变文件上传状态：0：初始状态、1：上传失败、2：上传完成
+      setResult(0); // 上传进度
+
+      API.readUpload({
+        uid: userId,
+        info: fileItem,
+        serviceType: 0,
+        serviceVal: userId
+      })
+        .then((res) => {
+          const { uploadUrl } = res.stat;
+          const isDev = process.env.NODE_ENV === "development";
+          const url = isDev
+            ? uploadUrl.replace("http://xxx.net:21006", "")
+            : uploadUrl;
+          // 当文件大小小于22M并且没有返回url时，说明文件已经上传过了，就不需要再重新进行上传
+          if (file.size <= 20 * 1024 * 1024 && !url) {
+            setResult(2); // 改变文件上传状态：0：初始状态、1：上传失败、2：上传完成
+            setProgress(100); // 上传进度
+            getDownloadUrl(res.stat, true); // 获取上传完成的文件url
+          } else if (file.size <= 20 * 1024 * 1024 && url) {
+            // 当文件大小小于22M并且返回了url时，直接上传，而不进行切片上传
+            setCurrentUploadUrl(url);
+            handleUpload(file, url, res.stat);
+          } else if (file.size > 20 * 1024 * 1024 && !url) {
+            // 当文件大小大于20M并且没有返回url时，表示已经上传过了，就不需要在重新进行切片上传
+            setResult(2); // 改变文件上传状态：0：初始状态、1：上传失败、2：上传完成
+            setProgress(100); // 上传进度
+            getDownloadUrl(res.stat, true); // 获取上传完成的文件url
+          } else {
+            // 进行切片上传
+            uploadByChunk(file, url, res.stat);
+          }
+        })
+        .catch(() => {
+          setResult(1);
+        });
+    },
+    [getDownloadUrl, handleUpload, userId, uploadByChunk]
+  );
+
+  // 切片上传
+  const uploadByChunk = useCallback(
+    async (file, url, uploadInfo) => {
+      let index = 0;
+      let max = 1024 * 100; // 每片100kb
+      let count = Math.ceil(file.size / max); // 需要切成的份数
+      // 如果切成的份数大于50份时，按50份进行切分，每片大小为：file.size / 50
+      if (count > 50) {
+        max = file.size / 50;
+        count = 50;
+      }
+      let startSize = 0; // 告诉服务端从什么文件大小开始上传，即从哪片切片开始上传
+      let isStop = false; // 是否停止上传
+
+      // 上传每片切片方法
+      const uploadSlice = (chunkData, uploadUrl) => {
+        return ajax({
+          url: uploadUrl,
+          data: chunkData
+        }).catch(() => {
+          // 如果走到这，说明已经停止了上传
+          isStop = true;
+          setIsStop(false);
+          setResult(0);
+        });
+      };
+
+      while (index < count && !isStop) {
+        const fd = new FormData();
+        fd.append(
+          `${index}_${startSize}`,
+          file.slice(index * max, (index + 1) * max)
+        );
+        const uploadUrl = `${url}&off=${startSize}`; // 将切好的文件大小拼接到url上
+        setCurrentUploadUrl(uploadUrl); // 缓存当前拼接上每片文件大小的url
+        // eslint-disable-next-line no-await-in-loop
+        await uploadSlice(fd, uploadUrl); // 开始上传切片
+        startSize = (index + 1) * max;
+        index++;
+        const curProgress = Math.floor((index / count) * 100);
+        setProgress(curProgress); // 设置上传进度
+        // 当index等于count时，说明文件已经上传完成
+        if (index === count) {
+          try {
+            // 调用接口通知服务端切片已经上传完成
+            // eslint-disable-next-line no-await-in-loop
+            await API.uploadEnd({
+              checkCode: uploadInfo.fileId
+            });
+            getUploadFinishInfo(uploadInfo); // 获取上传完成的文件信息
+          } catch (error) {
+            setResult(1);
+          }
+        }
+      }
+    },
+    [getUploadFinishInfo]
+  );
+
+  // 获取上传完成的文件信息
+  const getUploadFinishInfo = useCallback(
+    async (uploadInfo) => {
+      try {
+        const res = await API.getUploadFinishInfo({
+          id: uploadInfo.fileId
+        });
+        getDownloadUrl(res.storageId); // 获取上传完成的文件url
+      } catch (error) {
+        message.error("获取上传文件信息失败");
+      }
+    },
+    [getDownloadUrl]
+  );
+
+  // 获取切片上传的文件
+  const getDownloadUrl = useCallback(
+    async (uploadInfo, isUploaded) => {
+      const fileId = isUploaded ? uploadInfo.fileId : uploadInfo;
+      try {
+        const res = await API.getDownloadUrl({
+          uid: userId,
+          fileId,
+          expireTime: 0
+        });
+        setResult(2);
+      } catch (error) {
+        message.error("未获取到上传视频链接");
+        setResult(1);
+      }
+    },
+    [handleChange, userId]
+  );
+
+  return (
+    <div
+      className={cx(STYLES["uploader-wrapper"], {
+        [STYLES.uploading]: !unUpload
+      })}
+    >
+      <Dragger
+        accept={acceptList.join(",")}
+        className={STYLES.uploader}
+        beforeUpload={beforeUpload}
+        fileList={fileList}
+      >
+        <p className="ant-upload-drag-icon">
+          <img alt="" src={UPLOAD_IMG} />
+        </p>
+        <p className="ant-upload-text">
+          文件拖拽到这里或
+          <a>点击上传</a>
+        </p>
+        <p className="ant-upload-hint">
+          文件支持: MP4、WMV、FLV、MKV格式 (不超过500MB)
+        </p>
+        {!unUpload && type === 3 && (
+          <div
+            className={STYLES["uploader-loading"]}
+            onClick={handleStopOption}
+          >
+            <div className={STYLES["file-name"]}>{fileInfo.name}</div>
+            <div className={STYLES["loading-animation"]}>
+              <img
+                alt=""
+                className={STYLES["video-loading-file"]}
+                src={VIDEO}
+              />
+              <div style={{ width: "100%" }}>
+                <div className={STYLES["video-ant-upload-hint"]}>
+                  {result !== 1 && result !== 2 ? (
+                    <div>
+                      <span>
+                        已经上传：
+                        {fileItem && fileItem.fileSize
+                          ? `${(
+                              (fileItem.fileSize * progress) /
+                              1024 /
+                              1024 /
+                              100
+                            ).toFixed(2)}MB`
+                          : `${(
+                              (fileInfo.size * progress) /
+                              1024 /
+                              1024 /
+                              100
+                            ).toFixed(2)}MB`}
+                        {/* 已经上传：{parseInt((fileInfo.size * progress) / 100 / 1024 / 1024, 10)}MB */}
+                        /&nbsp;
+                        {parseInt(fileItem.fileSize / 1024 / 1024, 10) ||
+                          parseInt(fileInfo.size / 1024 / 1024, 10)}
+                        MB
+                      </span>
+                    </div>
+                  ) : (
+                    <div className={STYLES["success-icon"]}>
+                      {result === 2 && (
+                        <span>
+                          <img src={SUCCESS_ICON} alt="" />
+                          上传完成
+                        </span>
+                      )}
+                      {result === 1 && (
+                        <span>
+                          <img src={ERROR_ICON} alt="" />
+                          上传失败
+                        </span>
+                      )}
+                      {(result === 2 || result === 1) && (
+                        <a
+                          className={STYLES["upload-action"]}
+                          onClick={handleReUpload}
+                        >
+                          重新上传
+                        </a>
+                      )}
+                    </div>
+                  )}
+                  {result !== 2 && result !== 1 && (
+                    <div>
+                      {progress}%
+                      <span
+                        onClick={() => onCancelUpload(currentUploadUrl)}
+                        className={STYLES.deleteIcon}
+                      >
+                        <Icon type="close-circle" />
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <Progress percent={progress} showInfo={false} size="small" />
+              </div>
+            </div>
+          </div>
+        )}
+      </Dragger>
+    </div>
+  );
+};
 ```
 
 #### index.html 内容
