@@ -14,7 +14,7 @@ $greenColor: green;
           .menu-text {
             box-shadow: inset 0 0 5px #fff !important;
             a {
-              color: #111;
+              color: $greenColor;
             }
           }
         }
@@ -34,12 +34,13 @@ $greenColor: green;
             border-color: transparent transparent #d7f2d7;
           }
 
+          // 所有文章/友联样式
           .tips-box {
             .tips-text {
               box-shadow: inset 0 0 5px #fff;
 
               .tips-a {
-                color: #111;
+                color: $greenColor;
               }
               &:hover {
                 background-color: #e0e0e099;
@@ -57,10 +58,10 @@ $greenColor: green;
     .dark,
     .toggleMusic {
       box-shadow: inset 0 0 8px #fff !important;
-      color: #111 !important;
+      color: $greenColor !important;
 
       &:hover {
-        color: $greenColor !important;
+        color: $purpleColor !important;
       }
     }
 
@@ -351,7 +352,7 @@ $greenColor: green;
 
           &:hover {
             background: #e0e0e099;
-            color: #111;
+            color: $greenColor;
           }
         }
       }
@@ -380,12 +381,12 @@ $greenColor: green;
         }
 
         .page-number {
-          color: #00b5ff;
+          color: $greenColor;
           box-shadow: inset 0 0 3px #fff;
         }
 
         .extend {
-          color: #00b5ff;
+          color: $greenColor;
         }
       }
 
@@ -440,11 +441,11 @@ $greenColor: green;
           }
 
           a {
-            color: #0097bb;
+            color: $greenColor;
 
             &:hover {
               // 标签选中文字
-              color: $greenColor;
+              color: $purpleColor;
             }
           }
         }
@@ -453,7 +454,7 @@ $greenColor: green;
       // 标签云字体颜色
       .tag-cloud {
         a {
-          color: #0097bb;
+          color: $greenColor;
           // 标签选中字体底部边框颜色
           &::before {
             background: $greenColor;
