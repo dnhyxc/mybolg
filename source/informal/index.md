@@ -186,7 +186,7 @@ function fileSlice(file) {
     const chunk = file.slice(start * maxChunkSize, (start + 1) * maxChunkSize);
     chunks.push({
       file: chunk,
-      filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`,
+      filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`
     });
   }
 }
@@ -202,7 +202,7 @@ function fileSliceByCount(file) {
     const chunk = file.slice(start, start + maxChunkSize + 1);
     chunksByCont.push({
       file: chunk,
-      filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`,
+      filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`
     });
   }
 }
@@ -218,7 +218,7 @@ function fileSliceBySize(file) {
     const chunk = file.slice(start * maxChunkSize, (start + 1) * maxChunkSize);
     chunksBySize.push({
       file: chunk,
-      filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`,
+      filename: `${"fileOnlyOneHash"}_${start + 1}.${"file后缀"}`
     });
   }
 }
@@ -495,24 +495,24 @@ console.log(res); // false
 const arr1 = [
   {
     value: 22,
-    name: "其它",
+    name: "其它"
   },
   {
     value: 11,
-    name: "法定代表人章",
+    name: "法定代表人章"
   },
   {
     value: 33,
-    name: "合同专用章",
+    name: "合同专用章"
   },
   {
     value: 12,
-    name: "财务专用章",
+    name: "财务专用章"
   },
   {
     value: 90,
-    name: "公章",
-  },
+    name: "公章"
+  }
 ];
 
 const arr2 = [
@@ -524,7 +524,7 @@ const arr2 = [
   "xxx",
   "sss",
   "vvv",
-  "nnn",
+  "nnn"
 ];
 
 const arr1Name = arr1.map((i) => i.name);
@@ -652,7 +652,7 @@ const getVirtualRect = (options: any, meta: any) => {
     h,
     l,
     t,
-    timePoint,
+    timePoint
   };
 };
 ```
@@ -771,7 +771,7 @@ function downloadByLink(link, fileName) {
   axios
     .request({
       url: link,
-      responseType: "blob", //关键代码，让axios把响应改成blob
+      responseType: "blob" //关键代码，让axios把响应改成blob
     })
     .then((res) => {
       const link = URL.createObjectURL(res.data);
@@ -1502,6 +1502,100 @@ async function getData() {
 
 > 上述代码描述的是通过 url 从 oss 上获取富文本内容（返回的是一个 html 字符串），此时获取到的结果在 body 中，如果不使用 `text()` 方法，那么获取到的数据就是不可读的。因此 text() 可以读取 response 对象，同时将其设置为已读。最后返回一被解析的 html 字符串。
 
+### esc-ui 业务组件库
+
+#### [esc-ui 之 Http 请求库](https://esc-ui.netlify.app/#/http)
+
+1、Http 基本配置：
+
+- api/urlMap.js：
+
+```js
+export default {
+  UPLOAD_DOM: "/xxx/upload",
+  PREVIEW_BY_ID: "/xxx/previewById?:ids",
+  GET_FILE_LIST: "/xxx/getFileList",
+  GET_PARAGRAPH_LIST: "/xxx/getParagraphList?fileId="
+};
+```
+
+> 要传递 query 参数，api 后面需要加 `?:id`。
+
+- api/index.js：
+
+```js
+import { Http } from "esc-ui";
+import { message } from "antd";
+import urlMap from "./urlMap";
+
+export default new Http({
+  baseUrl: "/",
+  urlMap,
+  notify: (res) => {
+    message.destroy();
+    message.error(res);
+  },
+  contentType: "application/json",
+  // 异常处理
+  beforeCatch: (res) => {
+    if ([403].includes(res.code)) {
+      message.error(res.msg);
+    }
+    return res;
+  }
+});
+```
+
+2、使用 get 发送 Array 参数：
+
+- 要发送 query 数组参数，需要借助 [qs 第三方模块](https://github.com/ljharb/qs) 处理数组参数：
+
+```
+npm i qs -S
+```
+
+- 参数处理：
+
+```js
+const params = qs.stringify({ ids: [111, 222, 333] }, { indices: false }); // 'ids=111&ids=222&ids=333'
+```
+
+- get 传递 query 参数的基本使用方式：
+
+```js
+import http from "@/api";
+import qs from "qs";
+
+const getListByIds = async () => {
+  const ids = [{ id: 111 }, { id: 222 }, { id: 333 }].map((i) => i.id);
+  const params = qs.stringify({ ids }, { indices: false });
+  try {
+    const res = await http.get("PREVIEW_BY_ID", { ids: params });
+    console.log(res);
+  } catch (error) {
+    message.error(error.msg);
+  }
+};
+```
+
+3、post 请求使用方式：
+
+```js
+import http from "@/api";
+
+const uploadFile = async () => {
+  try {
+    const res = await http.post("UPLOAD_DOM", {
+      fileName: "file1",
+      url: "dnhyxc.gitee.io"
+    });
+    console.log(res);
+  } catch (error) {
+    message.error(error.msg);
+  }
+};
+```
+
 ### momment
 
 #### momment 获取当天时间戳
@@ -1563,7 +1657,7 @@ module.exports = override(
   fixBabelImports("import", {
     libraryName: "antd",
     libraryDirectory: "es",
-    style: "css", // style: true 会加载 less 文件
+    style: "css" // style: true 会加载 less 文件
   })
 );
 ```
@@ -1707,7 +1801,7 @@ const CheckList: React.FC = () => {
     { id: "3", name: "ccc" },
     { id: "4", name: "ddd" },
     { id: "5", name: "eee" },
-    { id: "6", name: "fff" },
+    { id: "6", name: "fff" }
   ];
 
   // 处理选中逻辑
@@ -1834,18 +1928,18 @@ const config = [
   {
     key: "home",
     name: "home",
-    path: "/home",
+    path: "/home"
   },
   {
     key: "about",
     name: "about",
-    path: "/about",
+    path: "/about"
   },
   {
     key: "detail",
     name: "detail",
-    path: "(.*)?/detail",
-  },
+    path: "(.*)?/detail"
+  }
 ];
 ```
 
@@ -1934,7 +2028,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 class App extends React.Component {
   state = {
     value: "",
-    copied: false,
+    copied: false
   };
 
   render() {
@@ -1999,7 +2093,7 @@ ReactDOM.render(<App />, appRoot);
 
     <script>
       let obj = {
-        name: "",
+        name: ""
       };
 
       let newObj = JSON.parse(JSON.stringify(obj));
@@ -2011,7 +2105,7 @@ ReactDOM.render(<App />, appRoot);
         set(value) {
           value !== newObj.name && (newObj.name = value);
           observer();
-        },
+        }
       });
 
       function observer() {
@@ -2070,7 +2164,7 @@ ReactDOM.render(<App />, appRoot);
         set(target, prop, value) {
           target[prop] = value;
           observer();
-        },
+        }
       });
 
       function observer() {
