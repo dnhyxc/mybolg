@@ -122,7 +122,7 @@ function initSetThemes() {
     setBgcThemes(9, 'shi')
   }
 
-  if (Utils.getSSG("yun") && document.body.clientWidth > 800) {
+  if (Utils.getSSG("yun") && !Utils.getSSG('container') && document.body.clientWidth > 800) {
     setSaveEyeColor()
   } else {
     removeSaveEyeColor()

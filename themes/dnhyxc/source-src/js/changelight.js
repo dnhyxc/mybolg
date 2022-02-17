@@ -1,4 +1,5 @@
 import closeShadow from "./closeShadow";
+import * as setThemes from './setThemes';
 import * as Utils from "./public-utils";
 
 function setLight() {
@@ -157,14 +158,14 @@ function init() {
     if (Utils.getSSG("container")) {
       changeInfo.style.display = "none";
       closeShadow.removeShadow();
-      container.classList.remove("saveEyesContainer");
+      setThemes.removeSaveEyeColor()
     } else {
       lightChangeInfo.style.opacity = "0";
       if (Utils.getSSG("hideShadow")) {
         closeShadow.addShadow();
       }
       if (Utils.getSSG('yun')) {
-        container.classList.add("saveEyesContainer");
+        setThemes.setSaveEyeColor()
       }
     }
   };
