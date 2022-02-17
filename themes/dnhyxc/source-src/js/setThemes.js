@@ -18,7 +18,7 @@ const themeColors = (() => {
     chu: '#879d89 0%, #537895 100%',
     zuo: '#39707b 0%, #39707b 100%',
     kan: '#535c68 0%, #535c68 100%',
-    yun: document.body.clientWidth > 800 ? '#B5E6B5 0%, #B5E6B5 100%' : '#336750 0%, #1b6950 100%',
+    yun: document.body.clientWidth > 800 ? '#b5e6b5 0%, #b5e6b5 100%' : '#336750 0%, #1b6950 100%',
     qi: '#2c3e50 0%, #2c3e50 100%',
     shi: '#23262e 0%, #23262e 100%',
   }
@@ -33,8 +33,7 @@ const colors = (() => {
     chu: { color1: '#879d89', color2: '#537895' },
     zuo: { color1: '#39707b', color2: '#39707b' },
     kan: { color1: '#535c68', color2: '#535c68' },
-    yun: document.body.clientWidth > 800 ? { color1: '#B5E6B5', color2: '#B5E6B5' } : { color1: '#336750', color2: '#1b6950' },
-    // yun_mobile: { color1: '#336750', color2: '#1b6950' },
+    yun: document.body.clientWidth > 800 ? { color1: '#b5e6b5', color2: '#b5e6b5' } : { color1: '#336750', color2: '#1b6950' },
     qi: { color1: '#2c3e50', color2: '#2c3e50' },
     shi: { color1: '#23262e', color2: '#23262e' },
   }
