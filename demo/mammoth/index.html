@@ -1,0 +1,96 @@
+<!--
+ * @Description: mammoth demo
+ * @Author: dnh
+ * @Date: 2022-02-18 10:44:58
+ * @LastEditTime: 2022-02-18 14:43:17
+ * @LastEditors: dnh
+ * @FilePath: \demo\mammoth\index.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>test</title>
+    <script src="https://cdn.bootcss.com/mammoth/1.4.8/mammoth.browser.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <input id="document" type="file" />
+      <div class="row" style="width: 100%">
+        <div class="span8">
+          <div id="output" class="well"></div>
+        </div>
+      </div>
+      <button id="btn">docx</button>
+    </div>
+
+    <script type="text/javascript">
+      console.log(mammoth, "mammoth");
+
+      document
+        .getElementById("document")
+        .addEventListener("change", readFileInputEventAsArrayBuffer, false);
+
+      const btn = document.querySelector("#btn");
+
+      function displayResult(result) {
+        console.log(result, "result");
+        let html = result.value;
+        let newHTML = html
+          .replace(//g, "")
+          .replace("<h1>", '<h1 style="text-align: center;">')
+          .replace(/<table>/g, '<table style="border-collapse: collapse;">')
+          .replace(/<tr>/g, '<tr style="height: 30px;">')
+          .replace(/<td>/g, '<td style="border: 1px solid pink;">')
+          .replace(/<p>/g, '<p style="text-indent: 2em;">');
+        document.getElementById("output").innerHTML = newHTML;
+      }
+
+      function readFileInputEventAsArrayBuffer(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = async function (loadEvent) {
+          var arrayBuffer = loadEvent.target.result; //arrayBuffer
+          console.log(arrayBuffer);
+          const res = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
+          console.log(res.value, "---------");
+          displayResult(res.value);
+        };
+
+        reader.readAsArrayBuffer(file);
+      }
+
+      btn.addEventListener("click", () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open(
+          "get",
+          "http://moa-dev.uban360.net:21007/sfs/file?digest=fidfb10374adfef1bcf34a80a6c0cd2e83b"
+        );
+        xhr.responseType = "arraybuffer"; // ""|"text"-字符串 "blob"-Blob对象 "arraybuffer"-ArrayBuffer对象
+        xhr.onload = function () {
+          var path = URL.createObjectURL(xhr.response);
+          console.log(path, "----------------------");
+        };
+        xhr.send();
+
+        var reader = new FileReader();
+
+        reader.onload = async function (loadEvent) {
+          var arrayBuffer = loadEvent.target.result; //arrayBuffer
+          console.log(arrayBuffer);
+          const res = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
+          console.log(res.value, "---------");
+          displayResult(res.value);
+        };
+
+        reader.readAsArrayBuffer(
+          "http://moa-dev.uban360.net:21007/sfs/file?digest=fidfb10374adfef1bcf34a80a6c0cd2e83b"
+        );
+      });
+    </script>
+  </body>
+</html>
