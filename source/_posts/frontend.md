@@ -2183,6 +2183,272 @@ let baz = { ...bar, ...{ a: 2, b: 4 } }; // {a: 2, b: 4}
 
 需要注意：**扩展运算符对对象实例的拷贝属于浅拷贝**。
 
+*2、*数组扩展运算符：
+
+数组的扩展运算符可以将一个数组转为用逗号分隔的参数序列，且每次只能展开一层数组。
+
+```js
+console.log(...[1, 2, 3]); // 1 2 3
+console.log(...[1, [2, 3, 4], 5]); // 1 [2, 3, 4] 5
+```
+
+数组扩展运算符的应用：
+
+- 将数组转为参数序列：
+
+```js
+function add(x, y) {
+  return x + y;
+}
+const numbers = [1, 2];
+add(...numbers); // 3
+```
+
+- 复制数组：
+
+```js
+const arr1 = [1, 2];
+const arr2 = [...arr1];
+```
+
+> 注意：扩展运算符用于取出参数对象中的所有可遍历属性，拷贝到当前对象之中，这里参数对象是个数组，数组里面的所有对象都是基础数据类型，将所有基础数据类型重新拷贝到新的数组中。
+
+- 合并数组：
+
+```js
+const arr1 = ["two", "three"];
+const arr2 = ["one", ...arr1, "four", "five"]; // ["one", "two", "three", "four", "five"]
+```
+
+- 扩展运算符与结构赋值结合起来，用于生成数组：
+
+```js
+const [first, ...rest] = [1, 2, 3, 4, 5];
+
+console.log(first); // 1
+console.log(rest); // [2, 3, 4, 5]
+```
+
+> 注意：如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则将会报错，如 `const [...rest, last] = [1, 2, 3, 4, 5]; // 报错`，`const [first, ...rest, last] = [1, 2, 3, 4, 5]; // 报错`。
+
+- 将字符串转为真正的数组：
+
+```js
+[..."hello"]; // [ "h", "e", "l", "l", "o" ]
+```
+
+- 任何 Iterator 接口的对象，都可以用扩展运算符转为真正的数组，比较常见的应用是可以将某些数据结构转为数组：
+
+```js
+// arguments对象
+function foo() {
+  const args = [...arguments];
+}
+```
+
+> 用于替换 ES5 中的 Array.prototype.slice.call(arguments)写法。
+
+- 使用 Math 函数获取数组中特定的值：
+
+```js
+const numbers = [9, 4, 7, 1];
+Math.min(...numbers); // 1
+Math.max(...numbers); // 9
+```
+
+#### 如何提取高度嵌套的对象里的指定属性
+
+有时会遇到一些嵌套程度非常深的对象：
+
+```js
+const school = {
+  classes: {
+    stu: {
+      name: "Bob",
+      age: 24,
+    },
+  },
+};
+```
+
+像此处的 name 这个变量，嵌套了四层，此时如果仍然尝试老方法来提取它，显然不是奏效的，因为 school 这个对象本身是没有 name 这个属性的，name 位于 school 对象的 "儿子的儿子" 对象里面。要想把 name 提取出来，一种比较笨的方法是逐层结构：
+
+```js
+const { classes } = school;
+const { stu } = classes;
+const { name } = stu;
+console.log(name); // 'Bob'
+```
+
+由上述代码可见，写法过于冗余，相对于上述写法，还有一种更标准的做法，即可以用一行代码来解决这个问题：
+
+```js
+const {
+  classes: {
+    stu: { name },
+  },
+} = school;
+
+console.log(name); // 'Bob'
+```
+
+#### ES6 字符串处理
+
+存在性判定：在过去，当判断一个字符/字符串是否在某字符串中时，只能用 `indexOf > -1` 来实现。现在 ES6 提供了三个方法：`includes、startsWith、endsWith`，它们都会返回一个布尔值来告诉你是否存在。
+
+- includes：判断字符串与子串的包含关系：
+
+```js
+const son = "haha";
+const father = "xixi haha hehe";
+father.includes(son); // true
+```
+
+- startsWith：判断字符串是否以某个/某串字符开头：
+
+```js
+const father = "xixi haha hehe";
+father.startsWith("haha"); // false
+father.startsWith("xixi"); // true
+```
+
+- endsWith：判断字符串是否以某个/某串字符结尾：
+
+```js
+const father = "xixi haha hehe";
+father.endsWith("hehe"); // true
+```
+
+自动重复：可以使用 repeat 方法来使同一个字符串输出多次（被连续复制多次）：
+
+```js
+const sourceCode = "repeat for 3 times;";
+const repeated = sourceCode.repeat(3);
+console.log(repeated); // repeat for 3 times;repeat for 3 times;repeat for 3 times;
+```
+
+#### Map 和 Object 的区别
+
+意外的键：
+
+- Map 默认情况不包含任何键，只包含显示插入的键。
+
+- Object 有一个原型，原型链上的键名有可能和自己在对象上的设置的键名产生冲突。
+
+键的类型：
+
+- Map 的键可以任意值，包括函数、对象或任意基本类型。
+
+- Object 的键必须是 String 或是 Symbol。
+
+键的顺序：
+
+- Map 的键可以是任意值，包括函数、对象或任意基本类型。
+
+- Object 的键是无序的。
+
+size：
+
+- Map 的键值对个数可以轻易地通过 size 属性获取。
+
+- Object 的键值对个数只能手动计算。
+
+迭代：
+
+- Map 是 iterable 的，所以可以直接被迭代。
+
+- 迭代 Object 需要以某种方式获取它的键然后才能迭代。
+
+性能：
+
+- 在频繁增删键值对的场景下表现更好。
+
+- 在频繁添加和删除键值对的场景下未做出优化。
+
+#### Map 和 weakMap 的区别
+
+*1、*Map 数据结构：
+
+Map 本质上就是键值对的集合，但是普通的 Object 中的键值对中的键只能是字符串。而 ES6 提供的 Map 数据结构类似于对象，但是它的键不限制范围，可以是任意类型，是一种更加完善的 Hash 结构。如果 Map 的键是一个原始数据类型，只要两个键严格相同，就视为是同一个键。
+
+实际上 Map 是一个数组，它的每一个数据也都是一个数组，其形式如下：
+
+```js
+const map = [
+  ["name", "张三"],
+  ["age", 18],
+];
+```
+
+Map 数据结构有以下操作方法：
+
+- size：`map.size` 返回 Map 结构的成员总数。
+
+- set(key, value)：设置键名 key 对应的键值 value，然后返回整个 Map 结构，如果 key 已经有值，则键值会被更新，否则就新生成该键。
+
+- get(key)：该方法读取 key 对应的键值，如果找不到 key，返回 undefined。
+
+- has(key)：该方法返回一个布尔值，表示某个键是否在当前 Map 对象中。
+
+- delete(key)：还方法删除某个键，返回 true，如果删除失败，返回 false。
+
+- clear()：map.clear() 清除所有成员，没有返回值。
+
+Map 结构原生提供是三个遍历器生成函数和一个遍历方法：
+
+- keys()：返回键名的遍历器。
+
+- values()：返回键值的遍历器。
+
+- entries()：返回所有成员的遍历器。
+
+- forEach()：遍历 Map 的所有成员。
+
+```js
+const map = new Map([
+  ["foo", 1],
+  ["bar", 2],
+]);
+for (let key of map.keys()) {
+  console.log(key); // foo bar
+}
+for (let value of map.values()) {
+  console.log(value); // 1 2
+}
+for (let items of map.entries()) {
+  console.log(items); // ["foo",1]  ["bar",2]
+}
+map.forEach((value, key, map) => {
+  console.log(key, value); // foo 1    bar 2
+});
+```
+
+*2、*WeakMap 数据结构：
+
+WeakMap 对象也是一组键值对的集合，其中的键是弱引用的。其**键必须是对象**，原始数据类型不能作为 key 值，而值可以是任意的。
+
+该对象也有以下几种方式：
+
+- set(key, value)：设置键名 key 对应的键值 value，然后返回整个 WeakMap 结构，如果 key 已经有值，则键值会被更新，否则就新生成该键（因为返回的是当前 WeakMap 对象，所以可以链式调用）。
+
+- get(key)：该方法读取 key 对应的键值，如果找不到 key，返回 undefined。
+
+- has(key)：该方法返回一个布尔值，表示某个键是否在当前 WeakMap 对象中。
+
+- delete(key)：该方法删除某个键，返回 true，如果删除失败，返回 false。
+
+> 其 clear()方法已经被弃用，所以可以通过创建一个空的 WeakMap 并替换原对象来实现清除。
+
+WeakMap 的设计目的在于，有时想在某个对象上面存放一些数据，但是这会形成对于这个对象的引用。一旦不再需要这两个对象，就必须手动删除这个引用，否则垃圾回收机制就不会释放对象占用的内存。
+
+而 WeakMap 的**键名所引用的对象都是弱引用**，即垃圾回收机制不将该引用考虑在内。因此，只要所引用的对象的其他引用都被清除，垃圾回收机制就会释放该对象所占用的内存。也就是说，一旦不再需要，WeakMap 里面的**键名对象和所对应的键值对会自动消失，不用手动删除引用**。
+
+简单总结：
+
+- Map 数据结构它类似于对象，也是键值对的集合，但是 "键" 的范围不限于字符串，各种类型的值（包括对象）都可以当作键。
+
+- WeakMap 结构与 Map 结构类似，也是用于生成键值对的集合。但是 WeakMap 只接受对象作为键名（null 除外），不接受其他类型的值作为键名。而且 WeakMap 的键名所指向的对象，不计入垃圾回收机制。
+
 #### let、const、var 的区别
 
 **块级作用域**：块级作用域由 `{}` 包括，let 和 const 具有块级作用域，var 不存在块级作用域。块级作用域解决了 ES5 中的两个问题：
@@ -2322,6 +2588,8 @@ new 操作符的实现步骤如下：
 #### 回调函数
 
 #### Generator
+
+#### Proxy 可以实现什么功能
 
 大纲 https://juejin.cn/post/6996841019094335519#heading-10
 
