@@ -2327,6 +2327,124 @@ const repeated = sourceCode.repeat(3);
 console.log(repeated); // repeat for 3 times;repeat for 3 times;repeat for 3 times;
 ```
 
+#### let、const、var 的区别
+
+**块级作用域**：块级作用域由 `{}` 包括，let 和 const 具有块级作用域，var 不存在块级作用域。块级作用域解决了 ES5 中的两个问题：
+
+- 内层变量可能覆盖外层变量的问题。
+
+- 用来计数的循环变量泄露为全局变量。
+
+**变量提升**：var 存在变量提升，let 和 const 不存在变量提升，即在变量只能在声明之后使用，否则会报错。
+
+**给全局添加属性**：浏览器的全局对象是 window，Node 的全局对象是 global。var 声明的变量为全局变量，并且会将该变量添加为全局对象（window）的属性，但是 let 和 const 不会。
+
+**重复声明**：var 声明的变量可以进行重复声明，后声明的同名变量会覆盖之前声明的变量。而 const 和 let 不允许重复声明变量。
+
+**暂时性死区**：使用 let、const 命令声明某个变量时，在该变量声明之前，其都是不可用的。这在语法上，称为 “暂时性死区”。使用 var 声明的变量不存在暂时性死区。
+
+```js
+console.log(a, "before"); // 此时该变量不可用，有暂时性死区，将报错
+let a = 209; // 或 const a = 209
+console.log(a, "after"); // 209
+
+console.log(b, "before"); // undefined
+var b = 902;
+console.log(b, "after"); // 902
+```
+
+**初始值设置**：在变量声明时，var 和 let 可以不用设置初始值。而 const 声明变量必须设置初始值。
+
+**指针指向**：let 和 const 都是 ES6 新增的用于创建变量的语法。let 创建的变量是可以更改指针指向的，即可以重复赋值。但 const 声明的变量是不允许更改指针指向的，即不能重新赋值。
+
+- const 保证的并不是变量的值不能改动，而是变量指向的那个内存地址不能改动。对于基本类型的数据，其值就保存在变量指向的那个内存地址中，因此等同于常量。
+
+- 对于引用数据类型（Object，Array）来说，变量指向的内存地址，保存的只是一个指针，const 只能保证这个指针是固定不变的，至于它指向的数据结构是不是可变的，就完全不能控制了。
+
+#### 箭头函数与普通函数的区别
+
+*1、*箭头函数比普通函数更加简洁：
+
+- 如果没有参数，就直接写一个空括号即可。
+
+- 如果只有一个参数，即可以省略参数的括号。
+
+- 如果有多个参数，用逗号分隔，参数括号不能省略。
+
+- 如果函数体的返回值只有一句，可以省略大括号。
+
+- 如果函数体不需要返回值，且只有一句话，可以给这个语句前面加一个 void 关键字。最常见的就是调用一个函数：
+
+```js
+const fn = () => void doesNotReturn();
+```
+
+*2、*箭头函数没有自己的 this：
+
+- 箭头函数不会创建自己的 this，所以它没有自己的 this，它只会在自己作用域上一层继承 this。所以箭头函数中 this 的指向在它定义时已经确定了，之后不会改变。
+
+*3、*箭头函数继承来的 this 永远不会改变：
+
+```js
+var id = "GLOBAL";
+var obj = {
+  id: "OBJ",
+  a: function () {
+    console.log(this.id);
+  },
+  b: () => {
+    console.log(this.id);
+  },
+};
+obj.a(); // 'OBJ'
+obj.b(); // 'GLOBAL'
+new obj.a(); // undefined
+new obj.b(); // Uncaught TypeError: obj.b is not a constructor
+```
+
+> 对象 obj 的方法 b 是一个箭头函数，这个函数中的 this 就永远指向它定义时所在的全局执行环境中的 this（window），即便这个函数是作为对象 obj 的方法调用，但是 this 依旧指向 window 对象。需要注意的是：定义对象的大括号 `{}` **是无法形成一个单独的执行环境的**，它依旧是处于全局执行环境中。
+
+*4、*call()、apply()、bind() 不能改变箭头函数中 this 的指向：
+
+```js
+var id = "Global";
+let fun1 = () => {
+  console.log(this.id);
+};
+fun1(); // 'Global'
+fun1.call({ id: "Obj" }); // 'Global'
+fun1.apply({ id: "Obj" }); // 'Global'
+fun1.bind({ id: "Obj" })(); // 'Global'
+```
+
+*5、*箭头函数没有自己的 arguments：
+
+- 在箭头函数中访问 arguments 实际上获得的是它外层函数的 arguments 值。
+
+*6、*箭头函数没有 prototype 属性。
+
+*7、*箭头函数不能作为构造函数使用：
+
+- 由于箭头函数没有自己的 prototype 属性及 this 属性，所以无法执行 new。
+
+*8、*箭头函数不能用作 Generator 函数，不能使用 yeild 关键字。
+
+#### 如果 new 箭头函数会怎样
+
+箭头函数它没有自己 prototype 属性，也没有自己的 this 指向，更不可以使用 arguments 参数，所以不能所以不能 new 箭头函数。
+
+new 操作符的实现步骤如下：
+
+1. 创建一个对象。
+
+2. 将构造函数的作用域赋给新对象（也就是将对象的 \_\_proto\_\_ 属性指向构造函数的 prototype 属性）。
+
+3. 改变 this 的指向（使构造函数中的 this 指向新创建的实例对象），执行构造函数、传递参数，fn.apply() 或者 fn.call()。
+
+4. 返回新的对象。
+
+> 由于构造函数没有 prototype 属性及自己的 this 属性，所以上述 3、4 步骤箭头函数都无法执行。
+
 #### Map 和 Object 的区别
 
 意外的键：
@@ -2448,124 +2566,6 @@ WeakMap 的设计目的在于，有时想在某个对象上面存放一些数据
 - Map 数据结构它类似于对象，也是键值对的集合，但是 "键" 的范围不限于字符串，各种类型的值（包括对象）都可以当作键。
 
 - WeakMap 结构与 Map 结构类似，也是用于生成键值对的集合。但是 WeakMap 只接受对象作为键名（null 除外），不接受其他类型的值作为键名。而且 WeakMap 的键名所指向的对象，不计入垃圾回收机制。
-
-#### let、const、var 的区别
-
-**块级作用域**：块级作用域由 `{}` 包括，let 和 const 具有块级作用域，var 不存在块级作用域。块级作用域解决了 ES5 中的两个问题：
-
-- 内层变量可能覆盖外层变量的问题。
-
-- 用来计数的循环变量泄露为全局变量。
-
-**变量提升**：var 存在变量提升，let 和 const 不存在变量提升，即在变量只能在声明之后使用，否则会报错。
-
-**给全局添加属性**：浏览器的全局对象是 window，Node 的全局对象是 global。var 声明的变量为全局变量，并且会将该变量添加为全局对象（window）的属性，但是 let 和 const 不会。
-
-**重复声明**：var 声明的变量可以进行重复声明，后声明的同名变量会覆盖之前声明的变量。而 const 和 let 不允许重复声明变量。
-
-**暂时性死区**：使用 let、const 命令声明某个变量时，在该变量声明之前，其都是不可用的。这在语法上，称为 “暂时性死区”。使用 var 声明的变量不存在暂时性死区。
-
-```js
-console.log(a, "before"); // 此时该变量不可用，有暂时性死区，将报错
-let a = 209; // 或 const a = 209
-console.log(a, "after"); // 209
-
-console.log(b, "before"); // undefined
-var b = 902;
-console.log(b, "after"); // 902
-```
-
-**初始值设置**：在变量声明时，var 和 let 可以不用设置初始值。而 const 声明变量必须设置初始值。
-
-**指针指向**：let 和 const 都是 ES6 新增的用于创建变量的语法。let 创建的变量是可以更改指针指向的，即可以重复赋值。但 const 声明的变量是不允许更改指针指向的，即不能重新赋值。
-
-- const 保证的并不是变量的值不能改动，而是变量指向的那个内存地址不能改动。对于基本类型的数据，其值就保存在变量指向的那个内存地址中，因此等同于常量。
-
-- 对于引用数据类型（Object，Array）来说，变量指向的内存地址，保存的只是一个指针，const 只能保证这个指针是固定不变的，至于它指向的数据结构是不是可变的，就完全不能控制了。
-
-#### 箭头函数与普通函数的区别
-
-*1、*箭头函数比普通函数更加简洁：
-
-- 如果没有参数，就直接写一个空括号即可。
-
-- 如果只有一个参数，即可以省略参数的括号。
-
-- 如果有多个参数，用逗号分隔，参数括号不能省略。
-
-- 如果函数体的返回值只有一句，可以省略大括号。
-
-- 如果函数体不需要返回值，且只有一句话，可以给这个语句前面加一个 void 关键字。最常见的就是调用一个函数：
-
-```js
-const fn = () => void doesNotReturn();
-```
-
-*2、*箭头函数没有自己的 this：
-
-- 箭头函数不会创建自己的 this，所以它没有自己的 this，它只会在自己作用域上一层继承 this。所以箭头函数中 this 的指向在它定义时已经确定了，之后不会改变。
-
-*3、*箭头函数继承来的 this 永远不会改变：
-
-```js
-var id = "GLOBAL";
-var obj = {
-  id: "OBJ",
-  a: function () {
-    console.log(this.id);
-  },
-  b: () => {
-    console.log(this.id);
-  },
-};
-obj.a(); // 'OBJ'
-obj.b(); // 'GLOBAL'
-new obj.a(); // undefined
-new obj.b(); // Uncaught TypeError: obj.b is not a constructor
-```
-
-> 对象 obj 的方法 b 是一个箭头函数，这个函数中的 this 就永远指向它定义时所在的全局执行环境中的 this（window），即便这个函数是作为对象 obj 的方法调用，但是 this 依旧指向 window 对象。需要注意的是：定义对象的大括号 `{}` **是无法形成一个单独的执行环境的**，它依旧是处于全局执行环境中。
-
-*4、*call()、apply()、bind() 不能改变箭头函数中 this 的指向：
-
-```js
-var id = "Global";
-let fun1 = () => {
-  console.log(this.id);
-};
-fun1(); // 'Global'
-fun1.call({ id: "Obj" }); // 'Global'
-fun1.apply({ id: "Obj" }); // 'Global'
-fun1.bind({ id: "Obj" })(); // 'Global'
-```
-
-*5、*箭头函数没有自己的 arguments：
-
-- 在箭头函数中访问 arguments 实际上获得的是它外层函数的 arguments 值。
-
-*6、*箭头函数没有 prototype 属性。
-
-*7、*箭头函数不能作为构造函数使用：
-
-- 由于箭头函数没有自己的 prototype 属性及 this 属性，所以无法执行 new。
-
-*8、*箭头函数不能用作 Generator 函数，不能使用 yeild 关键字。
-
-#### 如果 new 箭头函数会怎样
-
-箭头函数它没有自己 prototype 属性，也没有自己的 this 指向，更不可以使用 arguments 参数，所以不能所以不能 new 箭头函数。
-
-new 操作符的实现步骤如下：
-
-1. 创建一个对象。
-
-2. 将构造函数的作用域赋给新对象（也就是将对象的 \_\_proto\_\_ 属性指向构造函数的 prototype 属性）。
-
-3. 改变 this 的指向（使构造函数中的 this 指向新创建的实例对象），执行构造函数、传递参数，fn.apply() 或者 fn.call()。
-
-4. 返回新的对象。
-
-> 由于构造函数没有 prototype 属性及自己的 this 属性，所以上述 3、4 步骤箭头函数都无法执行。
 
 #### 函数
 
