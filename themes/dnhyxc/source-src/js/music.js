@@ -52,7 +52,8 @@ function init() {
         artist: "Luke Thompson",
         lrc: "/downloads/musicLrc/boatToChina.lrc",
         url: "/downloads/musicUrl/boatToChina.mp3",
-        cover: "/downloads/musicCover/boatToChina.jpg",
+        cover: "/downloads/musicCover/zxr.jpg",
+        // cover: "/downloads/musicCover/boatToChina.jpg",
       },
       {
         name: "New Boy",
