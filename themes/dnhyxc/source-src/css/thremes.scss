@@ -267,8 +267,12 @@ $greenColor: green;
 
       // 文章内容
       .article-entry {
+        .copyBtn{
+          color: green;
+        }
+
         blockquote {
-          background: hsla(0, 0%, 88%, 0.6);
+          background: rgba(189, 255, 210, .6);
         }
         h3,
         h4,
@@ -296,6 +300,52 @@ $greenColor: green;
 
         .copyInfo {
           color: $greenColor;
+        }
+
+        .highlight,
+        pre {
+          // background: #cdfdba;
+          background: #e3edcd;
+        }
+
+        .highlight {
+          .line {
+            color: green;
+          }
+        }
+
+        pre {
+          .tag {
+            color: #f31616;
+          }
+
+          .built_in {
+            color: #ff0098;
+          }
+
+          .keyword {
+            color: #ff6b00;
+          }
+
+          .function {
+            color: #ff6b00;
+
+            .title {
+              color: #d900ff;
+            }
+          }
+
+          .string {
+            color: #018fd5;
+          }
+
+          .attribute {
+            color: #d900ff;
+          }
+
+          .params {
+            color: #ff0098;
+          }
         }
       }
 
