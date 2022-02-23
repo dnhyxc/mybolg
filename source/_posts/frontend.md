@@ -2115,7 +2115,7 @@ const c = b.valueOf();
 console.log(c); // 'abc'
 ```
 
-使用 `new Boolean(false)` 包装 boolean 类型如：false，但是 false 被包裹成包装类型后就成为了对象，所以将其转为布尔值为 true，因此其非值为 false。如下：
+使用 `new Boolean(false)` 包装 boolean 类型如：false，但是 false 被包裹成包装类型后就成为了对象，所以将其转为布尔值为 true，因此其非值为 false。因此如下代码不会进入 if 判断：
 
 ```js
 const a = new Boolean(false);
@@ -2444,6 +2444,42 @@ new 操作符的实现步骤如下：
 4. 返回新的对象。
 
 > 由于构造函数没有 prototype 属性及自己的 this 属性，所以上述 3、4 步骤箭头函数都无法执行。
+
+实现一个 new 的伪代码如下：
+
+```js
+function Dog(name) {
+  this.name = name;
+  this.say = function () {
+    console.log("name = " + this.name);
+  };
+}
+
+function Cat(name) {
+  this.name = name;
+  this.say = function () {
+    console.log("name = " + this.name);
+  };
+}
+
+function _new(fn, ...arg) {
+  const obj = {}; // 创建一个新的对象
+  obj.__proto__ = fn.prototype; // 把obj的__proto__指向fn的prototype,实现继承
+  fn.apply(obj, arg); // 改变this的指向
+  return Object.prototype.toString.call(obj) === "[object Object]" ? obj : {}; // 返回新的对象obj
+}
+
+//测试1
+var dog = _new(Dog, "aaa");
+dog.say(); //'name = aaa'
+console.log(dog instanceof Dog); //true
+console.log(dog instanceof Cat); //false
+//测试2
+var cat = _new(Cat, "bbb");
+cat.say(); //'name = bbb'
+console.log(cat instanceof Cat); //true
+console.log(cat instanceof Dog); //false
+```
 
 #### Map 和 Object 的区别
 
