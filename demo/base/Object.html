@@ -40,6 +40,39 @@
 
       console.log(first); // 1
       console.log(rest); // [2, 3, 4, 5]
+
+      var arrayLike = {
+        0: "a",
+        1: "b",
+        2: "c",
+        length: 3,
+      };
+
+      const arr1 = Array.prototype.slice.call(arrayLike);
+      console.log(arr1, "arr1"); // ['a', 'b', 'c']
+
+      const arr2 = Array.prototype.splice.call(arrayLike, 0);
+      console.log(arr2); // ['a', 'b', 'c']
+
+      var arrayLike1 = {
+        0: "a",
+        1: "b",
+        2: "c",
+        length: 3,
+      };
+
+      const res = Array.from(arrayLike1);
+      console.log(res);
+
+      var arrayLike2 = {
+        0: "a",
+        1: "b",
+        2: "c",
+        length: 3,
+      };
+
+      const arr = Array.prototype.concat.apply([], arrayLike2);
+      console.log(arr);
     </script>
   </body>
 </html>

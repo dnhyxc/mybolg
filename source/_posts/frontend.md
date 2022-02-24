@@ -2655,6 +2655,63 @@ WeakMap 的设计目的在于，有时想在某个对象上面存放一些数据
 
 数组归并方法 `reduce() 和 reduceRight()` 方法。
 
+#### 类数组转换为数组的方法
+
+1. 通过 call 调用数组的 slice 方法来实现转换：
+
+```js
+const arrayLike = {
+  0: "a",
+  1: "b",
+  2: "c",
+  length: 3,
+};
+
+const arr = Array.prototype.slice.call(arrayLike);
+console.log(arr); // ['a', 'b', 'c']
+```
+
+2. 通过 call 调用数组的 splice 方法来实现转换：
+
+```js
+var arrayLike = {
+  0: "a",
+  1: "b",
+  2: "c",
+  length: 3,
+};
+const arr = Array.prototype.splice.call(arrayLike, 0);
+console.log(arr); // ['a', 'b', 'c']
+```
+
+3. 通过 apply 调用数组的 concat 方法来实现转换：
+
+```js
+const arrayLike = {
+  0: "a",
+  1: "b",
+  2: "c",
+  length: 3,
+};
+
+const arr = Array.prototype.concat.apply([], arrayLike);
+console.log(arr);
+```
+
+4. 通过 Array.from 方法来实现转换：
+
+```js
+var arrayLike = {
+  0: "a",
+  1: "b",
+  2: "c",
+  length: 3,
+};
+
+const arr = Array.from(arrayLike);
+console.log(arr);
+```
+
 #### JS 脚本延迟加载的方式
 
 延迟加载就是等页面加载完成之后再加载 js 文件。js 延迟加载有助于提高页面加载速度。一般有以下几种方式：
@@ -2687,6 +2744,12 @@ const regex = /^1[34578]\d{9}$/g;
 // （5）用户名正则
 const regex = /^[a-zA-Z\$][a-zA-Z0-9_\$]{4,16}$/;
 ```
+
+#### 什么是 DOM 和 BOM
+
+DOM 指的是文档对象模型，它指的是把文档当做一个对象，这个对象主要定义了处理网页内容的方法和接口。
+
+BOM 指的是浏览器对象模型，它指的是把浏览器当做一个对象来对待，这个对象主要定义了与浏览器进行交互的方法和接口。BOM 的核心是 window，而 window 对象具有双重角色，它既是通过 js 访问浏览器窗口的一个接口，又是一个 Global（全局）对象。这意味着在网页中定义的任何对象、变量和函数，都作为全局对象的一个属性或者方法存在。window 对象含有 location 对象、navigator 对象、screen 对象等字对象，并且 DOM 的最根本的对象 document 对象也是 BOM 的 window 对象的子对象。
 
 #### 函数
 
