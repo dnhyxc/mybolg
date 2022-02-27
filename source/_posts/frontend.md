@@ -2777,7 +2777,67 @@ BOM 指的是浏览器对象模型，它指的是把浏览器当做一个对象�
 
 ### React
 
- 
+#### React 15 渲染方式
+
+react 15 采用的是递归渲染的方式，模拟递归渲染代码如下：
+
+```jsx
+import React from "react";
+
+const element = (
+  <div id="0" className="wrap">
+    <div id="1">dom1</div>
+    <div id="2">dom2</div>
+  </div>
+);
+
+const render = (element, rootNode) => {
+  const dom = document.createElement(element.type);
+  Object.keys(element.props)
+    .filter((i) => i !== "children")
+    .forEach((j) => {
+      dom[j] = element.props[j];
+    });
+  if (Array.isArray(element.props.children)) {
+    element.props.children.forEach((i) => {
+      render(i, dom);
+    });
+  } else {
+    dom.innerHTML = element.props.children;
+  }
+  rootNode.appendChild(dom);
+};
+
+render(element, document.querySelector("#root"));
+```
+
+递归渲染所导致的问题：
+
+1. 如果界面节点过多，层次很深时，递归渲染会很耗时。
+
+2. 由于 js 是单线程的，而且 UI 线程和 js 线程是互斥的，因此会阻塞页面渲染，出现页面卡顿的问题。
+
+#### 什么是 Fiber
+
+Fiber 其实指的是一种数据结构，它可以用一个纯 js 对象来表示。
+
+Fiber 是一个执行单元，每次执行完一个执行单元，React 就会检查现在还剩多少时间，如果没有时间，就会把控制权交还给浏览器。
+
+#### Fiber 的特性
+
+**1、**增量渲染：通过 Fiber，可以将里面的渲染任务进行拆分，将它们均匀的分到每一帧里面去执行。
+
+**2、**暂停、终止、复用渲染任务。
+
+**3、**不同更新的优先级：
+
+- 在更新的时候，可以给这些更新的任务赋予不同的优先级，比如高优先级的任务：键盘输入事件，点击事件等这些需要立即得到反馈的任务就会被优先执行，而想网络请求这种低优先级的任务就会放在之后执行。
+
+- 另外，引入优先级之后，还允许对里面的这些任务进行插队。
+
+**4、**并发方面新的基础能力：
+
+- 采用 Fiber 模式之后，可以暂停高消耗的非紧急的组件渲染，优先处理紧急的任务，比如 UI 渲染。使应用始终保持可响应，避免白屏卡顿等现象。
 
 大纲 https://juejin.cn/post/6996841019094335519#heading-10
 
@@ -2785,3 +2845,4 @@ css 篇 https://juejin.cn/post/6905539198107942919
 
 js 篇 https://juejin.cn/post/6940945178899251230
 
+手写篇 https://juejin.cn/post/7018337760687685669
