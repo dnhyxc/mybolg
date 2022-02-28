@@ -51,6 +51,13 @@ const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
 
+function closeCover() {
+  hideCoverBtn &&
+    hideCoverBtn.addEventListener("click", function () {
+      cover && cover.classList.add("hideCover");
+    });
+}
+
 onDOMContentLoaded(function () {
   // Share.init()
   // Viewer.init();
@@ -72,6 +79,7 @@ onDOMContentLoaded(function () {
   tocWordsLoop.init();
   articleImage.init();
   // emStyle.init();
+  closeCover();
 });
 
 function stopTouchmove(e) {
@@ -80,7 +88,6 @@ function stopTouchmove(e) {
 
 document.onreadystatechange = function () {
   if (document.readyState === "complete") {
-    cover && cover.classList.add("hideCover");
     if (document.body.clientWidth <= 800) {
       document.body.style.position = "relative";
       document.body.style.width = "100%";
@@ -103,10 +110,7 @@ document.onreadystatechange = function () {
       }, 3000);
     }
   } else if (document.readyState === "interactive") {
-    hideCoverBtn &&
-      hideCoverBtn.addEventListener("click", function () {
-        cover && cover.classList.add("hideCover");
-      });
+    cover && cover.classList.add("hideCover");
     setThemes.initSetThemes();
     if (!Utils.getSSG("container") && Utils.getSSG("hideShadow")) {
       closeShadow.addShadow();

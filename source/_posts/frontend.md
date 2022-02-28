@@ -2115,7 +2115,7 @@ const c = b.valueOf();
 console.log(c); // 'abc'
 ```
 
-使用 `new Boolean(false)` 包装 boolean 类型如：false，但是 false 被包裹成包装类型后就成为了对象，所以将其转为布尔值为 true，因此其非值为 false。如下：
+使用 `new Boolean(false)` 包装 boolean 类型如：false，但是 false 被包裹成包装类型后就成为了对象，所以将其转为布尔值为 true，因此其非值为 false。因此如下代码不会进入 if 判断：
 
 ```js
 const a = new Boolean(false);
@@ -2445,6 +2445,42 @@ new 操作符的实现步骤如下：
 
 > 由于构造函数没有 prototype 属性及自己的 this 属性，所以上述 3、4 步骤箭头函数都无法执行。
 
+实现一个 new 的伪代码如下：
+
+```js
+function Dog(name) {
+  this.name = name;
+  this.say = function () {
+    console.log("name = " + this.name);
+  };
+}
+
+function Cat(name) {
+  this.name = name;
+  this.say = function () {
+    console.log("name = " + this.name);
+  };
+}
+
+function _new(fn, ...arg) {
+  const obj = {}; // 创建一个新的对象
+  obj.__proto__ = fn.prototype; // 把obj的__proto__指向fn的prototype,实现继承
+  fn.apply(obj, arg); // 改变this的指向
+  return Object.prototype.toString.call(obj) === "[object Object]" ? obj : {}; // 返回新的对象obj
+}
+
+//测试1
+var dog = _new(Dog, "aaa");
+dog.say(); //'name = aaa'
+console.log(dog instanceof Dog); //true
+console.log(dog instanceof Cat); //false
+//测试2
+var cat = _new(Cat, "bbb");
+cat.say(); //'name = bbb'
+console.log(cat instanceof Cat); //true
+console.log(cat instanceof Dog); //false
+```
+
 #### Map 和 Object 的区别
 
 意外的键：
@@ -2567,6 +2603,154 @@ WeakMap 的设计目的在于，有时想在某个对象上面存放一些数据
 
 - WeakMap 结构与 Map 结构类似，也是用于生成键值对的集合。但是 WeakMap 只接受对象作为键名（null 除外），不接受其他类型的值作为键名。而且 WeakMap 的键名所指向的对象，不计入垃圾回收机制。
 
+#### JavaScript 内置对象
+
+全局的对象（global objects）或称标准内置对象，不要和 "全局对象（global object）" 混淆。这里说的全局的对象是说在全局作用域里的对象。全局作用域中的其它对象可以由用户的脚本创建或由宿主程序提供。
+
+标准内置对象的分类：
+
+1. 值类型：这些全局属性返回一个简单值，这些值没有自己的属性和方法。例如 infinity、NaN、undefined、null 字面量。
+
+2. 函数类型：全局函数可以直接调用，不需要在调用时指定所属对象，执行结束后将结果直接返回给调用者。例如：eval()、parseFloat()、parseInt() 等。
+
+3. 基本对象：基本对象是定义或使用其它对象的基础。基本对象包括一般对象、函数对象和错误对象。例如：Object、Function、Boolean、Symbol、Error 等。
+
+4. 数字和日期对象：用来表示数字、日期和执行数学计算的对象。例如 Number、Math、Date。
+
+5. 字符串：用来表示和操作字符串的对象。例如：String、RegExp。
+
+6. 可索引的集合对象：这些对象表示按照索引值来排序的数据集合，包括数组和类型数组，以及数组结构的对象。例如：Array。
+
+7. 使用键的集合对象：这些集合对象在存储数据时会使用到键，支持按照插入顺序来迭代元素。 例如 Map、Set、WeakMap、WeakSet。
+
+8. 矢量集合：SIMD 矢量集合中的数据会被组织为一个数据序列。 例如 SIMD 等。
+
+9. 结构化数据：这些对象用来表示和操作结构化的缓冲区数据，或使用 JSON 编码的数据。例如 JSON 等。
+
+10. 控制抽象对象：例如 Promise、Generator 等。
+
+11. 反射：例如 Reflect、Proxy。
+
+12. 国际化：为了支持多语言处理而加入 ECMAScript 的对象。例如 Intl、Intl.Collator 等。
+
+13. WebAssembly。
+
+14. 其它：例如 arguments。
+
+> js 中的内置对象主要指的是在程序执行前存在全局作用域里的由 js 定义的一些全局值属性、函数和用来实例化其他对象的构造函数对象。一般经常用到的如全局变量值 NaN、undefined，全局函数如 parseInt()、parseFloat() 用来实例化对象的构造函数如 Date、Object 等，还有提供数学计算的单体内置对象如 Math 对象。
+
+#### 数组的原生方法
+
+数组和字符串的转换方法：`toString()、toLocalString()、join()` 其中 join() 方法可以指定转换为字符串时的分隔符。
+
+数组尾部操作的方法 `pop() 和 push()`，push 方法可以传入多个参数。
+
+数组首部操作的方法 `shift() 和 unshift()` 重排序的方法 `reverse() 和 sort()`，sort() 方法可以传入一个函数来进行比较，传入前后两个值，如果返回值为正数，则交换两个参数的位置。
+
+数组连接的方法 `concat()`，返回的是拼接好的数组，**不影响原数组**。
+
+数组截取办法 `slice()`，用于截取数组中的一部分返回，**不影响原数组**。
+
+数组插入方法 `splice()`，**影响原数组**查找特定项的索引的方法，`indexOf() 和 lastIndexOf() 迭代方法 every()、some()、filter()、map() 和 forEach()` 方法。
+
+数组归并方法 `reduce() 和 reduceRight()` 方法。
+
+#### 类数组转换为数组的方法
+
+1. 通过 call 调用数组的 slice 方法来实现转换：
+
+```js
+const arrayLike = {
+  0: "a",
+  1: "b",
+  2: "c",
+  length: 3,
+};
+
+const arr = Array.prototype.slice.call(arrayLike);
+console.log(arr); // ['a', 'b', 'c']
+```
+
+2. 通过 call 调用数组的 splice 方法来实现转换：
+
+```js
+var arrayLike = {
+  0: "a",
+  1: "b",
+  2: "c",
+  length: 3,
+};
+const arr = Array.prototype.splice.call(arrayLike, 0);
+console.log(arr); // ['a', 'b', 'c']
+```
+
+3. 通过 apply 调用数组的 concat 方法来实现转换：
+
+```js
+const arrayLike = {
+  0: "a",
+  1: "b",
+  2: "c",
+  length: 3,
+};
+
+const arr = Array.prototype.concat.apply([], arrayLike);
+console.log(arr);
+```
+
+4. 通过 Array.from 方法来实现转换：
+
+```js
+var arrayLike = {
+  0: "a",
+  1: "b",
+  2: "c",
+  length: 3,
+};
+
+const arr = Array.from(arrayLike);
+console.log(arr);
+```
+
+#### JS 脚本延迟加载的方式
+
+延迟加载就是等页面加载完成之后再加载 js 文件。js 延迟加载有助于提高页面加载速度。一般有以下几种方式：
+
+- **defer 属性**：给 js 脚本添加 defer 属性，这个属性会让脚本的加载与文档的解析同步进行，然后在文档解析完成后再执行这个脚本文件，这样的话就能使页面的渲染 bubei 阻塞。多个设置了 defer 属性的脚本按照规范来说最后是顺序执行的，但是在一些浏览器中可能不是这样。
+
+- **async 属性**：给 js 脚步添加 async 属性，这个属性会使脚本异步加载，不会阻塞页面的解析过程，但是当脚本加载完成后立即执行 js 脚本，这个时候如果文档没有解析完成的话同样会阻塞页面解析。多个 async 属性的脚本的执行顺序是不可预判的，一般不会按照代码的顺序依次执行。
+
+- **动态创建 DOM 方式**：动态创建 DOM 标签的方式，可以对文档的加载事件进行监听，当文档加载完成后再动态的创建 script 标签来引入 js 脚本。
+
+- **使用 setTimeout 延迟方法**：设置一个定时器来延迟加载 js 脚本文件。
+
+- **让 js 最后加载**：将 js 脚本放在文档的底部，来使 js 脚本尽可能的在最后来加载执行。
+
+#### 常用的正则表达式
+
+```js
+// （1）匹配 16 进制颜色值
+const regex = /#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})/g;
+
+// （2）匹配日期，如 yyyy-mm-dd 格式
+const regex = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+
+// （3）匹配 qq 号
+const regex = /^[1-9][0-9]{4,10}$/g;
+
+// （4）手机号码正则
+const regex = /^1[34578]\d{9}$/g;
+
+// （5）用户名正则
+const regex = /^[a-zA-Z\$][a-zA-Z0-9_\$]{4,16}$/;
+```
+
+#### 什么是 DOM 和 BOM
+
+DOM 指的是文档对象模型，它指的是把文档当做一个对象，这个对象主要定义了处理网页内容的方法和接口。
+
+BOM 指的是浏览器对象模型，它指的是把浏览器当做一个对象来对待，这个对象主要定义了与浏览器进行交互的方法和接口。BOM 的核心是 window，而 window 对象具有双重角色，它既是通过 js 访问浏览器窗口的一个接口，又是一个 Global（全局）对象。这意味着在网页中定义的任何对象、变量和函数，都作为全局对象的一个属性或者方法存在。window 对象含有 location 对象、navigator 对象、screen 对象等字对象，并且 DOM 的最根本的对象 document 对象也是 BOM 的 window 对象的子对象。
+
 #### 函数
 
 #### this
@@ -2591,8 +2775,74 @@ WeakMap 的设计目的在于，有时想在某个对象上面存放一些数据
 
 #### Proxy 可以实现什么功能
 
+### React
+
+#### React 15 渲染方式
+
+react 15 采用的是递归渲染的方式，模拟递归渲染代码如下：
+
+```jsx
+import React from "react";
+
+const element = (
+  <div id="0" className="wrap">
+    <div id="1">dom1</div>
+    <div id="2">dom2</div>
+  </div>
+);
+
+const render = (element, rootNode) => {
+  const dom = document.createElement(element.type);
+  Object.keys(element.props)
+    .filter((i) => i !== "children")
+    .forEach((j) => {
+      dom[j] = element.props[j];
+    });
+  if (Array.isArray(element.props.children)) {
+    element.props.children.forEach((i) => {
+      render(i, dom);
+    });
+  } else {
+    dom.innerHTML = element.props.children;
+  }
+  rootNode.appendChild(dom);
+};
+
+render(element, document.querySelector("#root"));
+```
+
+递归渲染所导致的问题：
+
+1. 如果界面节点过多，层次很深时，递归渲染会很耗时。
+
+2. 由于 js 是单线程的，而且 UI 线程和 js 线程是互斥的，因此会阻塞页面渲染，出现页面卡顿的问题。
+
+#### 什么是 Fiber
+
+Fiber 其实指的是一种数据结构，它可以用一个纯 js 对象来表示。
+
+Fiber 是一个执行单元，每次执行完一个执行单元，React 就会检查现在还剩多少时间，如果没有时间，就会把控制权交还给浏览器。
+
+#### Fiber 的特性
+
+**1、**增量渲染：通过 Fiber，可以将里面的渲染任务进行拆分，将它们均匀的分到每一帧里面去执行。
+
+**2、**暂停、终止、复用渲染任务。
+
+**3、**不同更新的优先级：
+
+- 在更新的时候，可以给这些更新的任务赋予不同的优先级，比如高优先级的任务：键盘输入事件，点击事件等这些需要立即得到反馈的任务就会被优先执行，而想网络请求这种低优先级的任务就会放在之后执行。
+
+- 另外，引入优先级之后，还允许对里面的这些任务进行插队。
+
+**4、**并发方面新的基础能力：
+
+- 采用 Fiber 模式之后，可以暂停高消耗的非紧急的组件渲染，优先处理紧急的任务，比如 UI 渲染。使应用始终保持可响应，避免白屏卡顿等现象。
+
 大纲 https://juejin.cn/post/6996841019094335519#heading-10
 
 css 篇 https://juejin.cn/post/6905539198107942919
 
 js 篇 https://juejin.cn/post/6940945178899251230
+
+手写篇 https://juejin.cn/post/7018337760687685669

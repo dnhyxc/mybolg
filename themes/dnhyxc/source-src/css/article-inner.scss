@@ -96,13 +96,38 @@
   }
 
   p {
-    margin-top: 10px;
+    margin-bottom: 10px;
     font-size: 14px;
   }
 
   ul li {
     font-size: 14px;
     text-align: justify;
+    display: flex;
+    justify-content: flex-start;
+
+    &:last-child {
+      p {
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  ol li {
+    font-size: 14px;
+    text-align: justify;
+    display: flex;
+    justify-content: flex-start;
+
+    &:last-child {
+      p {
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
   }
 
   p code,
@@ -120,6 +145,7 @@
   blockquote {
     padding: 10px 10px;
     margin-top: 10px;
+    margin-bottom: 10px;
     border-left: 5px solid #ffd900;
     background: rgba(225, 225, 225, 0.3);
     color: #000;
@@ -145,6 +171,7 @@
     li:before {
       content: "";
       width: 4px;
+      min-width: 4px;
       height: 4px;
       border: 1px solid #ffec8b;
       border-radius: 10px;
