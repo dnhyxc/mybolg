@@ -2839,6 +2839,8 @@ Fiber 是一个执行单元，每次执行完一个执行单元，React 就会�
 
 - 采用 Fiber 模式之后，可以暂停高消耗的非紧急的组件渲染，优先处理紧急的任务，比如 UI 渲染。使应用始终保持可响应，避免白屏卡顿等现象。
 
+![react fiber 执行调度流程](reactFiber.png)
+
 大纲 https://juejin.cn/post/6996841019094335519#heading-10
 
 css 篇 https://juejin.cn/post/6905539198107942919
