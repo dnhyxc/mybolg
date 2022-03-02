@@ -2130,7 +2130,7 @@ if (!a) {
 
 ```js
 const outObj = {
-  inObj: { a: 1, b: 2 }
+  inObj: { a: 1, b: 2 },
 };
 let newObj = { ...outObj };
 newObj.inObj.a = 2;
@@ -2141,7 +2141,7 @@ Object.assign()：
 
 ```js
 let outObj = {
-  inObj: { a: 1, b: 2 }
+  inObj: { a: 1, b: 2 },
 };
 let newObj = Object.assign({}, outObj);
 newObj.inObj.a = 2;
@@ -2265,9 +2265,9 @@ const school = {
   classes: {
     stu: {
       name: "Bob",
-      age: 24
-    }
-  }
+      age: 24,
+    },
+  },
 };
 ```
 
@@ -2285,8 +2285,8 @@ console.log(name); // 'Bob'
 ```js
 const {
   classes: {
-    stu: { name }
-  }
+    stu: { name },
+  },
 } = school;
 
 console.log(name); // 'Bob'
@@ -2394,7 +2394,7 @@ var obj = {
   },
   b: () => {
     console.log(this.id);
-  }
+  },
 };
 obj.a(); // 'OBJ'
 obj.b(); // 'GLOBAL'
@@ -2530,7 +2530,7 @@ Map 本质上就是键值对的集合，但是普通的 Object 中的键值对�
 ```js
 const map = [
   ["name", "张三"],
-  ["age", 18]
+  ["age", 18],
 ];
 ```
 
@@ -2561,7 +2561,7 @@ Map 结构原生提供是三个遍历器生成函数和一个遍历方法：
 ```js
 const map = new Map([
   ["foo", 1],
-  ["bar", 2]
+  ["bar", 2],
 ]);
 for (let key of map.keys()) {
   console.log(key); // foo bar
@@ -2664,7 +2664,7 @@ const arrayLike = {
   0: "a",
   1: "b",
   2: "c",
-  length: 3
+  length: 3,
 };
 
 const arr = Array.prototype.slice.call(arrayLike);
@@ -2678,7 +2678,7 @@ var arrayLike = {
   0: "a",
   1: "b",
   2: "c",
-  length: 3
+  length: 3,
 };
 const arr = Array.prototype.splice.call(arrayLike, 0);
 console.log(arr); // ['a', 'b', 'c']
@@ -2691,7 +2691,7 @@ const arrayLike = {
   0: "a",
   1: "b",
   2: "c",
-  length: 3
+  length: 3,
 };
 
 const arr = Array.prototype.concat.apply([], arrayLike);
@@ -2705,7 +2705,7 @@ var arrayLike = {
   0: "a",
   1: "b",
   2: "c",
-  length: 3
+  length: 3,
 };
 
 const arr = Array.from(arrayLike);
@@ -2770,6 +2770,8 @@ BOM 指的是浏览器对象模型，它指的是把浏览器当做一个对象�
 #### 异步队列
 
 #### 回调函数
+
+#### escape、encodeURI、encodeURIComponent 的区别
 
 #### Generator
 
