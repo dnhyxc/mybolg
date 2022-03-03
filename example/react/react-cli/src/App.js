@@ -1,29 +1,15 @@
-import React from "react";
-import { add } from "mylib_math_test";
-import "./App.css";
+import OutRoot from "./createPortal";
+import CreateElement from './createElement/index'
+import RenderSelf from './createPortal/renderSelf'
 
-console.log(add(22, 99), "mylib");
-
-const Sub = ({ className, name, ...props }) => {
-  return <div className={className}>hello {name}</div>;
-};
-
-Sub.Create = (props) => {
+const App = () => {
   return (
     <div>
-      <h1>{props.name}</h1>
-      <div>{props.content}</div>
+      <CreateElement />
+      <OutRoot />
+      <RenderSelf />
     </div>
-  );
-};
+  )
+}
 
-const child = React.createElement(Sub, { name: "sub", className: "child" });
-
-const parent = React.createElement(
-  "div",
-  { className: "parent" },
-  "parent",
-  child
-);
-
-export { parent, Sub };
+export default App
