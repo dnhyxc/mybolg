@@ -17,6 +17,10 @@ $greenColor: green;
               color: $greenColor;
             }
           }
+
+          .isShowShadow {
+            box-shadow: inset 0 0 2px #fff !important;
+          }
         }
 
         // 鸟笼样式
@@ -62,6 +66,12 @@ $greenColor: green;
 
       &:hover {
         color: $purpleColor !important;
+      }
+    }
+
+    @media screen and (min-width: 800px) {
+      .isShow-shadow {
+        box-shadow: inset 0 0 2px #fff !important;
       }
     }
 
@@ -524,27 +534,78 @@ $greenColor: green;
 
     // footer
     .end-footer {
-      .restColor {
-        box-shadow: inset 0 -1px 8px #fff !important;
+      #footer {
+        .restColor {
+          box-shadow: inset 0 -1px 8px #fff;
 
-        #scrollTop {
-          border-color: transparent transparent #fff !important;
-
-          .scroll-count {
-            color: #fff !important;
-          }
-
-          &:hover {
-            border-color: transparent transparent $greenColor !important;
+          #scrollTop {
+            border-color: transparent transparent #fff !important;
 
             .scroll-count {
               color: #fff !important;
             }
 
-            &::after {
-              color: $greenColor !important;
+            &:hover {
+              border-color: transparent transparent $greenColor !important;
+
+              .scroll-count {
+                color: #fff !important;
+              }
+
+              &::after {
+                color: $greenColor !important;
+              }
             }
           }
+        }
+
+        .isShowShadow {
+          box-shadow: inset 0 0 2px #fff !important;
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: 800px) {
+    .isShow-shadow,
+    .isShowShadow {
+      box-shadow: inset 0 0 2px #fff !important;
+    }
+
+    .tips-box {
+      .toggleShadow {
+        &:first-child {
+          // box-shadow: none !important;
+          box-shadow: inset 0 0 2px #fff !important;
+          border: none;
+        }
+
+        &:nth-child(2) {
+          // box-shadow: none !important;
+          box-shadow: inset 0 0 2px #fff !important;
+          border: none;
+        }
+
+        &:last-child {
+          // box-shadow: none !important;
+          box-shadow: inset 0 0 2px #fff !important;
+          border: none;
+        }
+      }
+    }
+
+    .tip-show {
+      .toggleShadow {
+        &:first-child {
+          box-shadow: 0 0 2px #fff inset !important;
+        }
+
+        &:nth-child(2) {
+          box-shadow: 0 0 2px #fff inset !important;
+        }
+
+        &:last-child {
+          box-shadow: 0 0 2px #fff inset !important;
         }
       }
     }
