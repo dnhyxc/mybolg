@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from 'react-dom'
 import { add } from "mylib_math_test";
 import "./index.css";
 
@@ -27,13 +26,33 @@ const parent = React.createElement(
   child
 );
 
-const H1 = React.createElement('h1', { key: 'h1', className: 'h1' }, 'root_child中的元素')
-const child1 = React.createElement('ul', { key: 'child1', className: 'child1' }, <li>child1</li>)
-const child2 = React.createElement('ul', { key: 'child2', className: 'child2' }, <li>child2</li>)
+const H1 = React.createElement(
+  "div",
+  { key: "h1", className: "h1" },
+  "root_child中的元素"
+);
+const child1 = React.createElement(
+  "ul",
+  { key: "child1", className: "child1" },
+  <li>React.createElement 生成 child1</li>
+);
+const child2 = React.createElement(
+  "ul",
+  { key: "child2", className: "child2" },
+  <li>React.createElement 生成 child2</li>
+);
 
-const List = React.createElement('div', { className: "wrap" }, <div>{H1}{child1}{child2}</div>)
+const List = React.createElement(
+  "div",
+  { className: "wrap" },
+  <div>
+    {H1}
+    {child1}
+    {child2}
+  </div>
+);
 
-ReactDOM.render(List, document.querySelector('#root_child'))
+// ReactDOM.render(List, document.querySelector('#root_child')) // 该代码同样生效，类似于 ReactDOM.createPortal()
 
 export { parent, Sub, List };
 
