@@ -1,12 +1,7 @@
 import "./index.css";
 
 const Layout = ({ children }) => {
-  return (
-    <div className="container">
-      <div className="left">left</div>
-      {children}
-    </div>
-  );
+  return <div className="container">{children}</div>;
 };
 
 export default Layout;

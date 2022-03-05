@@ -29,7 +29,7 @@ const List = React.createElement(
 
 const RenderSelf = () => {
   const wrap = document.createElement("div");
-  wrap.className = "container";
+  wrap.className = "renderSelf";
   document.body.appendChild(wrap);
 
   return createPortal(List, wrap);

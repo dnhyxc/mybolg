@@ -4,7 +4,10 @@ import "./index.css";
 const LayoutOutlet = () => {
   return (
     <div className="outlet">
-      <Outlet />
+      <div className="left">left</div>
+      <div className="content">
+        <Outlet />
+      </div>
     </div>
   );
 };
