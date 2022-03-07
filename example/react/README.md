@@ -1,7 +1,13 @@
-#### react 创建新项目
+#### react 创建 react+js 项目
 
 ```
 npx create-react-app my-app
+```
+
+#### react 创建 react+ts 项目
+
+```
+npx create-react-ts demo --template typescriptss
 ```
 
 #### 报错处理
