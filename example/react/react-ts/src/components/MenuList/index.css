@@ -1,0 +1,24 @@
+.menuList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  color: #333;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  height: 40px;
+  width: 100%;
+  background-color: #ddf1f9;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.active {
+  color: #20beff;
+  background-color: #caf5ff;
+}
