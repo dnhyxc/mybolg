@@ -4,9 +4,9 @@ const Home = () => {
   const navigate = useNavigate();
 
   const toMessage = () => {
-    navigate("/home/message", {
+    navigate("message", {
       state: {
-        from: "我从山中来",
+        from: "state 传参 => 我从山中来",
       },
       replace: false, // 默认 replace 是 false
     });
@@ -14,7 +14,7 @@ const Home = () => {
 
   return (
     <div>
-      <div onClick={toMessage}>message</div>
+      <div onClick={toMessage}>click to message</div>
       <Outlet />
     </div>
   );

@@ -27,7 +27,7 @@ const routes: RouteObject[] = [
         element: <About />,
       },
       {
-        path: "/about/detail",
+        path: "/about/detail/:id",
         element: <Detail />,
       },
       {

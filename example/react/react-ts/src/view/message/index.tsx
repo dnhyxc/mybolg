@@ -7,6 +7,7 @@ interface LocationState {
 }
 
 const Message: React.FC = () => {
+  // 接受 state 传参
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -23,7 +24,7 @@ const Message: React.FC = () => {
         {[0, 1, 2].map((i) => {
           return (
             <li key={i} onClick={() => onClickMessage(i)}>
-              {from}message{i}
+              {from} click message to detail
             </li>
           );
         })}
