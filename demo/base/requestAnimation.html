@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>requestAnimation</title>
+    <style>
+      #root {
+        width: 100px;
+        height: 100px;
+        background-color: pink;
+        /* transform: translateX(10px); */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      let start;
+      function animate(timeStart) {
+        if (!start) {
+          start = timeStart;
+        }
+        console.log(timeStart - start); // 计算每帧的时间差：大约为16.6ms => 16.682999999999993 => 33.36500000000024 => 50.047000000000025 间隔大致为 16 左右
+        root.style.transform = `translateX(${timeStart * 0.01}px)`;
+        if (timeStart < 10000) {
+          requestAnimationFrame(animate);
+        }
+      }
+      requestAnimationFrame(animate);
+    </script>
+  </body>
+</html>

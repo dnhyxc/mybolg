@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>requestAnimation</title>
+    <style>
+      #root {
+        width: 100px;
+        height: 100px;
+        background-color: pink;
+        /* transform: translateX(10px); */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      function sleep(duration) {
+        let now = Date.now();
+        // console.log(now, "now");
+        // console.log(duration + now, "now");
+        // console.log(Date.now(), "Date.now()");
+        while (duration + now > Date.now()) {}
+      }
+      // sleep(2000);
+      // console.log(">>>>>>>>");
+
+      // 让浏览器一致处于忙碌状态，利于真实计算出剩余空闲时间
+      function start() {
+        console.log("我一直在忙，都快累死了！");
+        requestAnimationFrame(start);
+      }
+      requestAnimationFrame(start);
+
+      let works = [
+        () => {
+          console.log("任务1");
+          sleep(20);
+        },
+        () => {
+          console.log("任务2");
+          sleep(200);
+        },
+        () => {
+          console.log("任务3");
+        },
+        () => {
+          console.log("任务4");
+          sleep(200);
+        },
+        () => {
+          console.log("任务5");
+        },
+        () => {
+          console.log("任务6");
+          sleep(200);
+        },
+      ];
+
+      function progress(dealine) {
+        // 剩余多少时间
+        const dealineTime = dealine.timeRemaining();
+        if (dealineTime > 0 && works.length > 0) {
+          performUnitOfWork();
+          requestIdleCallback(progress);
+          console.log("剩余空余时间为：", dealineTime);
+        }
+      }
+
+      // 取出每个任务，依次执行
+      function performUnitOfWork() {
+        let work = works.shift();
+        work();
+      }
+
+      requestIdleCallback(progress);
+    </script>
+  </body>
+</html>
