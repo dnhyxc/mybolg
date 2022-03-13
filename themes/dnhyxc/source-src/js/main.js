@@ -46,6 +46,7 @@ import articleImage from "./article-image";
 
 import lockHeader from "./lockHeader";
 import emStyle from "./emStyle";
+import articleImg from "./articleImg";
 
 const cover = document.querySelector(".cover");
 const hideCoverBtn = document.querySelector(".hideCoverBtn");
@@ -78,6 +79,7 @@ onDOMContentLoaded(function () {
   music.init();
   tocWordsLoop.init();
   articleImage.init();
+  articleImg.init();
   // emStyle.init();
   closeCover();
 });
