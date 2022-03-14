@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>递归</title>
+  </head>
+  <body>
+    <script>
+      const arr = [
+        {
+          child: [
+            {
+              child: [],
+              name: "1-1",
+              info: {
+                num: 18.1,
+              },
+            },
+          ],
+          name: "1",
+          info: {
+            age: 19,
+          },
+        },
+        {
+          child: [
+            {
+              child: [
+                {
+                  name: "2-2",
+                  info: {
+                    num: 18.3,
+                  },
+                },
+              ],
+              name: "2-1",
+              info: {
+                num: 18.2,
+              },
+            },
+          ],
+          name: "2",
+          info: {
+            num: 19,
+          },
+        },
+        {
+          child: [],
+          name: "3",
+          info: {
+            num: 19,
+          },
+        },
+        {
+          child: [
+            {
+              child: [
+                {
+                  name: "4-2",
+                  info: {
+                    num: 18.5,
+                  },
+                },
+              ],
+              name: "4-1",
+              info: {
+                num: 18.2,
+              },
+            },
+          ],
+          name: "4",
+          info: {
+            num: 20,
+          },
+        },
+        {
+          child: [],
+          name: "5",
+          info: {
+            num: 21,
+          },
+        },
+      ];
+
+      let info = null;
+      const recursionFun = (arr) => {
+        arr.forEach((i) => {
+          if (i.child && i.child.length) {
+            recursionFun(i.child);
+          }
+          if (i.info.num === 18.5) {
+            info = i.info;
+          }
+        });
+      };
+      recursionFun(arr);
+      console.log(info);
+    </script>
+  </body>
+</html>
