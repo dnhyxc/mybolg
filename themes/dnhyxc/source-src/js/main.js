@@ -45,19 +45,19 @@ import tocWordsLoop from "./tocWordsLoop";
 import articleImage from "./article-image";
 
 import lockHeader from "./lockHeader";
-import emStyle from "./emStyle";
+// import emStyle from "./emStyle";
 import articleImg from "./articleImg";
 
 const cover = document.querySelector(".cover");
-const hideCoverBtn = document.querySelector(".hideCoverBtn");
+// const hideCoverBtn = document.querySelector(".hideCoverBtn");
 const changeInfo = document.querySelector(".changeInfo");
 
-function closeCover() {
-  hideCoverBtn &&
-    hideCoverBtn.addEventListener("click", function () {
-      cover && cover.classList.add("hideCover");
-    });
-}
+// function closeCover() {
+//   hideCoverBtn &&
+//     hideCoverBtn.addEventListener("click", function () {
+//       cover && cover.classList.add("hideCover");
+//     });
+// }
 
 onDOMContentLoaded(function () {
   // Share.init()
@@ -81,7 +81,6 @@ onDOMContentLoaded(function () {
   articleImage.init();
   articleImg.init();
   // emStyle.init();
-  closeCover();
 });
 
 function stopTouchmove(e) {
@@ -112,6 +111,7 @@ document.onreadystatechange = function () {
       }, 3000);
     }
   } else if (document.readyState === "interactive") {
+    // closeCover();
     cover && cover.classList.add("hideCover");
     setThemes.initSetThemes();
     if (!Utils.getSSG("container") && Utils.getSSG("hideShadow")) {
