@@ -58,6 +58,14 @@
             {
               child: [
                 {
+                  child: [
+                    {
+                      name: "4-3",
+                      info: {
+                        num: 18.5,
+                      },
+                    },
+                  ],
                   name: "4-2",
                   info: {
                     num: 18.5,
@@ -65,6 +73,44 @@
                 },
               ],
               name: "4-1",
+              info: {
+                num: 18.2,
+              },
+            },
+          ],
+          name: "4",
+          info: {
+            num: 20,
+          },
+        },
+        {
+          child: [
+            {
+              child: [
+                {
+                  child: [
+                    {
+                      name: "5-2",
+                      info: {
+                        num: 18.5,
+                      },
+                      child: [
+                        {
+                          name: "5-3",
+                          info: {
+                            num: 18.5,
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                  name: "5-1",
+                  info: {
+                    num: 18.5,
+                  },
+                },
+              ],
+              name: "5",
               info: {
                 num: 18.2,
               },
@@ -90,8 +136,8 @@
           if (i.child && i.child.length) {
             recursionFun(i.child);
           }
-          if (i.info.num === 18.5) {
-            info = i.info;
+          if (i.info.num === 18.5 && (!i.child || !i.child.length)) {
+            info = i;
           }
         });
       };
