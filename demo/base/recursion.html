@@ -8,6 +8,8 @@
   </head>
   <body>
     <script>
+      const num = 18.5;
+
       const arr = [
         {
           child: [
@@ -130,14 +132,14 @@
         },
       ];
 
-      let info = null;
+      let info = [];
       const recursionFun = (arr) => {
         arr.forEach((i) => {
           if (i.child && i.child.length) {
             recursionFun(i.child);
           }
           if (i.info.num === 18.5 && (!i.child || !i.child.length)) {
-            info = i;
+            info.push(i);
           }
         });
       };
