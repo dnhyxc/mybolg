@@ -92,40 +92,71 @@
                 {
                   child: [
                     {
-                      name: "5-2",
+                      name: "5-3",
                       info: {
                         num: 18.5,
                       },
                       child: [
                         {
-                          name: "5-3",
+                          name: "5-4",
                           info: {
                             num: 18.5,
                           },
+                          child: [
+                            {
+                              name: "5-5",
+                              info: {
+                                num: 18.5,
+                              },
+                              child: [
+                                {
+                                  name: "5-6",
+                                  info: {
+                                    num: 18.5,
+                                  },
+                                  child: [
+                                    {
+                                      name: "5-7",
+                                      info: {
+                                        num: 18.5,
+                                      },
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                          ],
                         },
                       ],
                     },
                   ],
-                  name: "5-1",
+                  name: "5-2",
                   info: {
                     num: 18.5,
                   },
                 },
               ],
-              name: "5",
+              name: "5-1",
               info: {
                 num: 18.2,
               },
             },
           ],
-          name: "4",
+          name: "5",
           info: {
             num: 20,
           },
         },
         {
-          child: [],
-          name: "5",
+          child: [
+            {
+              name: "6-1",
+              info: {
+                num: 18.5,
+              },
+            },
+          ],
+          name: "6",
           info: {
             num: 21,
           },
@@ -138,7 +169,7 @@
           if (i.child && i.child.length) {
             recursionFun(i.child);
           }
-          if (i.info.num === 18.5 && (!i.child || !i.child.length)) {
+          if (i.info.num === 18.5) {
             info.push(i);
           }
         });
