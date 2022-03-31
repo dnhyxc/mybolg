@@ -6,15 +6,15 @@
             <!--在如下的tab定义中，id是WPSWorkExtTab，显示标签是OA辅助，有控制显隐的事件设置getVisible，设置在「开始」(TabHome)页签之前-->
             <tab id="WPSWorkExtTab" label="OA辅助" getVisible="OnGetVisible" insertBeforeMso="TabHome">
                 <group id="grpWPSClound" label="WPS云文档相关功能" getVisible="OnGetVisible">
-                    <box id="boxBoxCloud1" boxStyle="horizontal" visible="true">
+                    <!-- <box id="boxBoxCloud1" boxStyle="horizontal" visible="true">
                         <button id="btnOpenWPSYUN" label="WPS云文档" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large"/>
-                    </box>
+                    </box> -->
                     <box id="boxBoxCloud1" boxStyle="horizontal" visible="true">
                         <button id="btnOpenLocalWPSYUN" label="导入文件" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large"/>
                     </box>
                     <separator id="sepWPSClound"/>
                 </group>
-                <group id="grpWPSWork" label="OA助手文档操作功能组" getVisible="OnGetVisible">
+                <!-- <group id="grpWPSWork" label="OA助手文档操作功能组" getVisible="OnGetVisible">
                     <button id="btnSaveToServer" label="保存到OA" onAction="OnAction" getEnabled="OnGetEnabled" getImage="GetImage" size="large"/>
                     <button id="btnSaveAsFile" label="保存本地" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large" />
                     <box id="boxWPSWorkEx" boxStyle="vertical" visible="true">
@@ -23,7 +23,7 @@
                         <button id="btnChangeToOFD" label="转OFD上传" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large"/>
                     </box>
                     <separator id="sepWPSWork" getVisible="OnGetVisible" />
-                </group>
+                </group> -->
                 <group id="grpOAExtend" label="扩展功能组" getVisible="OnGetVisible">
                     <button id="btnInsertRedHeader" label="套红头" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large"/>
                     <button id="btnInsertSeal" label="印章" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large" />
@@ -70,13 +70,13 @@
                         <button id="btnUserName" label="用户" onAction="OnAction" getLabel="OnGetLabel" />
                     </box>
                 </group>
-                <group id="grpNotice" label="通知消息" getVisible="OnGetVisible">
+                <!-- <group id="grpNotice" label="通知消息" getVisible="OnGetVisible">
                     <box id="boxNotice" boxStyle="vertical" visible="true">
                         <button id="btnSendMessage1" label="执行业务系统函数handleOaFunc1" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large"/>
                         <button id="btnSendMessage2" label="执行业务系统函数handleOaFunc2" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large"/>
                     </box>
                     <button id="btnAddWebShape" label="插入活动对象" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large"/>
-                </group>
+                </group> -->
             </tab>
             <!-- 在这里可以定义WPS自身的tab页签的一些行为，页签的getEnabled和getVisible等效，无onAction事件-->
             <!-- 全集可以去open.wps.cn/docs/office的idMso列表查询-->
