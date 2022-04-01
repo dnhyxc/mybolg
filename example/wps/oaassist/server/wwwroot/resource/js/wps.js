@@ -239,9 +239,9 @@ function openDoc() {
 
   var uploadFieldName = prompt(
     "请输入文档上传到业务系统时自定义字段：",
-    "自定义字段"
+    "dnhyxc"
   );
-  var backupPath = prompt("请输入文档备份路径:");
+  var backupPath = prompt("请输入文档备份路径:", GetUploadPath());
 
   _WpsInvoke([
     {
@@ -251,7 +251,7 @@ function openDoc() {
         uploadFieldName: uploadFieldName,
         picPath: GetDemoPngPath(),
         copyUrl: backupPath,
-        userName: "东方不败",
+        userName: "dnhyxc",
       },
     },
   ]); // OpenDoc方法对应于OA助手dispatcher支持的方法名
@@ -545,9 +545,9 @@ function fillTemplate() {
   var templatePath = prompt(
     "请输入需要填充的数据的请求地址:",
     document.location.protocol +
-      "//" +
-      document.location.host +
-      "/getTemplateData"
+    "//" +
+    document.location.host +
+    "/getTemplateData"
   );
 
   _WpsInvoke([
@@ -845,6 +845,16 @@ _wps["onlineEditOfficialDocument"] = {
             userName 传给wps要显示的OA用户名\n\
 ",
 };
+
+
+/**
+ * =======================自定义测试================================
+ */
+
+function customDoc(){
+  
+}
+
 
 /**
  * 这是HTML页面上的按钮赋予事件的实现，开发者无需关心，使用自己习惯的方式做开发即可

@@ -57,6 +57,8 @@ var constStrEnum = {
     AllowOADocReOpen: "AllowOADocReOpen",
     AutoSaveToServerTime: "AutoSaveToServerTime",
     bkInsertFile: "bkInsertFile",
+    bkInsertFileStart: "bkInsertFileStart",
+    bkInsertFileEnd: "bkInsertFileEnd",
     buttonGroups: "buttonGroups",
     CanSaveAs: "CanSaveAs",
     copyUrl: "copyUrl",
