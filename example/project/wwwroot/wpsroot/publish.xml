@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsplugins>
+    <jspluginonline enable="true" url="http://sub.baas.uban360.net:8089/WpsOAAssist/" type="wps" name="WpsOAAssist"/>
+</jsplugins>
