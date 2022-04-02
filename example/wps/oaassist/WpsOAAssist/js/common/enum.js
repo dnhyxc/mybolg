@@ -113,5 +113,37 @@ var constStrEnum = {
     /**
      * 修订状态标志位
      */
-    RevisionEnableFlag: "RevisionEnableFlag"
+    RevisionEnableFlag: "RevisionEnableFlag",
+
+    // 用户自定义cookie
+    CookieParams: 'CookieParams',
+
+    // 插入红头标识: 1：开始插入，2：插入成功
+    InsertReding: 'InsertReding',
+
+    // 临时保存数据，用于业务保存pdf 和 nomarkPdf
+    SaveAllTemp: 'SaveAllTemp',
+
+    // 企业ID
+    OrgId: 'orgId',
+
+    // 新建文件名称
+    NewFileName: 'NewFileName',
+
+    // 下载参数
+    DownloadParams: 'downloadParams',
+
+    // 字段映射对象
+    FieldObj: 'FieldObj',
+
+    // 正文字段 URL
+    BodyTemplateUrl: 'bodyTemplateUrl'
+}
+
+// 套红字段类型
+var fieldObjEnum = {
+    '标题': 'title',
+    '文号': 'refNo',
+    '缓急': 'urgencyLevel',
+    '密级': 'secretClass',
 }

@@ -490,7 +490,8 @@ function insertRedHeader() {
   );
   var templateURL = prompt(
     "请输入红头模板路径（本地或是url）:",
-    GetDemoPath("红头文件.docx")
+    GetDemoPath("wps广西通信服务公司发文.doc")
+    // GetDemoPath("红头文件.docx")
   );
   if (filePath != "" && filePath != null) {
     _WpsInvoke([
@@ -851,9 +852,64 @@ _wps["onlineEditOfficialDocument"] = {
  * =======================自定义测试================================
  */
 
-function customDoc(){
-  
+function customDoc() {
+  var filePath = prompt(
+    "请输入打开文件路径（本地或是url）：",
+    GetDemoPath("样章.docx")
+  );
+
+  console.log(filePath, "filePath》》》》》》customDoc");
+
+  var uploadPath = prompt("请输入文档上传接口:", GetUploadPath());
+
+  console.log(uploadPath, "uploadPath");
+
+  var uploadFieldName = prompt(
+    "请输入文档上传到业务系统时自定义字段：",
+    "dnhyxc"
+  );
+  var backupPath = prompt("请输入文档备份路径:", GetUploadPath());
+
+  var fileList = []
+
+  var fileObj = {
+    title: '看我能不能插入'
+  }
+
+  var bookMarksStart = '正文内容B'
+
+  var bookMarksEnd = '正文内容E'
+
+  _WpsInvoke([
+    {
+      OpenDoc: {
+        uploadPath: uploadPath, // 保存文档上传接口
+        fileName: filePath,
+        uploadFieldName: uploadFieldName,
+        picPath: GetDemoPngPath(),
+        insertFileUrl: GetDemoPath("wps广西通信服务公司发文.doc"),
+        copyUrl: backupPath,
+        bkInsertFileStart: bookMarksStart,
+        bkInsertFileEnd: bookMarksEnd,
+        userName: "dnhyxc",
+        params: {
+          id: '666',
+          orgId: '902209',
+          file: '',
+          list: fileList || [],
+          fileObj,
+        }
+      },
+    },
+  ], true); // OpenDoc方法对应于OA助手dispatcher支持的方法名
 }
+
+_wps["customDoc"] = {
+  action: customDoc,
+};
+/**
+ * =======================自定义测试================================
+ */
 
 
 /**
@@ -868,8 +924,8 @@ window.onload = function () {
       var btn2 = document.getElementById("demoBtn");
       btn2.innerText = this.innerText;
       document.getElementById("codeDes").innerText =
-        _wps[this.id].detail.toString();
-      document.getElementById("code").innerText = _wps[this.id].code.toString();
+        _wps[this.id].detail && _wps[this.id].detail.toString();
+      document.getElementById("code").innerText = _wps[this.id].code && _wps[this.id].code.toString();
       var onBtnAction = _wps[this.id].action;
 
       // document.getElementById("demoBtn").onclick = onBtnAction //IE不支持箭头函数，改为通用写法
