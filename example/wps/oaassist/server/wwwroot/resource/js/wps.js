@@ -490,7 +490,7 @@ function insertRedHeader() {
   );
   var templateURL = prompt(
     "请输入红头模板路径（本地或是url）:",
-    GetDemoPath("wps广西通信服务公司发文.doc")
+    GetDemoPath("wps广西移动公司部门会议纪要.doc")
     // GetDemoPath("红头文件.docx")
   );
   if (filePath != "" && filePath != null) {
@@ -546,9 +546,9 @@ function fillTemplate() {
   var templatePath = prompt(
     "请输入需要填充的数据的请求地址:",
     document.location.protocol +
-    "//" +
-    document.location.host +
-    "/getTemplateData"
+      "//" +
+      document.location.host +
+      "/getTemplateData"
   );
 
   _WpsInvoke([
@@ -847,7 +847,6 @@ _wps["onlineEditOfficialDocument"] = {
 ",
 };
 
-
 /**
  * =======================自定义测试================================
  */
@@ -870,38 +869,74 @@ function customDoc() {
   );
   var backupPath = prompt("请输入文档备份路径:", GetUploadPath());
 
-  var fileList = []
+  var fileList = [];
 
-  var fileObj = {
-    title: '看我能不能插入'
-  }
+  var fieldObj = {
+    title: "看我能不能插入",
+  };
 
-  var bookMarksStart = '正文内容B'
+  var bookMarksStart = "正文内容B";
 
-  var bookMarksEnd = '正文内容E'
+  var bookMarksEnd = "正文内容E";
 
-  _WpsInvoke([
-    {
-      OpenDoc: {
-        uploadPath: uploadPath, // 保存文档上传接口
-        fileName: filePath,
-        uploadFieldName: uploadFieldName,
-        picPath: GetDemoPngPath(),
-        insertFileUrl: GetDemoPath("wps广西通信服务公司发文.doc"),
-        copyUrl: backupPath,
-        bkInsertFileStart: bookMarksStart,
-        bkInsertFileEnd: bookMarksEnd,
-        userName: "dnhyxc",
-        params: {
-          id: '666',
-          orgId: '902209',
-          file: '',
-          list: fileList || [],
-          fileObj,
-        }
+  _WpsInvoke(
+    [
+      {
+        OpenDoc: {
+          docId: "902209",
+          uploadPath: uploadPath, // 保存文档上传接口
+          fileName: filePath,
+          uploadFieldName: uploadFieldName,
+          picPath: GetDemoPngPath(),
+          insertFileUrl: GetDemoPath("wps广西移动公司部门会议纪要.doc"),
+          copyUrl: backupPath,
+          bkInsertFileStart: bookMarksStart,
+          bkInsertFileEnd: bookMarksEnd,
+          bodyTemplateUrl: "",
+          userName: "dnhyxc",
+          suffix: ".pdf",
+          uploadWithAppendPath: "1",
+          params: {
+            isNew: true,
+            id: "666",
+            orgId: "902209",
+            docId: 123456789,
+            file: undefined,
+            index: -1,
+            list: fileList || [],
+            operType: 4,
+            dealDescription: "创建【会议纪要】文件",
+            fieldObj: {
+              title: "看我插不插入",
+              mainSend: "WOWOWOW",
+              copySend: "DNHYXC",
+              issUer: "签发人",
+              signingUnit: "落款单位",
+              signatureUnit: "署名单位",
+              issueDate: "签发日期",
+              printDate: "印发日期",
+              creatPerson: "dnhyxc",
+              refNo: "2020[0902]号",
+              urgencyLevel: "紧急",
+              secretClass: "密级1",
+              department: "高级的前端部门",
+              units: "发文单位",
+            },
+          },
+          openType: {
+            // 文档打开方式
+            // 文档保护类型，-1：不启用保护模式，0：只允许对现有内容进行修订，
+            // 1：只允许添加批注，2：只允许修改窗体域(禁止拷贝功能)，3：只读
+            protectType: -1,
+            // protectType: downloadParams ? 0 : -1,
+            // password: '123456',
+          },
+          // buttonGroups: options.filePath ? "btnImportTemplate" : "", // 屏蔽功能按钮
+        },
       },
-    },
-  ], true); // OpenDoc方法对应于OA助手dispatcher支持的方法名
+    ],
+    true
+  ); // OpenDoc方法对应于OA助手dispatcher支持的方法名
 }
 
 _wps["customDoc"] = {
@@ -910,7 +945,6 @@ _wps["customDoc"] = {
 /**
  * =======================自定义测试================================
  */
-
 
 /**
  * 这是HTML页面上的按钮赋予事件的实现，开发者无需关心，使用自己习惯的方式做开发即可
@@ -925,7 +959,8 @@ window.onload = function () {
       btn2.innerText = this.innerText;
       document.getElementById("codeDes").innerText =
         _wps[this.id].detail && _wps[this.id].detail.toString();
-      document.getElementById("code").innerText = _wps[this.id].code && _wps[this.id].code.toString();
+      document.getElementById("code").innerText =
+        _wps[this.id].code && _wps[this.id].code.toString();
       var onBtnAction = _wps[this.id].action;
 
       // document.getElementById("demoBtn").onclick = onBtnAction //IE不支持箭头函数，改为通用写法

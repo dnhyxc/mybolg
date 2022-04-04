@@ -1,4 +1,4 @@
-// --------------------------  通用常量  ---------------------------
+// --------------------------  通用常量 源文件  ---------------------------
 
 //OA门户网站用接口,配置默认服务器接口
 var OA_DOOR = {
@@ -253,7 +253,7 @@ function getHtmlURL(html) {
     var e = document.location.toString();
     return (
       -1 != (e = decodeURI(e)).indexOf("/") &&
-      (e = e.substring(0, e.lastIndexOf("/"))),
+        (e = e.substring(0, e.lastIndexOf("/"))),
       e
     );
   };
@@ -359,10 +359,32 @@ function pGetParamName(data, attr) {
  * 从requst中获取文件名（确保请求中有filename这个参数）
  * @param {*} request
  * @param {*} url
+ * @param {*} name
  */
-function pGetFileName(request, url) {
+// function pGetFileName(request, url) {
+//   var disposition = request.getResponseHeader("Content-Disposition");
+//   var filename = "";
+//   if (disposition) {
+//     var matchs = pGetParamName(disposition, "filename=");
+//     if (matchs) {
+//       filename = decodeURIComponent(matchs);
+//     } else {
+//       filename = "petro" + Date.getTime();
+//     }
+//   } else {
+//     filename = url.substring(url.lastIndexOf("/") + 1);
+//     filename = filename.split("?")[0];
+//   }
+//   return filename;
+// }
+
+// 更改，增加name参数处理
+function pGetFileName(request, url, name) {
   var disposition = request.getResponseHeader("Content-Disposition");
   var filename = "";
+
+  if (name) return name;
+
   if (disposition) {
     var matchs = pGetParamName(disposition, "filename=");
     if (matchs) {
@@ -390,14 +412,37 @@ function StringToUint8Array(string) {
 /**
  * WPS下载文件到本地打开（业务系统可根据实际情况进行修改）
  * @param {*} url 文件流的下载路径
+ * @param {*} name 文件名称
  * @param {*} callback 下载后的回调
  */
-function DownloadFile(url, callback) {
+// function DownloadFile(url, callback) {
+//   var xhr = new XMLHttpRequest();
+//   xhr.onreadystatechange = function () {
+//     if (this.readyState == 4 && this.status == 200) {
+//       //需要业务系统的服务端在传递文件流时，确保请求中的参数有filename
+//       var fileName = pGetFileName(xhr, url);
+//       //落地打开模式下，WPS会将文件下载到本地的临时目录，在关闭后会进行清理
+//       var path = wps.Env.GetTempPath() + "/" + fileName;
+//       var reader = new FileReader();
+//       reader.onload = function () {
+//         wps.FileSystem.writeAsBinaryString(path, reader.result);
+//         callback(path);
+//       };
+//       reader.readAsBinaryString(xhr.response);
+//     }
+//   };
+//   xhr.open("GET", url);
+//   xhr.responseType = "blob";
+//   xhr.send();
+// }
+
+// 更改: 增加name参数
+function DownloadFile(url, name, callback) {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       //需要业务系统的服务端在传递文件流时，确保请求中的参数有filename
-      var fileName = pGetFileName(xhr, url);
+      var fileName = pGetFileName(xhr, url, name);
       //落地打开模式下，WPS会将文件下载到本地的临时目录，在关闭后会进行清理
       var path = wps.Env.GetTempPath() + "/" + fileName;
       var reader = new FileReader();
@@ -420,15 +465,68 @@ function DownloadFile(url, callback) {
  * @param {*} strFieldName 业务调用方自定义的一些内容可通过此字段传递，默认赋值'file'
  * @param {*} OnSuccess 上传成功后的回调
  * @param {*} OnFail 上传失败后的回调
+ * @param {1 | 2 | 3 | 4} [saveType = 1] 上传失败后的回调
  */
+// function UploadFile(
+//   strFileName,
+//   strPath,
+//   uploadPath,
+//   strFieldName,
+//   OnSuccess,
+//   OnFail
+// ) {
+//   var xhr = new XMLHttpRequest();
+//   xhr.open("POST", uploadPath);
+
+//   var fileData = wps.FileSystem.readAsBinaryString(strPath);
+//   var data = new FakeFormData();
+//   if (strFieldName == "" || typeof strFieldName == "undefined") {
+//     //如果业务方没定义，默认设置为'file'
+//     strFieldName = "file";
+//   }
+//   data.append(strFieldName, {
+//     name: utf16ToUtf8(strFileName), //主要是考虑中文名的情况，服务端约定用utf-8来解码。
+//     type: "application/octet-stream",
+//     getAsBinary: function () {
+//       return fileData;
+//     },
+//   });
+//   xhr.onreadystatechange = function () {
+//     if (xhr.readyState == 4) {
+//       if (xhr.status == 200) OnSuccess(xhr.response);
+//       else OnFail(xhr.response);
+//     }
+//   };
+//   xhr.setRequestHeader("Cache-Control", "no-cache");
+//   xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+//   if (data.fake) {
+//     xhr.setRequestHeader(
+//       "Content-Type",
+//       "multipart/form-data; boundary=" + data.boundary
+//     );
+//     var arr = StringToUint8Array(data.toString());
+//     xhr.send(arr);
+//   } else {
+//     xhr.send(data);
+//   }
+// }
+
+// 更改：增加 saveType 参数
 function UploadFile(
   strFileName,
   strPath,
   uploadPath,
   strFieldName,
   OnSuccess,
-  OnFail
+  OnFail,
+  saveType = 1
 ) {
+  // var submitToken = Cookies.get("token");
+  // if (!submitToken) {
+  //   alert("文件来源未登录，请在公文中登录！");
+  //   return;
+  // }
+
   var xhr = new XMLHttpRequest();
   xhr.open("POST", uploadPath);
 
@@ -447,7 +545,7 @@ function UploadFile(
   });
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4) {
-      if (xhr.status == 200) OnSuccess(xhr.response);
+      if (xhr.status == 200) OnSuccess(xhr.response, saveType);
       else OnFail(xhr.response);
     }
   };
@@ -463,6 +561,137 @@ function UploadFile(
   } else {
     xhr.send(data);
   }
+}
+
+// 更改：添加自定义composePdfMarks方法
+/**
+ * 转换添加签批pdf
+ * @param {*} pdfUrl
+ * @param {*} marks
+ * @returns
+ */
+function composePdfMarks(pdfUrl, marks, orgId) {
+  return new Promise((resolve, reject) => {
+    if (!marks || !marks.length) {
+      resolve(pdfUrl);
+      return;
+    }
+
+    // 我们自己的a4标准
+    const a4 = {
+      w: 595,
+      h: 841.92,
+    };
+    const images = [];
+    for (const mark of marks) {
+      const { pageNo, url, x, y, w, h } = mark;
+      images.push({
+        pageNo,
+        imageUrl: url,
+        x: a4.w * x,
+        y: a4.h - a4.h * y - a4.h * h,
+        width: a4.w * w,
+        height: a4.h * h,
+      });
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/doconline/tools/draw_image_on_pdf2");
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4) {
+        return;
+      }
+      if (xhr.status !== 200) {
+        reject();
+        return;
+      }
+      var result = xhr.response;
+      result = JSON.parse(result);
+      if (result.retcode !== 0) {
+        reject();
+        return;
+      }
+      resolve(result.data);
+    };
+    xhr.withCredentials = true;
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send({
+      orgId,
+      pdfUrl,
+      images,
+    });
+  });
+}
+
+// 更改：增加自定义转换带水印文件方法 transformPdfWaterMark
+/**
+ * 转换带水印文件
+ * @param {*} fileurl
+ * @param {*} orgId
+ * @returns
+ */
+function transformPdfWaterMark(fileurl, orgId) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: "/access/DocumentMoa/addWatermark",
+      method: "post",
+      withCredentials: true,
+      dataType: "json",
+      contentType: "application/json",
+      data: JSON.stringify({
+        orgId,
+        url: fileurl,
+      }),
+    }).then(
+      (res) => {
+        if (res.retcode !== 0) {
+          reject();
+          return;
+        }
+        resolve(res.data);
+      },
+      () => {
+        reject();
+      }
+    );
+  });
+}
+
+// 更改：增加自定义处理正文方法：dealDocumentBody
+/**
+ * 处理正文数据
+ * @param {*} data
+ * @returns
+ */
+function dealDocumentBody(data) {
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/access/DocumentMoa/dealDocumentBodyFile");
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4) {
+        return;
+      }
+      if (xhr.status !== 200) {
+        reject();
+        return;
+      }
+      var result = xhr.response;
+      result = JSON.parse(result);
+      if (result.retcode !== 0) {
+        reject();
+        return;
+      }
+      resolve(result.data);
+    };
+    xhr.withCredentials = true;
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    // xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.send(JSON.stringify(data));
+  });
 }
 
 /**
@@ -544,6 +773,26 @@ function SetDocParamsValue(Doc, Key, Value) {
   wps.PluginStorage.setItem(Doc.DocID, JSON.stringify(l_objParams));
 }
 
-function getTemplateUrl(l_doc) {
-  console.log(l_doc, 'getTemplateUrl')
+// 更改：增加自定义获取红头模板的方法：getRedTemplateUrl
+function getRedTemplateUrl(l_doc) {
+  return new Promise((resolve, reject) => {
+    var insertFileUrl = GetDocParamsValue(l_doc, constStrEnum.insertFileUrl);
+
+    if (!insertFileUrl) {
+      //   alert('模板未配置红头！')
+      reject();
+      return;
+    }
+
+    $.ajax({
+      url: insertFileUrl,
+      success: function () {
+        resolve(insertFileUrl);
+      },
+      error: function () {
+        alert("模板红头不可用");
+        reject();
+      },
+    });
+  });
 }

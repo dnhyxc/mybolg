@@ -1,3 +1,4 @@
+// ====================== 源文件 ======================
 var EnumOAFlag = {
   DocFromOA: 1,
   DocFromNoOA: 0,
@@ -50,19 +51,27 @@ function pInitParameters() {
 
   wps.PluginStorage.setItem(constStrEnum.DefaultUploadFieldName, "file"); //针对UploadFile方法设置上载字段名称
 
-  wps.PluginStorage.setItem(constStrEnum.AutoSaveToServerTime, "10"); //自动保存回OA服务端的时间间隔。如果设置0，则关闭，最小设置3分钟
+  // wps.PluginStorage.setItem(constStrEnum.AutoSaveToServerTime, "10"); //自动保存回OA服务端的时间间隔。如果设置0，则关闭，最小设置3分钟
+
+  // 更改：将自动保存设置为 0
+  wps.PluginStorage.setItem(constStrEnum.AutoSaveToServerTime, "0"); //自动保存回OA服务端的时间间隔。如果设置0，则关闭，最小设置3分钟
+
   wps.PluginStorage.setItem(constStrEnum.TempTimerID, "0"); //临时值，用于保存计时器ID的临时值
 
   // 以下是一些临时状态参数，用于打开文档等的状态判断
   wps.PluginStorage.setItem(constStrEnum.IsInCurrOADocOpen, false); //用于执行来自OA端的新建或打开文档时的状态
   wps.PluginStorage.setItem(constStrEnum.IsInCurrOADocSaveAs, false); //用于执行来自OA端的文档另存为本地的状态
   wps.PluginStorage.setItem(constStrEnum.RevisionEnableFlag, false); //按钮的标记控制
-  wps.PluginStorage.setItem(constStrEnum.Save2OAShowConfirm, true); //弹出上传成功后的提示信息
+  // wps.PluginStorage.setItem(constStrEnum.Save2OAShowConfirm, true); //弹出上传成功后的提示信息
 
-  console.log(wps.PluginStorage, 'wps.PluginStorage')
+  // 更改：将提示改为false
+  wps.PluginStorage.setItem(constStrEnum.Save2OAShowConfirm, false); //弹出上传成功后的提示信息
+
+  // 更改：增加弹出关闭前提示保存信息后的提示信息
+  wps.PluginStorage.setItem(constStrEnum.CloseConfirmTip, true); // 弹出关闭前提示保存信息后的提示信息
 }
 
-console.log(getTemplateUrl, 'getTemplateUrl')
+console.log(getTemplateUrl, "getTemplateUrl");
 
 //挂载WPS的文档事件
 function AddDocumentEvent() {
@@ -357,12 +366,15 @@ function getDocSavePath(doc) {
  * @param {*} p_Suffix 另存为的目标文件格式
  * @param {*} pShowPrompt 是否弹出用户确认框
  * @param {*} p_ShowRevision :是否强制关闭修订，如果是False，则强制关闭痕迹显示。如果为true则不做控制输出。
+ * @param {1 | 2 | 3 | 4} [saveType=1] 保存类型
  */
 function pDoChangeToOtherDocFormat(
   p_Doc,
   p_Suffix,
   pShowPrompt,
-  p_ShowRevision
+  p_ShowRevision,
+  // 更改：增加保存类型
+  saveType = 1
 ) {
   if (!p_Doc) {
     return;
@@ -390,8 +402,8 @@ function pDoChangeToOtherDocFormat(
     if (
       !wps.confirm(
         "当前文档将另存一份" +
-        l_suffix +
-        " 格式的副本，并上传到系统后台，请确认 ？"
+          l_suffix +
+          " 格式的副本，并上传到系统后台，请确认 ？"
       )
     ) {
       return;
@@ -441,11 +453,19 @@ function pDoChangeToOtherDocFormat(
     l_Doc.ShowRevisions = false; //隐含属性，隐藏修订模式
     l_Doc.AcceptAllRevisions();
     l_Doc.Save();
-    handleFileAndUpload(l_suffix, l_Doc, l_uploadPath, l_FieldName);
+
+    // handleFileAndUpload(l_suffix, l_Doc, l_uploadPath, l_FieldName);
+
+    // 更改：增加saveType参数
+    handleFileAndUpload(l_suffix, l_Doc, l_uploadPath, l_FieldName, saveType);
+
     l_Doc.Close();
     wps.FileSystem.Remove(l_NewName); //删除临时文档
   } else {
-    handleFileAndUpload(l_suffix, p_Doc, l_uploadPath, l_FieldName);
+    // handleFileAndUpload(l_suffix, p_Doc, l_uploadPath, l_FieldName);
+
+    // 更改：增加saveType参数
+    handleFileAndUpload(l_suffix, p_Doc, l_uploadPath, l_FieldName, saveType);
   }
 
   wps.PluginStorage.setItem(constStrEnum.OADocUserSave, false);
@@ -456,7 +476,7 @@ function pDoChangeToOtherDocFormat(
 /**
  * 把文档转换成UOT在上传
  */
-function OnDoChangeToUOF() { }
+function OnDoChangeToUOF() {}
 
 /**
  *  打开WPS云文档的入口
@@ -465,10 +485,11 @@ function pDoOpenWPSCloundDoc() {
   wps.TabPages.Add("https://www.kdocs.cn");
 }
 
+// 更改：增加传入isWatermark参数
 /**
  *  执行另存为本地文件操作
  */
-function OnBtnSaveAsLocalFile() {
+function OnBtnSaveAsLocalFile(isWatermark) {
   //初始化临时状态值
   wps.PluginStorage.setItem(constStrEnum.OADocUserSave, false);
   wps.PluginStorage.setItem(constStrEnum.IsInCurrOADocSaveAs, false);
@@ -493,6 +514,8 @@ function OnBtnSaveAsLocalFile() {
     pSetNoneOADocFlag(l_doc);
 
     wps.ribbonUI.Invalidate(); //刷新Ribbon的状态
+  } else {
+    console.log("自定义修改，其他");
   }
 }
 
@@ -581,14 +604,170 @@ function pSaveAnotherDoc(p_Doc) {
   wps.WpsApplication().Documents.Open();
 }
 
-//保存到OA后台服务器
-function OnBtnSaveToServer() {
+/**
+ * 保存到OA后台服务器
+ * @param {1 | 2 | 3 | 4} [saveType=1] 保存类型
+ * @returns
+ */
+// function OnBtnSaveToServer() {
+//   // console.log('SaveToServer');
+//   var l_doc = wps.WpsApplication().ActiveDocument;
+//   if (!l_doc) {
+//     alert("空文档不能保存！");
+//     return;
+//   }
+
+//   //非OA文档，不能上传到OA
+//   if (pCheckIfOADoc() == false) {
+//     alert("非系统打开的文档，不能直接上传到系统！");
+//     return;
+//   }
+
+//   //如果是OA打开的文档，并且设置了保护的文档，则不能再上传到OA服务器
+//   if (pISOADocReadOnly(l_doc)) {
+//     wps.alert("系统设置了保护的文档，不能再提交到系统后台。");
+//     return;
+//   }
+
+//   /**
+//    * 参数定义：OAAsist.UploadFile(name, path, url, field,  "OnSuccess", "OnFail")
+//    * 上传一个文件到远程服务器。
+//    * name：为上传后的文件名称；
+//    * path：是文件绝对路径；
+//    * url：为上传地址；
+//    * field：为请求中name的值；
+//    * 最后两个参数为回调函数名称；
+//    */
+//   var l_uploadPath = GetDocParamsValue(l_doc, constStrEnum.uploadPath); // 文件上载路径
+
+//   console.log(l_uploadPath, "l_uploadPath");
+
+//   if (l_uploadPath == "") {
+//     wps.alert("系统未传入文件上载路径，不能执行上传操作！");
+//     return;
+//   }
+
+//   var l_showConfirm = wps.PluginStorage.getItem(
+//     constStrEnum.Save2OAShowConfirm
+//   );
+//   if (l_showConfirm) {
+//     if (!wps.confirm("先保存文档，并开始上传到系统后台，请确认？")) {
+//       return;
+//     }
+//   }
+
+//   var l_FieldName = GetDocParamsValue(l_doc, constStrEnum.uploadFieldName); //上载到后台的业务方自定义的字段名称
+//   if (l_FieldName == "") {
+//     l_FieldName = wps.PluginStorage.getItem(
+//       constStrEnum.DefaultUploadFieldName
+//     ); // 默认为‘file’
+//   }
+
+//   var l_UploadName = GetDocParamsValue(l_doc, constStrEnum.uploadFileName); //设置OA传入的文件名称参数
+//   if (l_UploadName == "") {
+//     l_UploadName = l_doc.Name; //默认文件名称就是当前文件编辑名称
+//   }
+
+//   var l_DocPath = l_doc.FullName; // 文件所在路径
+
+//   if (pIsOnlineOADoc(l_doc) == false) {
+//     //对于本地磁盘文件上传OA，先用Save方法保存后，再上传
+//     //设置用户保存按钮标志，避免出现禁止OA文件保存的干扰信息
+//     wps.PluginStorage.setItem(
+//       constStrEnum.OADocUserSave,
+//       EnumDocSaveFlag.OADocSave
+//     );
+//     if (l_doc.Path == "") {
+//       //对于不落地文档，文档路径为空
+//       l_doc.SaveAs2(
+//         wps.Env.GetTempPath() + "/" + l_doc.Name,
+//         undefined,
+//         undefined,
+//         undefined,
+//         false
+//       );
+//     } else {
+//       l_doc.Save();
+//     }
+//     //执行一次保存方法
+//     //设置用户保存按钮标志
+//     wps.PluginStorage.setItem(
+//       constStrEnum.OADocUserSave,
+//       EnumDocSaveFlag.NoneOADocSave
+//     );
+//     //落地文档，调用UploadFile方法上传到OA后台
+//     l_DocPath = l_doc.FullName;
+//     try {
+//       //调用OA助手的上传方法
+//       UploadFile(
+//         l_UploadName,
+//         l_DocPath,
+//         l_uploadPath,
+//         l_FieldName,
+//         OnUploadToServerSuccess,
+//         OnUploadToServerFail
+//       );
+//     } catch (err) {
+//       alert("上传文件失败！请检查系统上传参数及网络环境！");
+//     }
+//   } else {
+//     // 不落地的文档，调用 Document 对象的不落地上传方法
+//     wps.PluginStorage.setItem(
+//       constStrEnum.OADocUserSave,
+//       EnumDocSaveFlag.OADocSave
+//     );
+//     try {
+//       //调用不落地上传方法
+//       l_doc.SaveAsUrl(
+//         l_UploadName,
+//         l_uploadPath,
+//         l_FieldName,
+//         "OnUploadToServerSuccess",
+//         "OnUploadToServerFail"
+//       );
+//     } catch (err) {
+//       alert("上传文件失败！请检查系统上传参数及网络环境，重新上传。");
+//     }
+//     wps.PluginStorage.setItem(
+//       constStrEnum.OADocUserSave,
+//       EnumDocSaveFlag.NoneOADocSave
+//     );
+//   }
+
+//   //获取OA传入的 转其他格式上传属性
+//   var l_suffix = GetDocParamsValue(l_doc, constStrEnum.suffix);
+//   if (l_suffix == "") {
+//     console.log("上传需转换的文件后缀名错误，无法进行转换上传!");
+//     return;
+//   }
+
+//   //判断是否同时上传PDF等格式到OA后台
+//   var l_uploadWithAppendPath = GetDocParamsValue(
+//     l_doc,
+//     constStrEnum.uploadWithAppendPath
+//   ); //标识是否同时上传suffix格式的文档
+//   if (l_uploadWithAppendPath == "1") {
+//     //调用转pdf格式函数，强制关闭转换修订痕迹，不弹出用户确认的对话框
+//     pDoChangeToOtherDocFormat(l_doc, l_suffix, false, false);
+//   }
+//   return;
+// }
+
+/**
+ * 保存到OA后台服务器
+ * @param {1 | 2 | 3 | 4} [saveType=1] 保存类型
+ * @returns
+ */
+// 更改：增加传入 saveType 字段
+function OnBtnSaveToServer(saveType = 1) {
   // console.log('SaveToServer');
   var l_doc = wps.WpsApplication().ActiveDocument;
   if (!l_doc) {
     alert("空文档不能保存！");
     return;
   }
+
+  console.log("保存文档ID：", l_doc.DocID);
 
   //非OA文档，不能上传到OA
   if (pCheckIfOADoc() == false) {
@@ -623,6 +802,9 @@ function OnBtnSaveToServer() {
   var l_showConfirm = wps.PluginStorage.getItem(
     constStrEnum.Save2OAShowConfirm
   );
+
+  console.log(l_showConfirm, "l_showConfirm");
+
   if (l_showConfirm) {
     if (!wps.confirm("先保存文档，并开始上传到系统后台，请确认？")) {
       return;
@@ -678,7 +860,9 @@ function OnBtnSaveToServer() {
         l_uploadPath,
         l_FieldName,
         OnUploadToServerSuccess,
-        OnUploadToServerFail
+        OnUploadToServerFail,
+        // 更改：增加传入saveType 字段
+        saveType
       );
     } catch (err) {
       alert("上传文件失败！请检查系统上传参数及网络环境！");
@@ -707,22 +891,22 @@ function OnBtnSaveToServer() {
     );
   }
 
-  //获取OA传入的 转其他格式上传属性
-  var l_suffix = GetDocParamsValue(l_doc, constStrEnum.suffix);
-  if (l_suffix == "") {
-    console.log("上传需转换的文件后缀名错误，无法进行转换上传!");
-    return;
-  }
+  // 获取OA传入的 转其他格式上传属性
+  // var l_suffix = GetDocParamsValue(l_doc, constStrEnum.suffix);
+  // if (l_suffix == "") {
+  //   console.log("上传需转换的文件后缀名错误，无法进行转换上传!");
+  //   return;
+  // }
 
-  //判断是否同时上传PDF等格式到OA后台
-  var l_uploadWithAppendPath = GetDocParamsValue(
-    l_doc,
-    constStrEnum.uploadWithAppendPath
-  ); //标识是否同时上传suffix格式的文档
-  if (l_uploadWithAppendPath == "1") {
-    //调用转pdf格式函数，强制关闭转换修订痕迹，不弹出用户确认的对话框
-    pDoChangeToOtherDocFormat(l_doc, l_suffix, false, false);
-  }
+  // //判断是否同时上传PDF等格式到OA后台
+  // var l_uploadWithAppendPath = GetDocParamsValue(
+  //   l_doc,
+  //   constStrEnum.uploadWithAppendPath
+  // ); //标识是否同时上传suffix格式的文档
+  // if (l_uploadWithAppendPath == "1") {
+  //   //调用转pdf格式函数，强制关闭转换修订痕迹，不弹出用户确认的对话框
+  //   pDoChangeToOtherDocFormat(l_doc, l_suffix, false, false);
+  // }
   return;
 }
 
@@ -764,32 +948,344 @@ function OnInsertDateClicked() {
   }
 }
 
+// 更改：增加自定义最终保存的函数
 /**
- * 调用文件上传到OA服务端时，
- * @param {*} resp
+ * 最终保存函数
  */
-function OnUploadToServerSuccess(resp) {
-  console.log("成功上传服务端后的回调：" + resp);
-  console.log(resp);
-  var l_doc = wps.WpsApplication().ActiveDocument;
-  var l_showConfirm = wps.PluginStorage.getItem(
-    constStrEnum.Save2OAShowConfirm
-  );
-  if (l_showConfirm) {
-    if (wps.confirm("文件上传成功！继续编辑请确认，取消关闭文档。") == false) {
+function OnUploadSuccessFinally(l_doc, fileURLObj) {
+  console.log("最终保存fileURLObj", fileURLObj);
+
+  var l_newFileName = GetDocParamsValue(l_doc, constStrEnum.NewFileName);
+  var l_isCreate = GetDocParamsValue(l_doc, "isNew");
+  var l_params = GetDocParamsValue(l_doc, "params");
+
+  var isCreate = l_params.index < 0;
+
+  Promise.resolve()
+    .then(() => {
+      console.log("构造最终文件对象");
+
+      var list = l_params.list;
+      var file = l_params.file;
+      if (isCreate) {
+        file = {
+          key: Math.random(),
+          // key: uuidv1(),
+          type: "docx",
+          name: l_newFileName,
+        };
+      }
+
+      if (!file.key) {
+        file.key = Math.random();
+        // file.key = uuidv1();
+      }
+
+      var redHeadPdfUrl =
+        fileURLObj.redHeadPdfUrl || fileURLObj.noRedHeadPdfUrl;
+
+      file = Object.assign({}, file, {
+        originalUrl:
+          fileURLObj.redHeadOriginalUrl || fileURLObj.noRedHeadOriginalUrl,
+        noMarksPdfUrl: redHeadPdfUrl,
+        url: redHeadPdfUrl,
+        downloadUrl: redHeadPdfUrl,
+
+        redHeadOriginalUrl: fileURLObj.redHeadOriginalUrl,
+        redHeadPdfUrl: fileURLObj.redHeadPdfUrl,
+        noRedHeadOriginalUrl: fileURLObj.noRedHeadOriginalUrl,
+        noRedHeadPdfUrl: fileURLObj.noRedHeadPdfUrl,
+        // watermarkUrl: descUrl,
+      });
+
+      console.log("最终文件对象构造完成", file);
+
+      if (isCreate) {
+        var nextIndex = list.length || 0;
+        list.push(file);
+        l_params.index = nextIndex;
+      } else {
+        list[l_params.index] = file;
+      }
+      l_params.list = list;
+      l_params.file = file;
+
+      console.log("即将保存文件列表", l_params);
+
+      // 更新参数，供后期再次修改
+      var oaParams = wps.PluginStorage.getItem(l_doc.DocID);
+      oaParams = JSON.parse(oaParams);
+      oaParams.params = JSON.stringify(l_params);
+      wps.PluginStorage.setItem(l_doc.DocID, JSON.stringify(oaParams));
+
+      return list;
+    })
+    .then((list) => {
+      if (l_params.isNew) {
+        return list;
+      }
+
+      // 整理参数保存
+      var dealparam = {
+        id: l_params.id,
+        orgId: l_params.orgId,
+        bodyFile: JSON.stringify(list),
+        operType: l_params.operType,
+        description: l_params.dealDescription,
+      };
+
+      console.log("整理保存记录参数", dealparam);
+
+      return dealDocumentBody(dealparam).then(() => list);
+    })
+    .then((list) => {
+      console.log("保存操作记录成功，开始通知业务系统");
+      // 通知业务系统
+      var l_NofityURL = GetDocParamsValue(l_doc, constStrEnum.notifyUrl);
+      if (l_NofityURL != "") {
+        l_NofityURL = l_NofityURL.replace("{?}", "2"); //约定：参数为2则文档被成功上传
+        NotifyToServer(l_NofityURL);
+      } else {
+        var successParams = {
+          // action: isTaoHong ? 'taohong' : 'save',
+          action: "save",
+          message: JSON.stringify({
+            id: l_params.id,
+            list: list,
+          }),
+          // message: resp,
+        };
+        wps.OAAssist.WebNotify(JSON.stringify(successParams), true);
+      }
+
+      // 如果是创建保存，直接关闭不提示
+      // if (l_params.isNew || isCreate) {
+      //   if (l_doc) {
+      //     console.log("OnUploadToServerSuccess: before Close");
+      //     l_doc.Close(-1); //保存文档后关闭
+      //     console.log("OnUploadToServerSuccess: after Close");
+      //     return;
+      //   }
+      // } else {
+      //   // 提醒关闭
+      //   var l_showConfirm = wps.PluginStorage.getItem(
+      //     constStrEnum.Save2OAShowConfirm
+      //   );
+      //   if (l_showConfirm) {
+      //     if (
+      //       wps.confirm("文件上传成功！继续编辑请确认，取消关闭文档。") == false
+      //     ) {
+      //       if (l_doc) {
+      //         console.log("OnUploadToServerSuccess: before Close");
+      //         l_doc.Close(-1); //保存文档后关闭
+      //         console.log("OnUploadToServerSuccess: after Close");
+      //       }
+      //     }
+      //   }
+      // }
+
+      console.log("已通知业务系统，开始关闭公文 TAB");
+
+      // 保存成功直接关闭
       if (l_doc) {
         console.log("OnUploadToServerSuccess: before Close");
         l_doc.Close(-1); //保存文档后关闭
         console.log("OnUploadToServerSuccess: after Close");
+        return;
       }
+    })
+    // .then(() => {
+    //   // 提醒关闭
+    //   var l_showConfirm = wps.PluginStorage.getItem(constStrEnum.Save2OAShowConfirm);
+    //   if (l_showConfirm) {
+    //       if (wps.confirm("文件上传成功！继续编辑请确认，取消关闭文档。") == false) {
+    //           if (l_doc) {
+    //               console.log("OnUploadToServerSuccess: before Close");
+    //               l_doc.Close(-1); //保存文档后关闭
+    //               console.log("OnUploadToServerSuccess: after Close");
+    //           }
+    //       }
+    //   }
+    // })
+    .catch(() => {
+      alert("保存失败");
+    });
+}
+
+// /**
+//  * 调用文件上传到OA服务端时，
+//  * @param {*} resp
+//  * @param {1 | 2 | 3 | 4} [saveType=1] 保存类型
+//  */
+// function OnUploadToServerSuccess(resp) {
+//   console.log("成功上传服务端后的回调：" + resp);
+//   console.log(resp);
+//   var l_doc = wps.WpsApplication().ActiveDocument;
+//   var l_showConfirm = wps.PluginStorage.getItem(
+//     constStrEnum.Save2OAShowConfirm
+//   );
+//   if (l_showConfirm) {
+//     if (wps.confirm("文件上传成功！继续编辑请确认，取消关闭文档。") == false) {
+//       if (l_doc) {
+//         console.log("OnUploadToServerSuccess: before Close");
+//         l_doc.Close(-1); //保存文档后关闭
+//         console.log("OnUploadToServerSuccess: after Close");
+//       }
+//     }
+//   }
+
+//   var l_NofityURL = GetDocParamsValue(l_doc, constStrEnum.notifyUrl);
+//   if (l_NofityURL != "") {
+//     l_NofityURL = l_NofityURL.replace("{?}", "2"); //约定：参数为2则文档被成功上传
+//     NotifyToServer(l_NofityURL);
+//   }
+// }
+
+// 更改：增加相应saveType参数的处理
+/**
+ * 调用文件上传到OA服务端时，
+ * @param {*} resp
+ * @param {1 | 2 | 3 | 4} [saveType=1] 保存类型
+ */
+function OnUploadToServerSuccess(resp, saveType = 1) {
+  console.log("成功上传服务端后的回调：" + resp);
+  console.log(resp, "resp");
+  var l_doc = wps.WpsApplication().ActiveDocument;
+
+  // 上传成功回调返回的文件路径
+  var parseResp = JSON.parse(resp) || {};
+
+  switch (saveType) {
+    default:
+      return;
+
+    // 未套红源文件
+    case SAVE_TYPE.ORGINAL_NO_RED_HEAD: {
+      // 主动保存不涉及保存弹窗
+      wps.PluginStorage.setItem(constStrEnum.CloseConfirmTip, false);
+
+      console.log("构造文件对象");
+      var fileURLObj = {
+        noRedHeadOriginalUrl: parseResp.fileUrl,
+      };
+
+      wps.PluginStorage.setItem(
+        constStrEnum.SaveAllTemp,
+        JSON.stringify(fileURLObj)
+      );
+
+      // 获取OA传入的 转其他格式上传属性
+      var l_suffix = GetDocParamsValue(l_doc, constStrEnum.suffix);
+
+      console.log("开始转存 PDF");
+      //调用转pdf格式函数，强制关闭转换修订痕迹，不弹出用户确认的对话框
+      pDoChangeToOtherDocFormat(
+        l_doc,
+        l_suffix,
+        false,
+        true,
+        SAVE_TYPE.PDF_NO_RED_HEAD
+      );
+      return;
+    }
+
+    // 未套红 PDF
+    case SAVE_TYPE.PDF_NO_RED_HEAD: {
+      var saveAllTemp = wps.PluginStorage.getItem(constStrEnum.SaveAllTemp);
+
+      console.log(saveAllTemp, "saveAllTemp");
+
+      var fileURLObj = JSON.parse(saveAllTemp);
+
+      console.log(fileURLObj, "fileURLObj");
+
+      fileURLObj.noRedHeadPdfUrl = parseResp.fileUrl;
+
+      wps.PluginStorage.setItem(
+        constStrEnum.SaveAllTemp,
+        JSON.stringify(fileURLObj)
+      );
+
+      console.log("开始检测红头文件是否可用");
+      getRedTemplateUrl(l_doc)
+        .then((redTemplateUrl) => {
+          // 接下来进行套红操作
+          console.log("红头文件可用，开始套红操作");
+
+          InsertRedHeadDoc(l_doc);
+
+          console.log("套红完成，主动触发保存");
+          // 主动调用保存操作
+          OnBtnSaveToServer(SAVE_TYPE.ORGINAL_RED_HEAD);
+        })
+        .catch(() => {
+          // 这里直接去保存操作记录
+          wps.PluginStorage.removeItem(constStrEnum.SaveAllTemp);
+
+          console.log("红头文件不可用，直接去保存操作记录");
+          OnUploadSuccessFinally(l_doc, fileURLObj);
+        });
+
+      return;
+    }
+
+    // 套红源文件
+    case SAVE_TYPE.ORGINAL_RED_HEAD: {
+      var saveAllTemp = wps.PluginStorage.getItem(constStrEnum.SaveAllTemp);
+      var fileURLObj = JSON.parse(saveAllTemp);
+      fileURLObj.redHeadOriginalUrl = parseResp.fileUrl;
+
+      wps.PluginStorage.setItem(
+        constStrEnum.SaveAllTemp,
+        JSON.stringify(fileURLObj)
+      );
+
+      // 获取OA传入的 转其他格式上传属性
+      var l_suffix = GetDocParamsValue(l_doc, constStrEnum.suffix);
+
+      console.log("开始转存套红 PDF");
+      //调用转pdf格式函数，强制关闭转换修订痕迹，不弹出用户确认的对话框
+      pDoChangeToOtherDocFormat(
+        l_doc,
+        l_suffix,
+        false,
+        true,
+        SAVE_TYPE.PDF_RED_HEAD
+      );
+      return;
+    }
+
+    // 套红 PDF
+    case SAVE_TYPE.PDF_RED_HEAD: {
+      var saveAllTemp = wps.PluginStorage.getItem(constStrEnum.SaveAllTemp);
+      var fileURLObj = JSON.parse(saveAllTemp);
+      fileURLObj.redHeadPdfUrl = parseResp.fileUrl;
+
+      wps.PluginStorage.removeItem(constStrEnum.SaveAllTemp);
+
+      console.log("所有东西都保存结束，开始保存操作记录");
+      OnUploadSuccessFinally(l_doc, fileURLObj);
     }
   }
 
-  var l_NofityURL = GetDocParamsValue(l_doc, constStrEnum.notifyUrl);
-  if (l_NofityURL != "") {
-    l_NofityURL = l_NofityURL.replace("{?}", "2"); //约定：参数为2则文档被成功上传
-    NotifyToServer(l_NofityURL);
-  }
+  // var l_showConfirm = wps.PluginStorage.getItem(
+  //   constStrEnum.Save2OAShowConfirm
+  // );
+  // if (l_showConfirm) {
+  //   if (wps.confirm("文件上传成功！继续编辑请确认，取消关闭文档。") == false) {
+  //     if (l_doc) {
+  //       console.log("OnUploadToServerSuccess: before Close");
+  //       l_doc.Close(-1); //保存文档后关闭
+  //       console.log("OnUploadToServerSuccess: after Close");
+  //     }
+  //   }
+  // }
+
+  // var l_NofityURL = GetDocParamsValue(l_doc, constStrEnum.notifyUrl);
+  // if (l_NofityURL != "") {
+  //   l_NofityURL = l_NofityURL.replace("{?}", "2"); //约定：参数为2则文档被成功上传
+  //   NotifyToServer(l_NofityURL);
+  // }
 }
 
 function OnUploadToServerFail(resp) {
@@ -809,17 +1305,12 @@ function pCheckIfOADoc() {
 
 //根据传入的doc对象，判断当前文档是否是OA文档
 function CheckIfDocIsOADoc(doc) {
-  console.trace(doc, "type_doc>>>>>>doc");
-
-  console.trace(constStrEnum, "constStrEnum___CheckIfDocIsOADoc(根据传入的doc对象，判断当前文档是否是OA文档)");
-
   if (!doc) {
     return false;
   }
 
   var l_isOA = GetDocParamsValue(doc, constStrEnum.isOA);
 
-  console.log(l_isOA, "l_isOA"); // 1
   if (l_isOA == "") {
     return false;
   }
@@ -948,8 +1439,6 @@ function pShowRibbonGroupByOADocParam(CtrlID) {
  * 返回值：返回指定 Key的 Value
  */
 function GetDocParamsValue(Doc, Key) {
-  console.log(Doc, 'Doc_GetDocParamsValue(Document对象)')
-
   if (!Doc) {
     return "";
   }
@@ -969,8 +1458,6 @@ function GetDocParamsValue(Doc, Key) {
   if (typeof l_rtnValue == "undefined" || l_rtnValue == null) {
     return "";
   }
-
-  console.log(l_rtnValue, "l_rtnValue______GetDocParamsValue(根据传入Document对象，获取OA传入的参数的某个Key值的Value)");
 
   return l_rtnValue;
 }
@@ -1005,7 +1492,56 @@ function OnOpenLocalFile() {
 /**
  *   插入水印
  */
-function DoInsertWaterToDoc() {
+// function DoInsertWaterToDoc() {
+//   var app, shapeRange;
+//   try {
+//     // app = wpsFrame.Application;
+//     var app = wps.WpsApplication();
+//     var doc = app.ActiveDocument;
+//     var selection = doc.ActiveWindow.Selection;
+//     var pageCount = app.ActiveWindow.ActivePane.Pages.Count;
+//     for (var i = 1; i <= pageCount; i++) {
+//       selection.GoTo(1, 1, i);
+//       app.ActiveWindow.ActivePane.View.SeekView = 9;
+//       app.ActiveDocument.Sections.Item(1)
+//         .Headers.Item(1)
+//         .Shapes.AddTextEffect(0, "公司绝密", "华文新魏", 36, false, false, 0, 0)
+//         .Select();
+//       shapeRange = app.Selection.ShapeRange;
+//       shapeRange.TextEffect.NormalizedHeight = false;
+//       shapeRange.Line.Visible = false;
+//       shapeRange.Fill.Visible = true;
+//       shapeRange.Fill.Solid();
+//       shapeRange.Fill.ForeColor.RGB = 12632256; /* WdColor枚举 wdColorGray25 代表颜色值 */
+//       shapeRange.Fill.Transparency = 0.5; /* 填充透明度，值为0.0~1.0 */
+//       shapeRange.LockAspectRatio = true;
+//       shapeRange.Height = 4.58 * 28.346;
+//       shapeRange.Width = 28.07 * 28.346;
+//       shapeRange.Rotation = 315; /* 图形按照Z轴旋转度数，正值为顺时针旋转，负值为逆时针旋转 */
+//       shapeRange.WrapFormat.AllowOverlap = true;
+//       shapeRange.WrapFormat.Side = 3; /* WdWrapSideType枚举 wdWrapLargest 形状距离页边距最远的一侧 */
+//       shapeRange.WrapFormat.Type = 3;
+//       shapeRange.RelativeHorizontalPosition = 0;
+//       shapeRange.RelativeVerticalPosition = 0;
+//       shapeRange.Left = "-999995";
+//       shapeRange.Top = "-999995";
+//     } /* WdShapePosition枚举 wdShapeCenter 形状的位置在中央 */
+//     selection.GoTo(1, 1, 1);
+//     app.ActiveWindow.ActivePane.View.SeekView = 0;
+//   } catch (error) {
+//     alert(error.message);
+//   }
+// }
+
+/**
+ *   插入水印
+ */
+// 更改：增加watermarkText参数相应的逻辑
+function DoInsertWaterToDoc(watermarkText = "") {
+  if (!watermarkText) {
+    alert("水印内容为空，不能插入");
+    return;
+  }
   var app, shapeRange;
   try {
     // app = wpsFrame.Application;
@@ -1016,9 +1552,20 @@ function DoInsertWaterToDoc() {
     for (var i = 1; i <= pageCount; i++) {
       selection.GoTo(1, 1, i);
       app.ActiveWindow.ActivePane.View.SeekView = 9;
+      // 页眉
+      // app.ActiveDocument.Sections.Item(1).Headers.Item(1).Shapes.AddTextEffect(0, "公司绝密", "华文新魏", 36, false, false, 0, 0);
       app.ActiveDocument.Sections.Item(1)
         .Headers.Item(1)
-        .Shapes.AddTextEffect(0, "公司绝密", "华文新魏", 36, false, false, 0, 0)
+        .Shapes.AddTextEffect(
+          0,
+          watermarkText,
+          "华文新魏",
+          36,
+          false,
+          false,
+          0,
+          0
+        )
         .Select();
       shapeRange = app.Selection.ShapeRange;
       shapeRange.TextEffect.NormalizedHeight = false;
@@ -1028,8 +1575,13 @@ function DoInsertWaterToDoc() {
       shapeRange.Fill.ForeColor.RGB = 12632256; /* WdColor枚举 wdColorGray25 代表颜色值 */
       shapeRange.Fill.Transparency = 0.5; /* 填充透明度，值为0.0~1.0 */
       shapeRange.LockAspectRatio = true;
-      shapeRange.Height = 4.58 * 28.346;
-      shapeRange.Width = 28.07 * 28.346;
+      // shapeRange.Height = 4.58 * 28.346;
+      // shapeRange.Width = 28.07 * 28.346;
+
+      // 更改：改变宽高
+      shapeRange.Height = 2 * 28.346;
+      shapeRange.Width = 15 * 28.346;
+
       shapeRange.Rotation = 315; /* 图形按照Z轴旋转度数，正值为顺时针旋转，负值为逆时针旋转 */
       shapeRange.WrapFormat.AllowOverlap = true;
       shapeRange.WrapFormat.Side = 3; /* WdWrapSideType枚举 wdWrapLargest 形状距离页边距最远的一侧 */
@@ -1062,8 +1614,6 @@ function OnImportTemplate() {
 
 //自定义菜单按钮的点击执行事件
 function OnAction(control) {
-  console.log(control, "control___OnAction()");
-
   var eleId;
   if (typeof control == "object" && arguments.length == 1) {
     //针对Ribbon的按钮的
@@ -1090,7 +1640,6 @@ function OnAction(control) {
       OnbtnTabClick();
       break;
     case "btnSaveToServer": //保存到OA服务器
-      console.log("保存到OA服务器");
       // wps.PluginStorage.setItem(constStrEnum.Save2OAShowConfirm, true)
       OnBtnSaveToServer();
       break;
@@ -1153,7 +1702,7 @@ function OnAction(control) {
     case "btnInsertPic": //插入图片
       DoInsertPicToDoc();
       break;
-    case "btnInsertWater":
+    case "btnInsertWater": // 插入水印
       DoInsertWaterToDoc();
     case "btnInsertDate": //插入日期
       OnInsertDateClicked();
@@ -1186,9 +1735,10 @@ function OnAction(control) {
     case "FileSaveAs": {
       if (pCheckIfOADoc()) {
         //文档来源是业务系统的，做自定义
-        alert(
-          "这是OA文档，将Ctrl+S动作做了重定义，可以调用OA的保存文件流到业务系统的接口。"
-        );
+        // 更改：注释 alert
+        // alert(
+        //   "这是OA文档，将Ctrl+S动作做了重定义，可以调用OA的保存文件流到业务系统的接口。"
+        // );
         OnBtnSaveToServer();
       } else {
         //本地的文档，期望不做自定义，通过转调idMso的方法实现
@@ -1523,10 +2073,18 @@ function OnGetEnabled(control) {
     eleId = arguments[2].Id;
   }
   switch (eleId) {
+    // 更改：增加FileClose判断
+    case "FileClose":
+      return false;
+
     case "btnSaveToServer": //保存到OA服务器的相关按钮。判断，如果非OA文件，禁止点击
     case "btnChangeToPDF": //保存到PDF格式再上传
     case "btnChangeToUOT": //保存到UOT格式再上传
     case "btnChangeToOFD": //保存到OFD格式再上传
+      // 更改：增加 return false 处理
+      return false;
+    // 更改：增加btnSaveToServer判断
+    case "btnSaveToServer": //保存到OA服务器的相关按钮。判断，如果非OA文件，禁止点击
     case "SaveAll": //保存所有文档
     //以下四个idMso的控制是关于文档新建的
     case "FileNew":
@@ -1544,8 +2102,25 @@ function OnGetEnabled(control) {
     }
     case "PictureInsert":
       return false;
-    case "TabInsert": //WPS自身tab：插入
-    case "TabDeveloper": {
+
+    case "TabDeveloper":
+      // 更改：增加 return true
+      return true;
+    // 更改：增加如下判断
+    case "FileSaveAsMenu":
+    case "FileSaveAs":
+    case "FileSaveAsPicture":
+    case "SaveAsPicture":
+    case "FileMenuSendMail":
+    case "SaveAsPDF":
+    case "FileSaveAsPDF":
+    case "ExportToPDF":
+    case "FileSaveAsPdfOrXps":
+    case "SaveAsOfd":
+    case "FileSaveAsOfd":
+    case "TabSecurity":
+    case "TabInsert": {
+      // case "TabReferences": //WPS自身tab：引用 //WPS自身tab：插入
       // case "TabView": //WPS自身tab：视图 // case "TabReviewWord": //WPS自身tab：审阅 // case "TabReferences": //WPS自身tab：引用 // case "TabPageLayoutWord": //WPS自身tab：页面布局 //WPS自身tab：开发工具
       if (pCheckIfOADoc()) {
         return false; //如果是OA打开的文档，把这个几个tab不可用/隐藏
