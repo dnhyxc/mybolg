@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selection</title>
+  </head>
+  <body>
+    <p>
+      <a href="https://dnhyxc.gitee.io">dnhyxc</a>
+      <span>元素1</span>
+      <span>元素2</span>
+      <span>元素3</span>
+      Selecti
+    </p>
+
+    <script>
+      const selObj = window.getSelection();
+
+      document.addEventListener("mouseup", () => {
+        console.log(selObj, "selObj");
+        console.log(selObj.rangeCount, "rangeCount");
+        console.log(selObj.toString());
+        var range = selObj.getRangeAt(0);
+        console.log(range);
+      });
+    </script>
+  </body>
+</html>
