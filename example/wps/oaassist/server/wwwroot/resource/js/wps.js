@@ -546,9 +546,9 @@ function fillTemplate() {
   var templatePath = prompt(
     "请输入需要填充的数据的请求地址:",
     document.location.protocol +
-      "//" +
-      document.location.host +
-      "/getTemplateData"
+    "//" +
+    document.location.host +
+    "/getTemplateData"
   );
 
   _WpsInvoke([
@@ -852,27 +852,38 @@ _wps["onlineEditOfficialDocument"] = {
  */
 
 function customDoc() {
-  var filePath = prompt(
-    "请输入打开文件路径（本地或是url）：",
-    GetDemoPath("样章.docx")
-  );
+  var filePath = GetDemoPath("样章.docx")
+  // var filePath = prompt(
+  //   "请输入打开文件路径（本地或是url）：",
+  //   GetDemoPath("样章.docx")
+  // );
 
   console.log(filePath, "filePath》》》》》》customDoc");
 
-  var uploadPath = prompt("请输入文档上传接口:", GetUploadPath());
+  var uploadPath = GetUploadPath()
 
   console.log(uploadPath, "uploadPath");
 
-  var uploadFieldName = prompt(
-    "请输入文档上传到业务系统时自定义字段：",
-    "dnhyxc"
-  );
-  var backupPath = prompt("请输入文档备份路径:", GetUploadPath());
+  var uploadFieldName = "dnhyxc"
+  var backupPath = GetUploadPath()
 
   var fileList = [];
 
   var fieldObj = {
-    title: "看我能不能插入",
+    title: "瞧好了，标题插入了",
+    mainSend: "WOWOWOW",
+    copySend: "DNHYXC",
+    issUer: "签发人",
+    signingUnit: "落款单位",
+    signatureUnit: "署名单位",
+    issueDate: "签发日期",
+    printDate: "印发日期",
+    creatPerson: "dnhyxc",
+    refNo: "2020[0902]号",
+    urgencyLevel: "紧急",
+    secretClass: "密级1",
+    department: "高级的前端部门",
+    units: "发文单位",
   };
 
   var bookMarksStart = "正文内容B";
@@ -885,17 +896,26 @@ function customDoc() {
         OpenDoc: {
           docId: "902209",
           uploadPath: uploadPath, // 保存文档上传接口
-          fileName: filePath,
+          fileName: '',
+          newFileName: '问号名称newFileName.docx',
+          // fileName: filePath,
           uploadFieldName: uploadFieldName,
           picPath: GetDemoPngPath(),
           insertFileUrl: GetDemoPath("wps广西移动公司部门会议纪要.doc"),
-          copyUrl: backupPath,
+          // copyUrl: backupPath,
           bkInsertFileStart: bookMarksStart,
           bkInsertFileEnd: bookMarksEnd,
           bodyTemplateUrl: "",
           userName: "dnhyxc",
           suffix: ".pdf",
           uploadWithAppendPath: "1",
+
+          // 默认开启修订
+          revisionCtrl: {
+            bOpenRevision: true,
+            bShowRevision: true
+          },
+
           params: {
             isNew: true,
             id: "666",
@@ -906,22 +926,7 @@ function customDoc() {
             list: fileList || [],
             operType: 4,
             dealDescription: "创建【会议纪要】文件",
-            fieldObj: {
-              title: "看我插不插入",
-              mainSend: "WOWOWOW",
-              copySend: "DNHYXC",
-              issUer: "签发人",
-              signingUnit: "落款单位",
-              signatureUnit: "署名单位",
-              issueDate: "签发日期",
-              printDate: "印发日期",
-              creatPerson: "dnhyxc",
-              refNo: "2020[0902]号",
-              urgencyLevel: "紧急",
-              secretClass: "密级1",
-              department: "高级的前端部门",
-              units: "发文单位",
-            },
+            fieldObj,
           },
           openType: {
             // 文档打开方式

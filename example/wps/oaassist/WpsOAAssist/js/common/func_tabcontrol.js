@@ -767,8 +767,6 @@ function OnBtnSaveToServer(saveType = 1) {
     return;
   }
 
-  console.log("保存文档ID：", l_doc.DocID);
-
   //非OA文档，不能上传到OA
   if (pCheckIfOADoc() == false) {
     alert("非系统打开的文档，不能直接上传到系统！");
@@ -792,8 +790,6 @@ function OnBtnSaveToServer(saveType = 1) {
    */
   var l_uploadPath = GetDocParamsValue(l_doc, constStrEnum.uploadPath); // 文件上载路径
 
-  console.log(l_uploadPath, "l_uploadPath");
-
   if (l_uploadPath == "") {
     wps.alert("系统未传入文件上载路径，不能执行上传操作！");
     return;
@@ -802,8 +798,6 @@ function OnBtnSaveToServer(saveType = 1) {
   var l_showConfirm = wps.PluginStorage.getItem(
     constStrEnum.Save2OAShowConfirm
   );
-
-  console.log(l_showConfirm, "l_showConfirm");
 
   if (l_showConfirm) {
     if (!wps.confirm("先保存文档，并开始上传到系统后台，请确认？")) {
@@ -1087,12 +1081,12 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       console.log("已通知业务系统，开始关闭公文 TAB");
 
       // 保存成功直接关闭
-      if (l_doc) {
-        console.log("OnUploadToServerSuccess: before Close");
-        l_doc.Close(-1); //保存文档后关闭
-        console.log("OnUploadToServerSuccess: after Close");
-        return;
-      }
+      // if (l_doc) {
+      //   console.log("OnUploadToServerSuccess: before Close");
+      //   l_doc.Close(-1); //保存文档后关闭
+      //   console.log("OnUploadToServerSuccess: after Close");
+      //   return;
+      // }
     })
     // .then(() => {
     //   // 提醒关闭

@@ -21,6 +21,7 @@ function NewFile(params) {
   if (wps.Env && wps.Env.GetTempPath) {
     if (params.newFileName) {
       //按OA传入的文件名称保存
+      console.log(params.newFileName, '按OA传入的文件名称保存1111111111')
       doc.SaveAs2(
         ($FileName = wps.Env.GetTempPath() + "/" + params.newFileName),
         undefined,
@@ -31,6 +32,7 @@ function NewFile(params) {
     } else {
       //OA传入空文件名称，则保存成系统时间文件
       if (params.isOfficialDocument) {
+        console.log(params.newFileName, 'OA传入空文件名称，则保存成系统时间文件22222222222222222')
         doc.SaveAs2(
           ($FileName = wps.Env.GetTempPath() + "/OA_" + currentTime()),
           0,
@@ -39,6 +41,7 @@ function NewFile(params) {
           false
         );
       } else {
+        console.log(params.newFileName, 'OA传入空文件名称，则保存成系统时间文件333333333333333333333')
         doc.SaveAs2(
           ($FileName = wps.Env.GetTempPath() + "/OA_" + currentTime()),
           undefined,
@@ -134,7 +137,8 @@ function OpenFile(params) {
       } else {
         //本地文档
         doc = pDoOpenOADocProcess(params, l_strFileUrl);
-        if (doc)
+        if (doc) {
+          console.log(doc, 'openFIle>>>>>>>>>>本地文档')
           doc.SaveAs2(
             ($FileName = wps.Env.GetTempPath() + "/" + doc.Name),
             undefined,
@@ -142,6 +146,7 @@ function OpenFile(params) {
             undefined,
             false
           );
+        }
       }
     }
   } else {
@@ -383,7 +388,7 @@ function OpenOnLineFile(OAParams) {
  * 打开在线文档成功后触发事件
  * @param {*} resp
  */
-function OnOpenOnLineDocSuccess(resp) {}
+function OnOpenOnLineDocSuccess(resp) { }
 
 /**
  *  打开在线不落地文档出现失败时，给予错误提示
@@ -395,7 +400,7 @@ function OnOpenOnLineDocDownFail(res) {
     err.Body = Base64.decode(res.Body);
     err.Headers = Base64.decode(JSON.stringify(res.Headers));
     console.log(err);
-  } catch (err) {}
+  } catch (err) { }
   alert("打开在线不落地文档失败！请尝试重新打开。");
   return;
 }
@@ -422,7 +427,7 @@ function DoSetOADocLandMode(doc, DocLandMode) {
  * 作用：设置Ribbon工具条的按钮显示状态
  * @param {*} paramsGroups
  */
-function pDoResetRibbonGroups(paramsGroups) {}
+function pDoResetRibbonGroups(paramsGroups) { }
 
 /**
  * 作用：打开文档处理的各种过程，包含：打开带密码的文档，保护方式打开文档，修订方式打开文档等种种情况
@@ -730,7 +735,8 @@ function handleFileAndUpload(suffix, doc, uploadPath, FieldName, saveType = 1) {
       //保存回原来的文档内容
       l_strPath = pGetValidDocTempPath(doc) + suffix;
       wps.FileSystem.Remove(l_strPath);
-      doc.SaveAs2(l_strPath);
+      console.log('保存为htmlLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL')
+      doc.SaveAs2(l_strPath, 8);
       l_strChangeFileName = doc.Name.split(".")[0] + suffix;
       UploadFile(
         l_strChangeFileName,
@@ -889,7 +895,7 @@ function pAutoUploadToServer(p_Doc) {
         "OnAutoUploadSuccess",
         "OnAutoUploadFail"
       );
-    } catch (err) {}
+    } catch (err) { }
     wps.PluginStorage.setItem(
       constStrEnum.OADocUserSave,
       EnumDocSaveFlag.NoneOADocSave
@@ -1212,9 +1218,9 @@ function pInsertRInedHead(doc, strFile, bookmarkStart, bookmarkEnd) {
   } else {
     alert(
       "套红头失败，您选择的红头模板没有对应书签：" +
-        bookmarkStart +
-        ", " +
-        bookmarkEnd
+      bookmarkStart +
+      ", " +
+      bookmarkEnd
     );
   }
 

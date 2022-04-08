@@ -300,4 +300,7 @@ var SAVE_TYPE = {
    * 套红 PDF
    */
   PDF_RED_HEAD: 4,
+
+  // 套红html文件
+  HTML_HEAD: 5
 };
