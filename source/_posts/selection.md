@@ -1,14 +1,62 @@
 ---
-title: selection
-date: 2022-04-05 18:47:12
+title: ChromePlugin
+date: 2022-04-05 20:09:12
 toc: true
 tags:
-  - html5
-  - selection
+  - Chrome Plugins
+  - Selection
 categories:
+  - Chrome API
   - DOM API
   - 文本选择
+  - 文本复制
 ---
+
+### 谷歌插件
+
+#### 谷歌插件开发说明
+
+谷歌插件基本是以 `.crx` 为文件后缀，该文件其实就是一个压缩包，包括插件所需要的 html、css、js、图片资源等等文件。其中必须要存在 `manifest.json` 文件，并且该文件必须放在插件开发目录的根目录上。该文件主要是用来描述插件的元数据，插件的配置信息等。除了 manifest.json 文件，根据需要，还可以配置如下一些文件：
+
+- backgroubd.js 文件：该文件主要是用户配置插件的后台脚本。配置在 background 属性中，而 background 是一个常驻的页面，它的生命周期是插件中所有类型页面中最长的，它随着浏览器的打开而打开，随着浏览器的关闭而关闭，所以通常把需要一直运行的、启动就运行的、全局的代码放在 background 里面。
+
+<!-- more -->
+
+#### manifest.json
+
+`manifest.json` 文件基本配置如下：
+
+```json
+{
+  "name": "tts",
+  "version": "1.0",
+  "description": "tts",
+  "manifest_version": 3,
+  // 给tts开启权限
+  "permissions": ["tts"],
+  // 插件所需的各种尺寸的图标
+  "icons": {
+    "16": "/static/images/S16.png",
+    "32": "/static/images/S32.png",
+    "48": "/static/images/S48.png",
+    "128": "/static/images/S128.png"
+  },
+  // 用户配置插件的后台脚本，在谷歌扩展程序页面点击对应插件的查看视图 Service Worker 即可调出后台调试页面
+  "background": {
+    "service_worker": "background.js"
+  },
+  // 用户设置插件的交互脚本
+  "content_scripts": [
+    {
+      "js": ["page.js"],
+      // 设置page.js文件在哪个页面生效。http://localhost/* 的意思是 page.js 会在所有的以localhost 形成的域名下生效
+      "matches": ["http://localhost/*"] // ["http://*/*", "https://*/*"] 匹配所有的域名
+    }
+  ]
+}
+```
+
+> 更多配置请看[谷歌插件开发官方文档](https://developer.chrome.com/docs/extensions/mv3/manifest/#overview)
 
 ### Selection API
 
@@ -46,54 +94,49 @@ range（范围）指的是文档中连续的一部分。一个范围包括整个
 
 **rangeCount**：只读属性，返回该选区所包含的连续范围的数量。
 
-#### Selection 方法
+#### Selection 常用方法
 
-**getRangeAt**：返回选区包含的指定区域（Range）的引用，语法如下：
-
-```js
-const range = sel.getRangeAt(index);
-```
-
-- range：将返回 range 对象。
-
-- index：该参数指定需要被处理的子集编号（从零开始计数）。如果该数值被错误的赋予了大于或等于 rangeCount 结果的数字，将会产生错误。
-
-具体使用如下：
+**toString**：该方法返回当前被选中的文本文字。语法如下：
 
 ```js
-let ranges = [];
-
-sel = window.getSelection();
-
-for (var i = 0; i < sel.rangeCount; i++) {
-  ranges[i] = sel.getRangeAt(i);
-}
-/*
- * 在 ranges 数组的每一个元素都是一个 range 对象，
- * 对象的内容是当前选区中的一个。
- */
+const selection = window.getSelection();
+const str = selection.toString();
 ```
 
-**addRange**：向选区（Selection）中添加一个区域（Range）。语法如下：
+#### Selection 的基本使用方式
 
-```js
-sel.addRange(range);
+使用 Selection 实时获取选中的文本：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selection</title>
+  </head>
+  <body>
+    <p>
+      <a href="https://dnhyxc.gitee.io">dnhyxc</a>
+      <span>元素1</span>
+      <span>元素2</span>
+      <span>元素3</span>
+      Selection
+      对象表示用户选择的文本范围或插入符号的当前位置。它代表页面中的文本选区，可能横跨多个元素。文本选区由用户拖拽鼠标经过文字而产生。要获取用于检查或修改的
+      Selection 对象，需要调用 window.getSelection() 获取 Selection 对象。
+    </p>
+
+    <script>
+      const selObj = window.getSelection();
+
+      document.addEventListener("mouseup", () => {
+        const selectStr = selObj.toString();
+        console.log(selectStr);
+      });
+    </script>
+  </body>
+</html>
 ```
 
-- range：一个区域（Range）对象将被增加到选区（Selection）当中。
-
-基本使用示例如下：
-
-```js
-/* 在一个HTML文档中选中所有加粗的文本。 */
-const strongs = document.getElementsByTagName("strong");
-const s = window.getSelection();
-
-if (s.rangeCount > 0) s.removeAllRanges();
-
-for (let i = 0; i < strongs.length; i++) {
-  const range = document.createRange();
-  range.selectNode(strongs[i]);
-  s.addRange(range);
-}
-```
+> [Selection 更多属性及方法请戳这里查看>>>](https://developer.mozilla.org/zh-CN/docs/Web/API/Selection)

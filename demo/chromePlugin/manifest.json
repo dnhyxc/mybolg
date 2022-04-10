@@ -1,0 +1,32 @@
+{
+  "name": "tts",
+  "version": "1.0",
+  "description": "tts",
+  "manifest_version": 3,
+  "permissions": ["tts"],
+  "icons": {
+    "16": "/static/images/S16.png",
+    "32": "/static/images/S32.png",
+    "48": "/static/images/S48.png",
+    "128": "/static/images/S128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "/static/images/S16.png",
+      "32": "/static/images/S32.png",
+      "48": "/static/images/S48.png",
+      "128": "/static/images/S128.png"
+    },
+    "default_title": "Click Me",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "js": ["page.js"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ]
+}
