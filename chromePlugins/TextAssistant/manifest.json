@@ -1,7 +1,7 @@
 {
-  "name": "tts",
+  "name": "文本助手",
   "version": "1.0",
-  "description": "tts",
+  "description": "自动复制选中的文本，同时播报选中的英文字符",
   "manifest_version": 3,
   "permissions": ["tts"],
   "icons": {
