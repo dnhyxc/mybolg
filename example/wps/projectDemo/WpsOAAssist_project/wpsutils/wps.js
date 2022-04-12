@@ -287,7 +287,7 @@ export function outWpsEdit(params = {}, callback) {
         file: isCreate ? undefined : currentFile,
         index,
         list: fileList || [],
-        operType,
+        operType, // create: 4 mod: 12
         dealDescription,
         isNew,
         fieldObj,

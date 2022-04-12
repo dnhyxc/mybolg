@@ -246,12 +246,22 @@ function openDoc() {
   _WpsInvoke([
     {
       OpenDoc: {
-        uploadPath: uploadPath, // 保存文档上传接口
-        fileName: filePath,
+        isNew: false,
+        uploadPath, // 保存文档上传接口
+        fileName: '正文.docx',
+        newFileName: '正文.docx',
+        filePath,
         uploadFieldName: uploadFieldName,
         picPath: GetDemoPngPath(),
-        copyUrl: backupPath,
+        // copyUrl: backupPath,
         userName: "dnhyxc",
+        params: {
+          id: '902209',
+          isNew: false,
+          file: filePath,
+          operType: 12,
+          list: [{ redHeadPdfUrl: filePath }]
+        }
       },
     },
   ]); // OpenDoc方法对应于OA助手dispatcher支持的方法名

@@ -302,5 +302,8 @@ var SAVE_TYPE = {
   PDF_RED_HEAD: 4,
 
   // 套红html文件
-  HTML_HEAD: 5
+  HTML_HEAD: 5,
+
+  // 未套红html文件
+  NO_HTML_HEAD: 6,
 };

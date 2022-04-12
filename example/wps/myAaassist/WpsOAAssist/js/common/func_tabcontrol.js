@@ -793,6 +793,30 @@ function OnInsertDateClicked() {
   }
 }
 
+/**
+ * 处理最终返回的file
+ * @param {*} file 
+ * @returns 
+ */
+function manageFileData(fileURLObj, file) {
+  var redHeadPdfUrl =
+    fileURLObj.redHeadPdfUrl || fileURLObj.noRedHeadPdfUrl;
+
+  return Object.assign({}, file, {
+    originalUrl:
+      fileURLObj.redHeadOriginalUrl || fileURLObj.noRedHeadOriginalUrl,
+    noMarksPdfUrl: redHeadPdfUrl,
+    url: redHeadPdfUrl,
+    downloadUrl: redHeadPdfUrl,
+    redHeadOriginalHTML: fileURLObj.redHeadOriginalHTML,
+    redHeadOriginalUrl: fileURLObj.redHeadOriginalUrl,
+    redHeadPdfUrl: fileURLObj.redHeadPdfUrl,
+    noRedHeadOriginalUrl: fileURLObj.noRedHeadOriginalUrl,
+    noRedHeadPdfUrl: fileURLObj.noRedHeadPdfUrl,
+    // watermarkUrl: descUrl,
+  });
+}
+
 // 更改：增加自定义最终保存的函数
 /**
  * 最终保存函数
@@ -827,22 +851,14 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
         // file.key = uuidv1();
       }
 
-      var redHeadPdfUrl =
-        fileURLObj.redHeadPdfUrl || fileURLObj.noRedHeadPdfUrl;
+      console.log("最终文件对象构造之前》》》》》", file);
 
-      file = Object.assign({}, file, {
-        originalUrl:
-          fileURLObj.redHeadOriginalUrl || fileURLObj.noRedHeadOriginalUrl,
-        noMarksPdfUrl: redHeadPdfUrl,
-        url: redHeadPdfUrl,
-        downloadUrl: redHeadPdfUrl,
-        redHeadOriginalHTML: fileURLObj.redHeadOriginalHTML,
-        redHeadOriginalUrl: fileURLObj.redHeadOriginalUrl,
-        redHeadPdfUrl: fileURLObj.redHeadPdfUrl,
-        noRedHeadOriginalUrl: fileURLObj.noRedHeadOriginalUrl,
-        noRedHeadPdfUrl: fileURLObj.noRedHeadPdfUrl,
-        // watermarkUrl: descUrl,
-      });
+      if (typeof file === 'object') {
+        file = manageFileData(fileURLObj, file);
+      } else {
+        const objFile = { name: '正文.docx', type: 'docx', url: file }
+        file = manageFileData(fileURLObj, objFile);
+      }
 
       console.log("最终文件对象构造完成", file);
 
@@ -851,7 +867,14 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
         list.push(file);
         l_params.index = nextIndex;
       } else {
-        list[l_params.index] = file;
+
+        console.log(l_params, 'l_params.index')
+
+        if (l_params.index) {
+          list[l_params.index] = file;
+        } else {
+          list.file = file
+        }
       }
       l_params.list = list;
       l_params.file = file;
@@ -864,6 +887,7 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       oaParams.params = JSON.stringify(l_params);
       wps.PluginStorage.setItem(l_doc.DocID, JSON.stringify(oaParams));
 
+      console.log("即将保存文件列表>>>list", list);
       return list;
     })
     .then((list) => {
@@ -882,7 +906,9 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
 
       console.log("整理保存记录参数", dealparam);
 
-      return dealDocumentBody(dealparam).then(() => list);
+      // return dealDocumentBody(dealparam).then(() => list);
+      console.log(list, 'list')
+      return list
     })
     .then((list) => {
       console.log("保存操作记录成功，开始通知业务系统");
@@ -933,12 +959,12 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       console.log("已通知业务系统，开始关闭公文 TAB");
 
       // 保存成功直接关闭
-      if (l_doc) {
-        console.log("OnUploadToServerSuccess: before Close");
-        l_doc.Close(-1); //保存文档后关闭
-        console.log("OnUploadToServerSuccess: after Close");
-        return;
-      }
+      // if (l_doc) {
+      //   console.log("OnUploadToServerSuccess: before Close");
+      //   l_doc.Close(-1); //保存文档后关闭
+      //   console.log("OnUploadToServerSuccess: after Close");
+      //   return;
+      // }
     })
     // .then(() => {
     //   // 提醒关闭
@@ -1031,12 +1057,13 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
         true,
         // SAVE_TYPE.HTML_HEAD
         SAVE_TYPE.PDF_NO_RED_HEAD
+        // SAVE_TYPE.NO_RED_HTML_HEAD
       );
       return;
     }
 
     // // 未套红HTML
-    // case SAVE_TYPE.HTML_HEAD: {
+    // case SAVE_TYPE.NO_RED_HTML_HEAD: {
     //   // 主动保存不涉及保存弹窗
     //   wps.PluginStorage.setItem(constStrEnum.CloseConfirmTip, false);
 

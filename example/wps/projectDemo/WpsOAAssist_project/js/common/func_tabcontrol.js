@@ -389,8 +389,8 @@ function pDoChangeToOtherDocFormat(
     if (
       !wps.confirm(
         "当前文档将另存一份" +
-          l_suffix +
-          " 格式的副本，并上传到系统后台，请确认 ？"
+        l_suffix +
+        " 格式的副本，并上传到系统后台，请确认 ？"
       )
     ) {
       return;
@@ -455,7 +455,7 @@ function pDoChangeToOtherDocFormat(
 /**
  * 把文档转换成UOT在上传
  */
-function OnDoChangeToUOF() {}
+function OnDoChangeToUOF() { }
 
 /**
  *  打开WPS云文档的入口
@@ -850,7 +850,8 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
 
       console.log("整理保存记录参数", dealparam);
 
-      return dealDocumentBody(dealparam).then(() => list);
+      // return dealDocumentBody(dealparam).then(() => list);
+      return list
     })
     .then((list) => {
       console.log("保存操作记录成功，开始通知业务系统");
@@ -1813,15 +1814,15 @@ function OnGetEnabled(control) {
     case "FileSaveAsOfd":
     case "TabSecurity":
     case "TabInsert": // case "TabReferences": //WPS自身tab：引用 //WPS自身tab：插入
-    // case "TabReviewWord": //WPS自身tab：审阅
-    // case "TabView": //WPS自身tab：视图
-    {
-      if (pCheckIfOADoc()) {
-        return false; //如果是OA打开的文档，把这个几个tab不可用/隐藏
-      } else {
-        return true;
+      // case "TabReviewWord": //WPS自身tab：审阅
+      // case "TabView": //WPS自身tab：视图
+      {
+        if (pCheckIfOADoc()) {
+          return false; //如果是OA打开的文档，把这个几个tab不可用/隐藏
+        } else {
+          return true;
+        }
       }
-    }
 
     default:
   }
