@@ -383,13 +383,15 @@ function openDoc() {
       OpenDoc: {
         isNew: false,
         uploadPath, // 保存文档上传接口
-        fileName: '',
+        fileName: '正文.docx',
         newFileName: '正文.docx',
         filePath,
         uploadFieldName: uploadFieldName,
         picPath: GetDemoPngPath(),
         // copyUrl: backupPath,
         userName: "dnhyxc",
+        suffix: '.pdf',
+        uploadWithAppendPath: '1', // 需和 suffix 配合使用，用于保存前保存为特定格式文件后一起保存
         params: {
           id: '902209',
           isNew: false,
@@ -1035,6 +1037,8 @@ function customDoc() {
 
   var bookMarksEnd = "正文内容E";
 
+  const dealDescription = `创建【套红正文】文件`
+
   _WpsInvoke(
     [
       {
@@ -1042,10 +1046,10 @@ function customDoc() {
           docId: "902209",
           uploadPath: uploadPath, // 保存文档上传接口
           fileName: '',
-          newFileName: '问号名称newFileName.docx',
+          newFileName: '问号名称.docx',
           // fileName: filePath,
           uploadFieldName: uploadFieldName,
-          picPath: GetDemoPngPath(),
+          // picPath: GetDemoPngPath(),
           insertFileUrl: GetDemoPath("wps广西移动公司部门会议纪要.doc"),
           // copyUrl: backupPath,
           bkInsertFileStart: bookMarksStart,
@@ -1070,7 +1074,7 @@ function customDoc() {
             index: -1,
             list: fileList || [],
             operType: 4,
-            dealDescription: "创建【会议纪要】文件",
+            dealDescription,
             fieldObj,
           },
           openType: {

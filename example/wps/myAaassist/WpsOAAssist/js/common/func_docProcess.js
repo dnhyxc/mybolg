@@ -19,6 +19,9 @@ function NewFile(params) {
 
   //检查系统临时文件目录是否能访问
   if (wps.Env && wps.Env.GetTempPath) {
+
+    console.log(wps.Env.GetTempPath(), 'wps.Env.GetTempPath')
+
     if (params.newFileName) {
       //按OA传入的文件名称保存
       doc.SaveAs2(
@@ -157,87 +160,6 @@ function OpenFile(params) {
 
   pOpenFile(doc, params, l_IsOnlineDoc);
 }
-// function OpenFile(params) {
-//   var l_strFileUrl = params.fileName; //来自OA网页端的OA文件下载路径
-//   var doc;
-//   var l_IsOnlineDoc = false; //默认打开的是不落地文档
-//   if (l_strFileUrl) {
-//     //下载文档之前，判断是否已下载该文件
-//     if (pCheckIsExistOpenOADoc(l_strFileUrl) == true) {
-//       //如果找到相同OA地址文档，则给予提示
-//       wps.WpsApplication().WindowState = 1;
-//       wps.WpsApplication().Activate(); //把WPS对象置前
-//       //根据OA助手对是否允许再次打开相同文件的判断处理
-//       var l_AllowOADocReOpen = false;
-//       l_AllowOADocReOpen = wps.PluginStorage.getItem(
-//         constStrEnum.AllowOADocReOpen
-//       );
-//       if (l_AllowOADocReOpen == false) {
-//         alert("已打开相同的OA文件，请关闭之前的文件，再次打开。");
-//         wps.WpsApplication().Activate();
-//         return null;
-//       } else {
-//         //处理重复打开相同OA 文件的方法
-//         var nDocCount = wps.WpsApplication().Documents.Count;
-//         pReOpenOADoc(l_strFileUrl);
-//         //重复打开的文档采用不落地的方式打开
-//         // 不落地方式打开文档判断落地比较多，V1版本先暂时关闭
-//         l_IsOnlineDoc = true;
-//         var nDocCount_New = wps.WpsApplication().Documents.Count;
-//         if (nDocCount_New > nDocCount) {
-//           doc = wps.WpsApplication().ActiveDocument;
-//         }
-//       }
-//     } else {
-//       //如果当前没有打开文档，则另存为本地文件，再打开
-//       if (l_strFileUrl.startWith("http")) {
-//         // 网络文档
-//         DownloadFile(l_strFileUrl, function (path) {
-//           if (path == "") {
-//             alert(
-//               "从服务端下载路径：" + l_strFileUrl + "\n" + "获取文件下载失败！"
-//             );
-//             return null;
-//           }
-
-//           doc = pDoOpenOADocProcess(params, path);
-//           pOpenFile(doc, params, l_IsOnlineDoc);
-
-//           // 更改：增加notifyParam对象（开始位置）
-//           //   var notifyParam = {
-//           //     action: "open",
-//           //     message: doc.DocID,
-//           //   };
-//           //   wps.OAAssist.WebNotify(JSON.stringify(notifyParam), true);
-//           // 更改结束位置
-//         });
-//         return;
-//       } else {
-//         //本地文档
-//         doc = pDoOpenOADocProcess(params, l_strFileUrl);
-//         if (doc) {
-//           console.log(doc, 'openFIle>>>>>>>>>>本地文档')
-//           doc.SaveAs2(
-//             ($FileName = wps.Env.GetTempPath() + "/" + doc.Name),
-//             undefined,
-//             undefined,
-//             undefined,
-//             false
-//           );
-//         }
-//       }
-//     }
-//   } else {
-//     //fileURL 如果为空，则按新建OA本地文件处理
-//     NewFile(params);
-//   }
-//   //如果打开pdf等其他非Office文档，则doc对象为空
-//   if (!doc) {
-//     return null;
-//   }
-
-//   pOpenFile(doc, params, l_IsOnlineDoc);
-// }
 
 /**
  * 新建公文打开文档后执行的动作集合
@@ -370,8 +292,8 @@ function InsertPresetTemplateDoc(doc) {
  */
 function GetServerTemplateData(template, pTemplateDataUrl) {
   // 更改：增加获取params参数逻辑（开始位置）
-    var l_params = GetDocParamsValue(template, "params");
-    return;
+  var l_params = GetDocParamsValue(template, "params");
+  return;
   // 结束位置
 
   //获取文档内容
@@ -725,6 +647,9 @@ function handleFileAndUpload(suffix, doc, uploadPath, FieldName, saveType = 1) {
   switch (suffix.toLocaleLowerCase()) {
     case ".pdf":
       l_strPath = pGetValidDocTempPath(doc) + ".pdf"; //获取有效输出路径
+
+      console.log(l_strPath, 'l_strPath>>>>pdf')
+
       wps.FileSystem.Remove(l_strPath); //先删除之前可能存在的临时文件
       doc.ExportAsFixedFormat(
         l_strPath,
@@ -813,7 +738,6 @@ function handleFileAndUpload(suffix, doc, uploadPath, FieldName, saveType = 1) {
       //保存回原来的文档内容
       l_strPath = pGetValidDocTempPath(doc) + suffix;
       wps.FileSystem.Remove(l_strPath);
-      console.log('保存为htmlLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL')
       doc.SaveAs2(l_strPath, 8);
       l_strChangeFileName = doc.Name.split(".")[0] + suffix;
       UploadFile(

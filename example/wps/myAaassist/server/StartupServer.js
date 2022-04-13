@@ -83,6 +83,8 @@ app.post("/Upload", function (request, response) {
       // 过滤空文件
       if (file.size == 0 && file.name == "") continue;
 
+      console.log(file.path, 'file.path>>>>>>>>upload')
+
       var fileName = file.name;
       if (!fileName) fileName = request.headers.filename;
       let oldPath = file.path;
@@ -200,7 +202,7 @@ var server = app.listen(3888, function () {
         exec(`xdg-open ${url}`);
         break;
     }
-  } catch (e) {}
+  } catch (e) { }
 });
 //启动node服务
 server.on("error", (e) => {

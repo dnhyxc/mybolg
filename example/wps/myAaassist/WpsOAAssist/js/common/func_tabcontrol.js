@@ -87,7 +87,6 @@ function AddDocumentEvent() {
   wps.ApiEvent.AddApiEventListener("DocumentOpen", OnDocumentOpen);
   wps.ApiEvent.AddApiEventListener("DocumentNew", OnDocumentNew);
   // wps.ApiEvent.AddApiEventListener("NewDocument", OnDocumentNew);
-  console.log("AddDocumentEvent");
 }
 
 /**
@@ -231,8 +230,6 @@ function OnOpenScanBtnClicked() {
  *  图片插入的默认版式是在浮于文档上方
  */
 function DoInsertPicToDoc() {
-  console.log("DoInsertPicToDoc...");
-
   var l_doc; //文档对象
   l_doc = wps.WpsApplication().ActiveDocument;
   if (!l_doc) {
@@ -336,7 +333,6 @@ function OnDoChangeToOtherDocFormat(p_FileSuffix, pShowPrompt) {
   if (!l_doc) {
     return;
   }
-  console.log(pShowPrompt);
   if (typeof pShowPrompt == "undefined") {
     pShowPrompt = true; //默认设置为弹出用户确认框
   }
@@ -385,6 +381,7 @@ function pDoChangeToOtherDocFormat(
     l_uploadPath = GetDocParamsValue(p_Doc, constStrEnum.uploadPath);
   }
   var l_FieldName = GetDocParamsValue(p_Doc, constStrEnum.uploadFieldName);
+
   if (l_FieldName == "") {
     l_FieldName = wps.PluginStorage.getItem(
       constStrEnum.DefaultUploadFieldName
@@ -609,7 +606,6 @@ function pSaveAnotherDoc(p_Doc) {
  */
 // 更改：增加传入 saveType 字段
 function OnBtnSaveToServer(saveType = 1) {
-  // console.log('SaveToServer');
   var l_doc = wps.WpsApplication().ActiveDocument;
   if (!l_doc) {
     alert("空文档不能保存！");
@@ -798,7 +794,7 @@ function OnInsertDateClicked() {
  */
 function manageFileData(fileURLObj, file) {
 
-  console.log(fileURLObj, 'fileURLObj')
+  console.log(fileURLObj, 'fileURLObj>>>>manageFileData')
 
   var redHeadPdfUrl =
     fileURLObj.redHeadPdfUrl || fileURLObj.noRedHeadPdfUrl;
@@ -823,8 +819,6 @@ function manageFileData(fileURLObj, file) {
  * 最终保存函数
  */
 function OnUploadSuccessFinally(l_doc, fileURLObj) {
-  console.log("最终保存fileURLObj", fileURLObj);
-
   var l_newFileName = GetDocParamsValue(l_doc, constStrEnum.NewFileName);
   var l_isCreate = GetDocParamsValue(l_doc, "isNew");
   var l_params = GetDocParamsValue(l_doc, "params");
@@ -836,8 +830,6 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
 
       var list = l_params.list;
       var file = l_params.file;
-
-      console.log("构造最终文件对象", list);
 
       if (isCreate) {
         file = {
@@ -853,8 +845,6 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
         // file.key = uuidv1();
       }
 
-      console.log("最终文件对象构造之前》》》》》", file, 'list>>>>>', list);
-
       if (typeof file === 'object') {
         file = manageFileData(fileURLObj, file);
         console.log(file, 'file的类型为object')
@@ -864,29 +854,25 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
         file = manageFileData(fileURLObj, objFile);
       }
 
-      console.log("最终文件对象构造完成", file);
-
       if (isCreate) {
-
-        console.log(isCreate, "最终文件对象构造完成>>>>>>>", file);
-
         var nextIndex = list.length || 0;
         list.push(file);
         l_params.index = nextIndex;
-      } else {
 
-        console.log(l_params, '不是create>>>>>>l_params.index')
+        console.log(isCreate, 'isCreate>>>>>>>>>>isCreate', nextIndex, 'nextIndex', file, 'file')
+
+      } else {
 
         if (l_params.index) {
           list[l_params.index] = file;
         } else {
           list[0] = file
         }
+
+        list[l_params.index] = file;
       }
       l_params.list = list;
       l_params.file = file;
-
-      console.log("即将保存文件列表", l_params);
 
       // 更新参数，供后期再次修改
       var oaParams = wps.PluginStorage.getItem(l_doc.DocID);
@@ -894,12 +880,9 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       oaParams.params = JSON.stringify(l_params);
       wps.PluginStorage.setItem(l_doc.DocID, JSON.stringify(oaParams));
 
-      console.log("即将保存文件列表>>>list", list);
       return list;
     })
     .then((list) => {
-
-      console.log(list, '开始保存>>>>list')
 
       if (l_params.isNew) {
         return list;
@@ -920,14 +903,12 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       return list
     })
     .then((list) => {
-      console.log(list, "保存操作记录成功，开始通知业务系统");
       // 通知业务系统
       var l_NofityURL = GetDocParamsValue(l_doc, constStrEnum.notifyUrl);
       if (l_NofityURL != "") {
         l_NofityURL = l_NofityURL.replace("{?}", "2"); //约定：参数为2则文档被成功上传
         NotifyToServer(l_NofityURL);
       } else {
-
 
         var successParams = {
           // action: isTaoHong ? 'taohong' : 'save',
@@ -936,10 +917,7 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
             id: l_params.id,
             list: list,
           }),
-          // message: resp,
         };
-
-        console.log(successParams, 'successParams')
 
         wps.OAAssist.WebNotify(JSON.stringify(successParams), true);
       }
@@ -966,11 +944,12 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
  * @param {1 | 2 | 3 | 4} [saveType=1] 保存类型
  */
 function OnUploadToServerSuccess(resp, saveType = 1) {
-  console.log("成功上传服务端后的回调：" + resp);
   var l_doc = wps.WpsApplication().ActiveDocument;
 
   // 上传成功回调返回的文件路径
   var parseResp = JSON.parse(resp) || {};
+
+  console.log('saveType>>>>>', saveType, "成功上传服务端后的回调>>>>>>", parseResp,);
 
   switch (saveType) {
     default:
@@ -981,7 +960,6 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
       // 主动保存不涉及保存弹窗
       wps.PluginStorage.setItem(constStrEnum.CloseConfirmTip, false);
 
-      console.log("构造文件对象");
       var fileURLObj = {
         noRedHeadOriginalUrl: parseResp.fileUrl,
       };
@@ -994,7 +972,7 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
       // 获取OA传入的 转其他格式上传属性
       var l_suffix = GetDocParamsValue(l_doc, constStrEnum.suffix);
 
-      console.log("开始转存 PDF");
+      console.log(l_suffix, "开始转存 PDF");
       //调用转pdf格式函数，强制关闭转换修订痕迹，不弹出用户确认的对话框
       pDoChangeToOtherDocFormat(
         l_doc,
@@ -1045,8 +1023,6 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
 
       var fileURLObj = JSON.parse(saveAllTemp);
 
-      console.log(fileURLObj, "fileURLObj>>>未套红 PDF");
-
       fileURLObj.noRedHeadPdfUrl = parseResp.fileUrl;
 
       wps.PluginStorage.setItem(
@@ -1061,9 +1037,9 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
           // 接下来进行套红操作
           console.log("红头文件可用，开始套红操作");
 
-          InsertRedHeadDoc(l_doc);
+          const tempDoc = { ...l_doc }
 
-          console.log("套红完成，主动触发保存");
+          InsertRedHeadDoc(tempDoc);
           // 主动调用保存操作
           OnBtnSaveToServer(SAVE_TYPE.ORGINAL_RED_HEAD);
         })
@@ -1504,7 +1480,6 @@ function OnAction(control) {
   } else if (typeof control == "undefined" && arguments.length > 1) {
     //针对idMso的
     eleId = arguments[1].Id;
-    console.log(eleId);
   } else if (typeof control == "boolean" && arguments.length > 1) {
     //针对checkbox的
     eleId = arguments[1].Id;

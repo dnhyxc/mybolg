@@ -253,7 +253,7 @@ function getHtmlURL(html) {
     var e = document.location.toString();
     return (
       -1 != (e = decodeURI(e)).indexOf("/") &&
-        (e = e.substring(0, e.lastIndexOf("/"))),
+      (e = e.substring(0, e.lastIndexOf("/"))),
       e
     );
   };
@@ -527,6 +527,16 @@ function UploadFile(
   //   return;
   // }
 
+  const fileType = {
+    1: '未套红doc',
+    2: '未套红pdf',
+    3: '套红doc',
+    4: '套红html',
+    5: '套红pdf',
+  }
+
+  const newFileName = fileType[saveType] + strFileName
+
   var xhr = new XMLHttpRequest();
   xhr.open("POST", uploadPath);
 
@@ -537,7 +547,7 @@ function UploadFile(
     strFieldName = "file";
   }
   data.append(strFieldName, {
-    name: utf16ToUtf8(strFileName), //主要是考虑中文名的情况，服务端约定用utf-8来解码。
+    name: utf16ToUtf8(newFileName), //主要是考虑中文名的情况，服务端约定用utf-8来解码。
     type: "application/octet-stream",
     getAsBinary: function () {
       return fileData;

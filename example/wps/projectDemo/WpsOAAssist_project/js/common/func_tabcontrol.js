@@ -850,8 +850,7 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
 
       console.log("整理保存记录参数", dealparam);
 
-      // return dealDocumentBody(dealparam).then(() => list);
-      return list
+      return dealDocumentBody(dealparam).then(() => list);
     })
     .then((list) => {
       console.log("保存操作记录成功，开始通知业务系统");
