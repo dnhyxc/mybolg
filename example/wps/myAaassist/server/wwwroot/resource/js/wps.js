@@ -3,6 +3,15 @@ var pluginType = WpsInvoke.ClientType.wps; //加载项类型wps,et,wpp
 var pluginName = "WpsOAAssist"; //加载项名称
 var wpsClient = new WpsClient(pluginType); //初始化一个多进程对象，多进程时才需要
 var clientStr = pluginName + pluginType + "ClientId";
+
+let notifyCallback = {
+  open() { },
+  save() { },
+  status() { },
+  taohong() { },
+  exit() { },
+}
+
 //单进程封装开始
 /**
  * 此方法是根据wps_sdk.js做的调用方法封装
@@ -12,25 +21,160 @@ var clientStr = pluginName + pluginType + "ClientId";
  * @param {*} jsPluginsXml  指定一个新的WPS加载项配置文件的地址,动态传递jsplugins.xml模式，例如：http://127.0.0.1:3888/jsplugins.xml
  * @param {*} isSilent      隐藏打开WPS，如果需要隐藏，那么需要传递front参数为false
  */
+const bUseHttps = location.protocol === 'https:'
 
 function _WpsInvoke(funcs, front, jsPluginsXml, isSilent) {
-  var info = {};
-  info.funcs = funcs;
-  if (isSilent) {
-    //隐藏启动时，front必须为false
-    front = false;
-  }
+  const info = {}
+  info.funcs = funcs
+  // info.cookieParams = Cookies.get()
+  const func = bUseHttps ? WpsInvoke.InvokeAsHttps : WpsInvoke.InvokeAsHttp
+  const isFront = isSilent ? false : front
+
+  func(
+    pluginType, // 组件类型
+    pluginName, // 插件名，与wps客户端加载的加载的插件名对应
+    'dispatcher', // 插件方法入口，与wps客户端加载的加载的插件代码对应，详细见插件代码
+    info, // 传递给插件的数据
+    (result) => {
+      // 调用回调，status为0为成功，其他是错误
+      // console.log('WPS接收消息', result)
+      if (result.status) {
+        if (bUseHttps && result.status == 100) {
+          WpsInvoke.AuthHttpesCert('请在稍后打开的网页中，点击"高级" => "继续前往"，完成授权。')
+          return
+        }
+        alert(result.message)
+      } else {
+        console.log(result)
+        NotifyCallback(result.response)
+      }
+    },
+    isFront,
+    jsPluginsXml,
+    isSilent,
+  )
+
+  /**
+* 该方法封装了发送给WPS客户端的请求，不需要用户去实现
+* 接收消息：WpsInvoke.RegWebNotify（type，name,callback）
+* WPS客户端返回消息： wps.OAAssist.WebNotify（message）
+* @param {*} type 加载项对应的插件类型
+* @param {*} name 加载项对应的名字
+* @param {func} callback 接收到WPS客户端的消息后的回调函数
+*/
+  WpsInvoke.RegWebNotify(pluginType, pluginName, NotifyCallback)
   /**
    * 下面函数为调起WPS，并且执行加载项WpsOAAssist中的函数dispatcher,该函数的参数为业务系统传递过去的info
    */
-  if (pluginsMode != 2) {
-    //单进程
-    singleInvoke(info, front, jsPluginsXml, isSilent);
-  } else {
-    //多进程
-    multInvoke(info, front, jsPluginsXml, isSilent);
+  // if (pluginsMode != 2) {
+  //   //单进程
+  //   singleInvoke(info, front, jsPluginsXml, isSilent);
+  // } else {
+  //   //多进程
+  //   multInvoke(info, front, jsPluginsXml, isSilent);
+  // }
+}
+
+function NotifyCallback(originMsg) {
+  console.log('接收到的消息', originMsg)
+
+  let msgBox = originMsg
+  try {
+    msgBox = JSON.parse(msgBox)
+  } catch (err) {
+    msgBox = {}
+  }
+
+  const func = notifyCallback && notifyCallback[msgBox.action]
+
+  console.log(func, 'func', msgBox)
+
+  switch (msgBox.action) {
+    case 'open':
+    case 'exit': {
+      if (func) {
+        func(msgBox.message)
+      }
+      break
+    }
+
+    case 'close': {
+      WPSMask.remove()
+      break;
+    }
+
+    case 'taohong':
+    case 'status':
+    case 'save': {
+      const features = msgBox.features || {}
+      let result = msgBox.message
+      try {
+        result = JSON.parse(result)
+
+        console.log(result, 'result')
+
+      } catch (err) {
+        //
+      }
+      if (func) {
+        func(result, features)
+      }
+      break
+    }
+
+    default:
+      break
   }
 }
+
+let globalMaskEl = null
+
+const wpsMask = {
+  async init(isEdit = false) {
+    const creatMask = () => {
+      if (globalMaskEl) {
+        return
+      }
+      globalMaskEl = createMaskElement()
+      globalMaskEl.addEventListener('click', async () => {
+        if (removing) {
+          return
+        }
+        removing = true
+
+        const hasEdit = await getWpsEditing()
+        if (hasEdit) {
+          message.warning('当前有文档正在编辑')
+          return
+        }
+        document.body.removeChild(globalMaskEl)
+        globalMaskEl = null
+        removing = false
+      })
+      document.body.appendChild(globalMaskEl)
+    }
+
+    if (isEdit) {
+      creatMask()
+      return
+    }
+
+    const hasEdit = await getWpsEditing()
+    if (!hasEdit) {
+      return
+    }
+    creatMask()
+  },
+
+  remove() {
+    if (globalMaskEl) {
+      document.body.removeChild(globalMaskEl)
+      globalMaskEl = null
+    }
+  },
+}
+
+window.WPSMask = wpsMask
 
 //单进程
 function singleInvoke(info, front, jsPluginsXml, isSilent) {
@@ -226,29 +370,20 @@ function GetDemoPngPath() {
 }
 
 function openDoc() {
-  var filePath = prompt(
-    "请输入打开文件路径（本地或是url）：",
-    GetDemoPath("样章.docx")
-  );
+  var filePath = GetDemoPath("样章.docx")
 
-  console.log(filePath, "filePath");
+  var uploadPath = GetUploadPath()
 
-  var uploadPath = prompt("请输入文档上传接口:", GetUploadPath());
+  var uploadFieldName = "dnhyxc"
 
-  console.log(uploadPath, "uploadPath");
-
-  var uploadFieldName = prompt(
-    "请输入文档上传到业务系统时自定义字段：",
-    "dnhyxc"
-  );
-  var backupPath = prompt("请输入文档备份路径:", GetUploadPath());
+  var backupPath = GetUploadPath()
 
   _WpsInvoke([
     {
       OpenDoc: {
         isNew: false,
         uploadPath, // 保存文档上传接口
-        fileName: '正文.docx',
+        fileName: '',
         newFileName: '正文.docx',
         filePath,
         uploadFieldName: uploadFieldName,

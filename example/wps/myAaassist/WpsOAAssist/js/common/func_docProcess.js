@@ -21,7 +21,6 @@ function NewFile(params) {
   if (wps.Env && wps.Env.GetTempPath) {
     if (params.newFileName) {
       //按OA传入的文件名称保存
-      console.log(params.newFileName, '按OA传入的文件名称保存1111111111')
       doc.SaveAs2(
         ($FileName = wps.Env.GetTempPath() + "/" + params.newFileName),
         undefined,
@@ -32,7 +31,6 @@ function NewFile(params) {
     } else {
       //OA传入空文件名称，则保存成系统时间文件
       if (params.isOfficialDocument) {
-        console.log(params.newFileName, 'OA传入空文件名称，则保存成系统时间文件22222222222222222')
         doc.SaveAs2(
           ($FileName = wps.Env.GetTempPath() + "/OA_" + currentTime()),
           0,
@@ -41,7 +39,6 @@ function NewFile(params) {
           false
         );
       } else {
-        console.log(params.newFileName, 'OA传入空文件名称，则保存成系统时间文件333333333333333333333')
         doc.SaveAs2(
           ($FileName = wps.Env.GetTempPath() + "/OA_" + currentTime()),
           undefined,
@@ -70,7 +67,7 @@ function NewFile(params) {
   wps.WpsApplication().Activate(); //把WPS对象置前
 
   // 更改：增加自定义 pNewFile() 方法
-  // pNewFile(doc, params);
+  pNewFile(doc, params);
 
   return doc; //返回新创建的Document对象
 }
@@ -282,13 +279,13 @@ function pOpenFile(doc, params, isOnlineDoc) {
     GetServerTemplateData(doc, params[constStrEnum.templateDataUrl]);
   }
 
-  if (GetParamsValue(params, constStrEnum.insertFileUrl)) {
-    console.log(
-      constStrEnum.insertFileUrl,
-      "pOpenFile>>>>>>>>文档打开后执行的动作集合,insertFileUrl"
-    );
-    InsertRedHeadDoc(doc);
-  }
+  // if (GetParamsValue(params, constStrEnum.insertFileUrl)) {
+  //   console.log(
+  //     constStrEnum.insertFileUrl,
+  //     "pOpenFile>>>>>>>>文档打开后执行的动作集合,insertFileUrl"
+  //   );
+  //   InsertRedHeadDoc(doc);
+  // }
 
   // 更改：注释 InsertRedHeadDoc 方法，注释该方法后，将不会在打开文档时就在文档中出现红头
   //   if (GetParamsValue(params, constStrEnum.insertFileUrl)) {
@@ -373,8 +370,8 @@ function InsertPresetTemplateDoc(doc) {
  */
 function GetServerTemplateData(template, pTemplateDataUrl) {
   // 更改：增加获取params参数逻辑（开始位置）
-  //   var l_params = GetDocParamsValue(template, "params");
-  //   return;
+    var l_params = GetDocParamsValue(template, "params");
+    return;
   // 结束位置
 
   //获取文档内容
@@ -1120,7 +1117,6 @@ function pInsertRInedField(doc) {
     return;
   }
   console.log("即将补全字段l_params", l_params);
-  console.log("constStrEnum", constStrEnum);
   var fieldObj = GetParamsValue(l_params, constStrEnum.FieldObj);
   console.log("即将补全字段", fieldObj);
 

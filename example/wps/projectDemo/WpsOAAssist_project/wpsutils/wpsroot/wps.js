@@ -51,7 +51,6 @@ function _WpsInvoke(funcs, front, jsPluginsXml, isSilent) {
         alert(result.message)
       } else {
         console.log(result.response)
-        // showresult(result.response)
         NotifyCallback(result.response)
       }
     },
@@ -70,6 +69,59 @@ function _WpsInvoke(funcs, front, jsPluginsXml, isSilent) {
  * @param {func} callback 接收到WPS客户端的消息后的回调函数
  */
   WpsInvoke.RegWebNotify(pluginType, pluginName, NotifyCallback)
+}
+
+
+function NotifyCallback(originMsg) {
+  console.log('接收到的消息', originMsg)
+
+  let msgBox = originMsg
+  try {
+    msgBox = JSON.parse(msgBox)
+  } catch (err) {
+    msgBox = {}
+  }
+
+  const func = notifyCallback && notifyCallback[msgBox.action]
+
+  console.log(func, 'func', msgBox)
+
+  switch (msgBox.action) {
+    case 'open':
+    case 'exit': {
+      if (func) {
+        func(msgBox.message)
+      }
+      break
+    }
+
+    case 'close': {
+      WPSMask.remove()
+      break;
+    }
+
+    case 'taohong':
+    case 'status':
+    case 'save': {
+      const features = msgBox.features || {}
+      let result = msgBox.message
+      try {
+        result = JSON.parse(result)
+
+        console.log(result, 'result')
+
+      } catch (err) {
+        //
+      }
+      if (func) {
+        func(result, features)
+      }
+      break
+    }
+
+    default:
+      break
+  }
 }
 
 // 多进程

@@ -71,8 +71,6 @@ function pInitParameters() {
   wps.PluginStorage.setItem(constStrEnum.CloseConfirmTip, true); // 弹出关闭前提示保存信息后的提示信息
 }
 
-console.log(getTemplateUrl, "getTemplateUrl");
-
 //挂载WPS的文档事件
 function AddDocumentEvent() {
   wps.ApiEvent.AddApiEventListener("WindowActivate", OnWindowActivate);
@@ -839,7 +837,7 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
 
       if (isCreate) {
         file = {
-          key: Math.random(),
+          key: Math.random() * 100,
           // key: uuidv1(),
           type: "docx",
           name: l_newFileName,
@@ -847,7 +845,7 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       }
 
       if (!file.key) {
-        file.key = Math.random();
+        file.key = Math.random() * 100;
         // file.key = uuidv1();
       }
 
@@ -959,12 +957,12 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       console.log("已通知业务系统，开始关闭公文 TAB");
 
       // 保存成功直接关闭
-      // if (l_doc) {
-      //   console.log("OnUploadToServerSuccess: before Close");
-      //   l_doc.Close(-1); //保存文档后关闭
-      //   console.log("OnUploadToServerSuccess: after Close");
-      //   return;
-      // }
+      if (l_doc) {
+        console.log("OnUploadToServerSuccess: before Close");
+        l_doc.Close(-1); //保存文档后关闭
+        console.log("OnUploadToServerSuccess: after Close");
+        return;
+      }
     })
     // .then(() => {
     //   // 提醒关闭
@@ -1641,6 +1639,7 @@ function OnAction(control) {
       break;
     case "btnInsertWater": // 插入水印
       DoInsertWaterToDoc();
+      break;
     case "btnInsertDate": //插入日期
       OnInsertDateClicked();
       break;
@@ -1688,9 +1687,9 @@ function OnAction(control) {
       //通过idMso进行「保存」功能的自定义
       if (pCheckIfOADoc()) {
         //文档来源是业务系统的，做自定义
-        alert(
-          "这是OA文档，将Ctrl+S动作做了重定义，可以调用OA的保存文件流到业务系统的接口。"
-        );
+        // alert(
+        //   "这是OA文档，将Ctrl+S动作做了重定义，可以调用OA的保存文件流到业务系统的接口。"
+        // );
         OnBtnSaveToServer();
       } else {
         //本地的文档，期望不做自定义，通过转调idMso的方法实现

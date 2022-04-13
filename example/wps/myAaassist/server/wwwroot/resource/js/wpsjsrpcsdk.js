@@ -1,3 +1,4 @@
+// sdk
 (function (global, factory) {
 
     "use strict";
@@ -59,6 +60,16 @@
     }
 
     /**
+     * 更改
+     * 加载项本地服务返回的错误信息，统一为data ： message的json格式
+     * 如果有新增错误信息，添加到下面
+     * 也可以通过请求状态码返回错误信息
+     */
+    const errorMsg = [
+        '{"data": "Failed to send message to WPS."}',
+        '{"data": "Json parse failed."}',
+        '{"error": "Json parse failed."}',
+    ]    /**
      * 通过该接口给服务器发请求
      * @param {*} options       参数对象，具体包含的参数如下：
      * @param {*} url           网页路径，传输地址
@@ -69,7 +80,7 @@
      * @param {*} bPop          是否弹出浏览器提示对话框
      * @param {*} timeout       请求等待响应的时间，超过时间请求实效
      * @param {*} concurrent    请求是否同步发送
-     * @param {*} client        wpsclient对象
+     * @param {*} wpsclient        wpsclient对象
      * @returns NULL
      */
     function startWps(options) {
@@ -81,52 +92,115 @@
                 });
             return;
         }
-        bFinished = false;
+        // 更改
+        // bFinished = false;
+        if (!options.concurrent) bFinished = false
+        else options.bFinished = false
 
         function startWpsInnder(tryCount) {
+            // if (tryCount <= 0) {
+            //     if (bFinished)
+            //         return;
+            //     bFinished = true;
+            //     if (options.callback)
+            //         options.callback({
+            //             status: 2,
+            //             message: "请允许浏览器打开WPS Office"
+            //         });
+            //     return;
+            // }
+
+            // 更改
             if (tryCount <= 0) {
-                if (bFinished)
-                    return;
-                bFinished = true;
-                if (options.callback)
+                if (!options.concurrent) {
+                    if (bFinished) return
+                    bFinished = true
+                } else {
+                    if (options.bFinished) {
+                        return
+                    }
+                    options.bFinished = true
+                }
+                if (options.callback) {
                     options.callback({
                         status: 2,
-                        message: "请允许浏览器打开WPS Office"
-                    });
-                return;
+                        message: '请允许浏览器打开WPS Office',
+                    })
+                }
+                return
             }
             var xmlReq = getHttpObj();
             //WPS客户端提供的接收参数的本地服务，HTTP服务端口为58890，HTTPS服务端口为58891
             //这俩配置，取一即可，不可同时启用
             xmlReq.open('POST', options.url);
             xmlReq.onload = function (res) {
-                bFinished = true;
-                if (initCloudsvr == true) {
-                    initCloudsvr = false;
-                }
+                // 更改
+                // bFinished = true;
+                const responseStr = IEVersion() < 10 ? xmlReq.responseText : res.target.response
+                const respStatus = IEVersion() < 10 ? xmlReq.status : res.target.status
+                if (!options.concurrent) bFinished = true
+                else options.bFinished = true
+                // if (initCloudsvr == true) {
+                //     initCloudsvr = false;
+                // }
+                // if (options.callback) {
+                //     if (res.target.response == "{\"data\": \"Failed to send message to WPS.\"}") {
+                //         options.callback({
+                //             status: 1,
+                //             message: IEVersion() < 10 ? xmlReq.responseText : res.target.response
+                //         });
+                //     }
+                //     else {
+                //         options.callback({
+                //             status: 0,
+                //             response: IEVersion() < 10 ? xmlReq.responseText : res.target.response
+                //         });
+                //     }
+                // }
                 if (options.callback) {
-                    if(res.target.response == "{\"data\": \"Failed to send message to WPS.\"}"){
+                    if (respStatus != 200 || errorMsg.indexOf(responseStr) != -1) {
+                        const errorMessage = JSON.parse(responseStr)
                         options.callback({
                             status: 1,
-                            message: IEVersion() < 10 ? xmlReq.responseText : res.target.response
-                        });
-                    }
-                    else {
+                            message: errorMessage.data,
+                        })
+                        if (
+                            errorMessage.data == 'Subserver not available.' &&
+                            tryCount == options.tryCount &&
+                            options.bPop
+                        ) {
+                            InitWpsCloudSvr()
+                            setTimeout(() => {
+                                startWpsInnder(tryCount - 1)
+                            }, 3000)
+                        }
+                    } else {
                         options.callback({
                             status: 0,
-                            response: IEVersion() < 10 ? xmlReq.responseText : res.target.response
-                        });
+                            response: responseStr,
+                        })
                     }
                 }
             }
+            // xmlReq.ontimeout = xmlReq.onerror = function (res) {
+            //     xmlReq.bTimeout = true;
+            //     if (tryCount == options.tryCount && options.bPop && initCloudsvr == false) { //打开wps并传参
+            //         InitWpsCloudSvr();
+            //     }
+            //     setTimeout(function () {
+            //         startWpsInnder(tryCount - 1)
+            //     }, 1000);
+            // }
+            // 更改
             xmlReq.ontimeout = xmlReq.onerror = function (res) {
-                xmlReq.bTimeout = true;
-                if (tryCount == options.tryCount && options.bPop && initCloudsvr == false) { //打开wps并传参
-                    InitWpsCloudSvr();
+                xmlReq.bTimeout = true
+                if (tryCount == options.tryCount && options.bPop) {
+                    // 打开wps并传参
+                    InitWpsCloudSvr()
                 }
-                setTimeout(function () {
+                setTimeout(() => {
                     startWpsInnder(tryCount - 1)
-                }, 1000);
+                }, 1000)
             }
             if (IEVersion() < 10) {
                 xmlReq.onreadystatechange = function () {
@@ -148,27 +222,28 @@
         return;
     }
 
-    var fromCharCode = String.fromCharCode;
+    const { fromCharCode } = String
     // encoder stuff
-    var cb_utob = function (c) {
+    const cb_utob = function (c) {
         if (c.length < 2) {
-            var cc = c.charCodeAt(0);
-            return cc < 0x80 ? c :
-                cc < 0x800 ? (fromCharCode(0xc0 | (cc >>> 6)) +
-                    fromCharCode(0x80 | (cc & 0x3f))) :
-                    (fromCharCode(0xe0 | ((cc >>> 12) & 0x0f)) +
-                        fromCharCode(0x80 | ((cc >>> 6) & 0x3f)) +
-                        fromCharCode(0x80 | (cc & 0x3f)));
+            var cc = c.charCodeAt(0)
+            return cc < 0x80
+                ? c
+                : cc < 0x800
+                    ? fromCharCode(0xc0 | (cc >>> 6)) + fromCharCode(0x80 | (cc & 0x3f))
+                    : fromCharCode(0xe0 | ((cc >>> 12) & 0x0f)) +
+                    fromCharCode(0x80 | ((cc >>> 6) & 0x3f)) +
+                    fromCharCode(0x80 | (cc & 0x3f))
         } else {
-            var cc = 0x10000 +
-                (c.charCodeAt(0) - 0xD800) * 0x400 +
-                (c.charCodeAt(1) - 0xDC00);
-            return (fromCharCode(0xf0 | ((cc >>> 18) & 0x07)) +
+            var cc = 0x10000 + (c.charCodeAt(0) - 0xd800) * 0x400 + (c.charCodeAt(1) - 0xdc00)
+            return (
+                fromCharCode(0xf0 | ((cc >>> 18) & 0x07)) +
                 fromCharCode(0x80 | ((cc >>> 12) & 0x3f)) +
                 fromCharCode(0x80 | ((cc >>> 6) & 0x3f)) +
-                fromCharCode(0x80 | (cc & 0x3f)));
+                fromCharCode(0x80 | (cc & 0x3f))
+            )
         }
-    };
+    }
     var re_utob = /[\uD800-\uDBFF][\uDC00-\uDFFFF]|[^\x00-\x7F]/g;
     var utob = function (u) {
         return u.replace(re_utob, cb_utob);
@@ -192,19 +267,78 @@
             // if the next str index does not exist:
             //   change the mapping table to "="
             //   check if d has no fractional digits
-            str.charAt(idx | 0) || (map = '=', idx % 1);
+            str.charAt(idx | 0) || ((map = '='), idx % 1);
             // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
-            output += map.charAt(63 & block >> 8 - idx % 1 * 8)
+            // output += map.charAt(63 & block >> 8 - idx % 1 * 8)
+            // 更改
+            output += map.charAt(63 & (block >> (8 - (idx % 1) * 8)))
         ) {
             charCode = str.charCodeAt(idx += 3 / 4);
             if (charCode > 0xFF) {
                 throw new InvalidCharacterError("'btoa' failed: The string to be encoded contains characters outside of the Latin1 range.");
             }
-            block = block << 8 | charCode;
+            block = (block << 8) | charCode;
         }
         return output;
+
     }
 
+    // 更改
+    if (typeof window.atob !== 'function') window.atob = func_atob
+
+    // 更改
+    function func_atob(input) {
+        output = input.replace(/[\s\S]{1,4}/g, cb_decode)
+        return output
+    }
+
+    // 更改
+    function cb_decode(cccc) {
+        const len = cccc.length
+        const padlen = len % 4
+        const n =
+            (len > 0 ? b64tab[cccc.charAt(0)] << 18 : 0) |
+            (len > 1 ? b64tab[cccc.charAt(1)] << 12 : 0) |
+            (len > 2 ? b64tab[cccc.charAt(2)] << 6 : 0) |
+            (len > 3 ? b64tab[cccc.charAt(3)] : 0)
+        const chars = [fromCharCode(n >>> 16), fromCharCode((n >>> 8) & 0xff), fromCharCode(n & 0xff)]
+        chars.length -= [0, 0, 2, 1][padlen]
+        return chars.join('')
+    }
+
+    // 更改
+    function btou(b) {
+        return b.replace(re_btou, cb_btou)
+    }
+
+    // 更改
+    // decoder stuff
+    var re_btou = new RegExp(
+        ['[\xC0-\xDF][\x80-\xBF]', '[\xE0-\xEF][\x80-\xBF]{2}', '[\xF0-\xF7][\x80-\xBF]{3}'].join('|'),
+        'g'
+    )
+
+    // 更改
+    function cb_btou(cccc) {
+        switch (cccc.length) {
+            case 4:
+                var cp =
+                    ((0x07 & cccc.charCodeAt(0)) << 18) |
+                    ((0x3f & cccc.charCodeAt(1)) << 12) |
+                    ((0x3f & cccc.charCodeAt(2)) << 6) |
+                    (0x3f & cccc.charCodeAt(3))
+                var offset = cp - 0x10000
+                return fromCharCode((offset >>> 10) + 0xd800) + fromCharCode((offset & 0x3ff) + 0xdc00)
+            case 3:
+                return fromCharCode(
+                    ((0x0f & cccc.charCodeAt(0)) << 12) |
+                    ((0x3f & cccc.charCodeAt(1)) << 6) |
+                    (0x3f & cccc.charCodeAt(2))
+                )
+            default:
+                return fromCharCode(((0x1f & cccc.charCodeAt(0)) << 6) | (0x3f & cccc.charCodeAt(1)))
+        }
+    }
     /**
      * 将字符串进行Base64编码
      * @param {*} u         需要编码的数据
@@ -218,6 +352,11 @@
                 return m0 == '+' ? '-' : '_';
             }).replace(/=/g, '');
     };
+
+    // 更改
+    const decode = function (u) {
+        return btou(atob(String(u)))
+    }
 
     /**
      * 获取IE浏览器版本
@@ -336,14 +475,22 @@
     var exId = 0;
     function WpsStartWrapExInner(options) {
         var infocontent = options.param.param;
+        // 更改
+        const cmdId = guid()
+
         if (!options.wpsclient || options.wpsclient.single) {
             infocontent = JSON.stringify(options.param.param);
-            var rspUrl = options.urlBase + "/transferEcho/runParams";
-            var time = new Date();
-            var cmdId = "js" + time.getTime() + "_" + exId;
-            var funcEx = "var res = " + options.func;
-            var cbCode = "var xhr = new XMLHttpRequest();xhr.open('POST', '" + rspUrl + "');xhr.send(JSON.stringify({id: '" + cmdId + "', response: res}));" //res 为func执行返回值
-            var infoEx = infocontent + ");" + cbCode + "void(0";
+            // var rspUrl = options.urlBase + "/transferEcho/runParams";
+            // 更改
+            const rspUrl = `${options.urlBase}/transferEcho/runParams`
+            // var time = new Date();
+            const funcEx = `var res = ${options.func}`
+            // 更改
+            // var cmdId = "js" + time.getTime() + "_" + exId;
+            // var cbCode = "var xhr = new XMLHttpRequest();xhr.open('POST', '" + rspUrl + "');xhr.send(JSON.stringify({id: '" + cmdId + "', response: res}));" //res 为func执行返回值
+            // var infoEx = infocontent + ");" + cbCode + "void(0";
+            const cbCode = `var xhr = new XMLHttpRequest();xhr.open('POST', '${rspUrl}');xhr.send(JSON.stringify({id: '${cmdId}', response: res}));` // res 为func执行返回值
+            const infoEx = `${infocontent});${cbCode}void(0`
             options.func = funcEx;
             infocontent = infoEx;
         }
@@ -358,7 +505,9 @@
         var strData = JSON.stringify(startInfo);
         if (IEVersion() < 10) {
             try {
-                eval("strData = '" + JSON.stringify(startInfo) + "';");
+                // eval("strData = '" + JSON.stringify(startInfo) + "';");
+                // 更改
+                eval(`strData = '${JSON.stringify(startInfo)}';`)
             } catch (err) {
 
             }
@@ -367,15 +516,19 @@
         var baseData = encode(strData);
         var wrapper;
 
-        if (!options.wpsclient|| options.wpsclient.single) {
+        if (!options.wpsclient || options.wpsclient.single) {
             var url = options.urlBase + "/transfer/runParams";
-            var data = "ksowebstartup" + options.clientType + "://" + baseData;
+            // var data = "ksowebstartup" + options.clientType + "://" + baseData;
+            // 更改
+            const data = `ksowebstartup${options.clientType}://${baseData}`
             wrapper = {
                 id: cmdId,
                 app: options.clientType,
                 data: data,
                 serverId: serverId,
-                mode: options.silentMode ? "true" : "false",
+                // mode: options.silentMode ? "true" : "false",
+                // 更改
+                mode: !!options.silentMode,
             };
         }
         else {
@@ -402,8 +555,9 @@
     }
 
     var serverVersion = "wait"
-    var cloudSvrStart = true;
-    var initCloudsvr = false;
+    // 更改
+    // var cloudSvrStart = true;
+    // var initCloudsvr = false;
     /**
      * 获取服务端版本号的接口
      * @param {*} options       参数对象，详情见下：
@@ -418,9 +572,13 @@
      */
     function WpsStartWrapVersionInner(options) {
         if (serverVersion == "wait") {
-            if (cloudSvrStart == false) {
-                InitWpsCloudSvr();
-                initCloudsvr = true;
+            // if (cloudSvrStart == false) {
+            //     InitWpsCloudSvr();
+            //     initCloudsvr = true;
+            // }
+            // 更改
+            if (g_isSdkInited == true) {
+                InitWpsCloudSvr()
             }
             startWps({
                 url: options.urlBase + '/version',
@@ -431,7 +589,8 @@
                         return;
                     }
                     serverVersion = res.response;
-                    cloudSvrStart = true;
+                    // 更改
+                    // cloudSvrStart = true;
                     options.tryCount = 1
                     options.bPop = false
                     if (serverVersion === "") {
@@ -444,7 +603,9 @@
                     }
                 },
                 tryCount: 4,
-                bPop: true,
+                // bPop: true,
+                // 更改
+                bPop: !g_isSdkInited,
                 timeout: 5000,
                 concurrent: options.concurrent
             });
@@ -585,19 +746,22 @@
     var serverId = undefined
     function EnableMultiUser() {
         serverId = getServerId();
+
+        // 更改
+        InitSdk(true)
     }
 
     /**
      * 自定义协议启动服务端
      * 默认不带参数serverId，linux未升级之前不要使用多用户
      */
-    function InitWpsCloudSvr () {
-        if(serverId == undefined)
+    function InitWpsCloudSvr() {
+        if (serverId == undefined)
             window.location.href = "ksoWPSCloudSvr://start=RelayHttpServer"//是否启动wps弹框
         else
             window.location.href = "ksoWPSCloudSvr://start=RelayHttpServer" + "&serverId=" + serverId //是否启动wps弹框
     }
-    
+
     /**
      * 获取serverId的接口
      * @returns serverId
@@ -629,9 +793,13 @@
     }
 
     var RegWebNotifyMap = { wps: {}, wpp: {}, et: {} }
-    var bWebNotifyUseTimeout = true
+    // 更改
+    // var bWebNotifyUseTimeout = true
+    var bWebNotifyUseTimeout = false
     function WebNotifyUseTimeout(value) {
-        bWebNotifyUseTimeout = value ? true : false
+        // bWebNotifyUseTimeout = value ? true : false
+        // 更改
+        bWebNotifyUseTimeout = !!value
     }
     var g_businessId = Number(Math.random().toString().substr(3, 5) + Date.parse(new Date())).toString(36);
     var HeartBeatWorker
@@ -690,37 +858,74 @@
         var askItem = function () {
             var xhr = getHttpObj()
             xhr.onload = function (e) {
-                if (xhr.responseText == "WPSInnerMessage_quit") {
+                // 更改
+                // if (xhr.responseText == "WPSInnerMessage_quit") {
+                if (xhr.responseText == 'WPSInnerMessage_quit' || xhr.status != 200) {
+                    if (!wpsclient || wpsclient.single) {
+                        window.setTimeout(askItem, 2000)
+                    }
                     return;
                 }
+                // 更改
+                window.setTimeout(askItem, 300)
                 try {
-                    var resText = JSON.parse(xhr.responseText);
-                    if (typeof resText == 'object') {
-                        paramStr.messageId = resText.msgId;
+                    // 更改
+                    if (!HeartBeatWorker) {
+                        throw new Error()
                     }
+                    var resText = JSON.parse(xhr.responseText);
+                    // 更改
+                    // if (typeof resText == 'object') {
+                    //     paramStr.messageId = resText.msgId;
+                    // }
                     if (wpsclient) {
-                        if (typeof resText.data == 'object')  // 如果发的数据是字符串化后的json对象，这里的resText.data就是一个json对象，可以输出自己想要的json数据
-                            wpsclient.OnRegWebNotify(resText.data.data)
-                        else
-                            wpsclient.OnRegWebNotify(resText.data)
+                        // 更改
+                        if (resText.data != undefined && paramStr.messageId != undefined) {
+                            // 如果发的数据是字符串化后的json对象，这里的resText.data就是一个json对象，可以输出自己想要的json数据
+                            if (typeof resText.data === 'object') {
+                                wpsclient.OnRegWebNotify(JSON.stringify(resText.data))
+                            } else wpsclient.OnRegWebNotify(resText.data)
+                        } else {
+                            wpsclient.OnRegWebNotify(xhr.responseText)
+                        }
                     } else {
                         var func = RegWebNotifyMap[clientType][name]
-                        if (typeof resText.data == 'object')  // 如果发的数据是字符串化后的json对象，这里的resText.data就是一个json对象，可以输出自己想要的json数据
-                            func(resText.data.data)
-                        else
-                            func(resText.data)
+                        // 更改
+                        if (resText.data != undefined && paramStr.messageId != undefined) {
+                            // 如果发的数据是字符串化后的json对象，这里的resText.data就是一个json对象，可以输出自己想要的json数据
+                            if (typeof resText.data === 'object') func(JSON.stringify(resText.data))
+                            else func(resText.data)
+                        } else {
+                            func(xhr.responseText)
+                        }
                     }
                 }
                 catch (e) {
                     // 这里做一个容错，即使json解析失败，也要把msgId提取出来，发回给服务端，避免消息清不掉一直重复发送
                     // 同时把data也取出来，但是格式无法保证
-                    var str = xhr.responseText
-                    var idx1 = str.indexOf(":")
-                    var idx2 = str.indexOf(",")
-                    paramStr.messageId = parseInt(str.substring(idx1 + 1, idx2))
-                    var idx3 = str.indexOf("\"data\"")
-                    var idx4 = str.indexOf("}")
-                    var data = str.substring(idx3, idx4)
+                    // var str = xhr.responseText
+                    // var idx1 = str.indexOf(":")
+                    // var idx2 = str.indexOf(",")
+                    // paramStr.messageId = parseInt(str.substring(idx1 + 1, idx2))
+                    // var idx3 = str.indexOf("\"data\"")
+                    // var idx4 = str.indexOf("}")
+                    // var data = str.substring(idx3, idx4)
+                    // 更改
+                    var data
+                    const str = xhr.responseText
+                    let idx1 = str.indexOf('"msgId"')
+                    let idx2
+                    let idx3
+                    let idx4
+                    var data
+                    if (idx1 != -1) {
+                        idx1 += 8
+                        idx2 = str.indexOf('"data"') - 2
+                        paramStr.messageId = parseInt(str.substring(idx1, idx2))
+                        idx3 = str.indexOf('"data"') + 8
+                        idx4 = str.length - 2
+                        data = str.substring(idx3, idx4)
+                    }
                     if (wpsclient) {
                         if (data)
                             wpsclient.OnRegWebNotify(data)
@@ -734,7 +939,6 @@
                             func(xhr.responseText)
                     }
                 }
-                window.setTimeout(askItem, 300)
             }
             xhr.onerror = function (e) {
                 if (bWebNotifyUseTimeout)
@@ -763,7 +967,9 @@
             }
             xhr.open('POST', GetUrlBase() + '/askwebnotify', true)
             if (bWebNotifyUseTimeout)
-                xhr.timeout = 2000;
+                // xhr.timeout = 2000;
+                // 更改
+                xhr.timeout = 10000;
             if (HeartBeatWorker) {
                 g_LastRegTime = new Date().valueOf();
                 var param = {
@@ -779,7 +985,9 @@
             }
             xhr.send(JSON.stringify(paramStr));
         }
-        window.setTimeout(askItem, 2000)
+        // window.setTimeout(askItem, 2000)
+        // 更改
+        askItem()
     }
 
     /**
@@ -803,7 +1011,7 @@
      * @param {*} jsPluginsXml  设置加载项路径
      * @param {*} silentMode    静默启动WPS
      */
-    function WpsStartWrapVersion(clientType, name, func, param, callback, showToFront, jsPluginsXml,silentMode) {
+    function WpsStartWrapVersion(clientType, name, func, param, callback, showToFront, jsPluginsXml, silentMode) {
         var paramEx = {
             jsPluginsXml: jsPluginsXml ? jsPluginsXml : "",
             showToFront: typeof (showToFront) == 'boolean' ? showToFront : true,
@@ -818,7 +1026,7 @@
             callback: callback,
             wpsclient: undefined,
             concurrent: true,
-            silentMode:silentMode
+            silentMode: silentMode
         }
         WpsStartWrapVersionInner(options);
     }
@@ -862,9 +1070,11 @@
          */
         this.notifyRegsitered = false;
         this.clientId = "";
-        this.concurrent = false;
+        // this.concurrent = false;
+        this.concurrent = true;
         this.clientType = clientType;
-        this.firstRequest = true;
+        // 更改
+        // this.firstRequest = true;
 
         /**
          * 内部函数，外部无需调用
@@ -873,8 +1083,10 @@
         this.initWpsClient = function (options) {
             options.clientType = this.clientType
             options.wpsclient = this
-            options.concurrent = this.firstRequest ? true : this.concurrent
-            this.firstRequest = false;
+            // 更改
+            // options.concurrent = this.firstRequest ? true : this.concurrent
+            // this.firstRequest = false;
+            options.concurrent = this.concurrent
             WpsStartWrapVersionInner(options)
         }
 
@@ -889,33 +1101,98 @@
          *                                   "WPS Addon is not response." 加载项阻塞，函数执行失败
          */
         this.InvokeAsHttp = function (name, func, param, callback, showToFront) {
+            // function clientCallback(res) {
+            //     //this不是WpsClient
+            //     if (res.status !== 0 || serverVersion < "1.0.1") {
+            //         if (callback)
+            //             callback(res);
+            //         RegWebNotify(clientType, name, this.client.onMessage)
+            //         return;
+            //     }
+            //     var resObject = JSON.parse(res.response);
+            //     if (this.client.clientId == "") {
+            //         this.client.clientId = resObject.clientId;
+            //     }
+            //     this.client.concurrent = true;
+            //     if (typeof resObject.data == "object")
+            //         res.response = JSON.stringify(resObject.data);
+            //     else
+            //         res.response = resObject.data;
+            //     if (IEVersion() < 10)
+            //         eval(" res.response = '" + res.response + "';");
+            //     if (callback)
+            //         callback(res);
+            //     this.client.RegWebNotify(name);
+            // }
+            // var paramEx = {
+            //     jsPluginsXml: this.jsPluginsXml ? this.jsPluginsXml : "",
+            //     showToFront: typeof (showToFront) == 'boolean' ? showToFront : true,
+            //     param: (typeof (param) == 'object' ? param : JSON.parse(param))
+            // }
+
+            // 更改
             function clientCallback(res) {
-                //this不是WpsClient
-                if (res.status !== 0 || serverVersion < "1.0.1") {
-                    if (callback) 
-                        callback(res);
-                    RegWebNotify(clientType, name, this.client.onMessage)
-                    return;
+                // this不是WpsClient，是options对象
+                if (res.status !== 0 || serverVersion < '1.0.1' || this.wpsclient.single == true) {
+                    if (callback) {
+                        callback(res)
+                    }
+                    if (serverVersion < '1.0.1' || this.wpsclient.single == true) {
+                        RegWebNotify(clientType, name, this.wpsclient.onMessage)
+                    }
+                    return
                 }
-                var resObject = JSON.parse(res.response);
-                if (this.client.clientId == "") {
-                    this.client.clientId = resObject.clientId;
+                if (serverVersion < '1.0.3') {
+                    try {
+                        var resObject = JSON.parse(res.response)
+                        if (this.wpsclient.clientId == '') {
+                            this.wpsclient.clientId = resObject.clientId
+                        }
+                        if (typeof resObject.data === 'object') {
+                            res.response = JSON.stringify(resObject.data)
+                        } else {
+                            res.response = resObject.data
+                        }
+                    } catch (e) {
+                        const str = res.response
+                        let idx1 = str.indexOf('"clientId":"{')
+                        let idx2
+                        let idx3
+                        let idx4
+                        if (idx1 != -1) {
+                            idx1 = idx1 + '"clientId":"{'.length - 1
+                            idx2 = str.indexOf('"data":') - 3
+                            if (this.wpsclient.clientId == '') {
+                                this.wpsclient.clientId = str.substring(idx1, idx2)
+                            }
+                            idx3 = str.indexOf('"data":') + '"data":'.length
+                            idx4 = str.length - 1
+                            if (idx3 < idx4) {
+                                res.response = str.substring(idx3, idx4)
+                            } else {
+                                res.response = ''
+                            }
+                        }
+                    }
+                } else {
+                    var resObject = JSON.parse(res.response)
+                    if (this.wpsclient.clientId == '') {
+                        this.wpsclient.clientId = resObject.clientId
+                    }
+                    res.response = decode(resObject.data)
                 }
-                this.client.concurrent = true;
-                if (typeof resObject.data == "object")
-                    res.response = JSON.stringify(resObject.data);
-                else
-                    res.response = resObject.data;
-                if (IEVersion() < 10)
-                    eval(" res.response = '" + res.response + "';");
-                if (callback)
-                    callback(res);
-                this.client.RegWebNotify(name);
+                if (IEVersion() < 10) {
+                    eval(` res.response = '${res.response}';`)
+                }
+                if (callback) {
+                    callback(res)
+                }
+                this.wpsclient.RegWebNotify(name)
             }
-            var paramEx = {
-                jsPluginsXml: this.jsPluginsXml ? this.jsPluginsXml : "",
-                showToFront: typeof (showToFront) == 'boolean' ? showToFront : true,
-                param: (typeof (param) == 'object' ? param : JSON.parse(param))
+            const paramEx = {
+                jsPluginsXml: this.jsPluginsXml ? this.jsPluginsXml : '',
+                showToFront: typeof showToFront === 'boolean' ? showToFront : true,
+                param: typeof param === 'object' ? param : JSON.parse(param),
             }
             this.initWpsClient({
                 name: name,
@@ -972,24 +1249,50 @@
          * @param {function({int, string})} [callback]         回调函数，status = 0 表示成功，失败请查看message信息
          */
         this.StartWpsInSilentMode = function (name, callback) {
+            // function initCallback(res) {
+            //     //this不是WpsClient
+            //     if (res.status !== 0 || serverVersion < "1.0.1") {
+            //         if (callback)
+            //             callback(res);
+            //         RegWebNotify(clientType, name, this.client.onMessage)
+            //         return;
+            //     }
+            //     if (this.client.clientId == "") {
+            //         this.client.clientId = JSON.parse(res.response).clientId;
+            //         window.wpsclients[window.wpsclients.length] = { name: name, client: this.client };
+            //     }
+            //     res.response = JSON.stringify(JSON.parse(res.response).data);
+            //     this.client.concurrent = true;
+            //     if (callback) {
+            //         callback(res);
+            //     }
+            //     this.client.RegWebNotify(name);
+            // }
+            // 更改
             function initCallback(res) {
-                //this不是WpsClient
-                if (res.status !== 0 || serverVersion < "1.0.1") {
-                    if (callback) 
-                        callback(res);
-                    RegWebNotify(clientType, name, this.client.onMessage)
-                    return;
+                // this不是WpsClient，是options对象
+                if (res.status !== 0 || serverVersion < '1.0.1' || this.wpsclient.single == true) {
+                    if (callback) {
+                        callback(res)
+                    }
+                    if (serverVersion < '1.0.1' || this.wpsclient.single == true) {
+                        RegWebNotify(clientType, name, this.wpsclient.onMessage)
+                    }
+                    return
                 }
-                if (this.client.clientId == "") {
-                    this.client.clientId = JSON.parse(res.response).clientId;
-                    window.wpsclients[window.wpsclients.length] = { name: name, client: this.client };
+                const jsonObj = JSON.parse(res.response)
+                if (this.wpsclient.clientId == '') {
+                    this.wpsclient.clientId = jsonObj.clientId
                 }
-                res.response = JSON.stringify(JSON.parse(res.response).data);
-                this.client.concurrent = true;
+                if (serverVersion < '1.0.3') {
+                    res.response = JSON.stringify(jsonObj.data)
+                } else {
+                    res.response = decode(jsonObj.data)
+                }
                 if (callback) {
-                    callback(res);
+                    callback(res)
                 }
-                this.client.RegWebNotify(name);
+                this.wpsclient.RegWebNotify(name)
             }
             var paramEx = {
                 jsPluginsXml: this.jsPluginsXml,
@@ -1117,49 +1420,68 @@
     /**
      * 初始化sdk，用来减少在服务进程启动时自定义协议弹框出现的次数
      */
-    function InitSdk() {
+    var g_isSdkInited = false
+    function InitSdk(bMultiUser) {
         var url = GetUrlBase() + "/version";
+        // startWps({
+        //     url: url,
+        //     callback: function (res) {
+        //         if (res.status !== 0) {
+        //             cloudSvrStart = false;
+        //             return;
+        //         }
+        //         if (serverVersion == "wait") {
+        //             InitMultiUser();
+        //         }
+        //     },
+        //     tryCount: 1,
+        //     bPop: false,
+        //     timeout: 1000
+        // });
+        // 更改
         startWps({
-            url: url,
-            callback: function (res) {
-                if (res.status !== 0) {
-                    cloudSvrStart = false;
-                    return;
+            url,
+            sendData: JSON.stringify({ serverId }),
+            callback(res) {
+                if ((!serverId && !bMultiUser) || bMultiUser) g_isSdkInited = true
+                if (res.status !== 0 && res.message !== 'Subserver not available.') {
+                    serverVersion = 'wait'
+                    return
                 }
-                if (serverVersion == "wait") {
-                    InitMultiUser();
-                }
+                if (res.response && serverVersion == 'wait') serverVersion = res.response
             },
             tryCount: 1,
             bPop: false,
-            timeout: 1000
-        });
+            concurrent: true,
+            timeout: 1000,
+        })
     }
-    InitSdk();
+    InitSdk(false);
 
     /**
      * 初始化多用户模式
      */
-    function InitMultiUser() {
-        var url = GetUrlBase() + "/version";
-        startWps({
-            url: url,
-            sendData: JSON.stringify({ serverId: serverId }),
-            callback: function (res) {
-                if (res.status !== 0) {
-                    cloudSvrStart = false;
-                    return;
-                }
-                if (serverVersion == "wait") {
-                    serverVersion = res.response;
-                    cloudSvrStart = true;
-                }
-            },
-            tryCount: 1,
-            bPop: false,
-            timeout: 1000
-        });
-    }
+    // 更改
+    // function InitMultiUser() {
+    //     var url = GetUrlBase() + "/version";
+    //     startWps({
+    //         url: url,
+    //         sendData: JSON.stringify({ serverId: serverId }),
+    //         callback: function (res) {
+    //             if (res.status !== 0) {
+    //                 cloudSvrStart = false;
+    //                 return;
+    //             }
+    //             if (serverVersion == "wait") {
+    //                 serverVersion = res.response;
+    //                 cloudSvrStart = true;
+    //             }
+    //         },
+    //         tryCount: 1,
+    //         bPop: false,
+    //         timeout: 1000
+    //     });
+    // }
 
     if (typeof noGlobal === "undefined") {
         window.WpsInvoke = WpsInvoke;
@@ -1277,7 +1599,9 @@
             callback: callBack,
             tryCount: 3,
             bPop: true,
-            timeout: 5000,
+            // timeout: 5000,
+            // 更改
+            timeout: 0,
             concurrent: true
         });
     }
@@ -1301,6 +1625,15 @@
     }
 
     /**
+     * 禁用所有加载项
+     * @param {*} element
+     * @param {*} callBack
+     */
+    function WpsAddonDisableAll(element, callBack) {
+        WpsAddonHandleEx(element, 'disableall', callBack)
+    }
+
+    /**
      * 生成json格式的数据
      * @param {*} element   参数对象
      * @param {*} cmd       具体操作，enable / disable / disableall
@@ -1313,7 +1646,9 @@
             "url": element.url,
             "addonType": element.addonType,
             "online": element.online,
-            "version": element.version
+            "version": element.version,
+            // 更改
+            time: new Date().getTime(),
         }
         return FormatSendData(data);
     }
@@ -1345,11 +1680,14 @@
         verifyStatus: WpsAddonVerifyStatus,
         enable: WpsAddonEnable,
         disable: WpsAddonDisable,
+        disableall: WpsAddonDisableAll,
     }
 
     if (typeof noGlobal === "undefined") {
         window.WpsAddonMgr = WpsAddonMgr;
     }
 
-    return { WpsInvoke: WpsInvoke, WpsAddonMgr: WpsAddonMgr, version: "1.0.21" };
+    // return { WpsInvoke: WpsInvoke, WpsAddonMgr: WpsAddonMgr, version: "1.0.21" };
+    // 更改
+    return { WpsInvoke, WpsAddonMgr, version: '1.0.31' }
 });

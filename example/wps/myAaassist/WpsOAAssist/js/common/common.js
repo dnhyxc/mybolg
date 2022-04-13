@@ -549,6 +549,7 @@ function UploadFile(
       else OnFail(xhr.response);
     }
   };
+  xhr.withCredentials = true;
   xhr.setRequestHeader("Cache-Control", "no-cache");
   xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
   if (data.fake) {
