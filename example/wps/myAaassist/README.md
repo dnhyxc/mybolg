@@ -1,121 +1,159 @@
-## Welcome to WPS OAAssist Demo
+### WPS 加载项
 
-### 这个项目是什么？
+#### 什么是 WPS OA 助手
 
-    这个工程主要提供常见的OA助手的场景示例来演示网页端启动WPS客户端并和WPS加载项交互WPS API的功能，方便大家能够快速理解并熟悉WPS加载项机制以及和浏览器调用交互的流程。
+WPS 加载项是一套基于 Web 技术用来扩展 WPS 应用程序的解决方案。每个 WPS 加载项都对应打开了一个网页，并通过调用网页中 JavaScript 方法来完成其功能逻辑。具体查看 [WPS 开发者文档](https://open.wps.cn/docs/client/wpsLoad)。
 
-### 工程结构
+#### 加载项（WpsOAAssist）文件结构说明
 
-* demo.html 	包含了本地是否安装了正确的wps安装包、是否启动了本地服务端等的环境检测。
-* server 	包含了一些前端文件和演示场景的模板文件，为网页端场景代码, 此外有几个场景需要服务端的支持，用nodejs写了一个本地服务程序用于模拟服务端场景。
-* EtOAAssist	WPS 表格组件的OA助手WPS加载项，提供简单的OA场景功能示例。（单独的网页项目）
-* WppOAAssist	WPS 演示组件的OA助手WPS加载项，提供简单的OA场景功能示例。（单独的网页项目）
-* WpsOAAssist	WPS 文字组件的OA助手WPS加载项，提供常见的OA场景功能示例。（单独的网页项目）
-### demo启动
-1. 安装WPS,WPS版本支持情况
+- icon：图标文件。
 
-    WPS Win：企业版：11.8.2.8808；个人版：11.1.0.9566
+- js：WPS 加载项功能逻辑的 js 代码。
 
-    Linux 企业版：11.8.2.9346 ； 个人版暂不支持
+- otherslib：vue 等第三方库。
 
-    他们之后的版本，含他们自己
+- template：示例模板文件。
 
-    这些版本是稳定支持的，之前的2019版本也支持，不推荐用了，jsapi支持的不稳定。
+- importTemplate.html：导入模板页面。
 
-2. 安装node(仅demo需要)
-    [windows安装](https://www.cnblogs.com/liuqiyun/p/8133904.html)
+- index.html：加载项的默认加载页面。
 
-    [Linux安装](https://www.cnblogs.com/sirdong/p/11447739.html)
-    
-    使用node的作用是：
+- qrcode.html：插入二维码页面。
 
-    * 静态资源转发。/plugin/et指向EtOAAssist目录，/plugin/wps指向WpsOAAssist目录，/plugin/et指向WppOAAssist目录。以及file目录下文档的访问。
+- redhead.html：插入红头页面。
 
-    * 后端接口提供：提供了下载文件接口/Download/文件名 和 上传文件接口/Upload
+- selectBookmark.html：插入标签页面。
 
-    在实际项目中，不需要安装node，静态资源转发由tomcat、nginx或者其他中间件实现。后端接口由java或者php语言实现。
+- selectSeal.html：插入签章页面。
 
-3. 进入server目录下
-4. npm config set registry http://registry.npm.taobao.org //切换npm淘宝镜像源
-5. npm install //安装相应依赖
-6. node StartupServer //启动demo的服务
+- setUserName.html：修改默认用户名页面。
 
+- ribbon.xml：自定义选项卡配置，即自定义功能区配置。遵循 **CustomUI** 标准。
 
-### WPS重要地址
+#### 逻辑部分（wwwroot）结构说明
 
-* WPS配置文件oem.ini地址
+- file：所需要的各种文件模板。
+
+- resource：web 页面相关页面及交互资源。
+
+  - wps.js：唤起 wps 创建、编辑等交互逻辑所在区。
+
+  - wpsjsrpcsdk.js：wps 开发者提供的通用 sdk。
+
+  - index.html：web 端页面入口。
+
+#### 使用加载项套红具体用法
+
+```js
+function customDoc() {
+  var uploadPath = GetUploadPath();
+
+  var uploadFieldName = "xxx";
+
+  var fieldObj = {
+    title: "瞧好了，标题插入了",
+    mainSend: "WOWOWOW",
+    copySend: "DNHYXC",
+    issUer: "签发人",
+    signingUnit: "落款单位",
+    signatureUnit: "署名单位",
+    issueDate: "签发日期",
+    printDate: "印发日期",
+    creatPerson: "dnhyxc",
+    refNo: "2020[0902]号",
+    urgencyLevel: "紧急",
+    secretClass: "密级1",
+    department: "高级的前端部门",
+    units: "发文单位",
+  };
+
+  var bookMarksStart = "正文内容B";
+
+  var bookMarksEnd = "正文内容E";
+
+  const dealDescription = `创建【套红正文】文件`;
+
+  _WpsInvoke(
+    [
+      {
+        OpenDoc: {
+          docId: "902209",
+          uploadPath: uploadPath, // 保存文档上传接口
+          fileName: "", // 文件名称，新建时传空
+          newFileName: "取名字真的好难.docx", // 新定义的文件名称，可根据表单字段获取
+          uploadFieldName, // 上传人名称
+          insertFileUrl: GetDemoPath("wps广西移动公司部门会议纪要.doc"), // 套红模板
+          bkInsertFileStart: bookMarksStart, // 套红开始标签
+          bkInsertFileEnd: bookMarksEnd, // 套红结束标签
+          bodyTemplateUrl: "", // 正文模板
+          userName: "用户名称，正常需要根据用户登录信息获取",
+          suffix: ".pdf", // wps 需要保存的文件格式
+          uploadWithAppendPath: "1", // 1 对应 pdf
+
+          // 默认开启修订
+          revisionCtrl: {
+            bOpenRevision: true,
+            bShowRevision: true,
+          },
+
+          // 自定义传入wps中的参数
+          params: {
+            isNew: true, // 是否是创建
+            id: parseInt(Math.random() * 100),
+            orgId: "902209",
+            docId: 123456789,
+            file: undefined, // 创建时 file 需要传 undefined
+            index: -1, // 创建 index 需要传 -1
+            list: [], // 文件列表
+            operType: 4, // 创建时传 4，编辑传 12
+            dealDescription,
+            fieldObj, // 需要插入的各种标签属性
+          },
+          openType: {
+            // 文档打开方式
+            // 文档保护类型，-1：不启用保护模式，0：只允许对现有内容进行修订，
+            // 1：只允许添加批注，2：只允许修改窗体域(禁止拷贝功能)，3：只读
+            protectType: -1,
+            // protectType: downloadParams ? 0 : -1,
+            // password: '123456',
+          },
+          // buttonGroups: options.filePath ? "btnImportTemplate" : "", // 屏蔽功能按钮
+        },
+      },
+    ],
+    true
+  ); // OpenDoc方法对应于OA助手dispatcher支持的方法名
+}
 ```
-    oem.ini目录地址：
-    windows:
-        1. 安装路径\WPS Offlce\一串数字（版本号）\offlce6\cfgs\
-        2. 鼠标右键点击左面的wps文字图标==>打开文件位置==>在同级目录中找到cfgs目录
-    linux:
-        普通linux操作系统：
-             /opt/kingsoft/wps-office/office6/cfgs/
-        uos操作系统:
-            /opt/apps/cn.wps.wps-office-pro/files/kingsoft/wps-office/office6/cfgs/
+
+#### 如何向 wps 中插入执行标签属性
+
+当需要插入新的标签属性时，只需要找到 `WpsOAAssist/js/commom/enum.js` 文件，添加需要新插入的标签值即可。
+
+```js
+var fieldObjEnum = {
+  标题: "title",
+  文号: "refNo",
+  // 紧急程度
+  缓急: "urgencyLevel",
+  // 密级
+  密级: "secretClass",
+  // 主送
+  主送: "mainSend",
+  // 抄送
+  抄送: "copySend",
+  签发人: "issUer",
+  落款单位: "signingUnit",
+  署名单位: "signatureUnit",
+  签发日期: "issueDate",
+  印发日期: "printDate",
+  // 附件
+  附件: "enclosure",
+  // 起草人
+  起草人: "creatPerson",
+  // 部门
+  部门: "department",
+  // 发文单位
+  发文单位: "units",
+};
 ```
-
-
-* 加载项管理文件存放位置（jsaddons目录）
-```
-    jsaddons目录地址：
-    windows:
-        我的电脑地址栏中输入：%appdata%\kingsoft\wps\jsaddons
-    linux:
-        我的电脑地址栏中输入：~/.local/share/Kingsoft/wps/jsaddons
-
-```
-
-### 调试器开启和使用
-
-    1. 配置oem.ini,在support栏下配置JsApiShowWebDebugger=true
-    2. linux机器上需要使用quickstartoffice restart重启WPS
-        普通linux操作系统：
-            电脑终端执行quickstartoffice restart
-        uos操作系统:
-            电脑终端执行 cd /opt/apps/cn.wps.wps-office-pro/files/bin
-            ./quickstartoffice restart
-    3. WPS打开后，在有文档的情况下按alt+F12(index.html页面的调试器)
-    4. ShowDialog和Taskpane页面的调试器，点击该弹窗或者任务窗格，按F12
-    如果无法打开调试器，那么说明加载项加载失败了，排查加载项管理文件是否生成，加载项管理文件中的加载项地址是否正确
-
-
-
-### 项目集成
-1. 部署加载项
-
-    * 将WpsOAAssist,EtOAAssist,WppOAAssist这三个目录分别部署到服务器上
-
-    [部署到tomcat](https://jingyan.baidu.com/article/22a299b5c6cfb09e18376a62.html)
-    [部署到nginx](https://www.cnblogs.com/amazingjava/p/13411644.html)
-2. 配置加载项管理文件
-
-     加载项有两种部署模式，publish模式和jsplugins.xml模式，**这两种模式是WPS去找到加载项管理文件的方式**，每个模式都有对应的管理文件,WPS启动时，会去jsaddons目录读取publish.xml和jsplugins.xml文件。
-     
-     
-    * 区别：
-
-        * 管理文件生成方式不一样
-
-        publish模式是通过在网页中调用本地服务的端口，在客户本地jsaddons目录中生成publish.xml文件，https://kdocs.cn/l/cpOfxONhn8Yg [金山文档] publish自动安装加载项.docx
-
-        jsplugins.xml模式是在oem.ini中配置好地址，在WPS启动时，会自动去服务端拉取地址指向的jsplugins.xml文件，放到客户本地的jsaddons目录中。在实际项目中，将jsplugins.xml文件地址告知我们，由我们将jsplugins打包进WPS安装包中，用户安装二次打包后的安装包即可使用
-        
-    * 相同
-        * 都有离线和在线模式
-        离线模式和在线模式是去根据加载项管理文件中的加载项地址，去拉取代码的方式，模式介绍请看文档
-        
-        https://kdocs.cn/l/cBk8tsBIf
-        [金山文档] 加载项在线模式和离线模式.docx
-        
-
-### 注意事项
-
-* 本工程只是演示demo
-* 我们建议您修改示例代码结合具体的应用场景部署到服务器上面，这样更能够体现OA助手集成的应用场景
-* 为了保护代码，建议代码上线前进行混淆
-* 使用该工程的时候，必须要安装WPS专业版，请咨询QQ：3253920855
-
-
-        
