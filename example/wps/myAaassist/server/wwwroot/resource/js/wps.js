@@ -395,7 +395,7 @@ function openDoc() {
           isNew: false,
           file: filePath,
           operType: 12,
-          list: [{ redHeadPdfUrl: filePath }]
+          list: [{ url: filePath }]
         }
       },
     },

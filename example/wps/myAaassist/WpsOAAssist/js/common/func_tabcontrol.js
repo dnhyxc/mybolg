@@ -797,6 +797,9 @@ function OnInsertDateClicked() {
  * @returns 
  */
 function manageFileData(fileURLObj, file) {
+
+  console.log(fileURLObj, 'fileURLObj')
+
   var redHeadPdfUrl =
     fileURLObj.redHeadPdfUrl || fileURLObj.noRedHeadPdfUrl;
 
@@ -830,10 +833,11 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
 
   Promise.resolve()
     .then(() => {
-      console.log("构造最终文件对象");
 
       var list = l_params.list;
       var file = l_params.file;
+
+      console.log("构造最终文件对象", list);
 
       if (isCreate) {
         file = {
@@ -849,11 +853,13 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
         // file.key = uuidv1();
       }
 
-      console.log("最终文件对象构造之前》》》》》", file);
+      console.log("最终文件对象构造之前》》》》》", file, 'list>>>>>', list);
 
       if (typeof file === 'object') {
         file = manageFileData(fileURLObj, file);
+        console.log(file, 'file的类型为object')
       } else {
+        console.log(file, 'file的类型不是不是不是object')
         const objFile = { name: '正文.docx', type: 'docx', url: file }
         file = manageFileData(fileURLObj, objFile);
       }
@@ -861,17 +867,20 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       console.log("最终文件对象构造完成", file);
 
       if (isCreate) {
+
+        console.log(isCreate, "最终文件对象构造完成>>>>>>>", file);
+
         var nextIndex = list.length || 0;
         list.push(file);
         l_params.index = nextIndex;
       } else {
 
-        console.log(l_params, 'l_params.index')
+        console.log(l_params, '不是create>>>>>>l_params.index')
 
         if (l_params.index) {
           list[l_params.index] = file;
         } else {
-          list.file = file
+          list[0] = file
         }
       }
       l_params.list = list;
@@ -889,6 +898,9 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       return list;
     })
     .then((list) => {
+
+      console.log(list, '开始保存>>>>list')
+
       if (l_params.isNew) {
         return list;
       }
@@ -905,17 +917,18 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       console.log("整理保存记录参数", dealparam);
 
       // return dealDocumentBody(dealparam).then(() => list);
-      console.log(list, 'list')
       return list
     })
     .then((list) => {
-      console.log("保存操作记录成功，开始通知业务系统");
+      console.log(list, "保存操作记录成功，开始通知业务系统");
       // 通知业务系统
       var l_NofityURL = GetDocParamsValue(l_doc, constStrEnum.notifyUrl);
       if (l_NofityURL != "") {
         l_NofityURL = l_NofityURL.replace("{?}", "2"); //约定：参数为2则文档被成功上传
         NotifyToServer(l_NofityURL);
       } else {
+
+
         var successParams = {
           // action: isTaoHong ? 'taohong' : 'save',
           action: "save",
@@ -925,91 +938,26 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
           }),
           // message: resp,
         };
+
+        console.log(successParams, 'successParams')
+
         wps.OAAssist.WebNotify(JSON.stringify(successParams), true);
       }
-
-      // 如果是创建保存，直接关闭不提示
-      // if (l_params.isNew || isCreate) {
-      //   if (l_doc) {
-      //     console.log("OnUploadToServerSuccess: before Close");
-      //     l_doc.Close(-1); //保存文档后关闭
-      //     console.log("OnUploadToServerSuccess: after Close");
-      //     return;
-      //   }
-      // } else {
-      //   // 提醒关闭
-      //   var l_showConfirm = wps.PluginStorage.getItem(
-      //     constStrEnum.Save2OAShowConfirm
-      //   );
-      //   if (l_showConfirm) {
-      //     if (
-      //       wps.confirm("文件上传成功！继续编辑请确认，取消关闭文档。") == false
-      //     ) {
-      //       if (l_doc) {
-      //         console.log("OnUploadToServerSuccess: before Close");
-      //         l_doc.Close(-1); //保存文档后关闭
-      //         console.log("OnUploadToServerSuccess: after Close");
-      //       }
-      //     }
-      //   }
-      // }
 
       console.log("已通知业务系统，开始关闭公文 TAB");
 
       // 保存成功直接关闭
-      if (l_doc) {
-        console.log("OnUploadToServerSuccess: before Close");
-        l_doc.Close(-1); //保存文档后关闭
-        console.log("OnUploadToServerSuccess: after Close");
-        return;
-      }
+      // if (l_doc) {
+      //   console.log("OnUploadToServerSuccess: before Close");
+      //   l_doc.Close(-1); //保存文档后关闭
+      //   console.log("OnUploadToServerSuccess: after Close");
+      //   return;
+      // }
     })
-    // .then(() => {
-    //   // 提醒关闭
-    //   var l_showConfirm = wps.PluginStorage.getItem(constStrEnum.Save2OAShowConfirm);
-    //   if (l_showConfirm) {
-    //       if (wps.confirm("文件上传成功！继续编辑请确认，取消关闭文档。") == false) {
-    //           if (l_doc) {
-    //               console.log("OnUploadToServerSuccess: before Close");
-    //               l_doc.Close(-1); //保存文档后关闭
-    //               console.log("OnUploadToServerSuccess: after Close");
-    //           }
-    //       }
-    //   }
-    // })
     .catch(() => {
       alert("保存失败");
     });
 }
-
-// /**
-//  * 调用文件上传到OA服务端时，
-//  * @param {*} resp
-//  * @param {1 | 2 | 3 | 4} [saveType=1] 保存类型
-//  */
-// function OnUploadToServerSuccess(resp) {
-//   console.log("成功上传服务端后的回调：" + resp);
-//   console.log(resp);
-//   var l_doc = wps.WpsApplication().ActiveDocument;
-//   var l_showConfirm = wps.PluginStorage.getItem(
-//     constStrEnum.Save2OAShowConfirm
-//   );
-//   if (l_showConfirm) {
-//     if (wps.confirm("文件上传成功！继续编辑请确认，取消关闭文档。") == false) {
-//       if (l_doc) {
-//         console.log("OnUploadToServerSuccess: before Close");
-//         l_doc.Close(-1); //保存文档后关闭
-//         console.log("OnUploadToServerSuccess: after Close");
-//       }
-//     }
-//   }
-
-//   var l_NofityURL = GetDocParamsValue(l_doc, constStrEnum.notifyUrl);
-//   if (l_NofityURL != "") {
-//     l_NofityURL = l_NofityURL.replace("{?}", "2"); //约定：参数为2则文档被成功上传
-//     NotifyToServer(l_NofityURL);
-//   }
-// }
 
 // 更改：增加相应saveType参数的处理
 /**
