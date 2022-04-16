@@ -397,8 +397,8 @@ function pDoChangeToOtherDocFormat(
     if (
       !wps.confirm(
         "当前文档将另存一份" +
-        l_suffix +
-        " 格式的副本，并上传到系统后台，请确认 ？"
+          l_suffix +
+          " 格式的副本，并上传到系统后台，请确认 ？"
       )
     ) {
       return;
@@ -471,7 +471,7 @@ function pDoChangeToOtherDocFormat(
 /**
  * 把文档转换成UOT在上传
  */
-function OnDoChangeToUOF() { }
+function OnDoChangeToUOF() {}
 
 /**
  *  打开WPS云文档的入口
@@ -789,15 +789,13 @@ function OnInsertDateClicked() {
 
 /**
  * 处理最终返回的file
- * @param {*} file 
- * @returns 
+ * @param {*} file
+ * @returns
  */
 function manageFileData(fileURLObj, file) {
+  console.log(fileURLObj, "fileURLObj>>>>manageFileData");
 
-  console.log(fileURLObj, 'fileURLObj>>>>manageFileData')
-
-  var redHeadPdfUrl =
-    fileURLObj.redHeadPdfUrl || fileURLObj.noRedHeadPdfUrl;
+  var redHeadPdfUrl = fileURLObj.redHeadPdfUrl || fileURLObj.noRedHeadPdfUrl;
 
   return Object.assign({}, file, {
     originalUrl:
@@ -827,7 +825,6 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
 
   Promise.resolve()
     .then(() => {
-
       var list = l_params.list;
       var file = l_params.file;
 
@@ -845,12 +842,12 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
         // file.key = uuidv1();
       }
 
-      if (typeof file === 'object') {
+      if (typeof file === "object") {
         file = manageFileData(fileURLObj, file);
-        console.log(file, 'file的类型为object')
+        console.log(file, "file的类型为object");
       } else {
-        console.log(file, 'file的类型不是不是不是object')
-        const objFile = { name: '正文.docx', type: 'docx', url: file }
+        console.log(file, "file的类型不是不是不是object");
+        const objFile = { name: "正文.docx", type: "docx", url: file };
         file = manageFileData(fileURLObj, objFile);
       }
 
@@ -859,14 +856,19 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
         list.push(file);
         l_params.index = nextIndex;
 
-        console.log(isCreate, 'isCreate>>>>>>>>>>isCreate', nextIndex, 'nextIndex', file, 'file')
-
+        console.log(
+          isCreate,
+          "isCreate>>>>>>>>>>isCreate",
+          nextIndex,
+          "nextIndex",
+          file,
+          "file"
+        );
       } else {
-
         if (l_params.index) {
           list[l_params.index] = file;
         } else {
-          list[0] = file
+          list[0] = file;
         }
 
         list[l_params.index] = file;
@@ -883,7 +885,6 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       return list;
     })
     .then((list) => {
-
       if (l_params.isNew) {
         return list;
       }
@@ -900,7 +901,7 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       console.log("整理保存记录参数", dealparam);
 
       // return dealDocumentBody(dealparam).then(() => list);
-      return list
+      return list;
     })
     .then((list) => {
       // 通知业务系统
@@ -909,7 +910,6 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
         l_NofityURL = l_NofityURL.replace("{?}", "2"); //约定：参数为2则文档被成功上传
         NotifyToServer(l_NofityURL);
       } else {
-
         var successParams = {
           // action: isTaoHong ? 'taohong' : 'save',
           action: "save",
@@ -937,6 +937,14 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
     });
 }
 
+// 获取传入的保存类型
+function pGetSuffix(l_doc, type) {
+  // 获取OA传入的 转其他格式上传属性
+  var l_suffix = GetDocParamsValue(l_doc, constStrEnum.suffix);
+  const l_suffixs = l_suffix && l_suffix.split(",");
+  return l_suffixs;
+}
+
 // 更改：增加相应saveType参数的处理
 /**
  * 调用文件上传到OA服务端时，
@@ -949,12 +957,14 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
   // 上传成功回调返回的文件路径
   var parseResp = JSON.parse(resp) || {};
 
-  console.log('saveType>>>>>', saveType, "成功上传服务端后的回调>>>>>>", parseResp,);
+  console.log(
+    "saveType>>>>>",
+    saveType,
+    "成功上传服务端后的回调>>>>>>",
+    parseResp
+  );
 
   switch (saveType) {
-    default:
-      return;
-
     // 未套红源文件
     case SAVE_TYPE.ORGINAL_NO_RED_HEAD: {
       // 主动保存不涉及保存弹窗
@@ -970,13 +980,13 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
       );
 
       // 获取OA传入的 转其他格式上传属性
-      var l_suffix = GetDocParamsValue(l_doc, constStrEnum.suffix);
+      const l_suffix = pGetSuffix(l_doc);
 
       console.log(l_suffix, "开始转存 PDF");
       //调用转pdf格式函数，强制关闭转换修订痕迹，不弹出用户确认的对话框
       pDoChangeToOtherDocFormat(
         l_doc,
-        l_suffix,
+        l_suffix[0],
         false,
         true,
         // SAVE_TYPE.HTML_HEAD
@@ -1037,9 +1047,7 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
           // 接下来进行套红操作
           console.log("红头文件可用，开始套红操作");
 
-          const tempDoc = { ...l_doc }
-
-          InsertRedHeadDoc(tempDoc);
+          InsertRedHeadDoc(l_doc);
           // 主动调用保存操作
           OnBtnSaveToServer(SAVE_TYPE.ORGINAL_RED_HEAD);
         })
@@ -1066,17 +1074,17 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
       );
 
       // 获取OA传入的 转其他格式上传属性
-      var l_suffix = GetDocParamsValue(l_doc, constStrEnum.suffix);
+      const l_suffix = pGetSuffix(l_doc);
+      console.log(l_suffix, "开始转存套红 PDF");
 
-      console.log("开始转存套红 PDF");
       //调用转pdf格式函数，强制关闭转换修订痕迹，不弹出用户确认的对话框
       pDoChangeToOtherDocFormat(
         l_doc,
-        l_suffix,
+        l_suffix[0],
         false,
         true,
         // SAVE_TYPE.PDF_RED_HEAD
-        SAVE_TYPE.HTML_HEAD
+        l_suffix.length > 1 ? SAVE_TYPE.HTML_HEAD : SAVE_TYPE.PDF_RED_HEAD
       );
       return;
     }
@@ -1098,12 +1106,14 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
       );
 
       // 获取OA传入的 转其他格式上传属性
-      var l_suffix = '.html';
+      const l_suffix = pGetSuffix(l_doc);
+
+      console.log(l_suffix, "套红HTML URL");
 
       //调用转pdf格式函数，强制关闭转换修订痕迹，不弹出用户确认的对话框
       pDoChangeToOtherDocFormat(
         l_doc,
-        l_suffix,
+        l_suffix.length > 1 ? l_suffix[1] : ".html",
         false,
         true,
         SAVE_TYPE.PDF_RED_HEAD
@@ -1117,8 +1127,13 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
       var saveAllTemp = wps.PluginStorage.getItem(constStrEnum.SaveAllTemp);
       var fileURLObj = JSON.parse(saveAllTemp);
 
-      fileURLObj.redHeadOriginalHTML = parseResp.fileUrl;
-      // fileURLObj.redHeadPdfUrl = parseResp.fileUrl;
+      const l_suffix = pGetSuffix(l_doc);
+
+      if (l_suffix.length > 1) {
+        fileURLObj.redHeadOriginalHTML = parseResp.fileUrl;
+      } else {
+        fileURLObj.redHeadPdfUrl = parseResp.fileUrl;
+      }  
 
       wps.PluginStorage.removeItem(constStrEnum.SaveAllTemp);
 
@@ -1870,6 +1885,27 @@ function OnGetLabel(control) {
 }
 
 /**
+ * 获取禁用按钮
+ * @param {*} control
+ * @returns
+ */
+
+function pGetDisabledBtn(key) {
+  const l_Doc = wps.WpsApplication().ActiveDocument;
+  if (!l_Doc) {
+    return false; //如果未装入文档，则设置OA助手按钮组不可见
+  }
+  const l_disabledBtns = GetDocParamsValue(l_Doc, constStrEnum.disabledBtns);
+  const btns = l_disabledBtns.split(",");
+  if (!btns) return;
+  if (btns.includes(key)) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+/**
  * 作用：处理Ribbon按钮的是否可显示
  * @param {*} control  ：Ribbon 的按钮控件
  */
@@ -1934,50 +1970,65 @@ function OnGetEnabled(control) {
   switch (eleId) {
     // 更改：增加FileClose判断
     case "FileClose":
-      return false;
-
-    case "btnSaveToServer": //保存到OA服务器的相关按钮。判断，如果非OA文件，禁止点击
+      return pGetDisabledBtn("FileClose");
     case "btnChangeToPDF": //保存到PDF格式再上传
+      return pGetDisabledBtn("btnChangeToPDF");
     case "btnChangeToUOT": //保存到UOT格式再上传
+      return pGetDisabledBtn("btnChangeToUOT");
     case "btnChangeToOFD": //保存到OFD格式再上传
       // 更改：增加 return false 处理
-      return false;
+      return pGetDisabledBtn("btnChangeToOFD");
     // 更改：增加btnSaveToServer判断
     case "btnSaveToServer": //保存到OA服务器的相关按钮。判断，如果非OA文件，禁止点击
+      return pGetDisabledBtn("btnSaveToServer");
     case "SaveAll": //保存所有文档
+      return pGetDisabledBtn("SaveAll");
     //以下四个idMso的控制是关于文档新建的
     case "FileNew":
+      return pGetDisabledBtn("FileNew");
     case "FileNewMenu":
+      return pGetDisabledBtn("FileNewMenu");
     case "WindowNew":
+      return pGetDisabledBtn("WindowNew");
     case "FileNewBlankDocument":
       return OnSetSaveToOAEnable();
-    case "btnCloseRevision": {
-      let bFlag = wps.PluginStorage.getItem(constStrEnum.RevisionEnableFlag);
-      return bFlag;
-    }
-    case "btnOpenRevision": {
-      let bFlag = wps.PluginStorage.getItem(constStrEnum.RevisionEnableFlag);
-      return !bFlag;
-    }
+    case "btnCloseRevision":
+      return pGetDisabledBtn("btnCloseRevision");
+    case "btnOpenRevision":
+      return pGetDisabledBtn("btnOpenRevision");
+    case "btnAcceptAllRevisions":
+      return pGetDisabledBtn("btnAcceptAllRevisions");
+    case "btnRejectAllRevisions":
+      return pGetDisabledBtn("btnRejectAllRevisions");
     case "PictureInsert":
-      return false;
-
+      return pGetDisabledBtn("PictureInsert");
     case "TabDeveloper":
-      // 更改：增加 return true
-      return true;
+      return pGetDisabledBtn("TabDeveloper");
     // 更改：增加如下判断
     case "FileSaveAsMenu":
+      return pGetDisabledBtn("FileSaveAsMenu");
     case "FileSaveAs":
+      return pGetDisabledBtn("FileSaveAs");
     case "FileSaveAsPicture":
+      return pGetDisabledBtn("FileSaveAsPicture");
     case "SaveAsPicture":
+      return pGetDisabledBtn("SaveAsPicture");
     case "FileMenuSendMail":
+      return pGetDisabledBtn("FileMenuSendMail");
     case "SaveAsPDF":
+      return pGetDisabledBtn("SaveAsPDF");
     case "FileSaveAsPDF":
+      return pGetDisabledBtn("FileSaveAsPDF");
     case "ExportToPDF":
+      return pGetDisabledBtn("ExportToPDF");
     case "FileSaveAsPdfOrXps":
+      return pGetDisabledBtn("FileSaveAsPdfOrXps");
     case "SaveAsOfd":
+      return pGetDisabledBtn("SaveAsOfd");
     case "FileSaveAsOfd":
+      return pGetDisabledBtn("FileSaveAsOfd");
     case "TabSecurity":
+      return pGetDisabledBtn("TabSecurity");
     case "TabInsert": {
       // case "TabReferences": //WPS自身tab：引用 //WPS自身tab：插入
       // case "TabView": //WPS自身tab：视图 // case "TabReviewWord": //WPS自身tab：审阅 // case "TabReferences": //WPS自身tab：引用 // case "TabPageLayoutWord": //WPS自身tab：页面布局 //WPS自身tab：开发工具

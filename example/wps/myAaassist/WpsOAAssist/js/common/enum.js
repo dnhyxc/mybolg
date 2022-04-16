@@ -158,6 +158,9 @@ var constStrEnum = {
 
   // 正文字段 URL
   BodyTemplateUrl: "bodyTemplateUrl",
+
+  // 需要禁用加载项按钮
+  disabledBtns: "disabledBtns",
 };
 
 // 更改：增加套红字段类型
@@ -296,13 +299,13 @@ var SAVE_TYPE = {
    */
   ORGINAL_RED_HEAD: 3,
 
+  // 套红html文件
+  HTML_HEAD: 4,
+
   /**
    * 套红 PDF
    */
-  PDF_RED_HEAD: 4,
-
-  // 套红html文件
-  HTML_HEAD: 5,
+  PDF_RED_HEAD: 5,
 
   // 未套红html文件
   NO_HTML_HEAD: 6,

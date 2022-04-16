@@ -5,12 +5,12 @@ var wpsClient = new WpsClient(pluginType); //初始化一个多进程对象，�
 var clientStr = pluginName + pluginType + "ClientId";
 
 let notifyCallback = {
-  open() { },
-  save() { },
-  status() { },
-  taohong() { },
-  exit() { },
-}
+  open() {},
+  save() {},
+  status() {},
+  taohong() {},
+  exit() {},
+};
 
 //单进程封装开始
 /**
@@ -21,48 +21,50 @@ let notifyCallback = {
  * @param {*} jsPluginsXml  指定一个新的WPS加载项配置文件的地址,动态传递jsplugins.xml模式，例如：http://127.0.0.1:3888/jsplugins.xml
  * @param {*} isSilent      隐藏打开WPS，如果需要隐藏，那么需要传递front参数为false
  */
-const bUseHttps = location.protocol === 'https:'
+const bUseHttps = location.protocol === "https:";
 
 function _WpsInvoke(funcs, front, jsPluginsXml, isSilent) {
-  const info = {}
-  info.funcs = funcs
+  const info = {};
+  info.funcs = funcs;
   // info.cookieParams = Cookies.get()
-  const func = bUseHttps ? WpsInvoke.InvokeAsHttps : WpsInvoke.InvokeAsHttp
-  const isFront = isSilent ? false : front
+  const func = bUseHttps ? WpsInvoke.InvokeAsHttps : WpsInvoke.InvokeAsHttp;
+  const isFront = isSilent ? false : front;
 
   func(
     pluginType, // 组件类型
     pluginName, // 插件名，与wps客户端加载的加载的插件名对应
-    'dispatcher', // 插件方法入口，与wps客户端加载的加载的插件代码对应，详细见插件代码
+    "dispatcher", // 插件方法入口，与wps客户端加载的加载的插件代码对应，详细见插件代码
     info, // 传递给插件的数据
     (result) => {
       // 调用回调，status为0为成功，其他是错误
       // console.log('WPS接收消息', result)
       if (result.status) {
         if (bUseHttps && result.status == 100) {
-          WpsInvoke.AuthHttpesCert('请在稍后打开的网页中，点击"高级" => "继续前往"，完成授权。')
-          return
+          WpsInvoke.AuthHttpesCert(
+            '请在稍后打开的网页中，点击"高级" => "继续前往"，完成授权。'
+          );
+          return;
         }
-        alert(result.message)
+        alert(result.message);
       } else {
-        console.log(result)
-        NotifyCallback(result.response)
+        console.log(result);
+        NotifyCallback(result.response);
       }
     },
     isFront,
     jsPluginsXml,
-    isSilent,
-  )
+    isSilent
+  );
 
   /**
-* 该方法封装了发送给WPS客户端的请求，不需要用户去实现
-* 接收消息：WpsInvoke.RegWebNotify（type，name,callback）
-* WPS客户端返回消息： wps.OAAssist.WebNotify（message）
-* @param {*} type 加载项对应的插件类型
-* @param {*} name 加载项对应的名字
-* @param {func} callback 接收到WPS客户端的消息后的回调函数
-*/
-  WpsInvoke.RegWebNotify(pluginType, pluginName, NotifyCallback)
+   * 该方法封装了发送给WPS客户端的请求，不需要用户去实现
+   * 接收消息：WpsInvoke.RegWebNotify（type，name,callback）
+   * WPS客户端返回消息： wps.OAAssist.WebNotify（message）
+   * @param {*} type 加载项对应的插件类型
+   * @param {*} name 加载项对应的名字
+   * @param {func} callback 接收到WPS客户端的消息后的回调函数
+   */
+  WpsInvoke.RegWebNotify(pluginType, pluginName, NotifyCallback);
   /**
    * 下面函数为调起WPS，并且执行加载项WpsOAAssist中的函数dispatcher,该函数的参数为业务系统传递过去的info
    */
@@ -76,105 +78,104 @@ function _WpsInvoke(funcs, front, jsPluginsXml, isSilent) {
 }
 
 function NotifyCallback(originMsg) {
-  console.log('接收到的消息', originMsg)
+  console.log("接收到的消息", originMsg);
 
-  let msgBox = originMsg
+  let msgBox = originMsg;
   try {
-    msgBox = JSON.parse(msgBox)
+    msgBox = JSON.parse(msgBox);
   } catch (err) {
-    msgBox = {}
+    msgBox = {};
   }
 
-  const func = notifyCallback && notifyCallback[msgBox.action]
+  const func = notifyCallback && notifyCallback[msgBox.action];
 
-  console.log(func, 'func', msgBox)
+  console.log(func, "func", msgBox);
 
   switch (msgBox.action) {
-    case 'open':
-    case 'exit': {
+    case "open":
+    case "exit": {
       if (func) {
-        func(msgBox.message)
+        func(msgBox.message);
       }
-      break
-    }
-
-    case 'close': {
-      WPSMask.remove()
       break;
     }
 
-    case 'taohong':
-    case 'status':
-    case 'save': {
-      const features = msgBox.features || {}
-      let result = msgBox.message
+    case "close": {
+      WPSMask.remove();
+      break;
+    }
+
+    case "taohong":
+    case "status":
+    case "save": {
+      const features = msgBox.features || {};
+      let result = msgBox.message;
       try {
-        result = JSON.parse(result)
+        result = JSON.parse(result);
 
-        console.log(result, 'result')
-
+        console.log(result, "result");
       } catch (err) {
         //
       }
       if (func) {
-        func(result, features)
+        func(result, features);
       }
-      break
+      break;
     }
 
     default:
-      break
+      break;
   }
 }
 
-let globalMaskEl = null
+let globalMaskEl = null;
 
 const wpsMask = {
   async init(isEdit = false) {
     const creatMask = () => {
       if (globalMaskEl) {
-        return
+        return;
       }
-      globalMaskEl = createMaskElement()
-      globalMaskEl.addEventListener('click', async () => {
+      globalMaskEl = createMaskElement();
+      globalMaskEl.addEventListener("click", async () => {
         if (removing) {
-          return
+          return;
         }
-        removing = true
+        removing = true;
 
-        const hasEdit = await getWpsEditing()
+        const hasEdit = await getWpsEditing();
         if (hasEdit) {
-          message.warning('当前有文档正在编辑')
-          return
+          message.warning("当前有文档正在编辑");
+          return;
         }
-        document.body.removeChild(globalMaskEl)
-        globalMaskEl = null
-        removing = false
-      })
-      document.body.appendChild(globalMaskEl)
-    }
+        document.body.removeChild(globalMaskEl);
+        globalMaskEl = null;
+        removing = false;
+      });
+      document.body.appendChild(globalMaskEl);
+    };
 
     if (isEdit) {
-      creatMask()
-      return
+      creatMask();
+      return;
     }
 
-    const hasEdit = await getWpsEditing()
+    const hasEdit = await getWpsEditing();
     if (!hasEdit) {
-      return
+      return;
     }
-    creatMask()
+    creatMask();
   },
 
   remove() {
     if (globalMaskEl) {
-      document.body.removeChild(globalMaskEl)
-      globalMaskEl = null
+      document.body.removeChild(globalMaskEl);
+      globalMaskEl = null;
     }
   },
-}
+};
 
-window.WPSMask = wpsMask
+window.WPSMask = wpsMask;
 
 //单进程
 function singleInvoke(info, front, jsPluginsXml, isSilent) {
@@ -370,35 +371,35 @@ function GetDemoPngPath() {
 }
 
 function openDoc() {
-  var filePath = GetDemoPath("样章.docx")
+  var filePath = GetDemoPath("样章.docx");
 
-  var uploadPath = GetUploadPath()
+  var uploadPath = GetUploadPath();
 
-  var uploadFieldName = "dnhyxc"
+  var uploadFieldName = "dnhyxc";
 
-  var backupPath = GetUploadPath()
+  var backupPath = GetUploadPath();
 
   _WpsInvoke([
     {
       OpenDoc: {
         isNew: false,
         uploadPath, // 保存文档上传接口
-        fileName: '正文.docx',
-        newFileName: '正文.docx',
+        fileName: "正文.docx",
+        newFileName: "正文.docx",
         filePath,
         uploadFieldName: uploadFieldName,
         picPath: GetDemoPngPath(),
         // copyUrl: backupPath,
         userName: "dnhyxc",
-        suffix: '.pdf',
-        uploadWithAppendPath: '1', // 需和 suffix 配合使用，用于保存前保存为特定格式文件后一起保存
+        suffix: ".pdf",
+        uploadWithAppendPath: "1", // 需和 suffix 配合使用，用于保存前保存为特定格式文件后一起保存
         params: {
-          id: '902209',
+          id: "902209",
           isNew: false,
           file: filePath,
           operType: 12,
-          list: [{ url: filePath }]
-        }
+          list: [{ url: filePath }],
+        },
       },
     },
   ]); // OpenDoc方法对应于OA助手dispatcher支持的方法名
@@ -693,9 +694,9 @@ function fillTemplate() {
   var templatePath = prompt(
     "请输入需要填充的数据的请求地址:",
     document.location.protocol +
-    "//" +
-    document.location.host +
-    "/getTemplateData"
+      "//" +
+      document.location.host +
+      "/getTemplateData"
   );
 
   _WpsInvoke([
@@ -997,22 +998,10 @@ _wps["onlineEditOfficialDocument"] = {
 /**
  * =======================自定义测试================================
  */
-
 function customDoc() {
-  var filePath = GetDemoPath("样章.docx")
-  // var filePath = prompt(
-  //   "请输入打开文件路径（本地或是url）：",
-  //   GetDemoPath("样章.docx")
-  // );
+  var uploadPath = GetUploadPath();
 
-  console.log(filePath, "filePath》》》》》》customDoc");
-
-  var uploadPath = GetUploadPath()
-
-  console.log(uploadPath, "uploadPath");
-
-  var uploadFieldName = "dnhyxc"
-  var backupPath = GetUploadPath()
+  var uploadFieldName = "dnhyxc";
 
   var fileList = [];
 
@@ -1037,7 +1026,7 @@ function customDoc() {
 
   var bookMarksEnd = "正文内容E";
 
-  const dealDescription = `创建【套红正文】文件`
+  const dealDescription = `创建【套红正文】文件`;
 
   _WpsInvoke(
     [
@@ -1045,13 +1034,10 @@ function customDoc() {
         OpenDoc: {
           docId: "902209",
           uploadPath: uploadPath, // 保存文档上传接口
-          fileName: '',
-          newFileName: '问号名称.docx',
-          // fileName: filePath,
+          fileName: "",
+          newFileName: "问号名称.docx",
           uploadFieldName: uploadFieldName,
-          // picPath: GetDemoPngPath(),
           insertFileUrl: GetDemoPath("wps广西移动公司部门会议纪要.doc"),
-          // copyUrl: backupPath,
           bkInsertFileStart: bookMarksStart,
           bkInsertFileEnd: bookMarksEnd,
           bodyTemplateUrl: "",
@@ -1062,12 +1048,12 @@ function customDoc() {
           // 默认开启修订
           revisionCtrl: {
             bOpenRevision: true,
-            bShowRevision: true
+            bShowRevision: true,
           },
 
           params: {
             isNew: true,
-            id: "666",
+            id: parseInt(Math.random() * 100),
             orgId: "902209",
             docId: 123456789,
             file: undefined,
@@ -1085,7 +1071,12 @@ function customDoc() {
             // protectType: downloadParams ? 0 : -1,
             // password: '123456',
           },
-          // buttonGroups: options.filePath ? "btnImportTemplate" : "", // 屏蔽功能按钮
+          // 屏蔽功能按钮, 不传则显示所有操作按钮，如果传入对应的按钮，那么传入的这些按钮将不会在加载项中显示。注意每个按钮之间需要用逗号分隔，btnImportTemplate 这个些参数是 ribbon.xml 中 button 所对应的 id
+          buttonGroups:
+            "btnImportTemplate,btnInsertBookmark,btnChangeToPDF,btnChangeToUOT,btnChangeToOFD",
+
+          disabledBtns:
+            "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions", // 禁用加载项按钮
         },
       },
     ],
@@ -1095,6 +1086,158 @@ function customDoc() {
 
 _wps["customDoc"] = {
   action: customDoc,
+  code: _WpsInvoke.toString() + "\n\n" + customDoc.toString(),
+  detail:
+    "\n\
+  说明：\n\
+    点击按钮，输入要打开的文档路径，输入文档上传接口，如果传的不是有效的服务端地址，将无法使用保存上传功能。\n\
+    打开WPS文字后,将根据文档路径在线打开对应的文档，保存将自动上传指定服务器地址\n\
+    \n\
+  方法使用：\n\
+    页面点击按钮，通过wps客户端协议来启动WPS，调用oaassist插件，执行传输数据中的指令\n\
+    funcs参数信息说明:\n\
+        OnlineEditDoc方法对应于OA助手dispatcher支持的方法名\n\
+            uploadPath 保存文档上传接口\n\
+            fileName 打开的文档路径\n\
+            uploadFieldName 文档上传到业务系统时自定义字段\n\
+            userName 传给wps要显示的OA用户名\n\
+",
+};
+
+// 自定义
+function editDoc() {
+  var uploadPath = GetUploadPath("uploaded");
+
+  // var filePath = GetDemoPath("未套红doc问号名称.docx");
+
+  var uploadFieldName = "dnhyxc";
+
+  var fileList = [
+    {
+      downloadUrl:
+        "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\套红pdf问号名称.pdf",
+      key: 69.51143176678201,
+      name: "",
+      noMarksPdfUrl:
+        "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\套红pdf问号名称.pdf",
+      noRedHeadOriginalUrl:
+        "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\未套红doc问号名称.docx",
+      noRedHeadPdfUrl:
+        "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\未套红pdf问号名称.pdf",
+      originalUrl:
+        "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\套红doc问号名称.docx",
+      redHeadOriginalHTML:
+        "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\套红html问号名称.html",
+      redHeadOriginalUrl:
+        "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\套红doc问号名称.docx",
+      redHeadPdfUrl:
+        "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\套红pdf问号名称.pdf",
+      type: "docx",
+      url: "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\套红pdf问号名称.pdf",
+    },
+  ];
+
+  const currentFile = fileList[0];
+
+  var fieldObj = {
+    title: "瞧好了，标题插入了",
+    mainSend: "WOWOWOW",
+    copySend: "Reinhold",
+    issUer: "签发人",
+    signingUnit: "落款单位",
+    signatureUnit: "署名单位",
+    issueDate: "签发日期",
+    printDate: "印发日期",
+    creatPerson: "Reinhold",
+    refNo: "2020[0902]号",
+    urgencyLevel: "紧急",
+    secretClass: "密级1",
+    department: "高级的前端部门",
+    units: "发文单位",
+  };
+
+  var bookMarksStart = "正文内容B";
+
+  var bookMarksEnd = "正文内容E";
+
+  const dealDescription = `创建【套红正文】文件`;
+
+  _WpsInvoke(
+    [
+      {
+        OpenDoc: {
+          docId: "902209",
+          uploadPath, // 保存文档上传接口
+          fileName: "正文.docx",
+          filePath: currentFile.noRedHeadOriginalUrl, // 需要编辑的正文
+          newFileName: "取名字真的好难.docx",
+          uploadFieldName, // 设置编辑人名称
+          insertFileUrl: GetDemoPath("wps广西移动公司部门会议纪要.doc"), // 套红模板
+          bkInsertFileStart: bookMarksStart, // 套红开始位置标签
+          bkInsertFileEnd: bookMarksEnd, // 套红结束位置标签
+          bodyTemplateUrl: "", // 正文模板，一般用不着
+          userName: "dnhyxc",
+          suffix: ".pdf,.html", // 需要保存的文件格式
+          uploadWithAppendPath: "1", // 需要保存的文件 saveType，对应pdf
+
+          // 默认开启修订
+          revisionCtrl: {
+            bOpenRevision: true,
+            bShowRevision: true,
+          },
+
+          // 禁用按钮
+          disabledBtns: "btnAcceptAllRevisions,btnRejectAllRevisions",
+
+          // 屏蔽（隐藏）功能按钮
+          buttonGroups: "btnChangeToPDF,btnChangeToUOT,btnChangeToOFD",
+
+          // 自定义传入wps的字段
+          params: {
+            isNew: true,
+            id: parseInt(Math.random() * 100),
+            orgId: "902209",
+            docId: 123456789,
+            file: currentFile,
+            index: -1,
+            list: fileList,
+            operType: 4,
+            dealDescription,
+            fieldObj, // 需要插入wps中的各类标签字段
+          },
+          openType: {
+            // 文档打开方式
+            // 文档保护类型，-1：不启用保护模式，0：只允许对现有内容进行修订，
+            // 1：只允许添加批注，2：只允许修改窗体域(禁止拷贝功能)，3：只读
+            protectType: -1,
+            // protectType: downloadParams ? 0 : -1,
+            // password: '123456',
+          },
+        },
+      },
+    ],
+    true
+  ); // OpenDoc方法对应于OA助手dispatcher支持的方法名
+}
+
+_wps["editDoc"] = {
+  action: editDoc,
+  code: _WpsInvoke.toString() + "\n\n" + editDoc.toString(),
+  detail:
+    "\n\
+  说明：\n\
+    点击按钮，输入要打开的文档路径，输入文档上传接口，如果传的不是有效的服务端地址，将无法使用保存上传功能。\n\
+    打开WPS文字后,将根据文档路径在线打开对应的文档，保存将自动上传指定服务器地址\n\
+    \n\
+  方法使用：\n\
+    页面点击按钮，通过wps客户端协议来启动WPS，调用oaassist插件，执行传输数据中的指令\n\
+    funcs参数信息说明:\n\
+        OnlineEditDoc方法对应于OA助手dispatcher支持的方法名\n\
+            uploadPath 保存文档上传接口\n\
+            fileName 打开的文档路径\n\
+            uploadFieldName 文档上传到业务系统时自定义字段\n\
+            userName 传给wps要显示的OA用户名\n\
+",
 };
 /**
  * =======================自定义测试================================

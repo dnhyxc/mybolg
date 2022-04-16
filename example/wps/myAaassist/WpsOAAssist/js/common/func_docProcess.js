@@ -19,8 +19,7 @@ function NewFile(params) {
 
   //检查系统临时文件目录是否能访问
   if (wps.Env && wps.Env.GetTempPath) {
-
-    console.log(wps.Env.GetTempPath(), 'wps.Env.GetTempPath')
+    console.log(wps.Env.GetTempPath(), "wps.Env.GetTempPath");
 
     if (params.newFileName) {
       //按OA传入的文件名称保存
@@ -388,7 +387,7 @@ function OpenOnLineFile(OAParams) {
  * 打开在线文档成功后触发事件
  * @param {*} resp
  */
-function OnOpenOnLineDocSuccess(resp) { }
+function OnOpenOnLineDocSuccess(resp) {}
 
 /**
  *  打开在线不落地文档出现失败时，给予错误提示
@@ -400,7 +399,7 @@ function OnOpenOnLineDocDownFail(res) {
     err.Body = Base64.decode(res.Body);
     err.Headers = Base64.decode(JSON.stringify(res.Headers));
     console.log(err);
-  } catch (err) { }
+  } catch (err) {}
   alert("打开在线不落地文档失败！请尝试重新打开。");
   return;
 }
@@ -427,7 +426,7 @@ function DoSetOADocLandMode(doc, DocLandMode) {
  * 作用：设置Ribbon工具条的按钮显示状态
  * @param {*} paramsGroups
  */
-function pDoResetRibbonGroups(paramsGroups) { }
+function pDoResetRibbonGroups(paramsGroups) {}
 
 /**
  * 作用：打开文档处理的各种过程，包含：打开带密码的文档，保护方式打开文档，修订方式打开文档等种种情况
@@ -441,13 +440,14 @@ function pDoResetRibbonGroups(paramsGroups) { }
  * userName	String	用于更改显示修改人的用户名
  * strBookmarkDataPath	string	书签列表 (可不传，可以在OA助手config.js中配置)
  * templatePath	string	模板列表 (可不传，可以在OA助手config.js中配置)
- * buttonGroups	string	自定义按钮组 （可不传，不传显示所有按钮）
+ * buttonGroups	string	自定义按钮组 （可不传，不传显示所有按钮），多个按钮之间以英文逗号相隔（,）。
  * revisionCtrl	String	痕迹控制 ，不传正常打开
- *      bOpenRevision	String	true(打开)false(关闭)修订
- *      bShowRevision	String	true(显示)/false(关闭)痕迹
+ * bOpenRevision	String	true(打开)false(关闭)修订
+ * bShowRevision	String	true(显示)/false(关闭)痕迹
  * openType	String	文档打开方式 ，不传正常打开
- *      protectType	String	文档保护类型，-1：不启用保护模式，0：只允许对现有内容进行修订，1：只允许添加批注，2：只允许修改窗体域，3：只读
- *      password	String密码
+ * protectType	String	文档保护类型，-1：不启用保护模式，0：只允许对现有内容进行修订，1：只允许添加批注，2：只允许修改窗体域，3：只读
+ * password	String密码
+ * disabledBtns String 禁用加载项按钮（可不传，不传显示所有按钮）。多个按钮之间以英文逗号相隔（,）。
  */
 function pDoOpenOADocProcess(params, TempLocalFile) {
   var l_ProtectType = -1; //默认文档保护类型 -1 为不启用保护
@@ -473,6 +473,8 @@ function pDoOpenOADocProcess(params, TempLocalFile) {
         l_bShowRevision = params[key].bShowRevision;
         break;
       case "buttonGroups".toUpperCase(): //按钮组合
+        break;
+      case "disabledBtns".toUpperCase(): //禁用加载项按钮
         break;
       case "docPassword".toUpperCase(): //传入打开文件的密码
         l_strDocPassword = params[key].docPassword;
@@ -648,7 +650,7 @@ function handleFileAndUpload(suffix, doc, uploadPath, FieldName, saveType = 1) {
     case ".pdf":
       l_strPath = pGetValidDocTempPath(doc) + ".pdf"; //获取有效输出路径
 
-      console.log(l_strPath, 'l_strPath>>>>pdf')
+      console.log(l_strPath, "l_strPath>>>>pdf");
 
       wps.FileSystem.Remove(l_strPath); //先删除之前可能存在的临时文件
       doc.ExportAsFixedFormat(
@@ -897,7 +899,7 @@ function pAutoUploadToServer(p_Doc) {
         "OnAutoUploadSuccess",
         "OnAutoUploadFail"
       );
-    } catch (err) { }
+    } catch (err) {}
     wps.PluginStorage.setItem(
       constStrEnum.OADocUserSave,
       EnumDocSaveFlag.NoneOADocSave
@@ -1219,9 +1221,9 @@ function pInsertRInedHead(doc, strFile, bookmarkStart, bookmarkEnd) {
   } else {
     alert(
       "套红头失败，您选择的红头模板没有对应书签：" +
-      bookmarkStart +
-      ", " +
-      bookmarkEnd
+        bookmarkStart +
+        ", " +
+        bookmarkEnd
     );
   }
 
