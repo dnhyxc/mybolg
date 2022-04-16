@@ -1,7 +1,11 @@
 ---
 title: WPS OA 助手二次开发
-date: 2022-04-13 23:25:16
+date: 2022-03-30 21:06:16
 tags: WPS
+declare: true
+categories:
+  - WPS OA 助手
+  - WPS 加载项
 ---
 
 ### WPS OA 助手
@@ -12,11 +16,11 @@ WPS 加载项是一套基于 Web 技术用来扩展 WPS 应用程序的解决方
 
 - 完整的功能。可通过多种不同的方法对文档、电子表格和演示文稿进行创作、格式设置和操控；通过鼠标、键盘执行的操作几乎都能通过 WPS 加载项 完成；可以轻松地执行重复任务，实现自动化。
 
+<!-- more -->
+
 - 三种交互方式。自定义功能区，采用公开的 CustomUI 标准，快速组织所有功能；任务窗格，展示网页，内容更丰富；Web 对话框，结合事件监听，实现自由交互。
 
 - 标准化集成。不影响 JavaScript 语言特性，网页运行效果和在浏览器中完全一致；WPS 加载项开发文档完整，接口设计符合 JavaScript 语法规范，避免不必要的学习成本，缩短开发周期。
-
-<!-- more -->
 
 > 具体可查看 [WPS 开发者文档](https://open.wps.cn/docs/client/wpsLoad)。
 
@@ -648,6 +652,8 @@ const plugins = [
 #### demo 仓库地址
 
 git 仓库地址：[戳这里查看](https://github.com/dnhyxc/wps_oa)
+
+code 压缩包：[戳这里下载](https://github.com/dnhyxc/wps_oa/archive/refs/heads/master.zip)
 
 #### 加载项（WpsOAAssist）文件结构说明
 
