@@ -11,3 +11,5 @@ build/
 example/webpack/node_modules/
 example/webpack/dist/
 example/webpack/build/
+example/webpack/project/
+example/webpack/wps/projectDemo/
