@@ -14,7 +14,7 @@
                     </box>
                     <separator id="sepWPSClound"/>
                 </group>
-                <!-- <group id="grpWPSWork" label="OA助手文档操作功能组" getVisible="OnGetVisible">
+                <group id="grpWPSWork" label="OA助手文档操作功能组" getVisible="OnGetVisible">
                     <button id="btnSaveToServer" label="保存到OA" onAction="OnAction" getEnabled="OnGetEnabled" getImage="GetImage" size="large"/>
                     <button id="btnSaveAsFile" label="保存本地" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large" />
                     <box id="boxWPSWorkEx" boxStyle="vertical" visible="true">
@@ -23,7 +23,7 @@
                         <button id="btnChangeToOFD" label="转OFD上传" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large"/>
                     </box>
                     <separator id="sepWPSWork" getVisible="OnGetVisible" />
-                </group> -->
+                </group>
                 <group id="grpOAExtend" label="扩展功能组" getVisible="OnGetVisible">
                     <button id="btnInsertRedHeader" label="套红头" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large"/>
                     <button id="btnInsertSeal" label="印章" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large" />
@@ -31,6 +31,10 @@
                     <button id="btnClearRevDoc" label="清稿" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large" />
                     <button id="btnInsertBookmark" label="导入书签" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large" />
                     <button id="btnImportTemplate" label="导入模板" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large"/>
+                    <separator id="sepOAExtend" getVisible="OnGetVisible" />
+                </group>
+                <group id="grpOAExtend" label="扩展功能组" getVisible="OnGetVisible">
+                    <button id="customBtn" label="自定义按钮" getLabel="OnGetLabel" onAction="OnAction" getEnabled="OnGetEnabled" getVisible="OnGetVisible" getImage="GetImage" size="large"/>
                     <separator id="sepOAExtend" getVisible="OnGetVisible" />
                 </group>
                 <group id="grpRevision" label="OA修订功能按钮组" getVisible="OnGetVisible">

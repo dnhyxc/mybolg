@@ -803,7 +803,7 @@ function manageFileData(fileURLObj, file) {
     noMarksPdfUrl: redHeadPdfUrl,
     url: redHeadPdfUrl,
     downloadUrl: redHeadPdfUrl,
-    redHeadOriginalHTML: fileURLObj.redHeadOriginalHTML,
+    redHeadOriginalHTMLUrl: fileURLObj.redHeadOriginalHTMLUrl,
     redHeadOriginalUrl: fileURLObj.redHeadOriginalUrl,
     redHeadPdfUrl: fileURLObj.redHeadPdfUrl,
     noRedHeadOriginalUrl: fileURLObj.noRedHeadOriginalUrl,
@@ -925,12 +925,12 @@ function OnUploadSuccessFinally(l_doc, fileURLObj) {
       console.log("已通知业务系统，开始关闭公文 TAB");
 
       // 保存成功直接关闭
-      // if (l_doc) {
-      //   console.log("OnUploadToServerSuccess: before Close");
-      //   l_doc.Close(-1); //保存文档后关闭
-      //   console.log("OnUploadToServerSuccess: after Close");
-      //   return;
-      // }
+      if (l_doc) {
+        console.log("OnUploadToServerSuccess: before Close");
+        l_doc.Close(-1); //保存文档后关闭
+        console.log("OnUploadToServerSuccess: after Close");
+        return;
+      }
     })
     .catch(() => {
       alert("保存失败");
@@ -1130,10 +1130,10 @@ function OnUploadToServerSuccess(resp, saveType = 1) {
       const l_suffix = pGetSuffix(l_doc);
 
       if (l_suffix.length > 1) {
-        fileURLObj.redHeadOriginalHTML = parseResp.fileUrl;
+        fileURLObj.redHeadOriginalHTMLUrl = parseResp.fileUrl;
       } else {
         fileURLObj.redHeadPdfUrl = parseResp.fileUrl;
-      }  
+      }
 
       wps.PluginStorage.removeItem(constStrEnum.SaveAllTemp);
 
@@ -1486,6 +1486,10 @@ function OnImportTemplate() {
   OnShowDialog("importTemplate.html", "导入模板", 560, 400);
 }
 
+function OnCustomBtnClick() {
+  OnShowDialog("custom.html", "自定义弹窗", 560, 350);
+}
+
 //自定义菜单按钮的点击执行事件
 function OnAction(control) {
   var eleId;
@@ -1604,6 +1608,9 @@ function OnAction(control) {
       break;
     case "btnImportTemplate": //导入模板
       OnImportTemplate();
+      break;
+    case "customBtn": //自定义弹窗
+      OnCustomBtnClick();
       break;
     case "FileSaveAsMenu": //通过idMso进行「另存为」功能的自定义
     case "FileSaveAs": {
@@ -1792,6 +1799,8 @@ function GetImage(control) {
       return "./icon/3.svg";
     case "btnSendMessage2":
       return "./icon/3.svg";
+    case "customBtn": // 自定义按钮
+      return "./icon/custom.png";
     default:
   }
   return "./icon/c_default.png";
@@ -1879,6 +1888,8 @@ function OnGetLabel(control) {
       return "导入书签";
     case "btnImportTemplate":
       return "导入模板";
+    case "customBtn":
+      return "自定义按钮";
     default:
   }
   return "";

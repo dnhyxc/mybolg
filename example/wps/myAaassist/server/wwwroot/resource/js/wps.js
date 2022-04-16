@@ -47,7 +47,7 @@ function _WpsInvoke(funcs, front, jsPluginsXml, isSilent) {
         }
         alert(result.message);
       } else {
-        console.log(result);
+        console.log(result, "result>>>>>>>>>>>>");
         NotifyCallback(result.response);
       }
     },
@@ -78,7 +78,7 @@ function _WpsInvoke(funcs, front, jsPluginsXml, isSilent) {
 }
 
 function NotifyCallback(originMsg) {
-  console.log("接收到的消息", originMsg);
+  console.log("接收到wps相应的数据的消息了");
 
   let msgBox = originMsg;
   try {
@@ -88,8 +88,6 @@ function NotifyCallback(originMsg) {
   }
 
   const func = notifyCallback && notifyCallback[msgBox.action];
-
-  console.log(func, "func", msgBox);
 
   switch (msgBox.action) {
     case "open":
@@ -112,10 +110,9 @@ function NotifyCallback(originMsg) {
       let result = msgBox.message;
       try {
         result = JSON.parse(result);
-
-        console.log(result, "result");
+        console.log("生成的文件列表>>>>>>", result);
       } catch (err) {
-        //
+        console.log("保存可能出现状况了~~~");
       }
       if (func) {
         func(result, features);
@@ -1126,7 +1123,7 @@ function editDoc() {
         "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\未套红pdf问号名称.pdf",
       originalUrl:
         "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\套红doc问号名称.docx",
-      redHeadOriginalHTML:
+      redHeadOriginalHTMLUrl:
         "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\套红html问号名称.html",
       redHeadOriginalUrl:
         "E:\\mybolg\\example\\wps\\myAaassist\\server\\wwwroot\\uploaded\\套红doc问号名称.docx",

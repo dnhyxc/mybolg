@@ -243,7 +243,7 @@ function pOpenFile(doc, params, isOnlineDoc) {
 /**
  * 从OA-web端点击正文模板
  *  doc : 需要存在以下属性
- *      'bodyTemplateUrl':'', 正文模板 URL
+ *  'bodyTemplateUrl':'', 正文模板 URL
  */
 function InsertPresetTemplateDoc(doc) {
   // 插入正文模板
@@ -292,7 +292,6 @@ function InsertPresetTemplateDoc(doc) {
 function GetServerTemplateData(template, pTemplateDataUrl) {
   // 更改：增加获取params参数逻辑（开始位置）
   var l_params = GetDocParamsValue(template, "params");
-  return;
   // 结束位置
 
   //获取文档内容
