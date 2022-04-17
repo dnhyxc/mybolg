@@ -47,6 +47,7 @@ import articleImage from "./article-image";
 import lockHeader from "./lockHeader";
 // import emStyle from "./emStyle";
 import previewImg from "./previewImg";
+import homePage from "./homePage";
 
 const cover = document.querySelector(".cover");
 // const hideCoverBtn = document.querySelector(".hideCoverBtn");
@@ -80,6 +81,7 @@ onDOMContentLoaded(function () {
   tocWordsLoop.init();
   articleImage.init();
   previewImg.init();
+  homePage.init();
   // emStyle.init();
 });
 

@@ -218,3 +218,6 @@ scrollBar: true
 
 # 页面加载特效页面
 cover: true
+
+# 是否显示homepage
+homePage: true
