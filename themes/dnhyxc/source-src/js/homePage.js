@@ -1,5 +1,9 @@
 import * as Utils from "./public-utils";
 
+function insertAfter(newNode, curNode) {
+  curNode.parentNode.insertBefore(newNode, curNode.nextElementSibling);
+}
+
 function init() {
   const homePage = document.querySelector(".homePage");
   const articleBoxWrap = document.querySelector(".articleBoxWrap");
@@ -30,20 +34,53 @@ function init() {
       return res.json();
     })
     .then((data) => {
+      console.log(data, "data");
       loading.style.display = "none";
       Utils.setSSG("data", "true");
+
       const box = document.createElement("div");
       box.className = "homePageArticleWrap";
+
       data.forEach((item) => {
-        const div = document.createElement("div");
-        div.className = "artWrap_a";
+        const date = Utils.formatDate(item.date);
+        const timeEl = document.createElement("div");
+        timeEl.className = "art_time";
+        timeEl.innerHTML = date;
+
+        const tagList = item.tags;
+        const tagsEl = document.createElement("div");
+        const tagLabel = document.createElement("span");
+        tagLabel.innerHTML = "tags：";
+        tagLabel.className = "tags_label";
+        tagsEl.className = "tagList";
+        tagsEl.appendChild(tagLabel);
+
+        tagList.forEach((i) => {
+          const tagA = document.createElement("a");
+          tagA.innerHTML = i.name;
+          tagA.href = i.permalink;
+          tagA.className = "art_tag";
+          tagsEl.appendChild(tagA);
+        });
+
         const a = document.createElement("a");
         a.href = `/${item.path}`;
         a.innerHTML = item.title;
+        a.id = "title_a";
+
+        const div = document.createElement("div");
+        div.className = "artWrap_a";
         div.appendChild(a);
+
+        insertAfter(timeEl, a);
+        insertAfter(tagsEl, timeEl);
+
         box.appendChild(div);
+
         articleBoxWrap.appendChild(box);
+
         articleLine.style.display = "block";
+
         a.addEventListener("click", () => {
           Utils.setSSG("homePage", true);
           document.onreadystatechange = function () {
@@ -56,7 +93,7 @@ function init() {
       });
     })
     .catch((err) => {
-      app.$set("jsonFail", true);
+      console.log(err);
     });
 }
 
