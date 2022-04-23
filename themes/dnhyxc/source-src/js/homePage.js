@@ -61,6 +61,15 @@ function init() {
           tagA.href = i.permalink;
           tagA.className = "art_tag";
           tagsEl.appendChild(tagA);
+          tagA.addEventListener("click", () => {
+            Utils.setSSG("homePage", true);
+            document.onreadystatechange = function () {
+              if (document.readyState === "complete") {
+                homePage.style.display = "none";
+                Utils.removeSSG("data");
+              }
+            };
+          });
         });
 
         const a = document.createElement("a");
