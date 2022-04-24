@@ -57,9 +57,9 @@ _WpsInvoke(
       OpenDoc: {
         insertFileUrl: "http://xxxurl", // 套红模板
         bkInsertFileStart: bookMarksStart, // 套红开始标签
-        bkInsertFileEnd: bookMarksEnd, // 套红结束标签
-      },
-    },
+        bkInsertFileEnd: bookMarksEnd // 套红结束标签
+      }
+    }
   ],
   true // 控制着通过页面执行WPS加载项方法，WPS的界面是否在执行时在前台显示
 );
@@ -186,7 +186,7 @@ var fieldObjEnum = {
   // 部门
   部门: "department",
   // 发文单位
-  发文单位: "units",
+  发文单位: "units"
 };
 ```
 
@@ -202,10 +202,10 @@ _WpsInvoke(
         bkInsertFileEnd: bookMarksEnd, // 套红结束标签
         // 自定义传入wps中的参数
         params: {
-          fieldObj, // 需要插入的各种标签属性
-        },
-      },
-    },
+          fieldObj // 需要插入的各种标签属性
+        }
+      }
+    }
   ],
   true
 );
@@ -224,8 +224,8 @@ const fieldObj = {
       mimeType: "xxx",
       name: "xxx",
       size: 29191,
-      url: "xxxurl",
-    },
+      url: "xxxurl"
+    }
   ],
   fileDepartment: '{"id":530051,"name":"区公司/人力资源部"}',
   issUer: "xxx",
@@ -238,8 +238,19 @@ const fieldObj = {
   signatureUnit: "xxx",
   signingUnit: "署名区公司人力资源部",
   title: "取个名字真的难",
-  urgencyLevel: "特急",
+  urgencyLevel: "特急"
 };
+```
+
+#### 设置 WPS 页边距
+
+设置页边距需要通过如下方式进行设置：
+
+```js
+const wpsApp = wps.WpsApplication();
+const selection = wpsApp.ActiveWindow.Selection;
+selection.Range.PageSetup.LeftMargin = 71.999428; // 设置左边距为 2.54
+selection.Range.PageSetup.RightMargin = 71.999428; // 设置左边距为 2.54
 ```
 
 #### 进入 WPS 编辑自动开启修订
@@ -256,10 +267,10 @@ _WpsInvoke(
         // 默认开启修订
         revisionCtrl: {
           bOpenRevision: true,
-          bShowRevision: true,
-        },
-      },
-    },
+          bShowRevision: true
+        }
+      }
+    }
   ],
   true
 );
@@ -277,9 +288,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         disabledBtns:
-          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions",
-      },
-    },
+          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions"
+      }
+    }
   ],
   true
 );
@@ -299,9 +310,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         buttonGroups:
-          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions",
-      },
-    },
+          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions"
+      }
+    }
   ],
   true
 );
@@ -321,9 +332,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         suffix: ".pdf",
-        uploadWithAppendPath: "1",
-      },
-    },
+        uploadWithAppendPath: "1"
+      }
+    }
   ],
   true
 ); // OpenDoc方法对应于OA助手dispatcher支持的方法名
@@ -337,9 +348,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         suffix: ".html",
-        uploadWithAppendPath: "1",
-      },
-    },
+        uploadWithAppendPath: "1"
+      }
+    }
   ],
   true
 );
@@ -433,7 +444,7 @@ function customDoc() {
     urgencyLevel: "紧急",
     secretClass: "密级1",
     department: "高级的前端部门",
-    units: "发文单位",
+    units: "发文单位"
   };
 
   const bookMarksStart = "正文内容B";
@@ -462,7 +473,7 @@ function customDoc() {
           // 默认开启修订
           revisionCtrl: {
             bOpenRevision: true,
-            bShowRevision: true,
+            bShowRevision: true
           },
 
           params: {
@@ -475,13 +486,13 @@ function customDoc() {
             list: fileList || [],
             operType: 4,
             dealDescription,
-            fieldObj,
+            fieldObj
           },
           openType: {
             // 文档打开方式
             // 文档保护类型，-1：不启用保护模式，0：只允许对现有内容进行修订，
             // 1：只允许添加批注，2：只允许修改窗体域(禁止拷贝功能)，3：只读
-            protectType: -1,
+            protectType: -1
             // protectType: downloadParams ? 0 : -1,
             // password: '123456',
           },
@@ -491,9 +502,9 @@ function customDoc() {
 
           // 禁用加载项按钮
           disabledBtns:
-            "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions",
-        },
-      },
+            "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions"
+        }
+      }
     ],
     true
   ); // OpenDoc方法对应于OA助手dispatcher支持的方法名
@@ -616,12 +627,12 @@ function customDoc() {
     el: "#template",
     data: {
       templateItem: -1,
-      templates: {},
+      templates: {}
     },
     methods: {},
     mounted: function () {
       this.onCustomClick();
-    },
+    }
   });
 </script>
 ```
@@ -641,9 +652,9 @@ const plugins = [
   new CopyWebpackPlugin([
     {
       from: "lib/WpsOAAssist",
-      to: "WpsOAAssist/",
-    },
-  ]),
+      to: "WpsOAAssist/"
+    }
+  ])
 ];
 ```
 
@@ -698,3 +709,41 @@ code 压缩包：[戳这里下载](https://github.com/dnhyxc/WPS_OA_Assistant/ar
 #### 如何启动项目
 
 在 `server` 文件目录下运行 `npm i` 安装所需要的包。安装好之后使用 `node StartupServer.js` 启动项目。
+
+### 其它
+
+#### 查看相应 WPS API
+
+在 WPS 中点击**开发工具**这个加载项，点击录制新宏。开启录制之后在 WPS 中执行你需要的操作，比如：换行、按 tab 进行缩进、另存为 html 格式等操作。操作完成之后点击**停止录制**按钮。停止录制之后点击 **WPS 宏编辑器** 按钮，此时在编辑器中就能看到所有录制的操作调用的 API 了，如下：
+
+- 按 tab 进行缩进并且输入文本：
+
+```js
+function Macro() {
+  Selection.SetRange(0, 0);
+  Selection.Range.Paragraphs.Item(1).Indent();
+  Selection.TypeText("按 tab 进行缩进并且输入文本");
+  Selection.SetRange(6, 6);
+}
+```
+
+- 换行之后进行 tab 缩进：
+
+```js
+function Macro() {
+  Selection.SetRange(3, 3);
+  Selection.TypeParagraph();
+  Selection.TypeParagraph();
+  Selection.Range.Paragraphs.Item(1).Indent();
+}
+```
+
+- 设置左右边距为 2.54 cm：
+
+```js
+function Macro() {
+  Selection.Range.PageSetup.LeftMargin = 71.999428;
+  Selection.Range.PageSetup.RightMargin = 71.999428;
+  Selection.SetRange(0, 1);
+}
+```
