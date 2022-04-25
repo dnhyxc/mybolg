@@ -81,7 +81,7 @@ onDOMContentLoaded(function () {
   tocWordsLoop.init();
   articleImage.init();
   previewImg.init();
-  new homePage.Init()
+  // new homePage.Init()
   // emStyle.init();
 });
 
