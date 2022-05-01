@@ -5,10 +5,10 @@ import RouterConfig from "./router";
 import "./index.css";
 
 function render(props) {
-  const { container, info } = props;
+  const { container, info, routerBase } = props;
   ReactDOM.render(
     <React.StrictMode>
-      <RouterConfig info={info} />
+      <RouterConfig info={info} routerBase={routerBase} />
     </React.StrictMode>,
     // 为了避免根 id #root 与其他的 DOM 冲突，需要限制查找范围。
     container
