@@ -24,7 +24,6 @@ export const importHtml = async (url) => {
   // 获取并执行所有的 script 脚本代码
   async function execScripts() {
     const scripts = await getExternalScripts();
-    console.log(scripts);
 
     // 手动构造一个 CommonJS 模块执行环境，此时会将子应用挂载到 module.exports 上。这种方式就可以不依赖子应用的名字了。
     const module = { exports: {} };
@@ -39,7 +38,6 @@ export const importHtml = async (url) => {
       // return window["micro-react-main"];
     });
 
-    console.log(module.exports);
     return module.exports;
   }
 

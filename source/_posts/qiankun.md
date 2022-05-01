@@ -586,7 +586,39 @@ module.exports = {
 };
 ```
 
-#### 全局状态管理
+#### 主子应用通信说明
+
+1、一般来说，微前端中各个应用之前的通信应该是尽量少的，而这依赖于应用的合理拆分。反过来说，如果你发现两个应用间存在极其频繁的通信，那么一般是拆分不合理造成的，这时往往需要将它们合并成一个应用。
+
+2、qiankun 官方基于通信问题提供了一个简要的方案，思路是基于一个全局的 **globalState** 对象。这个对象由基座应用负责创建，内部包含一组用于通信的变量，以及两个分别用于修改变量值和监听变量变化的方法：**setGlobalState** 和 **onGlobalStateChange**，具体使用如下：
+
+```js
+import { initGlobalState, MicroAppStateActions } from "qiankun";
+
+const initialState = {};
+const actions: MicroAppStateActions = initGlobalState(initialState);
+
+export default actions;
+```
+
+- 这里的 actions 对象就是我们说的 globalState，即全局状态。基座应用可以在加载子应用时通过 props 将 actions 传递到子应用内，而子应用通过以下语句即可监听全局状态变化：
+
+```js
+actions.onGlobalStateChange (globalState, oldGlobalState) {
+  ...
+}
+
+```
+
+- 修改全局状态：
+
+```js
+actions.setGlobalState(...);
+```
+
+- 同样的，子应用也可以从主应用传递下来的 props 中获取到 setGlobalState 方法修改全局状态。
+
+#### 主子应用全局状态管理配置方式
 
 1、qiankun 通过 initGlobalState, onGlobalStateChange, setGlobalState 实现主应用的全局状态管理，然后默认会通过 props 将通信方法传递给子应用。
 
@@ -653,7 +685,355 @@ const apps = [
 
 ### qiankun 实现原理
 
-##### 应用加载
+#### qiankun 实现的四个步骤
+
+1、监听路由变化。
+
+- 监听 hash 路由可以直接使用 window.onhashchange 方法实现。
+
+- 监听 history 路由需要分两种情况：
+
+  - history.go、history.back、history.forward：需要通过 popstate 事件实现。
+
+  - pushState、replaceState 则需要通过函数重写的方式进行劫持。
+
+```js
+window.addEventListener("popstate", () => {
+  console.log("监听到 popstate 变化");
+});
+
+const rawPushState = window.history.pushState;
+window.history.pushState = (...args) => {
+  console.log("监听到 pushState 变化");
+};
+
+const rawReplaceState = window.history.replaceState;
+window.history.replaceState = (...args) => {
+  console.log("监听到 replaceState 变化");
+};
+```
+
+2、匹配子路由。
+
+- 通过获取到当前的路由路径，再从 apps 中查找对应路径的应用。
+
+```js
+// apps 就是在主项目中注册的子应用列表
+const app = apps.find((i) => winddow.location.pathname === i.activeRule);
+```
+
+3、加载子应用。
+
+- 请求获取子应用的资源：HTML、CSS、JS。请求方式可以使用 fetch、ajax、axios 等。
+
+```js
+const fetchResource = (url) => fetch(url).then((res) => res.text());
+```
+
+4、渲染子应用。
+
+- 由于客户端渲染需要通过执行 JS 来生成内容，而浏览器出于安全考虑，innerHTML 中的 script 不会加载执行，要想执行其中的代码，需要通过 evel() 方法或者 new Function 执行。
+
+```js
+import { fetchResource } from "./fetchResource";
+
+export const importHtml = async (url) => {
+  const html = await fetchResource(url);
+  const template = document.createElement("div");
+  template.innerHTML = html;
+
+  const scripts = template.querySelectorAll("script");
+
+  // 获取所有 script 标签的代码
+  function getExternalScripts() {
+    return Promise.all(
+      Array.from(scripts).map((script) => {
+        const src = script.getAttribute("src");
+        if (!src) {
+          return Promise.resolve(script.innerHTML);
+        } else {
+          return fetchResource(src.startsWith("http") ? src : `${url}${src}`);
+        }
+      })
+    );
+  }
+
+  // 获取并执行所有的 script 脚本代码
+  async function execScripts() {
+    const scripts = await getExternalScripts();
+
+    // 手动构造一个 CommonJS 模块执行环境，此时会将子应用挂载到 module.exports 上。这种方式就可以不依赖子应用的名字了。
+    const module = { exports: {} };
+    const exports = module.exports;
+
+    scripts.forEach((code) => {
+      // eslint-disable-next-line no-eval
+      eval(code);
+      // 这里能通过window["micro-react-main"]拿到子应用的内容是因为在子应用打包时通过 library 打出了 umd 格式的包，最终会将 micro-react-main 挂载到 window 上
+      // console.log(window["micro-react-main"]);
+      // 使用 window 获取子应用的方式需要知道每个子应用的打包出来的名字，比较麻烦，因此不推荐该写法。
+      // return window["micro-react-main"];
+    });
+
+    return module.exports;
+  }
+
+  return {
+    template,
+    getExternalScripts,
+    execScripts,
+  };
+};
+```
+
+#### 具体手写实现代码
+
+1、index.js：
+
+```js
+import { rewriteRouter } from "./rewriteRouter";
+import { handleRouter } from "./handleRouter";
+
+// 注册子应用方法
+let _apps = [];
+
+export const getApps = () => _apps;
+
+export const registerMicroApps = (apps) => {
+  _apps = apps;
+};
+
+export const start = () => {
+  rewriteRouter();
+
+  // 初始化时手动执行匹配
+  handleRouter();
+};
+```
+
+2、rewriteRouter.js：
+
+```js
+import { handleRouter } from "./handleRouter";
+
+/**
+ * 1. 监视路由变化
+ *  - hash 路由：使用 window.onhashchange 方法监视
+ *  - history 路由：
+ *    - history.go、history.back、history.forword 使用 popstate 事件进行监视。
+ *    - pushState、replaceState 需要通过函数重写的方式进行劫持。
+ */
+
+let prevRoute = ""; // 上一个路由
+let nextRoute = window.location.pathname; // 下一个路由
+
+export const getPrevRoute = () => prevRoute;
+export const getNextRoute = () => nextRoute;
+
+export const rewriteRouter = () => {
+  window.addEventListener("popstate", () => {
+    // popstate 事件触发时，路由已经完成导航了，因此需要通过如下方式进行设置。
+    prevRoute = nextRoute;
+    nextRoute = window.location.pathname;
+    handleRouter();
+  });
+
+  const rawPushState = window.history.pushState;
+  window.history.pushState = (...args) => {
+    prevRoute = window.location.pathname;
+    rawPushState.apply(window.history, args); // 执行完这句代码之后，就改变了路由的历史纪录
+    nextRoute = window.location.pathname;
+    handleRouter();
+  };
+
+  const rawReplaceState = window.history.replaceState;
+  window.history.replaceState = (...args) => {
+    prevRoute = window.location.pathname;
+    rawReplaceState.apply(window.history, args);
+    nextRoute = window.location.pathname;
+    handleRouter();
+  };
+};
+```
+
+3、handleRouter.js：
+
+```js
+import { getApps } from "./index";
+import { getPrevRoute, getNextRoute } from "./rewriteRouter";
+import { importHtml } from "./importHtmlEntry";
+
+// 处理路由变化
+export const handleRouter = async () => {
+  /**
+   * 2. 匹配子应用
+   *  - 获取到当前的路由路径
+   *  - 从 apps 中查找对应的路径
+   */
+  const apps = getApps();
+
+  // 获取上一个应用
+  const prevApp = apps.find((i) => getPrevRoute().startsWith(i.activeRule));
+
+  if (prevApp) {
+    await unmount(prevApp);
+  }
+
+  // 获取下一个应用
+  const app = apps.find((i) => getNextRoute().startsWith(i.activeRule));
+
+  if (!app) return;
+
+  /**
+   * 3. 加载子应用
+   *  - 请求获取子应用的资源：HTML、CSS、JS。请求方式可以使用 fetch、ajax、axios 等。
+   */
+  // const html = await fetch(app.entry).then((res) => res.text());
+  // const container = document.querySelector(app.container);
+  /**
+   * 1. 客户端渲染需要通过执行 JS 来生成内容
+   * 2. 浏览器出于安全考虑，innerHTML 中的 script 不会加载执行，要想执行其中的代码，需要通过 evel() 方法或者 new Function 执行。
+   */
+  // container.innerHTML = html;
+  const container = document.querySelector(app.container);
+
+  // 4. 渲染子应用
+  const { template, execScripts } = await importHtml(app.entry);
+
+  container.appendChild(template);
+
+  // 配置全局环境变量
+  window.__POWERED_BY_QIANKUN__ = true;
+  // 设置该全局变量用于解决子应用中图片无法加载出来的问题
+  window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__ = `${app.entry}/`;
+
+  const appExports = await execScripts();
+  // 将从 module.exports 中获取到的 bootstrap、mount、unmount设置到 app 上。
+  app.bootstrap = appExports.bootstrap;
+  app.mount = appExports.mount;
+  app.unmount = appExports.unmount;
+
+  // 调用从 module.exports 中获取到的子应用中定义的 bootstrap 方法。
+  await bootstrap(app);
+  // 调用从 module.exports 中获取到的子应用中定义的 mount 方法。
+  await mount(app);
+};
+
+async function bootstrap(app) {
+  app.bootstrap && (await app.bootstrap());
+}
+
+async function mount(app) {
+  app.mount &&
+    (await app.mount({
+      container: document.querySelector(app.container),
+    }));
+}
+
+async function unmount(app) {
+  app.unmount &&
+    (await app.unmount({
+      container: document.querySelector(app.container),
+    }));
+}
+```
+
+4、importHtmlEntry.js：
+
+```js
+import { fetchResource } from "./fetchResource";
+
+export const importHtml = async (url) => {
+  const html = await fetchResource(url);
+  const template = document.createElement("div");
+  template.innerHTML = html;
+
+  const scripts = template.querySelectorAll("script");
+
+  // 获取所有 script 标签的代码
+  function getExternalScripts() {
+    return Promise.all(
+      Array.from(scripts).map((script) => {
+        const src = script.getAttribute("src");
+        if (!src) {
+          return Promise.resolve(script.innerHTML);
+        } else {
+          return fetchResource(src.startsWith("http") ? src : `${url}${src}`);
+        }
+      })
+    );
+  }
+
+  // 获取并执行所有的 script 脚本代码
+  async function execScripts() {
+    const scripts = await getExternalScripts();
+
+    // 手动构造一个 CommonJS 模块执行环境，此时会将子应用挂载到 module.exports 上。这种方式就可以不依赖子应用的名字了。
+    const module = { exports: {} };
+    const exports = module.exports;
+
+    scripts.forEach((code) => {
+      // eslint-disable-next-line no-eval
+      eval(code);
+      // 这里能通过window["micro-react-main"]拿到子应用的内容是因为在子应用打包时通过 library 打出了 umd 格式的包，最终会将 micro-react-main 挂载到 window 上
+      // console.log(window["micro-react-main"]);
+      // 使用 window 获取子应用的方式需要知道每个子应用的打包出来的名字，比较麻烦，因此不推荐该写法。
+      // return window["micro-react-main"];
+    });
+
+    return module.exports;
+  }
+
+  return {
+    template,
+    getExternalScripts,
+    execScripts,
+  };
+};
+```
+
+- webpack 打包 library umd 模式说明：
+
+```js
+!(function (e, o) {
+  /**
+   * e 表示 window，
+   * o 表示回调函数：
+   *    function () { 子应用代码 return { ... } 导出结果};
+   */
+
+  // 兼容 CommonJS 模块规范
+  "object" === typeof exports && "object" === typeof module
+    ? (module.exports = o())
+    : // 兼容 AMD 模块规范
+    "function" === typeof define && define.amd
+    ? // eslint-disable-next-line no-undef
+      define([], o)
+    : // 也是兼容 CommonJS 模块规范
+    "object" === typeof exports
+    ? (exports["micro-react-main"] = o())
+    : // 都不匹配的情况下设置 window[xxx] = o() 此时 window 下就会存在 micro-react-main 对象
+      (e["micro-react-main"] = o());
+})(window, function () {
+  // 最终返回导出的结果
+  return {
+    a: 1,
+    b: 2,
+  };
+});
+```
+
+> importHtmlEntry.js 中手动构造 CommonJS 运行模式就是根据上述代码中的判断实现的。
+
+5、fetchResource.js：
+
+```js
+export const fetchResource = (url) => fetch(url).then((res) => res.text());
+```
+
+#### 相关源码
+
+##### 加载子应用资源
 
 1、基于 single-spa，qiankun 进行了一次封装，给出了一个更完整的应用加载方案，并将应用加载的功能装成了 npm 插件 **import-html-entry**。
 
@@ -672,7 +1052,7 @@ const apps = [
 
 - qiankun 会通过 import-html-entry 请求 `http://localhost:8686`，得到对应的 html 文件，解析内部的所有 script 和 style 标签，依次下载和执行它们，这使得应用加载变得更易用。
 
-##### import-html-entry 的具体实现
+##### import-html-entry 源码实现
 
 1、import-html-entry 暴露出的核心接口是 importHTML，用于加载 html 文件，它支持两个参数：
 
@@ -892,16 +1272,47 @@ registerMicroApps({
   name: 'app1',
   ...
   sandbox: {
-    strictStyleIsolation: true
-    // 实验性方案，scoped方式
-    // experimentalStyleIsolation: true
+    strictStyleIsolation: true // 使用 shadow dom 进行样式隔离
+    // experimentalStyleIsolation: true // 通过添加选择器范围来解决样式冲突
   },
 })
 ```
 
-- 当启用 strictStyleIsolation 时，qiankun 将采用 shadowDom 的方式进行样式隔离，即为子应用的根节点创建一个 shadow root。最终整个应用的所有 DOM 将形成一棵 shadow tree。我们知道，shadowDom 的特点是，它内部所有节点的样式对树外面的节点无效，因此自然就实现了样式隔离。
+- 当启用 strictStyleIsolation 时，qiankun 将采用 shadowDom 的方式进行样式隔离，即为子应用的根节点创建一个 shadow root。最终整个应用的所有 DOM 将形成一棵 shadow tree。我们知道，shadowDom 的特点是，它内部所有节点的样式对树外面的节点无效，因此自然就实现了样式隔离。但是这种方案是存在缺陷的。因为某些 UI 框架可能会生成一些弹出框直接挂载到 document.body 下，此时由于脱离了 shadow tree，所以它的样式仍然会对全局造成污染。具体实现示例如下：
 
-- 但是这种方案是存在缺陷的。因为某些 UI 框架可能会生成一些弹出框直接挂载到 document.body 下，此时由于脱离了 shadow tree，所以它的样式仍然会对全局造成污染。
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>shadow-dom</title>
+    <style>
+      h1 {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>shadow-dom</h1>
+
+    <div id="subApp">
+      <h1>子应用内容</h1>
+    </div>
+
+    <script>
+      const subApp = document.getElementById("subApp");
+      // 是否允许通过 js 获取 shadow-dom
+      const shadow = subApp.attachShadow({ mode: "open" });
+      const h1 = document.createElement("h1");
+      h1.innerHTML = "我是通过 shadow dom 添加的内容，我的样式不会受外部影响";
+      h1.style.color = "deeppink";
+      shadow.appendChild(h1);
+    </script>
+  </body>
+</html>
+```
 
 - 此外 qiankun 也在探索类似于 scoped 属性的样式隔离方案，可以通过 experimentalStyleIsolation 来开启。这种方案的策略是为子应用的根节点添加一个特定的随机属性，如：
 
@@ -927,35 +1338,3 @@ registerMicroApps({
 ```
 
 - 经过上述替换，这个样式就只能在当前子应用内生效了。虽然该方案已经提出很久了，但仍然是实验性的，因为它不支持 @keyframes，@font-face，@import，@page（即不会被重写）。
-
-##### 应用通信
-
-1、一般来说，微前端中各个应用之前的通信应该是尽量少的，而这依赖于应用的合理拆分。反过来说，如果你发现两个应用间存在极其频繁的通信，那么一般是拆分不合理造成的，这时往往需要将它们合并成一个应用。
-
-2、qiankun 官方基于通信问题提供了一个简要的方案，思路是基于一个全局的 **globalState** 对象。这个对象由基座应用负责创建，内部包含一组用于通信的变量，以及两个分别用于修改变量值和监听变量变化的方法：**setGlobalState** 和 **onGlobalStateChange**，具体使用如下：
-
-```js
-import { initGlobalState, MicroAppStateActions } from "qiankun";
-
-const initialState = {};
-const actions: MicroAppStateActions = initGlobalState(initialState);
-
-export default actions;
-```
-
-- 这里的 actions 对象就是我们说的 globalState，即全局状态。基座应用可以在加载子应用时通过 props 将 actions 传递到子应用内，而子应用通过以下语句即可监听全局状态变化：
-
-```js
-actions.onGlobalStateChange (globalState, oldGlobalState) {
-  ...
-}
-
-```
-
-- 修改全局状态：
-
-```js
-actions.setGlobalState(...);
-```
-
-- 同样的，子应用也可以从主应用传递下来的 props 中获取到 setGlobalState 方法修改全局状态。

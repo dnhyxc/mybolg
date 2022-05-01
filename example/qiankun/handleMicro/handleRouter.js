@@ -35,7 +35,10 @@ export const handleRouter = async () => {
    */
   // container.innerHTML = html;
   const container = document.querySelector(app.container);
+
+  // 4. 渲染子应用
   const { template, execScripts } = await importHtml(app.entry);
+
   container.appendChild(template);
 
   // 配置全局环境变量
