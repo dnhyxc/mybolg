@@ -1,0 +1,17 @@
+.app-main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 100%;
+}
+
+.app-header {
+  height: 50px;
+  box-shadow: 0px 3px 5px 0px #dfdfdf;
+}
+
+.app-sub {
+  flex: 1;
+  position: relative;
+}
