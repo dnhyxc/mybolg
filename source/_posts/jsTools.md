@@ -940,3 +940,61 @@ const getFileType = (fileName) => {
   return "other";
 };
 ```
+
+#### 设置请求最大并发数
+
+当需要同时发送多个请求，但是服务端有限制，需要前端控制并发数，保证最多只能同时发送 10 个请求时，就会用到如下方法：
+
+```js
+class TaskQueue {
+  constructor() {
+    this.max = 10;
+    this.taskList = [];
+    setTimeout(() => {
+      this.run();
+    });
+  }
+
+  addTask(task) {
+    this.taskList.push(task);
+  }
+
+  run() {
+    const length = this.taskList.length;
+    if (!length) return;
+    const min = Math.min(this.max, length);
+    for (let i = 0; i < min; i++) {
+      this.max--;
+      const task = this.taskList.shift();
+      task()
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.max++;
+          this.run();
+        });
+    }
+  }
+}
+
+function createTask(i) {
+  return () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(i);
+      }, 2000);
+    });
+  };
+}
+
+const taskQueue = new TaskQueue();
+
+for (let i = 0; i < 25; i++) {
+  const task = createTask(i);
+  taskQueue.addTask(task);
+}
+```
