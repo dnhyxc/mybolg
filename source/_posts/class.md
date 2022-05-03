@@ -2,6 +2,7 @@
 title: Class
 date: 2020-04-01 06:02:11
 toc: true
+declare: true
 tags:
   - class
   - constructor
