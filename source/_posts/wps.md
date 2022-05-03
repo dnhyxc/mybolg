@@ -1,6 +1,6 @@
 ---
 title: WPS OA 助手开发
-date: 2022-03-30 21:06:16
+date: 2022-05-02 21:06:16
 toc: true
 tags: WPS
 declare: true
@@ -58,9 +58,9 @@ _WpsInvoke(
       OpenDoc: {
         insertFileUrl: "http://xxxurl", // 套红模板
         bkInsertFileStart: bookMarksStart, // 套红开始标签
-        bkInsertFileEnd: bookMarksEnd // 套红结束标签
-      }
-    }
+        bkInsertFileEnd: bookMarksEnd, // 套红结束标签
+      },
+    },
   ],
   true // 控制着通过页面执行WPS加载项方法，WPS的界面是否在执行时在前台显示
 );
@@ -187,7 +187,7 @@ var fieldObjEnum = {
   // 部门
   部门: "department",
   // 发文单位
-  发文单位: "units"
+  发文单位: "units",
 };
 ```
 
@@ -203,10 +203,10 @@ _WpsInvoke(
         bkInsertFileEnd: bookMarksEnd, // 套红结束标签
         // 自定义传入wps中的参数
         params: {
-          fieldObj // 需要插入的各种标签属性
-        }
-      }
-    }
+          fieldObj, // 需要插入的各种标签属性
+        },
+      },
+    },
   ],
   true
 );
@@ -225,8 +225,8 @@ const fieldObj = {
       mimeType: "xxx",
       name: "xxx",
       size: 29191,
-      url: "xxxurl"
-    }
+      url: "xxxurl",
+    },
   ],
   fileDepartment: '{"id":530051,"name":"区公司/人力资源部"}',
   issUer: "xxx",
@@ -239,7 +239,7 @@ const fieldObj = {
   signatureUnit: "xxx",
   signingUnit: "署名区公司人力资源部",
   title: "取个名字真的难",
-  urgencyLevel: "特急"
+  urgencyLevel: "特急",
 };
 ```
 
@@ -268,10 +268,10 @@ _WpsInvoke(
         // 默认开启修订
         revisionCtrl: {
           bOpenRevision: true,
-          bShowRevision: true
-        }
-      }
-    }
+          bShowRevision: true,
+        },
+      },
+    },
   ],
   true
 );
@@ -289,9 +289,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         disabledBtns:
-          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions"
-      }
-    }
+          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions",
+      },
+    },
   ],
   true
 );
@@ -311,9 +311,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         buttonGroups:
-          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions"
-      }
-    }
+          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions",
+      },
+    },
   ],
   true
 );
@@ -333,9 +333,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         suffix: ".pdf",
-        uploadWithAppendPath: "1"
-      }
-    }
+        uploadWithAppendPath: "1",
+      },
+    },
   ],
   true
 ); // OpenDoc方法对应于OA助手dispatcher支持的方法名
@@ -349,9 +349,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         suffix: ".html",
-        uploadWithAppendPath: "1"
-      }
-    }
+        uploadWithAppendPath: "1",
+      },
+    },
   ],
   true
 );
@@ -445,7 +445,7 @@ function customDoc() {
     urgencyLevel: "紧急",
     secretClass: "密级1",
     department: "高级的前端部门",
-    units: "发文单位"
+    units: "发文单位",
   };
 
   const bookMarksStart = "正文内容B";
@@ -474,7 +474,7 @@ function customDoc() {
           // 默认开启修订
           revisionCtrl: {
             bOpenRevision: true,
-            bShowRevision: true
+            bShowRevision: true,
           },
 
           params: {
@@ -487,13 +487,13 @@ function customDoc() {
             list: fileList || [],
             operType: 4,
             dealDescription,
-            fieldObj
+            fieldObj,
           },
           openType: {
             // 文档打开方式
             // 文档保护类型，-1：不启用保护模式，0：只允许对现有内容进行修订，
             // 1：只允许添加批注，2：只允许修改窗体域(禁止拷贝功能)，3：只读
-            protectType: -1
+            protectType: -1,
             // protectType: downloadParams ? 0 : -1,
             // password: '123456',
           },
@@ -503,9 +503,9 @@ function customDoc() {
 
           // 禁用加载项按钮
           disabledBtns:
-            "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions"
-        }
-      }
+            "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions",
+        },
+      },
     ],
     true
   ); // OpenDoc方法对应于OA助手dispatcher支持的方法名
@@ -628,12 +628,12 @@ function customDoc() {
     el: "#template",
     data: {
       templateItem: -1,
-      templates: {}
+      templates: {},
     },
     methods: {},
     mounted: function () {
       this.onCustomClick();
-    }
+    },
   });
 </script>
 ```
@@ -653,9 +653,9 @@ const plugins = [
   new CopyWebpackPlugin([
     {
       from: "lib/WpsOAAssist",
-      to: "WpsOAAssist/"
-    }
-  ])
+      to: "WpsOAAssist/",
+    },
+  ]),
 ];
 ```
 
