@@ -52,7 +52,6 @@ function init() {
   const dot_wrap = document.createElement('div')
   dot_wrap.className = 'dot_wrap'
   dot_wrap.appendChild(fragment)
-  console.log(dot_wrap, 'dot_wrap')
   imgContainer.appendChild(dot_wrap)
 
   if (right && left && bodyWidth > 800) {
@@ -100,7 +99,6 @@ function init() {
   }
 
   const allDot = dot_wrap.querySelectorAll('.img_dot')
-  console.log(allDot)
 
   if (bodyWidth <= 800) {
     if (!imgContainer) return
