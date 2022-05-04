@@ -139,17 +139,17 @@
   }
 
   @media screen and (min-width: 800px) {
-    &::before {
-      content: "";
-      position: absolute;
-      left: -10px;
-      top: -1px;
-      width: 10px;
-      height: 91px;
-      background-color: #ffd900;
-      border-top-left-radius: 5px;
-      border-bottom-right-radius: 5px;
-    }
+    // &::before {
+    //   content: "";
+    //   position: absolute;
+    //   left: -10px;
+    //   top: -1px;
+    //   width: 10px;
+    //   height: 91px;
+    //   background-color: #ffd900;
+    //   border-top-left-radius: 5px;
+    //   border-bottom-right-radius: 5px;
+    // }
   }
 }
 
