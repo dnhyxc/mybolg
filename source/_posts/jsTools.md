@@ -196,12 +196,12 @@ console.log(numFormat(b)); // "673,439.4542"
 var aaa = [
   {
     Name: "test1Name",
-    type: "test",
+    type: "test"
   },
   {
     Name: "test2",
-    model: "model2",
-  },
+    model: "model2"
+  }
 ];
 var bbb = JSON.parse(JSON.stringify(aaa).replace(/Name/g, "title"));
 console.log(bbb);
@@ -251,12 +251,12 @@ function copyTrans(obj, typeArr) {
 
 const arr = [
   { name: "key", age: "18" },
-  { key: "name", address: "poyang" },
+  { key: "name", address: "poyang" }
 ];
 
 const res = copyTrans(arr, [
   { key: "name", value: "myname" },
-  { key: "key", value: "myvalue" },
+  { key: "key", value: "myvalue" }
 ]);
 console.log(res);
 ```
@@ -459,7 +459,7 @@ const randomColor = () => {
     "#f5576c",
     "#330867",
     "#30cfd0",
-    "#38f9d7",
+    "#38f9d7"
   ];
   var colorIndex = Math.floor(colors.length * Math.random());
   return colors[colorIndex];
@@ -646,7 +646,7 @@ const A = [
   { id: 3, name: "dnhyx" },
   { id: 4, name: "dnhyxc" },
   { id: 5, name: "dnhyxcn" },
-  { id: 6, name: "dnhyxcnt" },
+  { id: 6, name: "dnhyxcnt" }
 ];
 
 const B = [
@@ -654,7 +654,7 @@ const B = [
   { id: 2, name: "ntd" },
   { id: 33, name: "ntdn" },
   { id: 77, name: "ntdnh" },
-  { id: 6, name: "ntdnhy" },
+  { id: 6, name: "ntdnhy" }
 ];
 
 const newArr = B.filter((i) => !A.some((j) => j.id === i.id));
@@ -918,7 +918,7 @@ const getFileType = (fileName) => {
     "avi",
     "flv",
     "mov",
-    "m4v",
+    "m4v"
   ];
   result = videolist.find((item) => item === suffix);
   if (result) {
@@ -996,5 +996,37 @@ const taskQueue = new TaskQueue();
 for (let i = 0; i < 25; i++) {
   const task = createTask(i);
   taskQueue.addTask(task);
+}
+```
+
+#### 获取用户使用设备
+
+```js
+function mobileType() {
+  var u = navigator.userAgent,
+    app = navigator.appVersion;
+  var type = {
+    // 移动终端浏览器版本信息
+    ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+    iPad: u.indexOf("iPad") > -1, //是否iPad
+    android: u.indexOf("Android") > -1 || u.indexOf("Linux") > -1, //android终端或者uc浏览器
+    iPhone: u.indexOf("iPhone") > -1 || u.indexOf("Mac") > -1, //是否为iPhone或者QQHD浏览器
+    trident: u.indexOf("Trident") > -1, //IE内核
+    presto: u.indexOf("Presto") > -1, //opera内核
+    webKit: u.indexOf("AppleWebKit") > -1, //苹果、谷歌内核
+    gecko: u.indexOf("Gecko") > -1 && u.indexOf("KHTML") == -1, //火狐内核
+    mobile:
+      !!u.match(/AppleWebKit.*Mobile/i) ||
+      !!u.match(
+        /MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/
+      ), //是否为移动终端
+    webApp: u.indexOf("Safari") == -1 //是否web应该程序，没有头部与底部
+  };
+  var lists = Object.keys(type);
+  for (var i = 0; i < lists.length; i++) {
+    if (type[lists[i]]) {
+      return lists[i];
+    }
+  }
 }
 ```
