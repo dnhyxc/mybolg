@@ -117,6 +117,8 @@ function init() {
     });
 
     hideMenu.addEventListener("click", () => {
+      const smallWrap = document.querySelector(".smallWrap");
+      smallWrap.style.display = 'block'
       if (!Utils.getSSG("hideMenu")) {
         Utils.setSSG("hideMenu", true);
       }

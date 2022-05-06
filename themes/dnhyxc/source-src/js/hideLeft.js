@@ -22,7 +22,9 @@ function onShowMenu() {
 
 function init() {
   const leftMenu = document.querySelector(".left-menu");
+  const smallWrap = document.querySelector(".smallWrap");
   leftMenu.addEventListener("click", () => {
+    smallWrap.style.display = 'none'
     if (Utils.getSSG("hideMenu")) {
       Utils.removeSSG("hideMenu");
     }
