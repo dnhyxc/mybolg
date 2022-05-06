@@ -541,6 +541,7 @@ function UploadFile(
   xhr.open("POST", uploadPath);
 
   var fileData = wps.FileSystem.readAsBinaryString(strPath);
+
   var data = new FakeFormData();
   if (strFieldName == "" || typeof strFieldName == "undefined") {
     //如果业务方没定义，默认设置为'file'
@@ -553,10 +554,14 @@ function UploadFile(
       return fileData;
     },
   });
+
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4) {
-      if (xhr.status == 200) OnSuccess(xhr.response, saveType);
-      else OnFail(xhr.response);
+      if (xhr.status == 200) {
+        OnSuccess(xhr.response, saveType);
+      } else {
+        OnFail(xhr.response);
+      }
     }
   };
   xhr.withCredentials = true;
@@ -788,6 +793,8 @@ function SetDocParamsValue(Doc, Key, Value) {
 function getRedTemplateUrl(l_doc) {
   return new Promise((resolve, reject) => {
     var insertFileUrl = GetDocParamsValue(l_doc, constStrEnum.insertFileUrl);
+
+    console.log(insertFileUrl, 'insertFileUrl>>>>>>>>>>>>>>>>>>')
 
     if (!insertFileUrl) {
       //   alert('模板未配置红头！')

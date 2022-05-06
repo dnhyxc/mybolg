@@ -158,6 +158,9 @@ var constStrEnum = {
 
   // 正文字段 URL
   BodyTemplateUrl: "bodyTemplateUrl",
+
+  // 需要禁用加载项按钮
+  disabledBtns: "disabledBtns",
 };
 
 // 更改：增加套红字段类型
@@ -274,6 +277,34 @@ var fieldObjEnum = {
    * 创建时间/拟稿时间
    */
   // CREAT_TIME: 'creatTime',
+
+  // 以下是单正文书签套红标签 >>>>>>>>>>>>>>>>>>>>>
+
+  // 密级
+  mj: 'secretClass',
+  // 缓急
+  // hj: 'urgencyLevel',
+  hj: '_taskLevel',
+  // 正文标题
+  zwbt: 'title',
+  // 文号
+  fwzh: 'refNo',
+  // 签发人
+  qfr: 'issUer',
+  // 印发机关
+  yfjg: 'signingUnit',
+  // 印发日期
+  yfrq: 'printDate',
+  // 签发日期
+  qfrq: 'issueDate',
+  // 抄送
+  csjg: 'copySend',
+  // 主送
+  zsjg: 'mainSend',
+  // 单位署名
+  dwsm: 'signatureUnit',
+  // 附件
+  fj: 'enclosure',
 };
 
 // 更改：增加保存类型
@@ -296,14 +327,14 @@ var SAVE_TYPE = {
    */
   ORGINAL_RED_HEAD: 3,
 
+  // 套红html文件
+  HTML_HEAD: 4,
+
   /**
    * 套红 PDF
    */
-  PDF_RED_HEAD: 4,
-
-  // 套红html文件
-  HTML_HEAD: 5,
+  PDF_RED_HEAD: 5,
 
   // 未套红html文件
-  NO_HTML_HEAD: 6,
+  NO_RED_HTML_HEAD: 6,
 };

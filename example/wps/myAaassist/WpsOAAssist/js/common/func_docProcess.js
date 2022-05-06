@@ -15,12 +15,17 @@ function NewFile(params) {
   } else {
     doc = wpsApp.Documents.Add(); //新增OA端文档
   }
+
+  // 新建时更改页边距
+  const selection = wpsApp.ActiveWindow.Selection;
+  selection.Range.PageSetup.LeftMargin = 71.999428; // 设置左边距为 2.54
+  selection.Range.PageSetup.RightMargin = 71.999428; // 设置左边距为 2.54
+
   wps.PluginStorage.setItem(constStrEnum.IsInCurrOADocOpen, false);
 
   //检查系统临时文件目录是否能访问
   if (wps.Env && wps.Env.GetTempPath) {
-
-    console.log(wps.Env.GetTempPath(), 'wps.Env.GetTempPath')
+    console.log(wps.Env.GetTempPath(), "wps.Env.GetTempPath");
 
     if (params.newFileName) {
       //按OA传入的文件名称保存
@@ -158,6 +163,12 @@ function OpenFile(params) {
     return null;
   }
 
+  // 更新正文时更改页边距
+  const wpsApp = wps.WpsApplication();
+  const selection = wpsApp.ActiveWindow.Selection;
+  selection.Range.PageSetup.LeftMargin = 71.999428; // 设置左边距为 2.54
+  selection.Range.PageSetup.RightMargin = 71.999428; // 设置左边距为 2.54
+
   pOpenFile(doc, params, l_IsOnlineDoc);
 }
 
@@ -244,7 +255,7 @@ function pOpenFile(doc, params, isOnlineDoc) {
 /**
  * 从OA-web端点击正文模板
  *  doc : 需要存在以下属性
- *      'bodyTemplateUrl':'', 正文模板 URL
+ *  'bodyTemplateUrl':'', 正文模板 URL
  */
 function InsertPresetTemplateDoc(doc) {
   // 插入正文模板
@@ -293,7 +304,6 @@ function InsertPresetTemplateDoc(doc) {
 function GetServerTemplateData(template, pTemplateDataUrl) {
   // 更改：增加获取params参数逻辑（开始位置）
   var l_params = GetDocParamsValue(template, "params");
-  return;
   // 结束位置
 
   //获取文档内容
@@ -441,13 +451,14 @@ function pDoResetRibbonGroups(paramsGroups) { }
  * userName	String	用于更改显示修改人的用户名
  * strBookmarkDataPath	string	书签列表 (可不传，可以在OA助手config.js中配置)
  * templatePath	string	模板列表 (可不传，可以在OA助手config.js中配置)
- * buttonGroups	string	自定义按钮组 （可不传，不传显示所有按钮）
+ * buttonGroups	string	自定义按钮组 （可不传，不传显示所有按钮），多个按钮之间以英文逗号相隔（,）。
  * revisionCtrl	String	痕迹控制 ，不传正常打开
- *      bOpenRevision	String	true(打开)false(关闭)修订
- *      bShowRevision	String	true(显示)/false(关闭)痕迹
+ * bOpenRevision	String	true(打开)false(关闭)修订
+ * bShowRevision	String	true(显示)/false(关闭)痕迹
  * openType	String	文档打开方式 ，不传正常打开
- *      protectType	String	文档保护类型，-1：不启用保护模式，0：只允许对现有内容进行修订，1：只允许添加批注，2：只允许修改窗体域，3：只读
- *      password	String密码
+ * protectType	String	文档保护类型，-1：不启用保护模式，0：只允许对现有内容进行修订，1：只允许添加批注，2：只允许修改窗体域，3：只读
+ * password	String密码
+ * disabledBtns String 禁用加载项按钮（可不传，不传显示所有按钮）。多个按钮之间以英文逗号相隔（,）。
  */
 function pDoOpenOADocProcess(params, TempLocalFile) {
   var l_ProtectType = -1; //默认文档保护类型 -1 为不启用保护
@@ -473,6 +484,8 @@ function pDoOpenOADocProcess(params, TempLocalFile) {
         l_bShowRevision = params[key].bShowRevision;
         break;
       case "buttonGroups".toUpperCase(): //按钮组合
+        break;
+      case "disabledBtns".toUpperCase(): //禁用加载项按钮
         break;
       case "docPassword".toUpperCase(): //传入打开文件的密码
         l_strDocPassword = params[key].docPassword;
@@ -648,7 +661,7 @@ function handleFileAndUpload(suffix, doc, uploadPath, FieldName, saveType = 1) {
     case ".pdf":
       l_strPath = pGetValidDocTempPath(doc) + ".pdf"; //获取有效输出路径
 
-      console.log(l_strPath, 'l_strPath>>>>pdf')
+      console.log(l_strPath, "l_strPath>>>>pdf");
 
       wps.FileSystem.Remove(l_strPath); //先删除之前可能存在的临时文件
       doc.ExportAsFixedFormat(
@@ -1014,13 +1027,16 @@ function InsertRedHead(params) {
 
   var bookmarkStart = GetDocParamsValue(doc, constStrEnum.bkInsertFileStart);
   var bookmarkEnd = GetDocParamsValue(doc, constStrEnum.bkInsertFileEnd);
+
+  var bkInsertFile = GetDocParamsValue(doc, constStrEnum.bkInsertFile);
+
   var strFile = GetParamsValue(params, constStrEnum.insertFileUrl);
   if (strFile == "") {
     alert("未获取到传入的红头模板URL路径，不能正常套红");
     return;
   }
 
-  if (bookmarkStart == "" || bookmarkEnd == "") {
+  if (bkInsertFile == '' || bookmarkStart == "" || bookmarkEnd == "") {
     alert("未获取到传入的正文书签，不能正常套红");
     return;
   }
@@ -1123,58 +1139,86 @@ function pInsertRInedField(doc) {
 }
 
 /**
+ * 单正文标签字段补全
+ * @param {*} doc 
+ */
+function pInsertRInedFieldAsOneBk(doc) {
+  try {
+    var bookMarks = doc.Bookmarks;
+    var initEmptyReg = /FORMTEXT/gi;
+    var l_params = GetDocParamsValue(doc, "params");
+    if (!l_params) {
+      return;
+    }
+    console.log("即将补全字段l_params", l_params);
+    var fieldObj = GetParamsValue(l_params, constStrEnum.FieldObj);
+    console.log("即将补全字段", fieldObj);
+
+    Object.keys(fieldObjEnum).forEach((key) => {
+      var currentValue = fieldObj[fieldObjEnum[key]];
+      if (!currentValue) {
+        return;
+      }
+
+      if (!bookMarks.Exists(key)) {
+        return;
+      }
+
+      var bookmark = bookMarks.Item(key);
+      var range = bookmark.Range;
+      var bookMarkName = bookmark.Name;
+
+      if (initEmptyReg.test(bookmark.Range.Text) && !currentValue) {
+        return;
+      }
+
+      if (bookmark.Range.Text === currentValue) {
+        return;
+      }
+
+      if (key === "fj") {
+        try {
+          const enclosure = JSON.parse(currentValue)
+          const res = enclosure.map((i, index) => {
+            if (index !== 0) {
+              return "      " + i + '\n'
+            } else {
+              return i + '\n'
+            }
+          })
+          bookmark.Range.Text = res && res.join('')
+          // '附件1.png' + '\n' + ("      " + '附件2222.png') + '\n' + ("      " + '附件33333.png');
+        } catch (error) {
+          throw new Error(error)
+        }
+      } else {
+        bookmark.Range.Text = currentValue;
+      }
+
+      // var isHead = ['密级'].includes(key)
+      var isHead = [].includes(key);
+
+      var rangeStart = isHead ? range.Start - 1 : range.Start;
+      var rangeEnd = range.Start + currentValue.length;
+
+      range.SetRange(rangeStart, rangeEnd);
+      range.Select(); // 内容替换后不会刷新，让wps作一次刷新，这可能是wps的bug
+
+      if (!bookMarks.Item(bookMarkName)) {
+        bookMarks.Add(bookMarkName, range);
+      }
+    });
+  } catch (error) {
+    console.log('>>>>>>>>>>>>>>>>>>>>报错了啊》》》》》》》》》》》》》》》')
+  }
+}
+
+/**
  * 套红头
  *  doc ：套红头的文档
  *  strFile ：获取红头模板接口
  *  bookmark ：,正文书签
  */
-// function pInsertRInedHead(doc, strFile, bookmark) {
-//   var bookMarks = doc.Bookmarks;
-//   if (bookMarks.Item("quanwen")) {
-//     // 当前文档存在"quanwen"书签时候表示已经套过红头
-//     alert("当前文档已套过红头，请勿重复操作!");
-//     return;
-//   }
-
-//   var wpsApp = wps.WpsApplication();
-//   var activeDoc = wpsApp.ActiveDocument;
-//   var selection = wpsApp.ActiveWindow.Selection;
-//   // 准备以非批注的模式插入红头文件(剪切/粘贴等操作会留有痕迹,故先关闭修订)
-//   activeDoc.TrackRevisions = false;
-//   selection.WholeStory(); //选取全文
-//   bookMarks.Add("quanwen", selection.Range);
-//   selection.Cut();
-//   selection.InsertFile(strFile);
-//   if (bookMarks.Exists(bookmark)) {
-//     var bookmark1 = bookMarks.Item(bookmark);
-//     bookmark1.Range.Select(); //获取指定书签位置
-//     var s = activeDoc.ActiveWindow.Selection;
-//     s.Paste();
-//   } else {
-//     alert("套红头失败，您选择的红头模板没有对应书签：" + bookmark);
-//   }
-
-//   // 轮询插入书签
-//   var elements = GetDocParamsValue(doc, constStrEnum.redFileElement);
-//   if (elements != "") {
-//     for (var key in elements) {
-//       console.log(key + "----" + elements[key]);
-//       if (bookMarks.Exists(key)) {
-//         // 直接插入
-//         var eleBookmark = bookMarks.Item(key);
-//         eleBookmark.Range.Text = elements[key];
-//       }
-//     }
-//   }
-
-//   // 恢复修订模式(根据传入参数决定)
-//   var l_revisionCtrl = GetDocParamsValue(activeDoc, constStrEnum.revisionCtrl);
-//   activeDoc.TrackRevisions =
-//     l_revisionCtrl == "" ? false : l_revisionCtrl.bOpenRevision;
-//   //取消WPS关闭时的提示信息
-//   wps.WpsApplication().DisplayAlerts = (wps.Enum && wps.Enum.wdAlertsNone) || 0;
-// }
-
 // 更改：改变套红插入书签的逻辑
 function pInsertRInedHead(doc, strFile, bookmarkStart, bookmarkEnd) {
   var bookMarks = doc.Bookmarks;
@@ -1227,18 +1271,46 @@ function pInsertRInedHead(doc, strFile, bookmarkStart, bookmarkEnd) {
 
   pInsertRInedField(doc);
 
-  // 轮询插入书签
-  //   var elements = GetDocParamsValue(doc, constStrEnum.redFileElement);
-  //   if (elements != "") {
-  //     for (var key in elements) {
-  //       console.log(key + "----" + elements[key]);
-  //       if (bookMarks.Exists(key)) {
-  //         // 直接插入
-  //         var eleBookmark = bookMarks.Item(key);
-  //         eleBookmark.Range.Text = elements[key];
-  //       }
-  //     }
-  //   }
+  // 恢复修订模式(根据传入参数决定)
+  var l_revisionCtrl = GetDocParamsValue(activeDoc, constStrEnum.revisionCtrl);
+  activeDoc.TrackRevisions =
+    l_revisionCtrl == "" ? false : l_revisionCtrl.bOpenRevision;
+  //取消WPS关闭时的提示信息
+  wps.WpsApplication().DisplayAlerts = (wps.Enum && wps.Enum.wdAlertsNone) || 0;
+}
+
+function pInsertRInedHeadAsOneBk(doc, strFile, bkInsertFile) {
+  var bookMarks = doc.Bookmarks;
+  if (bookMarks.Item("quanwen")) {
+    // 当前文档存在"quanwen"书签时候表示已经套过红头
+    // alert("当前文档已套过红头，请勿重复操作!");
+    pInsertRInedFieldAsOneBk(doc); // 自定义增加该方法
+    return;
+  }
+  var wpsApp = wps.WpsApplication();
+  var activeDoc = wpsApp.ActiveDocument;
+  var selection = wpsApp.ActiveWindow.Selection;
+
+  activeDoc.TrackRevisions = false;
+  selection.WholeStory(); //选取全文
+  bookMarks.Add("quanwen", selection.Range);
+  selection.Cut();
+  selection.InsertFile(strFile);
+
+  if (bookMarks.Exists(bkInsertFile)) {
+    var bookmark = bookMarks.Item(bkInsertFile);
+    bookmark.Range.Select(); //获取指定书签位置
+    var s = activeDoc.ActiveWindow.Selection;
+    s.Paste();
+    // 标识插入红头成功
+    wps.PluginStorage.setItem(constStrEnum.InsertReding, 2);
+  } else {
+    alert(
+      "套红头失败，您选择的红头模板没有对应书签：" + bkInsertFile
+    );
+  }
+
+  pInsertRInedFieldAsOneBk(doc);
 
   // 恢复修订模式(根据传入参数决定)
   var l_revisionCtrl = GetDocParamsValue(activeDoc, constStrEnum.revisionCtrl);
@@ -1286,20 +1358,27 @@ function InsertRedHeadDoc(doc, callback) {
   var bookmarkStart = GetDocParamsValue(doc, constStrEnum.bkInsertFileStart);
   var bookmarkEnd = GetDocParamsValue(doc, constStrEnum.bkInsertFileEnd);
 
-  console.log(bookmarkStart, "bookmarkStart");
-  console.log(bookmarkEnd, "bookmarkEnd");
+  var bkInsertFile = GetDocParamsValue(doc, constStrEnum.bkInsertFile);
 
   var strFile = GetDocParamsValue(doc, constStrEnum.insertFileUrl);
   if (strFile == "") {
     alert("未获取到系统传入的红头模板URL路径，不能正常套红");
     return;
   }
-  if (bookmarkStart == "" || bookmarkEnd == "") {
+
+  if ((bookmarkStart == "" || bookmarkEnd == "") && bkInsertFile == '') {
     alert("套红头失败，您选择的红头模板没有正文书签！");
     throw new Error("套红头失败，您选择的红头模板没有正文书签！");
+  } else if (bookmarkStart && bookmarkStart && bkInsertFile == '') {
+    pInsertRInedHead(doc, strFile, bookmarkStart, bookmarkEnd);
   }
 
-  pInsertRInedHead(doc, strFile, bookmarkStart, bookmarkEnd);
+  if (bkInsertFile == '' && (bookmarkStart == '' || bookmarkEnd == '')) {
+    alert("套红头失败，您选择的红头模板没有正文书签！");
+    throw new Error("套红头失败，您选择的红头模板没有正文书签！");
+  } else if (bkInsertFile) {
+    pInsertRInedHeadAsOneBk(doc, strFile, bkInsertFile);
+  }
 }
 
 /**
