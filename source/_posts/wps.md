@@ -254,6 +254,49 @@ selection.Range.PageSetup.LeftMargin = 71.999428; // 设置左边距为 2.54
 selection.Range.PageSetup.RightMargin = 71.999428; // 设置左边距为 2.54
 ```
 
+设置页边距具体用法：
+
+- 唤起 WPS 新建文档时设置左右页边距：
+
+```js
+function NewFile(params) {
+  const wpsApp = wps.WpsApplication();
+  wps.PluginStorage.setItem(constStrEnum.IsInCurrOADocOpen, true); // 设置OA打开文档的临时状态
+  let doc;
+  if (params.isOfficialDocument) {
+    wps.Application.GetApplicationEx().NewOfficialDocument(); // 新增使用公文写作打开的公文
+    doc = wpsApp.ActiveDocument;
+  } else {
+    doc = wpsApp.Documents.Add(); // 新增OA端文档
+  }
+
+  // 新建时更改页边距
+  const selection = wpsApp.ActiveWindow.Selection;
+  selection.Range.PageSetup.LeftMargin = 71.999428; // 设置左边距为 2.54
+  selection.Range.PageSetup.RightMargin = 71.999428; // 设置左边距为 2.54
+
+  // 以下代码省略...
+}
+```
+
+- 唤起 WPS 编辑文档时设置左右页边距：
+
+```js
+function OpenFile(params) {
+  // 以上代码省略...
+
+  // 更新正文时更改页边距
+  const wpsApp = wps.WpsApplication();
+  const selection = wpsApp.ActiveWindow.Selection;
+  selection.Range.PageSetup.LeftMargin = 71.999428; // 设置左边距为 2.54
+  selection.Range.PageSetup.RightMargin = 71.999428; // 设置左边距为 2.54
+
+  // 以下代码省略...
+}
+```
+
+> 说明：设置页边距时必须确保此时 **doc** 对象已经存在。
+
 #### 进入 WPS 编辑自动开启修订
 
 只需在 **\_WpsInvoke()** 方法下的 **OpenDoc** 属性中传入如下参数即可：
