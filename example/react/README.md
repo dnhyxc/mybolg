@@ -7,7 +7,7 @@ npx create-react-app my-app
 #### react 创建 react+ts 项目
 
 ```
-npx create-react-ts demo --template typescriptss
+npx create-react-app react_ts_demo --template typescript
 ```
 
 #### 报错处理

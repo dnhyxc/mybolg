@@ -36,7 +36,30 @@
     overflow: auto;
 
     img {
-      max-width: none;
+      max-width: 100vw;
+    }
+
+    .dot_wrap {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      .img_dot {
+        margin-right: 3px;
+        width: 7px;
+        height: 7px;
+        border-radius: 7px;
+        background-color: #d7fffe;
+        border: 1px solid #ccc;
+      }
+
+      .current_dot {
+        background-color: gold;
+        border: 1px solid gold;
+      }
     }
   }
 
@@ -60,26 +83,34 @@
     display: none;
   }
 
-  .control {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    margin-bottom: 50px;
-
-    .fangda {
-      cursor: pointer;
+  @media screen and (max-width: 800px) {
+    .control {
+      display: none;
     }
+  }
 
-    .suoxiao {
-      margin: 0 20px;
-      cursor: pointer;
-    }
+  @media screen and (min-width: 800px) {
+    .control {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      margin-bottom: 50px;
 
-    .xuanzhuan {
-      cursor: pointer;
+      .fangda {
+        cursor: pointer;
+      }
+
+      .suoxiao {
+        margin: 0 20px;
+        cursor: pointer;
+      }
+
+      .xuanzhuan {
+        cursor: pointer;
+      }
     }
   }
 }

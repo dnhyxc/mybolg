@@ -1,9 +1,11 @@
 <%- partial('_partial/head') %>
-
 <body class="bodyCover">
   <% if(theme.cover){%>
   <%- partial('_partial/cover') %>
   <% } %>
+  <% if(theme.homePage){%>
+    <%- partial('_partial/home-page') %>
+    <% } %>
   <div id="container" q-class="show:isCtnShow" style="<%=theme.style && theme.style.slider%>">
     <div class="btnctn js-mobile-btnctn" style="<%=theme.style && theme.style.btnctn%>">
       <div class="slider-trigger list" q-on="click: openSlider(e)">

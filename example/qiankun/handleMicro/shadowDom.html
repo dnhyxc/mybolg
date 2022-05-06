@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>shadow-dom</title>
+    <style>
+      h1 {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>shadow-dom</h1>
+
+    <div id="subApp">
+      <h1>子应用内容</h1>
+    </div>
+
+    <script>
+      const subApp = document.getElementById("subApp");
+      // 是否允许通过 js 获取 shadow-dom
+      const shadow = subApp.attachShadow({ mode: "open" });
+
+      const h1 = document.createElement("h1");
+
+      h1.innerHTML = "我是通过 shadow dom 添加的内容，我的样式不会受外部影响";
+
+      h1.style.color = "deeppink";
+
+      shadow.appendChild(h1);
+    </script>
+  </body>
+</html>

@@ -782,7 +782,62 @@ function downloadByLink(link, fileName) {
 
 ### window.Image()
 
-#### 使用 new window.Image() 设置图片 loading 效果
+#### new Image() 的用途
+
+1、图片预加载：使图片能更快打开，原理：
+
+- 创建 image 对象，将 image 对象的 src 分别指向需加载的图片地址，图片被请求，因为 Image 对象没有显示在页面上，所以不会对页面布局产生影响。
+
+```js
+const arr = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"];
+
+const img = new Image();
+
+const n = 0;
+img.src = arr[n];
+img.onload = function () {
+  n++;
+  if (n < arr.length) {
+    img.src = arr[n];
+  }
+};
+```
+
+2、向服务器发送统计请求：为了做点击量或页面统计（访问量、页面错误量、页面加载时间等）时，向服务器发送请求。原理：
+
+- 创建 image 对象，image 对象的 src 为请求服务器的地址，当 image 对象请求图片资源时，服务发送成功。为了避免浏览器缓存导致的不发送请求，可在请求地址后加时间戳。
+
+```js
+window.logInfo = {}; //统计页面加载时间
+window.logInfo.openTime = performance.timing.navigationStart;
+window.logInfo.whiteScreenTime = +new Date() - window.logInfo.openTime;
+document.addEventListener("DOMContentLoaded", function (event) {
+  window.logInfo.readyTime = +new Date() - window.logInfo.openTime;
+});
+window.onload = function () {
+  window.logInfo.allloadTime = +new Date() - window.logInfo.openTime;
+  window.logInfo.nowTime = new Date().getTime();
+  let timname = {
+    whiteScreenTime: "白屏时间",
+    readyTime: "用户可操作时间",
+    allloadTime: "总下载时间",
+    mobile: "使用设备",
+    nowTime: "时间"
+  };
+  let logStr = "";
+  for (let i in timname) {
+    console.warn(timname[i] + ":" + window.logInfo[i] + "ms");
+    if (i === "mobile") {
+      logStr += "&" + i + "=" + window.logInfo[i];
+    } else {
+      logStr += "&" + i + "=" + window.logInfo[i];
+    }
+  }
+  new Image().src = "/action?" + logStr;
+};
+```
+
+3、创建 image 对象：可在图片很大时，在图片还未加载出来时显示 loading 效果：
 
 ```html
 <!DOCTYPE html>
@@ -1625,6 +1680,42 @@ const endTime = moment().subtract(1, "days").endOf("day").valueOf();
 const beginTime = moment().subtract(6, "days").startOf("day").valueOf();
 const endTime = moment().endOf("day").valueOf();
 ```
+
+### GBK/GB2312 编码解码
+
+#### iconv-lite
+
+使用 iconv-lite 第三方库将文本转为 gbk 格式，具体使用方式如下：
+
+- 安装 iconv-lite：
+
+```
+npm i iconv-lite -S
+```
+
+- 使用示例：
+
+```js
+import iconv from "iconv-lite";
+
+function encode(str, charset) {
+  const buf = iconv.encode(str, charset);
+  let encodeStr = "";
+  let ch = "";
+  for (let i = 0; i < buf.length; i++) {
+    ch = buf[i].toString("16");
+    if (ch.length === 1) {
+      ch = `0${ch}`;
+    }
+    encodeStr += `%${ch}`;
+  }
+  return encodeStr.toUpperCase();
+}
+
+encode("请将我转成GBK", "gbk");
+```
+
+> 如果需要兼容 IE11，那么 iconv-lite 将是一个很好的选择。
 
 ### Dva & React & Vue
 

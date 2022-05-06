@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>明水印生成</title>
+    <style>
+      .watermark {
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+        pointer-events: none;
+        background-repeat: repeat;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <h1>背景图实现明水印</h1>
+      <p>dnhyxc</p>
+    </div>
+
+    <script>
+      /*
+        明水印破解方式一：
+        - 打开了Chrome Devtools 找到对应的元素，直接按 delete 键即可删除。
+
+        明水印破解方式二：
+        - 打开Chrome Devtools，点击设置 - Debugger - Disabled JavaScript。
+
+        明水印破解方式三：
+        - 复制一个 body 元素，然后将原来 body 元素的删除，编辑 html 插入复制出来的 body 元素，接着删除插入的水印元素即可。
+      
+        明水印防御方式一：使用 MutationObserver 方法，该方法能监控元素的改动。
+      */
+      function createWaterMark() {
+        const angle = -20;
+        const txt = "dnhyxc";
+        const canvas = document.createElement("canvas");
+        canvas.width = 180;
+        canvas.height = 100;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, 180, 100);
+        ctx.fillStyle = "#333";
+        ctx.globalAlpha = 0.2;
+        ctx.font = `22px serif`;
+        ctx.rotate((Math.PI / 180) * angle);
+        ctx.fillText(txt, 0, 50);
+        return canvas.toDataURL();
+      }
+      const watermark = document.createElement("div");
+      watermark.className = "watermark";
+      watermark.style.backgroundImage = `url(${createWaterMark()})`;
+      document.body.appendChild(watermark);
+
+      // 观察器的配置（需要观察什么变动）
+      const config = { attributes: true, childList: true, subtree: true };
+      // 当观察到变动时执行的回调函数
+      const callback = function (mutationsList, observer) {
+        // Use traditional 'for loops' for IE 11
+        for (let mutation of mutationsList) {
+          mutation.removedNodes.forEach(function (item) {
+            if (item === watermark) {
+              document.body.appendChild(watermark);
+            }
+          });
+        }
+      };
+      // 监听元素
+      const targetNode = document.body;
+      // 创建一个观察器实例并传入回调函数
+      const observer = new MutationObserver(callback);
+      // 以上述配置开始观察目标节点
+      observer.observe(targetNode, config);
+    </script>
+  </body>
+</html>

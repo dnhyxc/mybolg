@@ -25,7 +25,7 @@ function setLight() {
   } else {
     dark.classList.remove("light");
     toggleMusic.classList.remove("light");
-    dark.innerHTML = "白天";
+    dark.innerHTML = "白昼";
   }
   if (Utils.getSSG("mobileLight")) {
     mobileDark.classList.add("mobileLight");
@@ -34,7 +34,7 @@ function setLight() {
   } else {
     mobileDark.classList.remove("mobileLight");
     toTopDark.classList.remove("mobileLight");
-    mobileDark.innerHTML = "白天";
+    mobileDark.innerHTML = "白昼";
   }
 
   if (Utils.getSSG("lightBtnctn")) {
@@ -122,7 +122,7 @@ function init() {
     }
     if (dark.getAttribute("class").includes("light")) {
       dark.classList.remove("light");
-      dark.innerHTML = "白天";
+      dark.innerHTML = "白昼";
       Utils.removeSSG("light");
     } else {
       dark.classList.add("light");
@@ -136,7 +136,7 @@ function init() {
     }
     if (mobileDark.getAttribute("class").includes("mobileLight")) {
       mobileDark.classList.remove("mobileLight");
-      mobileDark.innerHTML = "白天";
+      mobileDark.innerHTML = "白昼";
       Utils.removeSSG("mobileLight");
     } else {
       mobileDark.classList.add("mobileLight");

@@ -140,6 +140,49 @@ const setTimeInLoop = function (fn, time) {
   }, time);
 };
 
+const formatDate = (date) => {
+  var json_date = new Date(date).toJSON();
+  return new Date(new Date(json_date) + 8 * 3600 * 1000)
+    .toISOString()
+    .replace(/T/g, " ")
+    .replace(/\.[\d]{3}Z/, "")
+    .slice(0, 10);
+};
+
+// 定义滑动手势函数
+const bindSwipeEvent = function (dom, leftCallback, rightCallback) {
+  /*手势的条件*/
+  /*1.必须滑动过*/
+  /*2.滑动的距离50px*/
+  let isMove = false; // 滑动状态
+  let startX = 0; // 起始横坐标
+  let distanceX = 0; // 滑动距离
+  dom.addEventListener('touchstart', function (e) {
+    startX = e.touches[0].clientX;
+  });
+  dom.addEventListener('touchmove', function (e) {
+    isMove = true;
+    const moveX = e.touches[0].clientX;
+    distanceX = moveX - startX;
+  });
+  dom.addEventListener('touchend', function (e) {
+    /*滑动结束*/
+    // 滑动距离必须大于50px
+    if (isMove && Math.abs(distanceX) > 50) {
+      // 判断左右滑动
+      if (distanceX > 0) {
+        rightCallback && rightCallback.call(this, e);
+      } else {
+        leftCallback && leftCallback.call(this, e);
+      }
+    }
+    /*重置参数*/
+    isMove = false;
+    startX = 0;
+    distanceX = 0;
+  });
+}
+
 module.exports = {
   isArticle,
   isInformal,
@@ -160,4 +203,6 @@ module.exports = {
   setTimeInLoop,
   getPathname,
   num,
+  formatDate,
+  bindSwipeEvent
 };

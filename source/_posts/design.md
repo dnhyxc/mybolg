@@ -2,6 +2,7 @@
 title: DesignPattern
 date: 2020-05-16 09:02:11
 toc: true
+declare: true
 tags:
   - JavaScript
 categories:

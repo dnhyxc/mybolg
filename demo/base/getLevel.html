@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const obj = {
+        a: "a",
+        b: {
+          c: {
+            d: "d",
+            e: "e",
+          },
+        },
+        f: {
+          g: {
+            h: {
+              i: "i",
+            },
+          },
+        },
+      };
+
+      function getLevel(obj = {}) {
+        let result = 1;
+        const fn = (param, level = 0) => {
+          console.log(param, level, result);
+          if (typeof param === "object" && param !== null) {
+            Object.values(param).forEach((item) => {
+              if (typeof item === "object" && item !== null) {
+                fn(item, level + 1);
+              } else {
+                return (result = level + 1 > result ? level + 1 : result);
+              }
+            });
+          } else {
+            result = level > result ? level : result;
+          }
+        };
+        fn(obj);
+        return result;
+      }
+
+      console.log(getLevel(obj));
+    </script>
+  </body>
+</html>
