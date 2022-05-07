@@ -29,6 +29,8 @@ function init() {
   let currentIndex = 0;
 
   const fragment = document.createDocumentFragment();
+  const dotList = []
+
   imgs.forEach((i, index) => {
     const dot = document.createElement('span')
     if (index === currentIndex) {
@@ -36,9 +38,16 @@ function init() {
     } else {
       dot.className = 'img_dot'
     }
+    dotList.push(dot)
     fragment.appendChild(dot)
     i.onclick = () => {
       currentIndex = index;
+      dotList.forEach(i => {
+        i.className = 'img_dot'
+        if (currentIndex === index) {
+          dot.className = 'img_dot current_dot'
+        }
+      })
       const img = getImg();
       if (img) {
         imgContainer.removeChild(img);
@@ -53,6 +62,8 @@ function init() {
   dot_wrap.className = 'dot_wrap'
   dot_wrap.appendChild(fragment)
   imgContainer.appendChild(dot_wrap)
+
+  const allDot = dot_wrap.querySelectorAll('.img_dot')
 
   if (right && left && bodyWidth > 800) {
     right.onclick = function () {
@@ -97,8 +108,6 @@ function init() {
       })
     };
   }
-
-  const allDot = dot_wrap.querySelectorAll('.img_dot')
 
   if (bodyWidth <= 800) {
     if (!imgContainer) return
