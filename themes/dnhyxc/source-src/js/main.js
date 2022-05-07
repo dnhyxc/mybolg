@@ -74,7 +74,7 @@ onDOMContentLoaded(function () {
   tocWordsLoop.init();
   articleImage.init();
   previewImg.init();
-  new homePage.Init()
+  new homePage.Init();
   smallMenu.init();
 });
 
@@ -127,7 +127,7 @@ document.onreadystatechange = function () {
     }
     if (Utils.getSSG("hideMenu")) {
       const smallWrap = document.querySelector(".smallWrap");
-      smallWrap && (smallWrap.style.display = 'block')
+      smallWrap && (smallWrap.style.display = "flex");
       menuList.onHideMenu();
       if (Utils.getSSG("narrow") && (Utils.isArticle || Utils.isInformal)) {
         atticleNarrow.setNarrow();

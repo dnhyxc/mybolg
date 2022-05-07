@@ -118,7 +118,7 @@ function init() {
 
     hideMenu.addEventListener("click", () => {
       const smallWrap = document.querySelector(".smallWrap");
-      smallWrap.style.display = 'block'
+      smallWrap.style.display = "flex";
       if (!Utils.getSSG("hideMenu")) {
         Utils.setSSG("hideMenu", true);
       }
