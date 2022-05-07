@@ -79,6 +79,6 @@
 
 @media screen and (max-width: 800px) {
   .smallWrap {
-    display: none;
+    display: none !important;
   }
 }
