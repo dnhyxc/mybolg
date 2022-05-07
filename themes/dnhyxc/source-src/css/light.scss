@@ -33,6 +33,30 @@
     #f4f5f7 100%
   ) !important;
 
+  @media screen and (min-width: 800px) {
+    .showMenuIcon {
+      box-shadow: inset 0 0 5px #ccc !important;
+
+      ._nemu_icon {
+        border: 1px solid #111 !important;
+      }
+    }
+
+    .smallMenu {
+      box-shadow: inset 0 0 5px #ccc !important;
+      background: rgba(225, 225, 225, 0.1) !important;
+
+      .menu-text a {
+        color: #333 !important;
+
+        &:hover {
+          color: #111 !important;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
   .icon-book:before {
     content: "\e6fe";
     color: rgba(0, 0, 0, 0.65);

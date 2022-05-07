@@ -48,6 +48,7 @@ import lockHeader from "./lockHeader";
 // import emStyle from "./emStyle";
 import previewImg from "./previewImg";
 import homePage from "./homePage";
+import smallMenu from "./small-menu";
 
 const cover = document.querySelector(".cover");
 const changeInfo = document.querySelector(".changeInfo");
@@ -73,8 +74,8 @@ onDOMContentLoaded(function () {
   tocWordsLoop.init();
   articleImage.init();
   previewImg.init();
-  new homePage.Init()
-  // emStyle.init();
+  new homePage.Init();
+  smallMenu.init();
 });
 
 function stopTouchmove(e) {
@@ -125,6 +126,8 @@ document.onreadystatechange = function () {
       menuList.hideFooter();
     }
     if (Utils.getSSG("hideMenu")) {
+      const smallWrap = document.querySelector(".smallWrap");
+      smallWrap && (smallWrap.style.display = "flex");
       menuList.onHideMenu();
       if (Utils.getSSG("narrow") && (Utils.isArticle || Utils.isInformal)) {
         atticleNarrow.setNarrow();

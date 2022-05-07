@@ -1,0 +1,14 @@
+<div class="smallWrap">
+  <ul class="smallMenu">
+    <% for (var i in theme.menu){ %>
+    <li class="menu-text">
+      <a href="<%- url_for(theme.menu[i]) %>"><%= i %></a>
+    </li>
+    <%}%>
+  </ul>
+  <div class="showMenuIcon">
+    <span class="_nemu_icon"></span>
+    <span class="_nemu_icon"></span>
+    <span class="_nemu_icon"></span>
+  </div>
+</div>

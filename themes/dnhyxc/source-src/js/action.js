@@ -1,6 +1,7 @@
 import * as Utils from "./public-utils";
 import hideMain from "./hideMain";
 import articleNarrow from "./atticle-narrow";
+import smallMenu from "./small-menu";
 
 function init() {
   let leftCol = document.querySelector(".left-col");
@@ -30,6 +31,7 @@ function init() {
   let header_bar = document.querySelector(".header_bar");
   let footerBar = document.querySelectorAll(".footerBar");
   let footer_bar = document.querySelectorAll(".footer_bar");
+  const smallWrap = document.querySelector(".smallWrap");
 
   let bodyScroll = document.body;
   let coverInfo = document.querySelectorAll(".coverInfo");
@@ -166,10 +168,12 @@ function init() {
   let beforeScrollTop = 0;
   // 滚动事件
   function scroll() {
+    // 滚动时隐藏小菜单
+    smallMenu && smallMenu.menageMemu();
     let countInfo = `${parseInt(
       (Math.ceil(artWrap.scrollTop) /
         (artWrap.scrollHeight - artWrap.offsetHeight)) *
-      100
+        100
     )}%`;
     if (artWrap.scrollTop / (artWrap.scrollHeight - artWrap.offsetHeight) > 1) {
       countInfo = "100%";
@@ -400,8 +404,9 @@ function init() {
             decodeURIComponent(newPath).lastIndexOf("/") - 1
           ) + 1
         );
-        mainLoading.innerHTML = `${res.split("/")[0][0].toUpperCase() + res.split("/")[0].slice(1)
-          }-${res.split("/")[1]}`;
+        mainLoading.innerHTML = `${
+          res.split("/")[0][0].toUpperCase() + res.split("/")[0].slice(1)
+        }-${res.split("/")[1]}`;
       } else {
         // 设置头部main的逻辑
         const subPath = res.slice(0, res.length - 1);
