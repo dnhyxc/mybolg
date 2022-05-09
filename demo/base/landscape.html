@@ -1,0 +1,141 @@
+<!--
+ * @Description: 横屏
+ * @Author: dnh
+ * @Date: 2022-05-09 19:21:40
+ * @LastEditTime: 2022-05-09 20:48:11
+ * @LastEditors: dnh
+ * @FilePath: \demo\base\landscape.html
+-->
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Demo</title>
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <style type="text/css">
+      * {
+        /*初始化样式*/
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        /*用于 获取 屏幕的可视宽高*/
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        /*让 body 初始 width 和 height 就 等于 页面可视区域的 宽高*/
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+
+        /*用于 测试的 样式*/
+        background-color: #444;
+        color: #fff;
+        letter-spacing: 4px;
+        font-size: 28px;
+        /*文字居中*/
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      @media screen and (orientation: portrait) {
+        /*竖屏样式*/
+        body {
+          transform-origin: 0 0;
+          transform: rotateZ(90deg) translateY(-100%);
+        }
+      }
+
+      /*测试 边边角角*/
+      div {
+        background-color: #f00;
+        position: fixed;
+        height: 2px;
+        width: 100px;
+      }
+      div:nth-of-type(1) {
+        top: 0;
+        left: 0;
+      }
+      div:nth-of-type(2) {
+        top: 0;
+        right: 0;
+      }
+      div:nth-of-type(3) {
+        bottom: 0;
+        left: 0;
+      }
+      div:nth-of-type(4) {
+        bottom: 0;
+        right: 0;
+      }
+    </style>
+  </head>
+  <body>
+    Loading2
+    <button class="heng">横屏</button>
+    <button class="shu">竖屏</button>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <script>
+      function resize() {
+        var body = document.getElementsByTagName("body")[0];
+        var html = document.getElementsByTagName("html")[0];
+        var width = html.clientWidth;
+        var height = html.clientHeight;
+        var max = width > height ? width : height;
+        var min = width > height ? height : width;
+        body.style.width = max + "px";
+        body.style.height = min + "px";
+      }
+
+      (function () {
+        resize();
+        window.addEventListener("resize", resize);
+      })();
+
+      // js判断手机横竖屏状态：
+      window.addEventListener("resize", (event) => {
+        var orientation =
+          window.innerWidth > window.innerHeight ? "landscape" : "portrait";
+        if (orientation === "portrait") {
+          console.log("竖屏");
+        } else {
+          console.log("横屏");
+        }
+      });
+
+      const heng = document.querySelector(".heng");
+      heng.addEventListener("click", () => {
+        var html = document.getElementsByTagName("html")[0];
+        var width = html.clientWidth;
+        var height = html.clientHeight;
+        document.body.style.width = `${height}px`;
+        document.body.style.height = `${width}px`;
+        document.body.style.top = (height - width) / 2 + "px";
+        document.body.style.left = 0 - (height - width) / 2 + "px";
+        document.body.style.transform = "rotateZ(0deg)";
+      });
+
+      heng.addEventListener("click", () => {
+        var html = document.getElementsByTagName("html")[0];
+        var width = html.clientWidth;
+        var height = html.clientHeight;
+        document.body.style.width = `${height}px`;
+        document.body.style.height = `${width}px`;
+        document.body.style.top = (height - width) / 2 + "px";
+        document.body.style.left = 0 - (height - width) / 2 + "px";
+        document.body.style.transform = "rotateZ(0deg)";
+      });
+    </script>
+  </body>
+</html>

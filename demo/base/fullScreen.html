@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>js实现全屏</title>
+  </head>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    body,
+    html {
+      height: 100%;
+      width: 100%;
+      background-color: #ddd;
+    }
+  </style>
+  <body>
+    <button id="full">全屏</button>
+    <button id="cancelFull">退出全屏</button>
+
+    <script>
+      // 进入全屏
+      function requestFullScreen(element) {
+        // 判断各种浏览器，找到正确的方法
+        var requestMethod =
+          element.requestFullScreen || //W3C
+          element.webkitRequestFullScreen || //Chrome等
+          element.mozRequestFullScreen || //FireFox
+          element.msRequestFullScreen; //IE11
+
+        if (requestMethod) {
+          requestMethod.call(element);
+        } else if (typeof window.ActiveXObject !== "undefined") {
+          //for Internet Explorer
+          var wscript = new ActiveXObject("WScript.Shell");
+          if (wscript !== null) {
+            wscript.SendKeys("{F11}");
+          }
+        }
+      }
+
+      // 退出进入全屏
+      function exitFull() {
+        // 判断各种浏览器，找到正确的方法
+        var exitMethod =
+          document.exitFullscreen || //W3C
+          document.mozCancelFullScreen || //Chrome等
+          document.webkitExitFullscreen || //FireFox
+          document.webkitExitFullscreen; //IE11
+
+        if (exitMethod) {
+          exitMethod.call(document);
+        } else if (typeof window.ActiveXObject !== "undefined") {
+          //for Internet Explorer
+          var wscript = new ActiveXObject("WScript.Shell");
+
+          if (wscript !== null) {
+            wscript.SendKeys("{F11}");
+          }
+        }
+      }
+
+      const full = document.querySelector("#full");
+      const cancelFull = document.querySelector("#cancelFull");
+      full.addEventListener("click", () => {
+        var docElm = document.documentElement;
+        if (docElm.requestFullscreen) {
+          docElm.requestFullscreen();
+        } else if (docElm.msRequestFullscreen) {
+          docElm.msRequestFullscreen();
+        } else if (docElm.mozRequestFullScreen) {
+          docElm.mozRequestFullScreen();
+        } else if (docElm.webkitRequestFullScreen) {
+          docElm.webkitRequestFullScreen();
+        }
+      });
+
+      cancelFull.addEventListener("click", () => {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen();
+        }
+      });
+    </script>
+  </body>
+</html>
