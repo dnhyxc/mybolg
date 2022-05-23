@@ -58,9 +58,9 @@ _WpsInvoke(
       OpenDoc: {
         insertFileUrl: "http://xxxurl", // 套红模板
         bkInsertFileStart: bookMarksStart, // 套红开始标签
-        bkInsertFileEnd: bookMarksEnd, // 套红结束标签
-      },
-    },
+        bkInsertFileEnd: bookMarksEnd // 套红结束标签
+      }
+    }
   ],
   true // 控制着通过页面执行WPS加载项方法，WPS的界面是否在执行时在前台显示
 );
@@ -187,7 +187,7 @@ var fieldObjEnum = {
   // 部门
   部门: "department",
   // 发文单位
-  发文单位: "units",
+  发文单位: "units"
 };
 ```
 
@@ -203,10 +203,10 @@ _WpsInvoke(
         bkInsertFileEnd: bookMarksEnd, // 套红结束标签
         // 自定义传入wps中的参数
         params: {
-          fieldObj, // 需要插入的各种标签属性
-        },
-      },
-    },
+          fieldObj // 需要插入的各种标签属性
+        }
+      }
+    }
   ],
   true
 );
@@ -225,8 +225,8 @@ const fieldObj = {
       mimeType: "xxx",
       name: "xxx",
       size: 29191,
-      url: "xxxurl",
-    },
+      url: "xxxurl"
+    }
   ],
   fileDepartment: '{"id":530051,"name":"区公司/人力资源部"}',
   issUer: "xxx",
@@ -239,7 +239,7 @@ const fieldObj = {
   signatureUnit: "xxx",
   signingUnit: "署名区公司人力资源部",
   title: "取个名字真的难",
-  urgencyLevel: "特急",
+  urgencyLevel: "特急"
 };
 ```
 
@@ -311,10 +311,10 @@ _WpsInvoke(
         // 默认开启修订
         revisionCtrl: {
           bOpenRevision: true,
-          bShowRevision: true,
-        },
-      },
-    },
+          bShowRevision: true
+        }
+      }
+    }
   ],
   true
 );
@@ -332,9 +332,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         disabledBtns:
-          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions",
-      },
-    },
+          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions"
+      }
+    }
   ],
   true
 );
@@ -354,9 +354,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         buttonGroups:
-          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions",
-      },
-    },
+          "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions"
+      }
+    }
   ],
   true
 );
@@ -376,9 +376,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         suffix: ".pdf",
-        uploadWithAppendPath: "1",
-      },
-    },
+        uploadWithAppendPath: "1"
+      }
+    }
   ],
   true
 ); // OpenDoc方法对应于OA助手dispatcher支持的方法名
@@ -392,9 +392,9 @@ _WpsInvoke(
     {
       OpenDoc: {
         suffix: ".html",
-        uploadWithAppendPath: "1",
-      },
-    },
+        uploadWithAppendPath: "1"
+      }
+    }
   ],
   true
 );
@@ -488,7 +488,7 @@ function customDoc() {
     urgencyLevel: "紧急",
     secretClass: "密级1",
     department: "高级的前端部门",
-    units: "发文单位",
+    units: "发文单位"
   };
 
   const bookMarksStart = "正文内容B";
@@ -517,7 +517,7 @@ function customDoc() {
           // 默认开启修订
           revisionCtrl: {
             bOpenRevision: true,
-            bShowRevision: true,
+            bShowRevision: true
           },
 
           params: {
@@ -530,13 +530,13 @@ function customDoc() {
             list: fileList || [],
             operType: 4,
             dealDescription,
-            fieldObj,
+            fieldObj
           },
           openType: {
             // 文档打开方式
             // 文档保护类型，-1：不启用保护模式，0：只允许对现有内容进行修订，
             // 1：只允许添加批注，2：只允许修改窗体域(禁止拷贝功能)，3：只读
-            protectType: -1,
+            protectType: -1
             // protectType: downloadParams ? 0 : -1,
             // password: '123456',
           },
@@ -546,9 +546,9 @@ function customDoc() {
 
           // 禁用加载项按钮
           disabledBtns:
-            "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions",
-        },
-      },
+            "btnOpenRevision,btnCloseRevision,btnAcceptAllRevisions,btnRejectAllRevisions"
+        }
+      }
     ],
     true
   ); // OpenDoc方法对应于OA助手dispatcher支持的方法名
@@ -671,12 +671,12 @@ function customDoc() {
     el: "#template",
     data: {
       templateItem: -1,
-      templates: {},
+      templates: {}
     },
     methods: {},
     mounted: function () {
       this.onCustomClick();
-    },
+    }
   });
 </script>
 ```
@@ -687,6 +687,198 @@ function customDoc() {
 
 - 唤起自定义页面需要找到 `commom/func_tabcontrol.js` 中的 **OnAction()** 方法进行设置。
 
+#### 自动排版实现
+
+在 `ribbon.xml` 中增加一个自定义的自动排版按钮，具体实现如下：
+
+```html
+<group id="grpRevision" label="自动排版功能组" getVisible="OnGetVisible">
+  <button
+    id="formatDoc"
+    label="自动排版"
+    onAction="OnAction"
+    getLabel="OnGetLabel"
+    getEnabled="OnGetEnabled"
+    getVisible="OnGetVisible"
+    getImage="GetImage"
+    size="large"
+  />
+  <separator id="sepWPSRevision" getVisible="OnGetVisible" />
+</group>
+```
+
+> 上述 `OnAction`、`OnGetLabel`、`OnGetEnabled`、`OnGetVisible`、`GetImage` 事件需要在 `func_tabcontrol.js` 中实现具体逻辑。
+
+在 `func_tabcontrol.js` 中的 **OnAction** 方法中实现自动排版的点击事件：
+
+```js
+function OnAction(control) {
+  // 省略代码...
+  switch (eleId) {
+    case "formatDoc": // 自动排版
+      OnFormatClick();
+      break;
+    // 省略代码...
+  }
+}
+```
+
+> [具体代码可点击此处查看](https://github.com/dnhyxc/WPS_OA_Assistant/blob/bfdde0918fc931b0c842fa2fee3ddadeb3de670e/WpsOAAssist/js/common/func_tabcontrol.js#L1819)
+
+实现自动排版逻辑的宏：
+
+- 清除文档原有格式、文档首行缩进、字符大小、字体格式等：
+
+```js
+/**
+ * Selection.WholeStory();全选文档
+ * Selection.SetRange(0, 0);起始位置
+ * Selection.EndKey(wps.Enum.wdStory, wps.Enum.wdMove);结束位置
+ */
+function Macro() {
+  const wpsApp = wps.WpsApplication();
+  const { Selection } = wpsApp.ActiveWindow;
+
+  Selection.WholeStory();
+  // 首先清除原来的格式
+  Selection.ClearFormatting();
+  Selection.Font.Name = "仿宋_GB2312";
+  // Selection.Font.ColorIndex = wps.Enum.wdAuto; // 设置字体颜色为自动
+  // Selection.Range.HighlightColorIndex = wps.Enum.wdAuto; // 设置字体底色未自动
+  ((obj) => {
+    obj.Size = 16;
+    obj.SizeBi = 16;
+  })(Selection.Font);
+
+  ((obj) => {
+    obj.CharacterUnitFirstLineIndent = 2;
+    obj.FirstLineIndent = 0;
+    obj.CharacterUnitFirstLineIndent = 2;
+    obj.FirstLineIndent = 0;
+    obj.ReadingOrder = wps.Enum.wdReadingOrderLtr;
+    obj.DisableLineHeightGrid = 0;
+    obj.AutoAdjustRightIndent = -1;
+    obj.WidowControl = 0;
+    obj.KeepWithNext = 0;
+    obj.KeepTogether = 0;
+    obj.PageBreakBefore = 0;
+    obj.FarEastLineBreakControl = -1;
+    obj.WordWrap = -1;
+    obj.HangingPunctuation = -1;
+    obj.HalfWidthPunctuationOnTopOfLine = 0;
+    obj.AddSpaceBetweenFarEastAndAlpha = -1;
+    obj.AddSpaceBetweenFarEastAndDigit = -1;
+    obj.BaseLineAlignment = wps.Enum.wdBaselineAlignAuto;
+  })(Selection.ParagraphFormat);
+  Selection.SetRange(0, 0);
+  wpsApp.ActiveDocument.AcceptAllRevisions();
+  // 判断是否开启了文档网格，如果开启了则设置网格对应的格式、否则去除网格的格式
+  if (!wpsApp.Options.DisplayGridLines) {
+    // 调用取消设置网格的宏
+    DisplayGridMacro(wpsApp);
+  } else {
+    // 调用网格格式的宏
+    GridMacro(wpsApp);
+  }
+}
+```
+
+- 取消网格格式的宏：
+
+```js
+function DisplayGridMacro(wpsApp) {
+  wpsApp.Options.DisplayGridLines = false;
+  wpsApp.ActiveWindow.Selection.Range.PageSetup.LayoutMode =
+    wps.Enum.wdLayoutModeLineGrid;
+  ((obj) => {
+    obj.MirrorMargins = 0;
+    ((obj) => {
+      obj.SetCount(1);
+      obj.EvenlySpaced = -1;
+      obj.LineBetween = 0;
+      obj.SetCount(1);
+      obj.Spacing = 0;
+    })(obj.TextColumns);
+    obj.Orientation = wps.Enum.wdOrientPortrait;
+    obj.GutterPos = wps.Enum.wdGutterPosLeft;
+    obj.TopMargin = 71.999428;
+    obj.BottomMargin = 71.999428;
+    obj.Gutter = 0;
+    obj.PageWidth = 595.270813;
+    obj.PageHeight = 841.883057;
+    obj.FirstPageTray = wps.Enum.wdPrinterDefaultBin;
+    obj.OtherPagesTray = wps.Enum.wdPrinterDefaultBin;
+    obj.Orientation = wps.Enum.wdOrientPortrait;
+    obj.GutterPos = wps.Enum.wdGutterPosLeft;
+    obj.TopMargin = 71.999428;
+    obj.BottomMargin = 71.999428;
+    obj.Gutter = 0;
+    obj.PageWidth = 595.270813;
+    obj.PageHeight = 841.883057;
+    obj.FirstPageTray = wps.Enum.wdPrinterDefaultBin;
+    obj.OtherPagesTray = wps.Enum.wdPrinterDefaultBin;
+    obj.FooterDistance = 49.605999;
+    obj.OddAndEvenPagesHeaderFooter = 0;
+    obj.DifferentFirstPageHeaderFooter = 0;
+    obj.LayoutMode = wps.Enum.wdLayoutModeLineGrid;
+  })(wpsApp.ActiveDocument.PageSetup);
+  ((obj) => {
+    obj.MeasurementUnit = wps.Enum.wdCentimeters;
+    obj.UseCharacterUnit = true;
+  })(wpsApp.Options);
+}
+```
+
+- 设置网格格式的宏：
+
+```js
+/**
+ * 网格格式
+ * wpsApp.Options.DisplayGridLines：是否开启网格，true:开启，false：关闭
+ */
+function GridMacro(wpsApp) {
+  wpsApp.ActiveWindow.Selection.Range.PageSetup.LayoutMode =
+    wps.Enum.wdLayoutModeGenko;
+  ((obj) => {
+    obj.MirrorMargins = 0;
+    ((obj) => {
+      obj.SetCount(1);
+      obj.EvenlySpaced = -1;
+      obj.LineBetween = 0;
+      obj.SetCount(1);
+      obj.Spacing = 0;
+    })(obj.TextColumns);
+    obj.Orientation = wps.Enum.wdOrientPortrait;
+    obj.GutterPos = wps.Enum.wdGutterPosLeft;
+    obj.TopMargin = 71.999428;
+    obj.BottomMargin = 71.999428;
+    obj.Gutter = 0;
+    obj.PageWidth = 595.270813;
+    obj.PageHeight = 841.883057;
+    obj.FirstPageTray = wps.Enum.wdPrinterDefaultBin;
+    obj.OtherPagesTray = wps.Enum.wdPrinterDefaultBin;
+    obj.Orientation = wps.Enum.wdOrientPortrait;
+    obj.GutterPos = wps.Enum.wdGutterPosLeft;
+    obj.TopMargin = 71.999428;
+    obj.BottomMargin = 71.999428;
+    obj.Gutter = 0;
+    obj.PageWidth = 595.270813;
+    obj.PageHeight = 841.883057;
+    obj.FirstPageTray = wps.Enum.wdPrinterDefaultBin;
+    obj.OtherPagesTray = wps.Enum.wdPrinterDefaultBin;
+    obj.FooterDistance = 49.605999;
+    obj.OddAndEvenPagesHeaderFooter = 0;
+    obj.DifferentFirstPageHeaderFooter = 0;
+    obj.LayoutMode = wps.Enum.wdLayoutModeGenko;
+  })(wpsApp.ActiveDocument.PageSetup);
+
+  ((obj) => {
+    obj.MeasurementUnit = wps.Enum.wdCentimeters;
+    obj.UseCharacterUnit = true;
+  })(wpsApp.Options);
+}
+```
+
 #### 项目中打包 WPS 加载项
 
 在 `webpack.config.js` 中 增加如下配置：
@@ -696,9 +888,9 @@ const plugins = [
   new CopyWebpackPlugin([
     {
       from: "lib/WpsOAAssist",
-      to: "WpsOAAssist/",
-    },
-  ]),
+      to: "WpsOAAssist/"
+    }
+  ])
 ];
 ```
 
@@ -791,3 +983,23 @@ function Macro() {
   Selection.SetRange(0, 1);
 }
 ```
+
+### 参考文档
+
+1、[WPS 加载项是什么](https://zhuanlan.zhihu.com/p/148803031)
+
+2、[怎么能快速体验 WPS 加载项](https://zhuanlan.zhihu.com/p/158963727)
+
+3、[怎么将 WPS 加载项和业务系统结合起来](https://zhuanlan.zhihu.com/p/161755083)
+
+4、[怎么把 WPS 加载项部署起来](https://zhuanlan.zhihu.com/p/164336341)
+
+5、[金山文档 publish 自动安装加载项.docx](https://kdocs.cn/l/cpOfxONhn8Yg)
+
+6、[利用 WPS 做业务系统的超级编辑器](https://zhuanlan.zhihu.com/p/177076379)
+
+7、[WPS 加载项案例应用回顾](https://zhuanlan.zhihu.com/p/208117631)
+
+8、[金山文档 WPS 产品矩阵集成解决方案-WPS 二次开发集成篇 V1.1.pptx](https://kdocs.cn/l/cyKkDebda)
+
+9、[金山文档 JSAPI 的特点和优势.docx](https://kdocs.cn/l/ssYE4VWBB)
