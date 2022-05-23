@@ -112,16 +112,29 @@ app.post("/Upload", function (request, response) {
  * 开发者可将此方法更换为自己业务系统的数据接口
  * json数据格式及解析， 可与各加载项中的 js / common / func_docProcess.js: GetServerTemplateData 方法对应着修改
  */
-app.get("/getTemplateData", function (request, response) {
-  var file = path.join(__dirname, "./wwwroot/file/templateData.json");
-  //读取json文件
-  fs.readFile(file, "utf-8", function (err, data) {
-    if (err) {
-      response.send("文件读取失败");
-    } else {
-      response.send(data);
-    }
-  });
+app.post("/getTemplateData", function (request, response) {
+  const luxun = path.join(__dirname, "./wwwroot/file/bodyFileTemplate/luxun.doc");
+  const lizhi = path.join(__dirname, "./wwwroot/file/bodyFileTemplate/lizhi.doc");
+  const weimei = path.join(__dirname, "./wwwroot/file/bodyFileTemplate/weimei.doc");
+  response.send({
+    data: [
+      {
+        tempId: 1,
+        name: '当代周树人.doc',
+        url: luxun
+      },
+      {
+        tempId: 2,
+        name: '励志.doc',
+        url: lizhi
+      },
+      {
+        tempId: 1,
+        name: '唯美.doc',
+        url: weimei
+      },
+    ]
+  })
 });
 //----开发者将WPS加载项集成到业务系统中时，需要实现的功能 End--------
 
@@ -343,4 +356,4 @@ function getServerIPAdress() {
   }
 }
 
-//----模拟服务端的特有功能，开发者无需关心 End--------
+ //----模拟服务端的特有功能，开发者无需关心 End--------
