@@ -21,6 +21,10 @@
         return true;
       };
 
+      Object.defineProperty(Array.prototype, "equals", {
+        enumerable: false,
+      });
+
       const a1 = ["a", ["b", ["c"], "d"]];
       const a2 = ["a", ["b", ["c"], "d"]];
 

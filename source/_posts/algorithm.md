@@ -42,6 +42,11 @@ Array.prototype.equals = function (arr) {
   return true;
 };
 
+// 设置原型上的 equals 方法为不可枚举
+Object.defineProperty(Array.prototype, "equals", {
+  enumerable: false,
+});
+
 const a1 = ["a", ["b", ["c"], "d"]];
 const a2 = ["a", ["b", ["c"], "d"]];
 const a3 = [1, "2"];
