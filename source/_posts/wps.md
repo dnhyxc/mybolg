@@ -689,6 +689,322 @@ function customDoc() {
 
 - 唤起自定义页面需要找到 `commom/func_tabcontrol.js` 中的 **OnAction()** 方法进行设置。
 
+#### 导入正文模板实现示例
+
+- ribbon.xml：
+
+```html
+<group id="grpOAExtend" label="扩展功能组" getVisible="OnGetVisible">
+  <button
+    id="btnImportTemplate"
+    label="导入模板"
+    getLabel="OnGetLabel"
+    onAction="OnAction"
+    getEnabled="OnGetEnabled"
+    getVisible="OnGetVisible"
+    getImage="GetImage"
+    size="large"
+  />
+  <separator id="sepOAExtend" getVisible="OnGetVisible" />
+</group>
+```
+
+- importTemplate.html：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>导入模板</title>
+    <meta charset="UTF-8" />
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="otherslib/lib/vue.min.js"></script>
+    <style type="text/css">
+      * {
+        box-sizing: border-box;
+      }
+
+      /*清除浮动*/
+      .clear:after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+
+      html,
+      body,
+      #template {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: calc(100% - 10px);
+      }
+
+      .row {
+        width: 100%;
+        height: 100%;
+        margin-top: 10px;
+        padding-top: 20px;
+        border-top: 1px solid #e7e7e7;
+      }
+
+      .action {
+        position: absolute;
+        bottom: 2px;
+        right: 0;
+        width: 100%;
+        border-top: 1px solid #e7e7e7;
+      }
+
+      .row > div {
+        height: 100%;
+      }
+
+      #file_select {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        padding: 0 20px;
+        height: 32px;
+      }
+
+      .def_control {
+        flex: 1;
+        height: 32px;
+        font-size: 16px;
+        color: #333;
+      }
+
+      .placeholder {
+        color: #9c9c9c;
+      }
+
+      .btn_box {
+        width: 88px;
+        float: right;
+        line-height: 4.5em;
+        margin-right: 20px;
+      }
+
+      .action_btn {
+        width: 100%;
+        height: 32px;
+        background: #fff;
+        outline: none;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+
+      .require {
+        background: #1e90ff;
+        color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="template">
+      <div class="row" style="height: 50%; padding-top: 3%">
+        <div id="file_select">
+          <span>文件名：</span>
+          <select
+            class="def_control"
+            style="width: 100%"
+            v-model="templateItem"
+          >
+            <option value="-1" class="placeholder">请选择模板</option>
+            <option
+              v-for="(item, key) in templates"
+              :value="item.tempId"
+              :key="key"
+            >
+              {{item.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="action">
+        <div class="btn_box">
+          <button class="action_btn" type="button" @click="cancel()">
+            取消
+          </button>
+        </div>
+        <div class="btn_box">
+          <button
+            class="action_btn require"
+            type="button"
+            @click="OnImportTemplate()"
+          >
+            导入
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  /**
+   * 导入公文模板，并替换当前文档全部内容
+   * @param templateURL  模板路径
+   */
+  function importTemplateFile(templateURL) {
+    var wpsApp = wps.WpsApplication();
+    var activeDoc = wpsApp.ActiveDocument;
+    if (!activeDoc) {
+      alert("文档不存在");
+      return;
+    }
+    var selection = wpsApp.ActiveWindow.Selection;
+    selection.WholeStory(); //选取全文
+    selection.Delete(); // 删除选中内容
+    selection.InsertFile(templateURL);
+    if (activeDoc.Revisions.Count > 0) {
+      // 文档或区域中的修订
+      activeDoc.AcceptAllRevisions(); // 接受对指定文档的所有修订
+    }
+  }
+
+  const mimeTypeMap = {
+    doc: "application/msword",
+    docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  };
+
+  // 获取选中项，拼接模板Url进行导入模板
+  function OnImportTemplate() {
+    var templateId = vm.templateItem;
+    var curTemp = vm.templates[templateId];
+    console.log(curTemp, "curTemp");
+    if (templateId == -1) {
+      alert("请选中模板!!");
+      return;
+    }
+    if (!curTemp.url) {
+      alert("请选中模板!!");
+      return;
+    }
+    const [_, type] = curTemp.name.match(/.([^.]+)$/i) || [];
+
+    // 当后端返回的url为：http://xxxxjsnhgxv 这种类型的url时需要拼接contenttype
+    // const templateUrl = `${curTemp.url}&contenttype=${mimeTypeMap[type]}`;
+
+    importTemplateFile(curTemp.url);
+    window.opener = null;
+    window.open("", "_self", "");
+    window.close();
+    wps.OAAssist.ShellExecute("ksowebstartupwps://");
+  }
+
+  function cancel() {
+    // 取消按钮
+    window.close();
+    wps.OAAssist.ShellExecute("ksowebstartupwps://"); // 将WPS程序置前
+  }
+
+  var vm = new Vue({
+    el: "#template",
+    data: {
+      templateItem: -1,
+      templates: []
+    },
+    methods: {
+      GetTemplatePath(templateDataUrl) {
+        var url = document.location.host;
+        return document.location.protocol + "//" + url + templateDataUrl;
+      },
+
+      getAllTemplate: function () {
+        var _this = this;
+        // 通过接口拉取模板列表
+        var p_Doc = wps.WpsApplication().ActiveDocument;
+        var l_params = GetDocParamsValue(p_Doc, "params");
+        var templateDataUrl = GetDocParamsValue(p_Doc, "templateDataUrl");
+        if (!templateDataUrl) {
+          alert("获取正文模板失败！");
+          return;
+        }
+        $.ajax({
+          url: templateDataUrl,
+          async: false,
+          method: "post",
+          dataType: "json",
+          success: function (res) {
+            _this.templates = res.data;
+          },
+          error: function (res) {
+            alert("获取响应失败");
+            _this.templates = [];
+          }
+        });
+      }
+    },
+    mounted: function () {
+      this.getAllTemplate();
+    }
+  });
+</script>
+```
+
+- node 模拟服务端接口代码如下：
+
+```js
+app.post("/getTemplateData", function (request, response) {
+  const luxun = path.join(
+    __dirname,
+    "./wwwroot/file/bodyFileTemplate/luxun.doc"
+  );
+  const lizhi = path.join(
+    __dirname,
+    "./wwwroot/file/bodyFileTemplate/lizhi.doc"
+  );
+  const weimei = path.join(
+    __dirname,
+    "./wwwroot/file/bodyFileTemplate/weimei.doc"
+  );
+  response.send({
+    data: [
+      {
+        tempId: 1,
+        name: "当代周树人.doc",
+        url: luxun
+      },
+      {
+        tempId: 2,
+        name: "励志.doc",
+        url: lizhi
+      },
+      {
+        tempId: 1,
+        name: "唯美.doc",
+        url: weimei
+      }
+    ]
+  });
+});
+```
+
+- 在 resource/wps.js 中的 **\_WpsInvoke** 方法中需要传入 **templateDataUrl** 参数：
+
+```js
+function insertRedHead() {
+  // 省略代码...
+  _WpsInvoke(
+    [
+      {
+        OpenDoc: {
+          // 省略代码...
+          templateDataUrl: "/getTemplateData"
+        }
+      }
+    ],
+    true
+  );
+}
+```
+
+> [完成代码可点击此处查看](https://github.com/dnhyxc/WPS_OA_Assistant/blob/bfdde0918fc931b0c842fa2fee3ddadeb3de670e/server/wwwroot/resource/js/wps.js#L424)
+
 #### 自动排版实现
 
 在 `ribbon.xml` 中增加一个自定义的自动排版按钮，具体实现如下：
