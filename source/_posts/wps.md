@@ -35,6 +35,8 @@ WPS 加载项是一套基于 Web 技术用来扩展 WPS 应用程序的解决方
 
 - 为文档进行套红操作（给文档套上用户传入的指定红头模板，下文将会集体介绍）。还能将收集到的用户填写的表单内容插入到模板对应的标签中，这个下文也将着重介绍。
 
+- 文档自动排版，即为新建或编辑的文档设置字体样式、字体大小、首行缩进、清除复制内容原有的格式（如：复制有底色文本，会将底色带入到正在编辑的文档中）等等格式设置。
+
 - 还能自定义 WPS 加载项的按钮、增加按钮对应的弹窗页面，同时还能禁用、隐藏加载项按钮。具体将在下文中介绍。
 
 目前，我只用 WPS OA 助手实现过如上这些能力，如果各位读者有实现过其它能力，欢迎大家向我指出，我们共同学习。
@@ -732,8 +734,8 @@ function OnAction(control) {
 ```js
 /**
  * Selection.WholeStory();全选文档
- * Selection.SetRange(0, 0);起始位置
- * Selection.EndKey(wps.Enum.wdStory, wps.Enum.wdMove);结束位置
+ * Selection.SetRange(0, 0);选中起始位置
+ * Selection.EndKey(wps.Enum.wdStory, wps.Enum.wdMove);选中结束位置
  */
 function Macro() {
   const wpsApp = wps.WpsApplication();
@@ -1003,3 +1005,5 @@ function Macro() {
 8、[金山文档 WPS 产品矩阵集成解决方案-WPS 二次开发集成篇 V1.1.pptx](https://kdocs.cn/l/cyKkDebda)
 
 9、[金山文档 JSAPI 的特点和优势.docx](https://kdocs.cn/l/ssYE4VWBB)
+
+10、[Microsoft Build API 文档](https://docs.microsoft.com/zh-cn/office/vba/api/overview/word)
