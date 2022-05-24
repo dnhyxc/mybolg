@@ -940,7 +940,7 @@ let obj1 = {
   a: {
     c: /a/,
     d: undefined,
-    b: null,
+    b: null
   },
   b: function () {
     console.log(this.a);
@@ -949,27 +949,27 @@ let obj1 = {
     {
       a: "c",
       b: /b/,
-      c: undefined,
+      c: undefined
     },
     "a",
-    3,
-  ],
+    3
+  ]
 };
 
 let obj2 = deepClone(obj1);
 
 obj2.a.d = {
-  aa: "我改了",
+  aa: "我改了"
 };
 
 obj2.c = [
   {
     a: "c",
     b: "我改了",
-    c: undefined,
+    c: undefined
   },
   "a",
-  3,
+  3
 ];
 
 console.log(obj1);
@@ -1141,7 +1141,7 @@ Function.prototype.Mycall = function (context) {
 
 // 测试
 let mock = {
-  value: 1,
+  value: 1
 };
 
 function mockNum(a, b) {
@@ -1168,7 +1168,7 @@ Function.prototype.myApply = function (context) {
 };
 
 let mock3 = {
-  arr: [1, 2, 3, 4, 5],
+  arr: [1, 2, 3, 4, 5]
 };
 
 function arrx2(arr) {
@@ -1217,7 +1217,7 @@ Function.prototype.Mybind = function (obj) {
 };
 
 let foo = {
-  value: 1,
+  value: 1
 };
 
 function bar(arg) {
@@ -1350,7 +1350,7 @@ eventBus.on("event1", function (params) {
   console.log(params);
 });
 eventBus.emit("event1", {
-  name: "dnhyxc",
+  name: "dnhyxc"
 });
 ```
 
@@ -1449,7 +1449,7 @@ deepEventBus.on("event1", function (params) {
 });
 deepEventBus.emit("event1", {
   name: "dnhyxc",
-  age: "18",
+  age: "18"
 });
 ```
 
@@ -1557,7 +1557,7 @@ function isNumberChar(c) {
     "+": true,
     e: true,
     E: true,
-    ".": true,
+    ".": true
   };
   if (chars[c]) {
     return true;
@@ -2371,7 +2371,7 @@ const obj = {
   b: function () {
     console.log("b");
     return this;
-  },
+  }
 };
 obj.a().b(); // a b
 ```
@@ -2404,249 +2404,3 @@ class Person {
 const person = new Person();
 person.fn1("疯狂coding", 88).fn2(3, 9).fn3(6).fn4(9);
 ```
-
-### react 相关
-
-#### hooks 是什么
-
-1，hooks 是 react16.8 出来的新特性，它能让我们在不使用 class 组件的情况下使用 state，以及其它的 react 特性。
-
-#### class 组件的不足
-
-1，状态逻辑难复用：
-
-- 在组件之间复用状态逻辑很难，可能要用到 render props （渲染属性）或者 HOC（高阶组件），但无论是渲染属性，还是高阶组件，都会在原先的组件外包裹一层父容器（一般都是 div 元素），导致层级冗余。
-
-2，趋向复杂难以维护：
-
-- 在生命周期函数中混杂不相干的逻辑（如：在 componentDidMount 中注册事件以及其他的逻辑，在 componentWillUnmount 中卸载事件，这样分散不集中的写法，很容易写出 bug ）。
-
-- 类组件中到处都是对状态的访问和处理，导致组件难以拆分成更小的组件。
-
-3，this 指向问题：
-
-- 父组件给子组件传递函数时，必须绑定 this。
-
-#### 相比 class hooks 的优势
-
-1，能优化类组件的三大问题。
-
-2，能在无需修改组件结构的情况下复用状态逻辑（自定义 Hooks ）。
-
-3，能将组件中相互关联的部分拆分成更小的函数（比如设置订阅或请求数据）。
-
-4，副作用的关注点分离。
-
-- 副作用指那些没有发生在数据向视图转换过程中的逻辑，如 ajax 请求、访问原生 dom 元素、本地持久化缓存、绑定/解绑事件、添加订阅、设置定时器、记录日志等。以往这些副作用都是写在类组件生命周期函数中的。而 useEffect 在全部渲染完毕后才会执行，useLayoutEffect 会在浏览器 layout 之后，painting 之前执行。
-
-#### useState
-
-##### useState 概述
-
-1，useState 会返回一个数组：一个 state，一个用于更新 state 的函数，如下：
-
-```js
-const [state, setState] = useState(initialState);
-```
-
-2，在初始化渲染期间，返回的状态 state 与传入的第一个参数 initialState 的值是相同的。
-
-3，我们可以在事件处理函数中或其他一些地方调用这个函数。它类似 class 组件的 this.setState，但是**它不会把新的 state 和旧的 state 进行合并，而是直接替换**。
-
-##### 深入 useState
-
-1，**useState 中每次渲染都是独立的闭包**：
-
-- 每一次渲染都有它自己的 Props 和 State。
-
-- 每一次渲染都有它自己的事件处理函数。
-
-- 当点击更新状态的时候，函数组件都会重新被调用，那么每次渲染都是独立的，取到的值不会受后面操作的影响。
-
-```js
-function Counter2() {
-  let [number, setNumber] = useState(0);
-  function alertNumber() {
-    setTimeout(() => {
-      // alert 只能获取到点击按钮时的那个状态
-      alert(number);
-    }, 3000);
-  }
-  return (
-    <>
-      <p>{number}</p>
-      <button onClick={() => setNumber(number + 1)}>+</button>
-      <button onClick={alertNumber}>alertNumber</button>
-    </>
-  );
-}
-```
-
-2，**函数式更新**：
-
-- 如果新的 state 需要通过使用先前的 state 计算得出，那么可以将回调函数当做参数传递给 setState。该回调函数将接收先前的 state，并返回一个更新后的值。
-
-```js
-function Counter() {
-  let [number, setNumber] = useState(0);
-  function lazy() {
-    setTimeout(() => {
-      // setNumber(number+1);
-      // 这样每次执行时都会去获取一遍 state，而不是使用点击触发时的那个 state
-      setNumber((number) => number + 1);
-    }, 3000);
-  }
-  return (
-    <>
-      <p>{number}</p>
-      <button onClick={() => setNumber(number + 1)}>+</button>
-      <button onClick={lazy}>lazy</button>
-    </>
-  );
-}
-```
-
-3， **惰性初始化 state**：
-
-- initialState 参数只会在组件的初始化渲染中起作用，后续渲染时会被忽略。
-
-- 如果初始 state 需要通过复杂计算获得，则可以传入一个函数，在函数中计算并返回初始的 state，此函数只在初始渲染时被调用。
-
-```js
-function Counter5(props) {
-  console.log("Counter5 render");
-  // 这个函数只在初始渲染时执行一次，后续更新状态重新渲染组件时，该函数就不会再被调用
-  function getInitState() {
-    return { number: props.number };
-  }
-  let [counter, setCounter] = useState(getInitState);
-  return (
-    <>
-      <p>{counter.number}</p>
-      <button onClick={() => setCounter({ number: counter.number + 1 })}>
-        +
-      </button>
-      <button onClick={() => setCounter(counter)}>setCounter</button>
-    </>
-  );
-}
-```
-
-##### useState 性能优化
-
-1，Object.is （浅比较）：
-
-- Hook 内部使用 Object.is 来比较新/旧 state 是否相等。
-
-- 与 class 组件中的 setState 方法不同，如果你修改状态的时候，传的状态值没有变化，则不重新渲染。
-
-- 与 class 组件中的 setState 方法不同，useState 不会自动合并更新对象。你可以用函数式的 setState 结合展开运算符来达到合并更新对象的效果。
-
-```js
-function Counter() {
-  const [counter, setCounter] = useState({ name: "计数器", number: 0 });
-  console.log("render Counter");
-  // 如果你修改状态的时候，传的状态值没有变化，则不重新渲染
-  return (
-    <>
-      <p>
-        {counter.name}:{counter.number}
-      </p>
-      <button
-        onClick={() => setCounter({ ...counter, number: counter.number + 1 })}
-      >
-        +
-      </button>
-      <button onClick={() => setCounter(counter)}>++</button>
-    </>
-  );
-}
-```
-
-2，减少渲染次数：
-
-- 默认情况，只要父组件状态变了（不管子组件依不依赖该状态），子组件也会重新渲染。
-
-- 一般的优化如下：
-
-  - 类组件：可以使用 pureComponent。
-
-  - 函数组件：使用 React.memo ，将函数组件传递给 memo 之后，就会返回一个新的组件，新组件的功能：如果接受到的属性不变，则不重新渲染函数。
-
-#### useEffect
-
-#### react 生命周期
-
-1，react 生命周期分为：实例化阶段、更新阶段、卸载阶段。
-
-- 实例化阶段主要有：
-
-  - constructor：可以在这里对 state、props 进行初始化等操作。
-
-  - getDerivedStateFromProps：根据父组件传递过来的 props 来按需更新自身的 state。
-
-  - render：初始化时，生成 Fiber 节点，形成虚拟 DOM。
-
-  - commonentDidMount：此时组件已经挂载完成，可以在这个生命周期中进行数据请求。
-
-- 更新阶段主要有：
-
-  - getDerivedStateFromProps：根据父组件传递过来的 props 来按需更新自身的 state。
-
-  - shouldComopnentUpdate：可以通过这个生命周期判断状态是否改变，组件是否需要更新，可以用来优化性能。
-
-  - render：将更新 Fiber 节点，生成新的虚拟 DOM。
-
-  - getSnapshotBeforeUpdate：会在组件即将更新时调用，用来获取快照，返回值将作为 componentDidUpdate 这个生命周期的第三个参数。
-
-  - componentDidUpdate：到此生命周期时组件已经更新完毕。
-
-- 卸载阶段主要有：
-
-  - componentWillUnmount：这个钩子主要用来做一些收尾工作，比如清除定时器、取消订阅等。
-
-3，react 捕获异常的生命周期：
-
-- componentDidCatch(error, info)：该声明周期专门用来捕获异常。
-
-![reactlive](reactlive.png)
-
-### 微前端相关
-
-#### 什么是微前端
-
-1，微前端（Micro-Frontends）是一种类似于微服务的架构，它将微服务的理念应用于浏览器端，即将 Web 应用由单一的单体应用转变为多个小型前端应用聚合为一的应用。同时各个前端应用还可以独立运行、独立开发、独立部署。
-
-#### 为什么会有微前端
-
-1，**项目需要拆分和细化**：
-
-- 当下前端领域，单页面应用（SPA）是非常流行的项目形态之一，而随着时间的推移以及应用功能的丰富，单页应用变得不再单一而是越来越庞大也越来越难以维护，往往是改一处而动全身，由此带来的发版成本也越来越高。微前端的意义就是将这些庞大应用进行拆分，并随之解耦，每个部分可以单独进行维护和部署，提升效率。
-
-2，**项目需要整合历史系统**：
-
-- 在不少的业务中，或多或少会存在一些历史项目，这些项目大多以采用老框架类似（Backbone.js，Angular.js 1）的 B 端管理系统为主，介于日常运营，这些系统需要结合到新框架中来使用还不能抛弃，对此我们也没有理由浪费时间和精力重写旧的逻辑。而微前端可以将这些系统进行整合，在基本不修改原来逻辑的同时还能兼容新老两套系统并行运行。
-
-#### 实现微前端的方案之 qiankun
-
-1，qiankun 概述：
-
-- qiankun 是一个基于 single-spa 进行封装的微前端解决方案。本质上还是**路由分发式**的服务框架。
-
-2，qiankun 的特点：
-
-- 与技术无关。
-
-  - 主框架不限制接入应用的技术栈，微应用具备完全自主权。
-
-- 各个子应用可以独立开发独立部署。
-
-  - 微应用仓库独立，前后端可独立开发，部署完成后主框架自动完成同步更新。
-
-- 增量升级。
-
-  - 在面对各种复杂场景时，我们通常很难对一个已经存在的系统做全量的技术栈升级或重构，而微前端是一种非常好的实施渐进式重构的手段和策略。
-
-- 独立运行时。
-
-  - 每个微应用之间状态隔离，运行时状态不共享。
