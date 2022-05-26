@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CompanyCard</title>
+  </head>
+  <body>
+    <template id="companyCard">
+      <style>
+        .container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-bottom: 20px;
+          width: 500px;
+          height: auto;
+          border: 1px solid #ccc;
+          font-size: 16px;
+        }
+
+        img {
+          width: 100px;
+          height: 100px;
+        }
+
+        .btn,
+        .btn_del,
+        .btn_modName,
+        .btn_modDesc,
+        .btn_modType {
+          height: 32px;
+          width: auto;
+          margin: 20px 0;
+          outline: none;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          font-size: 16px;
+          cursor: pointer;
+        }
+      </style>
+
+      <div class="container">
+        <p class="name"></p>
+        <p class="desc"></p>
+        <p class="use_slot">
+          <slot name="slot1">slot default text</slot>
+        </p>
+        <img src="" alt="啊！我裂开了呀" />
+        <div class="actions">
+          <button class="btn">快点我试试！</button>
+          <button class="btn_del">快点我删除我自己！</button>
+          <button class="btn_modName">快点我修改name属性！</button>
+          <button class="btn_modDesc">快点我修改desc属性！</button>
+          <button class="btn_modType">快点我修改type属性！</button>
+        </div>
+      </div>
+    </template>
+
+    <company-card
+      image="http://dnhyxc.gitee.io/img/dnhyxc.jpg"
+      name="dnhyxc"
+      desc="行到水穷处，坐看云起时"
+      type="text"
+      id="company_card"
+    >
+      <span slot="slot1">
+        我大抵是不愿上班的，横竖都不想上，起来打开电脑，这忧伤没由来的，默默然看着那两个需求，一个是我的，另一个也是我的，我向来是不屑于做这点事的。而如今却生出了偷懒的念头。也罢，大概是很久没涨工资了吧！
+      </span>
+    </company-card>
+
+    <company-card
+      image="http://dnhyxc.gitee.io/img/dnhyxc.jpg"
+      name="dnhyxc"
+      desc="爱你"
+      type="text"
+      id="company_card"
+    >
+      <p slot="slot1">
+        我对着人脸打卡机一扫，这张脸没有生气，瞳孔里倒印着诸如奋斗，拼搏，诚信之类密密麻麻的小词，我死活看不清楚，凑极近了仔细看了几分钟，才从像素上看出字来，满屏幕都上都闪烁着两个字，是“迟到！”
+      </p>
+      <ul slot="slot1">
+        <li>
+          我对着人脸打卡机一扫，这张脸没有生气，瞳孔里倒印着诸如奋斗，拼搏，诚信之类密密麻麻的小词，我死活看不清楚，凑极近了仔细看了几分钟，才从像素上看出字来，满屏幕都上都闪烁着两个字，是“迟到！”
+        </li>
+        <li>
+          我大抵是不想搬砖了，横竖都搬不动。坐在旁边，这eom不由的来。拿起手机，看着自己这两只手，一只不想搬，另一只也不想搬。也罢，我想我是搬累了。
+        </li>
+      </ul>
+    </company-card>
+
+    <script src="./CompanyCard.js"></script>
+  </body>
+</html>
