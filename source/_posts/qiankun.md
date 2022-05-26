@@ -1338,3 +1338,9 @@ registerMicroApps({
 ```
 
 - 经过上述替换，这个样式就只能在当前子应用内生效了。虽然该方案已经提出很久了，但仍然是实验性的，因为它不支持 @keyframes，@font-face，@import，@page（即不会被重写）。
+
+### 参考文档
+
+[quankun 官方文档](https://qiankun.umijs.org/zh/guide)
+
+[MicroApp 官网](https://micro-zoe.github.io/micro-app/docs.html#/)
