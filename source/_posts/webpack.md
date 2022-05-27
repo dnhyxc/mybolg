@@ -7,7 +7,7 @@ categories:
   - 构建工具
 ---
 
-### webpack5
+### webpack5 基本配置
 
 #### webpack 安装
 

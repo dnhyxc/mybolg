@@ -9,10 +9,12 @@ class CompanyCard extends HTMLElement {
     const name = content.querySelector(".name")
     const desc = content.querySelector(".desc")
     const img = content.querySelector("img")
+    const iframe = document.querySelector("#iframe")
 
     img.setAttribute("src", this.getAttribute("image"));
     name.innerText = this.getAttribute("name");
     desc.innerText = this.getAttribute("desc");
+
     shadow.appendChild(content);
 
     const actions = shadow.querySelector(".actions")
@@ -35,6 +37,11 @@ class CompanyCard extends HTMLElement {
             break;
           case 'btn_modType':
             document.querySelector('company-card').setAttribute('type', 'button')
+            console.log(iframe, 'iframe')
+            iframe.contentWindow.document.adoptNode(document.querySelector('company-card'))
+            break;
+          case 'btn_move':
+            iframe.contentWindow.document.adoptNode(document.querySelector('company-card'))
             break;
           default:
             break;

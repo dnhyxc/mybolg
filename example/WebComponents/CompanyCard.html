@@ -14,22 +14,25 @@
           flex-direction: column;
           align-items: center;
           margin-bottom: 20px;
+          padding: 0 20px;
           width: 500px;
           height: auto;
           border: 1px solid #ccc;
           font-size: 16px;
+          box-sizing: border-box;
         }
 
         img {
-          width: 100px;
-          height: 100px;
+          width: 200px;
+          height: auto;
         }
 
         .btn,
         .btn_del,
         .btn_modName,
         .btn_modDesc,
-        .btn_modType {
+        .btn_modType,
+        .btn_move {
           height: 32px;
           width: auto;
           margin: 20px 0;
@@ -54,12 +57,13 @@
           <button class="btn_modName">快点我修改name属性！</button>
           <button class="btn_modDesc">快点我修改desc属性！</button>
           <button class="btn_modType">快点我修改type属性！</button>
+          <button class="btn_move">快点我移到别的文档中!</button>
         </div>
       </div>
     </template>
 
     <company-card
-      image="http://dnhyxc.gitee.io/img/dnhyxc.jpg"
+      image="./images/1.jpg"
       name="dnhyxc"
       desc="行到水穷处，坐看云起时"
       type="text"
@@ -71,8 +75,8 @@
     </company-card>
 
     <company-card
-      image="http://dnhyxc.gitee.io/img/dnhyxc.jpg"
-      name="dnhyxc"
+      image="./images/2.jpg"
+      name="WebComponents"
       desc="爱你"
       type="text"
       id="company_card"
@@ -89,6 +93,15 @@
         </li>
       </ul>
     </company-card>
+
+    <iframe
+      src="http://127.0.0.1:5500/example/WebComponents/CompanyCard.html"
+      frameborder="0"
+      width="500"
+      height="350"
+      id="iframe"
+    >
+    </iframe>
 
     <script src="./CompanyCard.js"></script>
   </body>
