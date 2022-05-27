@@ -50,14 +50,14 @@ class CompanyCard extends HTMLElement {
     return ['name', 'desc'];  // 监听 company-card 自身上的 name 属性
   }
 
-  //  customElement 第一次被插入到 DOM 时被调用，通常用来初始化状态，事件监听，创建影子 DOM
+  // customElement 第一次被插入到 DOM 时被调用，通常用来初始化状态，事件监听，创建影子 DOM
   connectedCallback() {
     console.log('当 customElement (company-card 元素) 第一次被插入到DOM时被调用，通常用来初始化状态，事件监听，创建影子DOM');
   }
 
   // 当 customElement 从 DOM 移除时执行，通常用来做清理工作，例如取消事件监听和定时器
   disconnectedCallback() {
-    console.log('当 customElement (company-card 元素) 从DOM移除时执行，通常用来做清理工作，例如取消事件监听和定时器');
+    console.log('当 customElement (company-card 元素) 从 DOM 移除时执行，通常用来做清理工作，例如取消事件监听和定时器');
   }
 
   // 当 customElement 被移动到新的文档时被调用
@@ -67,11 +67,11 @@ class CompanyCard extends HTMLElement {
 
   /**
    * 需要注意的是，如果需要在元素属性变化后，
-   * 触发attributeChangedCallback()回调函数，你必须监听这个属性。
-   * 这可以通过定义observedAttributes() get函数来实现，
-   * observedAttributes()函数体内包含一个 return语句，返回一个数组，
+   * 触发 attributeChangedCallback() 回调函数，你必须监听这个属性。
+   * 这可以通过定义 observedAttributes() get 函数来实现，
+   * observedAttributes() 函数体内包含一个 return 语句，返回一个数组，
    * 包含了需要监听的属性名称：
-   *   - static get observedAttributes() {return ['w', 'l']; }
+   *   - static get observedAttributes() {return ['name', 'desc']; }
    */
 
   // 当 customElement 增加、删除、修改自身属性时被调用
