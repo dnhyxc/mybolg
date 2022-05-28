@@ -1,10 +1,12 @@
 ---
 title: Web Components
 date: 2022-05-27 23:47:17
-tags:
+tags: Web Components
 toc: true
 declare: true
-categories:
+categories: 
+  - ES6 
+  - JavaScript
 ---
 
 #### 何为 Web Components

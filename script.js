@@ -30,12 +30,13 @@ function getDate() {
 const content = `---
 title: ${fileName}
 date: ${getDate()}
-tags:
+tags: 
 toc: true
 declare: true
-categories:
+categories: 
 ---
 
+#### ${fileName}
 
 <!-- more -->
 `
