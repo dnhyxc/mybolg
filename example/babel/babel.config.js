@@ -26,8 +26,8 @@ const plugins = [
     },
   ],
   // 编译typescript的配置
-  "@babel/plugin-proposal-class-properties",
-  "@babel/plugin-proposal-object-rest-spread"
+  "@babel/plugin-proposal-class-properties",  // 支持类属性
+  "@babel/plugin-proposal-object-rest-spread" // 支持剩余扩展操作符
 ]
 
 module.exports = { presets, plugins };

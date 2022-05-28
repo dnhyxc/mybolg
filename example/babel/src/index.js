@@ -4,7 +4,7 @@ const bebel = {
 
 console.log(bebel)
 
-const func = (a, b) => {
+export const func = (a, b) => {
   return a + b
 }
 
