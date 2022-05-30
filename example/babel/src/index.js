@@ -21,3 +21,9 @@ const test = arr.includes(2)
 console.log(test, 'test')
 
 Promise.resolve().finally();
+
+class TestClass {
+
+}
+
+typeof a
