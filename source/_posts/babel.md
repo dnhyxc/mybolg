@@ -29,7 +29,7 @@ babel 转译 syntax 时，有时候会使用一些辅助的函数来帮忙转，
 
 > 需要注意的是：helper 会直接在转译后的文件里被定义一遍。如果一个项目中有 100 个文件，其中每个文件都写了一个 class，那么这个项目最终打包的产物里就会存在 100 个 `\_classCallCheck` 函数，他们的长相和功能都一模一样，这显然不合理。
 
-而 @babel/plugin-transform-runtime 就是用来解决上述两个问题的：
+@babel/plugin-transform-runtime 就是用来解决上述两个问题的：
 
 - @babel/plugin-transform-runtime 的作用是转译代码，转译后的代码中可能会引入 **@babel/runtime-corejs3** 里面的模块。所以前者运行在编译时，后者运行在运行时。类似 polyfill，后者需要被打包到最终产物里在浏览器中运行。因此要使用 @babel/plugin-transform-runtime 时，往往需要配合 `@babel/runtime-corejs3` 一起使用：
 
