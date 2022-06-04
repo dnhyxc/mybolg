@@ -11,6 +11,10 @@ categories: babel
 
 <!-- more -->
 
+#### babel-polyfill
+
+
+
 #### @babel/plugin-transform-runtime
 
 由于 `polyfill` 机制是：直接修改全局变量的原型，如：
@@ -42,7 +46,18 @@ npm i @babel/runtime-corejs3 -S
 - 部分转译代码如下：
 
 ```js
-// ...
+"use strict";
+
+var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+
+var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true,
+});
+
+exports.func = void 0;
+
 var _from = _interopRequireDefault(
   require("@babel/runtime-corejs3/core-js-stable/array/from")
 );
@@ -54,5 +69,24 @@ var _includes = _interopRequireDefault(
 var _promise = _interopRequireDefault(
   require("@babel/runtime-corejs3/core-js-stable/promise")
 );
-// ...
+
+const bebel = {
+  version: 7.2,
+};
+console.log(bebel);
+
+const func = (a, b) => {
+  return a + b;
+};
+
+exports.func = func;
+const res = func(9, 2);
+console.log(res, "res");
+const arr = [2, , 3, , 5];
+const arr1 = (0, _from.default)(arr);
+console.log(arr1, "arr1");
+const test = (0, _includes.default)(arr).call(arr, 2);
+console.log(test, "test");
+
+_promise.default.resolve().finally();
 ```

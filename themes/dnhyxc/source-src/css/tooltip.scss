@@ -154,7 +154,6 @@
     color: #4d4d4d;
     background: transparent;
     opacity: 0;
-    margin: 0 0 -6px -163px;
     cursor: default;
     pointer-events: none;
     font-family: "Satisfy", cursive;
@@ -162,6 +161,18 @@
     -webkit-transition: opacity 0.3s 0.3s;
     transition: opacity 0.3s 0.3s;
     padding-bottom: 25px;
+  }
+
+  @media screen and (max-width: 800px) {
+    .tooltip-content {
+      margin: 0 0 -6px -150px;
+    }
+  }
+
+  @media screen and (min-width: 800px) {
+    .tooltip-content {
+      margin: 0 0 -6px -163px;
+    }
   }
 
   .tooltip:hover .tooltip-content {
