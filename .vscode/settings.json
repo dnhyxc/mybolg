@@ -29,5 +29,6 @@
     "FilePath": "no item name"
   },
   "editor.tabSize": 2,
-  "explorer.compactFolders": false
+  "explorer.compactFolders": false,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
