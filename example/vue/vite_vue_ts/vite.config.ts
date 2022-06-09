@@ -1,4 +1,4 @@
-import path from "path";
+import * as path from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import AutoImport from "unplugin-auto-import/vite";
@@ -12,6 +12,13 @@ export default defineConfig({
       "@/": `${path.resolve(__dirname, "src")}/`
     }
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "./src/styles/element.scss" as *;` // 路径根据配置改变，没有别名就用相对路径和绝对路径
+      }
+    }
+  },
   plugins: [
     vue(),
     AutoImport({
@@ -20,8 +27,6 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()]
     }),
-    ElementPlus({
-      useSource: true
-    })
+    ElementPlus()
   ]
 });
