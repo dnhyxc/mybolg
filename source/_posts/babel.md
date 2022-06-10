@@ -7,13 +7,15 @@ declare: true
 categories: babel
 ---
 
-#### babel
+#### babel 定义
+
+Babel 是一个 JavaScript 编译器，它是一个工具链，主要用于将采用 ECMAScript 2015+ 语法编写的代码转换为向后兼容的 JavaScript 语法，以便能够运行在当前和旧版本的浏览器或其他环境中。简单来说就是 Babel 能够把 JavaScript 中 es2015/2016/2017/2046 的新语法转化为 es5，让低端运行环境(如浏览器和 node )能够认识并执行。
+
+#### babel 工作原理
 
 <!-- more -->
 
 #### babel-polyfill
-
-
 
 #### @babel/plugin-transform-runtime
 
