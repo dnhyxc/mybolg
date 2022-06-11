@@ -15,7 +15,7 @@
     "Author": "dnh", // 作者
     "description": "", // 函数描述
     "param": "", // 函数参数
-    "return": "", // 函数输出
+    "return": "" // 函数输出
     // "Date": "Do not edit", // 创建时间
     // "LastEditors": "dnh" // 修改人员
   },
@@ -30,5 +30,11 @@
   },
   "editor.tabSize": 2,
   "explorer.compactFolders": false,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
 }
