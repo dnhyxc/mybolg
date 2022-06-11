@@ -23,21 +23,17 @@ module.exports = merge(common, {
           'postcss-loader',
         ],
       },
+      /**
+       * 使用两次less-loader解决开启css模块化时导致antd自定义主题失效的问题。
+       * 需要在不开启模块化时，设置antd自定义主题才会生效，因此这一个less-loader使用include针对node_modules中的组件库（即antd）在不开启css模块化的情况下，开启自定义主题的设置。
+       * 
+       */
       {
         test: /\.less$/,
+        include: [/node_modules/],
         use: [
           'style-loader',
-          // 配置less模块化导入
-          {
-            loader: "css-loader",
-            options: {
-              modules: {
-                mode: "local",
-                localIdentName: "[name]__[local]--[hash:base64:5]",
-              },
-              importLoaders: 1,
-            },
-          },
+          'css-loader',
           'postcss-loader',
           {
             loader: 'less-loader',
@@ -45,14 +41,36 @@ module.exports = merge(common, {
               lessOptions: { // 如果使用less-loader@5，请移除 lessOptions 这一级直接配置选项。
                 sourceMap: true,
                 modifyVars: {
-                  'primary-color': 'green',
-                  'link-color': 'green',
-                  'border-radius-base': '10px',
+                  'primary-color': '#1DA57A',
+                  'link-color': '#1DA57A',
+                  'border-radius-base': '2px',
                 },
                 javascriptEnabled: true,
               }
             }
           }
+        ],
+      },
+      /**
+       * 该less-loader使用exclude排除node_modules中的组件库，只针对自己的代码开启css模块化
+       */
+      {
+        test: /\.less$/,
+        exclude: [/node_modules/],
+        use: [
+          'style-loader',
+          // 配置less模块化导入
+          {
+            loader: "css-loader",
+            options: {
+              modules: {
+                localIdentName: "[name]__[local]--[hash:base64:5]",
+              },
+              importLoaders: 1,
+            },
+          },
+          'postcss-loader',
+          'less-loader'
         ],
       },
       {

@@ -44,7 +44,7 @@ module.exports = {
                   {
                     libraryName: 'antd',
                     libraryDirectory: "es",
-                    style: 'css'
+                    style: true
                   }
                 ]
               ],
@@ -72,6 +72,13 @@ module.exports = {
       '@/': path.join(__dirname, '../src'),
     }
   },
+  // 精简控制台编译输出信息
+  stats: {
+    modules: false,
+    children: false,
+    chunks: false,
+    chunkModules: false
+  }
 };
 
 /**
