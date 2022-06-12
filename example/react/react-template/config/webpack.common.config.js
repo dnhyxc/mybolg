@@ -7,6 +7,7 @@
  * @LastEditTime: 2022-06-10 19:14:23
  */
 const path = require("path");
+const ESLintPlugin = require("eslint-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -28,11 +29,11 @@ module.exports = {
               ],
             },
           },
-          "eslint-loader",
         ],
       },
       {
         test: /\.ts(x?)$/,
+        exclude: /node_modules/,
         use: [
           {
             loader: "babel-loader",
@@ -51,7 +52,6 @@ module.exports = {
           },
           "ts-loader",
         ],
-        exclude: /node_modules/,
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
@@ -64,6 +64,7 @@ module.exports = {
       },
     ],
   },
+  plugins: [new ESLintPlugin()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "../src"),

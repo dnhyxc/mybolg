@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./router"
+import App from "./router";
 import "./index.less";
 
 const root = ReactDOM.createRoot(
