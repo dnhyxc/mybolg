@@ -17,16 +17,19 @@ module.exports = {
       {
         test: /\.js(x?)$/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env", "@babel/preset-react", "mobx"],
-            plugins: [
-              "@babel/plugin-transform-runtime",
-              "@babel/plugin-proposal-class-properties",
-            ],
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env", "@babel/preset-react", "mobx"],
+              plugins: [
+                "@babel/plugin-transform-runtime",
+                "@babel/plugin-proposal-class-properties",
+              ],
+            },
           },
-        },
+          "eslint-loader",
+        ],
       },
       {
         test: /\.ts(x?)$/,

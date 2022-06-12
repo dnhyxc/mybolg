@@ -54,4 +54,35 @@ yarn add eslint-config-prettier eslint-plugin-prettier -D
 }
 ```
 
+### 解决路径别名 eslint 报错
+
+首先安装如下插件：
+
+```
+yarn add eslint-import-resolver-webpack eslint-import-resolver-alias -D
+```
+
+增加一个与 rules 配置同级的 settings 配置：
+
+```json
+"settings": {
+  "import/resolver": {
+    "alias": {
+      "map": [["@", "./src"]]
+    }
+  }
+},
+```
+
+rules 增加如下配置：
+
+```json
+"rules": {
+  "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+  "import/parsers": {
+    "@typescript-eslint/parser": [".ts", ".tsx"]
+  }
+}
+```
+
 https://jishuin.proginn.com/p/763bfbd3bb1c
