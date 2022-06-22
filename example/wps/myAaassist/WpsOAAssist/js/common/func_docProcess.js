@@ -19,6 +19,10 @@ function NewFile(params) {
   const selection = wpsApp.ActiveWindow.Selection;
   selection.Range.PageSetup.LeftMargin = 71.999428; // 设置左边距为 2.54
   selection.Range.PageSetup.RightMargin = 71.999428; // 设置左边距为 2.54
+  selection.Font.Size = 16;
+  selection.Font.SizeBi = 16;
+  // 开启审阅修订模式
+  wpsApp.ActiveWindow.ActivePane.View.RevisionsMode = 0;
 
   wps.PluginStorage.setItem(constStrEnum.IsInCurrOADocOpen, false);
 
@@ -155,6 +159,13 @@ function OpenFile(params) {
           );
       }
     }
+    // 更新正文时更改页边距
+    const wpsApp = wps.WpsApplication();
+    const selection = wpsApp.ActiveWindow.Selection;
+    selection.Range.PageSetup.LeftMargin = 71.999428; // 设置左边距为 2.54
+    selection.Range.PageSetup.RightMargin = 71.999428; // 设置左边距为 2.54
+    // 启用修订模式
+    wpsApp.ActiveWindow.ActivePane.View.RevisionsMode = 0;
   } else {
     //fileURL 如果为空，则按新建OA本地文件处理
     NewFile(params);
@@ -163,12 +174,6 @@ function OpenFile(params) {
   if (!doc) {
     return null;
   }
-
-  // 更新正文时更改页边距
-  const wpsApp = wps.WpsApplication();
-  const selection = wpsApp.ActiveWindow.Selection;
-  selection.Range.PageSetup.LeftMargin = 71.999428; // 设置左边距为 2.54
-  selection.Range.PageSetup.RightMargin = 71.999428; // 设置左边距为 2.54
 
   pOpenFile(doc, params, l_IsOnlineDoc);
 }
@@ -399,7 +404,7 @@ function OpenOnLineFile(OAParams) {
  * 打开在线文档成功后触发事件
  * @param {*} resp
  */
-function OnOpenOnLineDocSuccess(resp) { }
+function OnOpenOnLineDocSuccess(resp) {}
 
 /**
  *  打开在线不落地文档出现失败时，给予错误提示
@@ -411,7 +416,7 @@ function OnOpenOnLineDocDownFail(res) {
     err.Body = Base64.decode(res.Body);
     err.Headers = Base64.decode(JSON.stringify(res.Headers));
     console.log(err);
-  } catch (err) { }
+  } catch (err) {}
   alert("打开在线不落地文档失败！请尝试重新打开。");
   return;
 }
@@ -438,7 +443,7 @@ function DoSetOADocLandMode(doc, DocLandMode) {
  * 作用：设置Ribbon工具条的按钮显示状态
  * @param {*} paramsGroups
  */
-function pDoResetRibbonGroups(paramsGroups) { }
+function pDoResetRibbonGroups(paramsGroups) {}
 
 /**
  * 作用：打开文档处理的各种过程，包含：打开带密码的文档，保护方式打开文档，修订方式打开文档等种种情况
@@ -554,7 +559,11 @@ function DoOADocOpenRevision(doc, bOpenRevision, bShowRevision) {
     .CommandBars.ExecuteMso("KsoEx_RevisionCommentModify_Disable"); //去掉修改痕迹信息框中的接受修订和拒绝修订勾叉，使其不可用
 
   if (bShowRevision) {
-    doc.ActiveWindow.ActivePane.View.RevisionsMode = 2; //2为不支持气泡显示。
+    // doc.ActiveWindow.ActivePane.View.RevisionsMode = 2; // 2为支持右侧气泡显示。
+
+    // 设置为 2 会导致无法开启 WPS 加载项中的【审阅】中的修订状态的下拉选择框，因此需要设置为 0。
+
+    doc.ActiveWindow.ActivePane.View.RevisionsMode = 0; // 0为不支持右侧气泡显示。
   }
 
   //如果关闭修订,关闭显示痕迹并将按钮至灰
@@ -908,7 +917,7 @@ function pAutoUploadToServer(p_Doc) {
         "OnAutoUploadSuccess",
         "OnAutoUploadFail"
       );
-    } catch (err) { }
+    } catch (err) {}
     wps.PluginStorage.setItem(
       constStrEnum.OADocUserSave,
       EnumDocSaveFlag.NoneOADocSave
@@ -1034,7 +1043,7 @@ function InsertRedHead(params) {
     return;
   }
 
-  if (bkInsertFile == '' || bookmarkStart == "" || bookmarkEnd == "") {
+  if (bkInsertFile == "" || bookmarkStart == "" || bookmarkEnd == "") {
     alert("未获取到传入的正文书签，不能正常套红");
     return;
   }
@@ -1138,7 +1147,7 @@ function pInsertRInedField(doc) {
 
 /**
  * 单正文标签字段补全
- * @param {*} doc 
+ * @param {*} doc
  */
 function pInsertRInedFieldAsOneBk(doc) {
   try {
@@ -1176,19 +1185,19 @@ function pInsertRInedFieldAsOneBk(doc) {
 
       if (key === "fj") {
         try {
-          const enclosure = JSON.parse(currentValue)
+          const enclosure = JSON.parse(currentValue);
           const res = enclosure.map((i, index) => {
-            const lastIndex = i.lastIndexOf('.')
-            const fileName = i.substring(0, lastIndex)
+            const lastIndex = i.lastIndexOf(".");
+            const fileName = i.substring(0, lastIndex);
             if (index !== 0) {
-              return `   ${index + 1}. ${fileName}\n`
+              return `   ${index + 1}. ${fileName}\n`;
             } else {
-              return `${index + 1}. ${fileName}\n`
+              return `${index + 1}. ${fileName}\n`;
             }
-          })
-          bookmark.Range.Text = res && res.join('')
+          });
+          bookmark.Range.Text = res && res.join("");
         } catch (error) {
-          throw new Error(error)
+          throw new Error(error);
         }
       } else {
         bookmark.Range.Text = currentValue;
@@ -1208,7 +1217,7 @@ function pInsertRInedFieldAsOneBk(doc) {
       }
     });
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 }
 
@@ -1262,9 +1271,9 @@ function pInsertRInedHead(doc, strFile, bookmarkStart, bookmarkEnd) {
   } else {
     alert(
       "套红头失败，您选择的红头模板没有对应书签：" +
-      bookmarkStart +
-      ", " +
-      bookmarkEnd
+        bookmarkStart +
+        ", " +
+        bookmarkEnd
     );
   }
 
@@ -1304,9 +1313,7 @@ function pInsertRInedHeadAsOneBk(doc, strFile, bkInsertFile) {
     // 标识插入红头成功
     wps.PluginStorage.setItem(constStrEnum.InsertReding, 2);
   } else {
-    alert(
-      "套红头失败，您选择的红头模板没有对应书签：" + bkInsertFile
-    );
+    alert("套红头失败，您选择的红头模板没有对应书签：" + bkInsertFile);
   }
 
   pInsertRInedFieldAsOneBk(doc);
@@ -1365,14 +1372,14 @@ function InsertRedHeadDoc(doc, callback) {
     return;
   }
 
-  if ((bookmarkStart == "" || bookmarkEnd == "") && bkInsertFile == '') {
+  if ((bookmarkStart == "" || bookmarkEnd == "") && bkInsertFile == "") {
     alert("套红头失败，您选择的红头模板没有正文书签！");
     throw new Error("套红头失败，您选择的红头模板没有正文书签！");
-  } else if (bookmarkStart && bookmarkStart && bkInsertFile == '') {
+  } else if (bookmarkStart && bookmarkStart && bkInsertFile == "") {
     pInsertRInedHead(doc, strFile, bookmarkStart, bookmarkEnd);
   }
 
-  if (bkInsertFile == '' && (bookmarkStart == '' || bookmarkEnd == '')) {
+  if (bkInsertFile == "" && (bookmarkStart == "" || bookmarkEnd == "")) {
     alert("套红头失败，您选择的红头模板没有正文书签！");
     throw new Error("套红头失败，您选择的红头模板没有正文书签！");
   } else if (bkInsertFile) {
